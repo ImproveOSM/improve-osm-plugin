@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="improveosm-plugin" default="dist" basedir=".">
+
+	<property name="plugin.main.version" value="1.0" />
+
+	<property name="plugin.build.dir" value="${basedir}/build/classes" />
+	<property name="plugin.apidoc.dir" value="${basedir}/build/doc" />
+	<property name="plugin.src.dir" value="${basedir}/src" />
+	<property name="plugin.dist.dir" value="${basedir}/dist" />
+	<property name="plugin.lib.dir" value="${basedir}/lib" />
+	<property name="plugin.images.dir" value="${basedir}/images" />
+	<property name="plugin.jar" value="${plugin.dist.dir}/ImproveOsm.jar" />
+
+	<!--
+    **********************************************************
+    ** init - initializes the build
+    **********************************************************
+    -->
+	<target name="init">
+		<mkdir dir="${plugin.build.dir}" />
+	</target>
+
+	<path id="classpath">
+		<fileset dir="${plugin.lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!--
+    **********************************************************
+    ** compile - complies the source tree
+    **********************************************************
+    -->
+	<target name="compile" depends="init">
+		<echo message="compiling sources for  ${plugin.jar} ... " />
+		<javac srcdir="src" classpathref="classpath" debug="true" 
+                destdir="${plugin.build.dir}" includeantruntime="true"
+                excludes="**/package-info.java">
+			<compilerarg value="-Xlint:deprecation" />
+			<compilerarg value="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<!--
+    **********************************************************
+    ** javadoc - creates javadocs
+    **********************************************************
+    -->
+	<target name="javadoc">
+		<mkdir dir="${plugin.apidoc.dir}" />
+		<javadoc destdir="${plugin.apidoc.dir}" source="1.7" 
+			classpathref="classpath" windowtitle="MissingGeometry plugin API">
+			<link href="http://java.sun.com/javase/7/docs/api/" />
+			<packageset dir="${plugin.src.dir}">
+			</packageset>
+		</javadoc>
+
+	</target>
+
+	<!--
+    **********************************************************
+    ** dist - creates the plugin jar
+    **********************************************************
+    -->
+	<target name="dist" depends="compile">
+		<echo message="creating ${plugin.jar} ... " />
+		<mkdir dir="${plugin.dist.dir}" />
+		<copy todir="${plugin.build.dir}">
+			<fileset dir="resources" />
+		</copy>
+		<copy todir="${plugin.build.dir}/images">
+			<fileset dir="images" />
+		</copy>
+		<copy todir="${plugin.build.dir}">
+			<fileset dir=".">
+				<include name="README" />
+				<include name="LICENSE" />
+			</fileset>
+		</copy>
+		<jar destfile="${plugin.jar}" basedir="${plugin.build.dir}">
+			<zipfileset src="${plugin.lib.dir}/gson-2.4.jar" />
+			<zipfileset src="${plugin.lib.dir}/commons-io-2.4.jar" />
+			<manifest>
+				<attribute name="Author" value="telenav" />
+				<attribute name="Plugin-Class" value="org.openstreetmap.josm.plugins.improveosm.ImproveOsmPlugin" />
+				<attribute name="Plugin-Date" value="${TSTAMP}" />
+				<attribute name="Plugin-Description" value="This project is helping you improve the OSM map." />
+				<attribute name="Plugin-Link" value="https://wiki.openstreetmap.org/wiki/JOSM/Plugins/ImproveOsm" />
+				<attribute name="Plugin-Icon" value="images/improveosm_logo_50x50.png" />
+				<attribute name="Plugin-Mainversion" value="1" />
+				<attribute name="Plugin-Version" value="${build-label}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!--
+    **********************************************************
+    ** clean - clean up the build environment
+    **********************************************************
+    -->
+	<target name="clean">
+		<delete dir="${plugin.dist.dir}" />
+		<delete dir="${plugin.build.dir}" />
+		<delete dir="${plugin.apidoc.dir}" />
+	</target>
+
+	<!--
+    **********************************************************
+    ** install - install the plugin in your local JOSM installation
+    **********************************************************
+    -->
+	<target name="install" depends="dist">
+		<property environment="env" />
+		<condition property="josm.plugins.dir" value="${env.APPDATA}/JOSM/plugins" else="${user.home}/.josm/plugins">
+			<and>
+				<os family="windows" />
+			</and>
+		</condition>
+		<delete file="${josm.plugins.dir}/${plugin.jar}" failonerror="false" />
+		<copy file="${plugin.jar}" todir="${josm.plugins.dir}" />
+	</target>
+</project>
