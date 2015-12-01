@@ -87,6 +87,7 @@
 				<attribute name="Plugin-Icon" value="images/improveosm_logo_50x50.png" />
 				<attribute name="Plugin-Mainversion" value="1" />
 				<attribute name="Plugin-Version" value="${build-label}" />
+				<attribute name="Plugin-Early" value="true"/>
 			</manifest>
 		</jar>
 	</target>
