@@ -58,7 +58,7 @@ public class BaseService {
      * @param url represents the service URL
      * @param responseType represents the response type
      * @return a {@code T} object
-     * @throws ServiceException
+     * @throws ServiceException if the operation fail
      */
     public <T> T executeGet(final String url, final Class<T> responseType) throws ServiceException {
         String response = null;
@@ -77,7 +77,7 @@ public class BaseService {
      * @param content represents the request's body
      * @param responseType represents the response type
      * @return a {@code T} object
-     * @throws ServiceException
+     * @throws ServiceException if the operation failed
      */
     public <T> T executePost(final String url, final String content, final Class<T> responseType)
             throws ServiceException {

@@ -24,6 +24,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 
 
 /**
+ * Defines a panel displaying a list of {@code Comment}s
  *
  * @author Beata
  * @version $Revision$

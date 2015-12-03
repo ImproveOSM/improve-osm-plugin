@@ -23,8 +23,8 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
  */
 public final class Config extends BaseConfig {
 
-    private static final Config DIRECTION_OF_FLOW_INSTANCE = new Config("directionofflow_config.properties");
-    private static final Config MISSING_GEO_INSTANCE = new Config("missinggeo_config.properties");
+    private static final Config DIRECTION_OF_FLOW_INSTANCE = new Config("improveosm_dof_config.properties");
+    private static final Config MISSING_GEO_INSTANCE = new Config("improveosm_mg_config.properties");
     private static final int MAX_CLUSTER_ZOOM = 14;
 
     private final String serviceUrl;

@@ -32,19 +32,19 @@ public final class Keys {
     public static final String DATA_LAYER = "improveosm.data.layer";
 
     /* direction of flow layer related properties */
-    static final String DIRECTIONOFFLOW_LAST_COMMENT = "directionOfFlow.comment";
-    static final String DIRECTIONOFFLOW_TIP_SUPPRESS = "directionOfFlow.tip.suppress";
-    static final String DIRECTIONOFFLOW_STATUS = "directionOfFlow.filter.status";
-    static final String DIRECTIONOFFLOW_CONFIDENCE_LEVEL = "directionOfFlow.filter.confidence";
-    public static final String DIRECTIONOFFLOW_FILTERS_CHANGED = "directionOfFlow.filter.changed";
+    static final String DIRECTIONOFFLOW_LAST_COMMENT = "improveosm.directionOfFlow.comment";
+    static final String DIRECTIONOFFLOW_TIP_SUPPRESS = "improveosm.directionOfFlow.tip.suppress";
+    static final String DIRECTIONOFFLOW_STATUS = "improveosm.directionOfFlow.filter.status";
+    static final String DIRECTIONOFFLOW_CONFIDENCE_LEVEL = "improveosm.directionOfFlow.filter.confidence";
+    public static final String DIRECTIONOFFLOW_FILTERS_CHANGED = "improveosm.directionOfFlow.filter.changed";
 
 
     /* missing geometry layer related properties */
-    static final String MISSINGGEO_LAST_COMMENT = "missingGeometry.comment";
-    static final String MISSINGGEO_STATUS = "missingGeometry.filter.status";
-    static final String MISSINGGEO_TYPE = "missingGeometry.filter.type";
-    static final String MISSINGGEO_COUNT = "missingGeometry.filter.count";
-    static final String MISSINGGEO_INCLUDE_WATER = "missingGeometry.filter.includeWater";
-    static final String MISSINGGEO_INCLUDE_PATH = "missingGeometry.filter.includePath";
-    public static final String MISSINGGEO_FILTERS_CHANGED = "missingGeometry.filter.changed";
+    static final String MISSINGGEO_LAST_COMMENT = "improveosm.missingGeometry.comment";
+    static final String MISSINGGEO_STATUS = "improveosm.missingGeometry.filter.status";
+    static final String MISSINGGEO_TYPE = "improveosm.missingGeometry.filter.type";
+    static final String MISSINGGEO_COUNT = "improveosm.missingGeometry.filter.count";
+    static final String MISSINGGEO_INCLUDE_WATER = "improveosm.missingGeometry.filter.includeWater";
+    static final String MISSINGGEO_INCLUDE_PATH = "improveosm.missingGeometry.filter.includePath";
+    public static final String MISSINGGEO_FILTERS_CHANGED = "improveosm.missingGeometry.filter.changed";
 }

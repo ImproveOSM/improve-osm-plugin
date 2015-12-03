@@ -25,6 +25,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 
 
 /**
+ * Utility class, formats custom objects.
  *
  * @author Beata
  * @version $Revision$
@@ -34,6 +35,7 @@ public final class Formatter {
     private static final String DOUBLE_FORMAT = "0.00";
     private static final String TSTP = "yyyy-MM-dd HH:mm:ss";
     private static final Long UNIX_TSTP = 1000L;
+
 
     private Formatter() {}
 
@@ -49,10 +51,22 @@ public final class Formatter {
         return value == null ? "" : (round ? "" + Math.round(value) : new DecimalFormat(DOUBLE_FORMAT).format(value));
     }
 
+    /**
+     * Formats the given coordinate in the following format: lat,lon
+     *
+     * @param latLon a {@code LatLon}
+     * @return a string representation of the value.
+     */
     public static String formatLatLon(final LatLon latLon) {
         return latLon == null ? "" : latLon.getY() + "," + latLon.getX();
     }
 
+    /**
+     * Formats the given collection of {@code Comment}s using html tags.
+     *
+     * @param comments a collection of {@code Comment}s
+     * @return a string containing the given {@code Comment}s
+     */
     public static String formatComments(final List<Comment> comments) {
         final StringBuilder sb = new StringBuilder("<html><body><font size='3' face='times new roman'>");
         for (final Comment comment : comments) {
@@ -74,6 +88,12 @@ public final class Formatter {
         return sb.toString();
     }
 
+    /**
+     * Formats the given timestamp in 'yyyy-MM-dd HH:mm:ss' format.
+     *
+     * @param timestamp a {@code Long} value
+     * @return a string containing the timestamp
+     */
     public static String formatTimestamp(final Long timestamp) {
         final SimpleDateFormat dateTimeFormat = new SimpleDateFormat(TSTP);
         dateTimeFormat.setTimeZone(TimeZone.getDefault());

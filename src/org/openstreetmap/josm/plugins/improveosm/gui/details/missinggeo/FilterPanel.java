@@ -60,6 +60,7 @@ class FilterPanel extends JPanel {
     private JCheckBox cbIncludePath;
     private JTextField txtCount;
 
+
     /**
      * Builds a new filter panel.
      *
@@ -82,6 +83,7 @@ class FilterPanel extends JPanel {
         addIncludePathFilter(includePath);
         addCountFilter(filter.getCount());
     }
+
 
     private void addStatusFilter(final Status status) {
         add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblStatus(), getFont().deriveFont(Font.BOLD), null),

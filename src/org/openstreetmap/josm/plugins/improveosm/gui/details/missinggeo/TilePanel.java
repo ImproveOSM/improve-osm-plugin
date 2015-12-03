@@ -29,6 +29,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConf
 
 
 /**
+ * Displays the information of a selected {@code Tile}
  *
  * @author Beata
  * @version $Revision$
@@ -38,6 +39,7 @@ class TilePanel extends BasicPanel<Tile> {
     private static final long serialVersionUID = 5842933383198993565L;
     private int y = 0;
     private int pnlWidth = 0;
+
 
     @Override
     public void createComponents(final Tile tile) {

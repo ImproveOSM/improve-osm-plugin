@@ -25,7 +25,9 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 
+
 /**
+ * Displays the information of a selected {@code RoadSegment}
  *
  * @author Beata
  * @version $Revision$

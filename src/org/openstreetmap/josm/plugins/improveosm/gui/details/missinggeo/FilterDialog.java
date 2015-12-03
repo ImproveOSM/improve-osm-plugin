@@ -32,6 +32,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Dialog window that displays the data filters.
  *
  * @author Beata
  * @version $Revision$
@@ -73,6 +74,7 @@ class FilterDialog extends ModalDialog {
 
 
     /* The action to be executed when the user click's on the 'OK' button */
+
     private class OkAction extends AbstractAction {
 
         private static final long serialVersionUID = -2928306625791941775L;
@@ -96,6 +98,7 @@ class FilterDialog extends ModalDialog {
     }
 
     /* The action to be executed when the user click's on the 'Reset' button */
+
     private class ResetAction extends AbstractAction {
 
         private static final long serialVersionUID = 4708883950358902356L;

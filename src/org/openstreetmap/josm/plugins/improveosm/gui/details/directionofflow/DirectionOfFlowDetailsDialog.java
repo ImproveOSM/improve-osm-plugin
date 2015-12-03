@@ -35,6 +35,7 @@ import org.openstreetmap.josm.tools.Shortcut;
 
 
 /**
+ * Defines the right side dialog window.
  *
  * @author Beata
  * @version $Revision$
@@ -53,6 +54,7 @@ public class DirectionOfFlowDetailsDialog extends ToggleDialog {
     private final InfoPanel pnlInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
+
 
     /**
      * Builds a new direction of flow details dialog window.
@@ -73,6 +75,7 @@ public class DirectionOfFlowDetailsDialog extends ToggleDialog {
         final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
         add(pnlMain);
     }
+
 
     /**
      * Registers the given observer to the corresponding components.

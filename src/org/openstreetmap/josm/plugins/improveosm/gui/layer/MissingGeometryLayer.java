@@ -38,7 +38,6 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConf
  */
 public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
 
-
     public MissingGeometryLayer() {
         super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
     }
@@ -58,6 +57,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
     Tile nearbyItem(final Point point) {
         return Util.nearbyTile(getDataSet().getItems(), point);
     }
+
 
     /*
      * Draws the layer's data items to the map.

@@ -39,6 +39,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Dialog window that display a simple panel containing a text area where the user can introduce a text.
  *
  * @author Beata
  * @version $Revision$
@@ -53,10 +54,11 @@ public class EditDialog extends ModalDialog implements CommentObservable {
     private JLabel lblError;
     private JTextArea txtComment;
 
+
     /**
      * Builds a new edit dialog with the given arguments.
      *
-     * @param status a {@code Status) represents the new status to be added.
+     * @param status represents the new status to be added.
      * @param title the title of the dialog
      * @param icon the icon of the dialog
      */
@@ -65,6 +67,7 @@ public class EditDialog extends ModalDialog implements CommentObservable {
         this.status = status;
         createComponents();
     }
+
 
     @Override
     protected void createComponents() {
@@ -100,7 +103,9 @@ public class EditDialog extends ModalDialog implements CommentObservable {
         this.observer = observer;
     }
 
+
     /* Handles the comment operation */
+
     private class AddCommentAction extends AbstractAction {
 
         private static final long serialVersionUID = -7862363740212492052L;

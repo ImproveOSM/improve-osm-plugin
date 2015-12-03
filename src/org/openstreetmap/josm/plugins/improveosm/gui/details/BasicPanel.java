@@ -24,6 +24,8 @@ import org.openstreetmap.josm.Main;
 
 
 /**
+ * Defines an abstract {@code JPanel} template for displaying basic information in (information name, value) format of
+ * an object of type T.
  *
  * @author Beata
  * @version $Revision$
@@ -48,6 +50,7 @@ public abstract class BasicPanel<T> extends JPanel {
     protected static final int RECT_X = 0;
     protected static final int RECT_Y = 0;
 
+
     /**
      * Builds a new {@code InfoPanel} with the given argument.
      */
@@ -59,6 +62,7 @@ public abstract class BasicPanel<T> extends JPanel {
         fontMetricsPlain = Main.map.mapView.getGraphics().getFontMetrics(fontPlain);
         fontMetricsBold = Main.map.mapView.getGraphics().getFontMetrics(fontBold);
     }
+
 
     /**
      * Creates the components of the panel with the information of the given object.

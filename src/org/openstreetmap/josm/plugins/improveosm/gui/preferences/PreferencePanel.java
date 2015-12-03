@@ -31,6 +31,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Defines the UI components of the preference settings.
  *
  * @author Beata
  * @version $Revision$
@@ -40,15 +41,18 @@ class PreferencePanel extends JPanel {
     private static final long serialVersionUID = -5573686133711742041L;
 
     /* UI components */
-    private final JCheckBox cbMissingGeometry;
-    private final JCheckBox cbDirectionOfFlow;
+    private JCheckBox cbMissingGeometry;
+    private JCheckBox cbDirectionOfFlow;
+
 
     PreferencePanel() {
         super(new GridBagLayout());
+        createComponents();
+    }
 
+
+    private void createComponents() {
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
-
-        /* add components */
         final Font font = getFont().deriveFont(Font.PLAIN);
         add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
         cbMissingGeometry =
@@ -73,6 +77,11 @@ class PreferencePanel extends JPanel {
         add(cbDirectionOfFlow, Constraints.CB_DIRECTION_OF_FLOW);
     }
 
+    /**
+     * Returns the selected data layers.
+     *
+     * @return a set of {@code DataLayer}s
+     */
     EnumSet<DataLayer> selectedDataLayers() {
         final EnumSet<DataLayer> result = EnumSet.noneOf(DataLayer.class);
         if (cbMissingGeometry.isSelected()) {

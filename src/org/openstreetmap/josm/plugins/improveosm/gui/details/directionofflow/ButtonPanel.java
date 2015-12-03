@@ -37,6 +37,7 @@ import org.openstreetmap.josm.tools.Utils;
 
 
 /**
+ * Defines the components of the button panel used in the {@code DirectionOfFlowDetailsDialog} window.
  *
  * @author Beata
  * @version $Revision$
@@ -135,6 +136,7 @@ class ButtonPanel extends JPanel {
 
 
     /* displays the FilterDialog window */
+
     private class DisplayFilterDialog extends AbstractAction {
 
         private static final long serialVersionUID = 1260997951329896682L;
@@ -150,6 +152,7 @@ class ButtonPanel extends JPanel {
     }
 
     /* copies the selected segment's/current position to clipboard */
+
     private class CopyLocationAction extends AbstractAction {
 
         private static final long serialVersionUID = 5864772613263351452L;
@@ -170,6 +173,7 @@ class ButtonPanel extends JPanel {
     }
 
     /* displays the dialog window for the following actions: comment, solve, reopen and invalidate road segment(s) */
+
     private final class DisplayEditDialog extends AbstractAction {
 
         private static final long serialVersionUID = 5626725687385429883L;
@@ -191,6 +195,5 @@ class ButtonPanel extends JPanel {
                 dialog.setVisible(true);
             }
         }
-
     }
 }

@@ -56,6 +56,12 @@ abstract class ImproveOsmLayer<T> extends AbstractLayer {
         }
     }
 
+    /**
+     * Sets the layer's data set. Previously selected items will be unselected if the new data set does not contains
+     * these elements.
+     *
+     * @param dataSet a {@code DataSet} containing the items from the current view
+     */
     public void setDataSet(final DataSet<T> dataSet) {
         this.dataSet = dataSet;
         if (!selectedItems.isEmpty() && !this.dataSet.getItems().isEmpty()) {
@@ -71,6 +77,11 @@ abstract class ImproveOsmLayer<T> extends AbstractLayer {
         }
     }
 
+    /**
+     * Updates the selected item.
+     *
+     * @param item an object representing the currently selected element
+     */
     public void updateSelectedItem(final T item) {
         if (item == null) {
             selectedItems.clear();
@@ -85,6 +96,13 @@ abstract class ImproveOsmLayer<T> extends AbstractLayer {
         }
     }
 
+    /**
+     * Returns the item nearby the given point. The method returns null if there is no nearby item.
+     *
+     * @param point a {@code Point} represents the location where the user clicked
+     * @param multiSelect specifies if multiple elements are selected or not
+     * @return a {@code T}
+     */
     public T nearbyItem(final Point point, final boolean multiSelect) {
         final T item = dataSet != null ? nearbyItem(point) : null;
         if (!multiSelect) {
@@ -93,8 +111,19 @@ abstract class ImproveOsmLayer<T> extends AbstractLayer {
         return item;
     }
 
+    /**
+     * Searches for the most close item to the given location. The method returns null if there is no nearby item.
+     *
+     * @param point a {@code Point} represents the location where the user clicked
+     * @return a {@code T}
+     */
     abstract T nearbyItem(final Point point);
 
+    /**
+     * Returns the last selected item. If no item is selected the method return null.
+     *
+     * @return a {@code T}
+     */
     public T lastSelectedItem() {
         return selectedItems.isEmpty() ? null : selectedItems.get(selectedItems.size() - 1);
     }

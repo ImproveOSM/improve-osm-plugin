@@ -24,7 +24,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
  */
 public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
-    private static final String CONFIG_FILE = "directionofflow_gui.properties";
+    private static final String CONFIG_FILE = "improveosm_dof_gui.properties";
     private static final DirectionOfFlowGuiConfig INSTANCE = new DirectionOfFlowGuiConfig();
 
     private final String layerName;

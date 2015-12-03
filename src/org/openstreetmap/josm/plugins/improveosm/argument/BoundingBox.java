@@ -76,7 +76,7 @@ public class BoundingBox {
         return north;
     }
 
-    private final void setNorth(final double north) {
+    private void setNorth(final double north) {
         this.north = north > MAX_LAT ? MAX_LAT : north;
     }
 

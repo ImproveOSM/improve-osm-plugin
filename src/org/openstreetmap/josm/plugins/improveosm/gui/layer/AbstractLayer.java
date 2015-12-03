@@ -23,6 +23,7 @@ import org.openstreetmap.josm.gui.layer.Layer;
 
 
 /**
+ * Defines the common JOSM Layer relayed functionality.
  *
  * @author Beata
  * @version $Revision$
@@ -32,6 +33,7 @@ abstract class AbstractLayer extends Layer {
     AbstractLayer(final String layerName) {
         super(layerName);
     }
+
 
     @Override
     public Object getInfoComponent() {

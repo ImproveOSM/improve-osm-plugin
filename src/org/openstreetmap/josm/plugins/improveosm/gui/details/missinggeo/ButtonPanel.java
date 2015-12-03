@@ -33,6 +33,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConf
 
 
 /**
+ * Defines the components of the button panel used in the {@code MissingGeometryDetailsDialog} window.
  *
  * @author Beata
  * @version $Revision$
@@ -54,6 +55,7 @@ class ButtonPanel extends JPanel {
 
     private CommentObserver commentObserver;
     private Tile tile;
+
 
     /**
      * Builds a new object.

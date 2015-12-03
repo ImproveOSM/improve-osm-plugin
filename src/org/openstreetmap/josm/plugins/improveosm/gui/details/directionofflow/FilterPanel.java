@@ -31,6 +31,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Displays the possible data filters.
  *
  * @author Beata
  * @version $Revision$
@@ -55,6 +56,7 @@ class FilterPanel extends JPanel {
         addStatusFilter(filter.getStatus());
         addConfidenceFilter(filter.getConfidenceLevels());
     }
+
 
     private void addStatusFilter(final Status status) {
         add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl(),
@@ -89,11 +91,7 @@ class FilterPanel extends JPanel {
         add(cbbConfidenceC3, Constraints.CBB_C3);
     }
 
-    /**
-     * Returns the selected filters.
-     *
-     * @return a {@code SearchFilter} object
-     */
+
     OnewayFilter selectedFilters() {
         Status status = null;
         if (btnGroupStatus.getSelection() != null) {
@@ -112,9 +110,6 @@ class FilterPanel extends JPanel {
         return status == null && confidenceLevels.isEmpty() ? null : new OnewayFilter(status, confidenceLevels);
     }
 
-    /**
-     * Resets the search filters to the default ones.
-     */
     void resetFilters() {
         selectStatus(OnewayFilter.DEFAULT.getStatus());
         selectConfidence(OnewayFilter.DEFAULT.getConfidenceLevels());

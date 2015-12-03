@@ -23,7 +23,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
  */
 public final class MissingGeometryGuiConfig extends BaseConfig {
 
-    private static final String CONFIG_FILE = "missinggeo_gui.properties";
+    private static final String CONFIG_FILE = "improveosm_mg_gui.properties";
     private static final MissingGeometryGuiConfig INSTANCE = new MissingGeometryGuiConfig();
 
     private final String layerName;

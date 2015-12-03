@@ -32,11 +32,12 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Dialog window that displays the data filters.
  *
  * @author Beata
  * @version $Revision$
  */
-public class FilterDialog extends ModalDialog {
+class FilterDialog extends ModalDialog {
 
     private static final long serialVersionUID = 6838800795969608589L;
 
@@ -47,15 +48,17 @@ public class FilterDialog extends ModalDialog {
     private FilterPanel pnlFilter;
     private JPanel pnlButton;
 
+
     /**
      * Builds a new filter panel.
      */
-    public FilterDialog() {
+    FilterDialog() {
         super(GuiConfig.getInstance().getDlgFilterTitle(), IconConfig.getInstance().getFilterIcon().getImage());
         createComponents();
         setSize(DIM);
         setMinimumSize(DIM);
     }
+
 
     @Override
     protected void createComponents() {
@@ -71,6 +74,7 @@ public class FilterDialog extends ModalDialog {
 
 
     /* if the user selects the reset button, then the search filters are reset to the default one */
+
     private class ResetAction extends AbstractAction {
 
         private static final long serialVersionUID = 6640018164566789264L;
@@ -83,6 +87,7 @@ public class FilterDialog extends ModalDialog {
 
 
     /* if the user selects the OK button, then the new search filters are applied */
+
     private class OkAction extends AbstractAction {
 
         private static final long serialVersionUID = 2130985524511727521L;

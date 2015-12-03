@@ -50,7 +50,8 @@ class ServiceHandler {
         return INSTANCE;
     }
 
-    public DataSet<Tile> searchMissingGeometryData(final BoundingBox bbox, final int zoom) {
+
+    DataSet<Tile> searchMissingGeometryData(final BoundingBox bbox, final int zoom) {
         DataSet<Tile> result = new DataSet<>();
         try {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
@@ -61,7 +62,7 @@ class ServiceHandler {
         return result;
     }
 
-    public DataSet<RoadSegment> searchDirectionOfFlowData(final BoundingBox bbox, final int zoom) {
+    DataSet<RoadSegment> searchDirectionOfFlowData(final BoundingBox bbox, final int zoom) {
         DataSet<RoadSegment> result = new DataSet<>();
         try {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
@@ -72,7 +73,7 @@ class ServiceHandler {
         return result;
     }
 
-    public List<Comment> retrieveComments(final Tile tile) {
+    List<Comment> retrieveComments(final Tile tile) {
         List<Comment> comments = new ArrayList<>();
         try {
             comments = missingGeometryService.retrieveComments(tile);
@@ -82,7 +83,7 @@ class ServiceHandler {
         return comments;
     }
 
-    public List<Comment> retrieveComments(final RoadSegment roadSegment) {
+    List<Comment> retrieveComments(final RoadSegment roadSegment) {
         List<Comment> comments = new ArrayList<>();
         try {
             comments = directionOfFlowService.retrieveComments(roadSegment);
@@ -92,7 +93,7 @@ class ServiceHandler {
         return comments;
     }
 
-    public void commentTiles(final Comment comment, final List<Tile> tiles) {
+    void commentTiles(final Comment comment, final List<Tile> tiles) {
         try {
             missingGeometryService.comment(comment, tiles);
         } catch (final ServiceException e) {
@@ -100,7 +101,7 @@ class ServiceHandler {
         }
     }
 
-    public void commentRoadSegments(final Comment comment, final List<RoadSegment> roadSegments) {
+    void commentRoadSegments(final Comment comment, final List<RoadSegment> roadSegments) {
         try {
             directionOfFlowService.comment(comment, roadSegments);
         } catch (final ServiceException e) {

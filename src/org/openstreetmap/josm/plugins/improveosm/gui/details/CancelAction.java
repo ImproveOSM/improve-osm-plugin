@@ -21,6 +21,7 @@ import javax.swing.JDialog;
 
 
 /**
+ * Defines the action to be executed when an user presses a 'Cancel' button.
  *
  * @author Beata
  * @version $Revision$

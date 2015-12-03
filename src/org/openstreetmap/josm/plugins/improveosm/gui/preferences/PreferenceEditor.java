@@ -27,6 +27,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Defines the preference editor settings.
  *
  * @author Beata
  * @version $Revision$
@@ -35,11 +36,13 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
 
     private final PreferencePanel pnlPreference;
 
+
     public PreferenceEditor() {
         super(IconConfig.getInstance().getPluginIconName(), GuiConfig.getInstance().getPluginName(),
                 GuiConfig.getInstance().getPluginTxt());
         pnlPreference = new PreferencePanel();
     }
+
 
     @Override
     public void addGui(final PreferenceTabbedPane pnlParent) {
@@ -54,5 +57,4 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
         PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
         return false;
     }
-
 }

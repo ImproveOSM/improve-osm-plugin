@@ -38,9 +38,26 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.ClusterConfig;
  */
 abstract class PaintHandler<T> {
 
+    /**
+     * Draws the given data set and selected items to the map.
+     *
+     * @param graphics a {@code Graphics2D} used to drawing to the map
+     * @param mapView the current {@code MapView}
+     * @param bounds the current map {@code Bounds}
+     * @param dataSet the {@code DataSet} to draw to the map
+     * @param items a list of selected items
+     */
     abstract void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds,
             final DataSet<T> dataSet, final List<T> items);
 
+    /**
+     *
+     * @param graphics a {@code Graphics2D} used to drawing to the map
+     * @param mapView the current {@code MapView}
+     * @param clusters a list of {@code Cluster}s to be drawn
+     * @param zoom the current zoom level
+     * @param color the {@code Color} to be used for representing the clusters
+     */
     void drawClusters(final Graphics2D graphics, final MapView mapView, final List<Cluster> clusters, final int zoom,
             final Color color) {
         final SortedMap<Integer, Double> clusterRadiusMap = generateClusterRadiusMap(zoom, clusters);

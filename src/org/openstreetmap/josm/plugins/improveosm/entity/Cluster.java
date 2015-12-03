@@ -33,13 +33,14 @@ public class Cluster implements Comparable<Cluster> {
     /**
      * Builds a new cluster with the given arguments.
      *
-     * @param point
-     * @param size
+     * @param point the cluster's centroid
+     * @param size the number of elements belonging to the cluster
      */
     public Cluster(final LatLon point, final Integer size) {
         this.point = point;
         this.size = size;
     }
+
 
     @Override
     public int compareTo(final Cluster object) {

@@ -31,7 +31,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
 
 /**
- * Defines the DirectionOfFlowLayer main fucntionality.
+ * Defines the DirectionOfFlowLayer main functionality.
  *
  * @author Beata
  * @version $Revision$

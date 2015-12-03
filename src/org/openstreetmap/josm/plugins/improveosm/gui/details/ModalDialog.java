@@ -23,6 +23,7 @@ import org.openstreetmap.josm.Main;
 
 
 /**
+ * Defines a general model dialog, custom dialogs should extend this class.
  *
  * @author Beata
  * @version $Revision$
@@ -30,6 +31,7 @@ import org.openstreetmap.josm.Main;
 public abstract class ModalDialog extends JDialog {
 
     private static final long serialVersionUID = -1864531391713589510L;
+
 
     /**
      * Builds a new {@code ModalDialog} with the given arguments.
@@ -58,6 +60,7 @@ public abstract class ModalDialog extends JDialog {
         setSize(size);
         setMinimumSize(size);
     }
+
 
     /**
      * Creates the UI components.

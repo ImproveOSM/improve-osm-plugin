@@ -25,6 +25,9 @@ import javax.swing.text.JTextComponent;
 
 /**
  *
+ * Displays a {@code JPopupMenu} on the specified {@code JComponent}. This adapter can be used to display a pop-up menu
+ * on text components and table cells.
+ *
  * @author Beata
  * @version $Revision$
  */
@@ -32,6 +35,7 @@ public class PopupMenuDisplayAdapter extends MouseAdapter {
 
     private final JPopupMenu menu;
     private final JComponent component;
+
 
     /**
      * Builds a new {@code PopupMenuDisplayAdapter} with the given arguments.
@@ -43,6 +47,7 @@ public class PopupMenuDisplayAdapter extends MouseAdapter {
         this.component = component;
         this.menu = menu;
     }
+
 
     @Override
     public void mouseClicked(final MouseEvent e) {

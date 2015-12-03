@@ -35,6 +35,7 @@ import org.openstreetmap.josm.tools.Shortcut;
 
 
 /**
+ * Defines the right side dialog window.
  *
  * @author Beata
  * @version $Revision$
