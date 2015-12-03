@@ -3,12 +3,12 @@
 	<distribution type="test">
 		<archive file="ImproveOsm.jar">
 			<property>
-				<location>directionofflow_config.properties</location>
+				<location>improveosm_dof_config.properties</location>
 				<name>service.url</name>
 				<value>http://fcd-ss.skobbler.net:2680/directionOfFlowService_test/</value>
 			</property>
 			<property>
-				<location>missinggeo_config.properties</location>
+				<location>improveosm_mg_config.properties</location>
 				<name>service.url</name>
 				<value>http://fcd-ss.skobbler.net:2680/missingGeoService_test/</value>
 			</property>
@@ -17,12 +17,12 @@
 	<distribution type="development">
 		<archive file="ImproveOsm.jar">
 			<property>
-				<location>directionofflow_config.properties</location>
+				<location>improveosm_dof_config.properties</location>
 				<name>service.url</name>
 				<value>http://fcd-ss.skobbler.net:2680/directionOfFlowService_dev/</value>
 			</property>
 			<property>
-				<location>missinggeo_config.properties</location>
+				<location>improveosm_mg_config.properties</location>
 				<name>service.url</name>
 				<value>http://fcd-ss.skobbler.net:2680/missingGeoService_dev/</value>
 			</property>
@@ -32,12 +32,12 @@
 	<distribution type="production">
 		<archive file="ImproveOsm.jar">
 			<property>
-				<location>directionofflow_config.properties</location>
+				<location>improveosm_dof_config.properties</location>
 				<name>service.url</name>
 				<value>http://improve-osm.skobbler.net:9090/directionOfFlowService/</value>
 			</property>
 			<property>
-				<location>missinggeo_config.properties</location>
+				<location>improveosm_mg_config.properties</location>
 				<name>service.url</name>
 				<value>http://missingroads.skobbler.net/missingGeoService/</value>
 			</property>
