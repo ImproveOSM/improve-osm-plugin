@@ -53,10 +53,12 @@ final class LoadManager {
         if (entries != null && !entries.isEmpty()) {
             dataLayers = EnumSet.noneOf(DataLayer.class);
             for (final DataLayerEntry entry : entries) {
-                dataLayers.add(DataLayer.valueOf(entry.getName()));
+                if (!entry.getName().equals(DataLayer.NONE.name())) {
+                    dataLayers.add(DataLayer.valueOf(entry.getName()));
+                }
             }
         }
-        return dataLayers == null ? EnumSet.allOf(DataLayer.class) : dataLayers;
+        return dataLayers == null ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.MISSING_GEOMETRY) : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */

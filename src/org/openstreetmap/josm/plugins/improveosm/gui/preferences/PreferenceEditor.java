@@ -15,7 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
+import java.awt.BorderLayout;
 import java.util.EnumSet;
+import javax.swing.JPanel;
 import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
@@ -31,17 +33,19 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  */
 public class PreferenceEditor extends DefaultTabPreferenceSetting {
 
-    private PreferencePanel pnlPreference;
+    private final PreferencePanel pnlPreference;
 
     public PreferenceEditor() {
         super(IconConfig.getInstance().getPluginIconName(), GuiConfig.getInstance().getPluginName(),
                 GuiConfig.getInstance().getPluginTxt());
+        pnlPreference = new PreferencePanel();
     }
 
     @Override
     public void addGui(final PreferenceTabbedPane pnlParent) {
-        pnlPreference = new PreferencePanel();
-        createPreferenceTabWithScrollPane(pnlParent, pnlPreference);
+        final JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(pnlPreference, BorderLayout.NORTH);
+        createPreferenceTabWithScrollPane(pnlParent, mainPanel);
     }
 
     @Override

@@ -40,6 +40,7 @@ public class BoundingBox {
     private double east;
     private double west;
 
+
     /**
      * Builds a new bounding box based on the given map view.
      *
@@ -70,11 +71,12 @@ public class BoundingBox {
         setWest(west);
     }
 
+
     public double getNorth() {
         return north;
     }
 
-    private void setNorth(final double north) {
+    private final void setNorth(final double north) {
         this.north = north > MAX_LAT ? MAX_LAT : north;
     }
 
@@ -125,15 +127,11 @@ public class BoundingBox {
             result = true;
         } else if (obj instanceof BoundingBox) {
             final BoundingBox other = (BoundingBox) obj;
-            if (equals(east, other.getEast()) && equals(north, other.getNorth()) && equals(south, other.getSouth())
-                    && equals(west, other.getWest())) {
-                result = true;
-            }
+            result = Double.doubleToLongBits(east) == Double.doubleToLongBits(other.getEast());
+            result = result && Double.doubleToLongBits(north) == Double.doubleToLongBits(other.getNorth());
+            result = result && Double.doubleToLongBits(south) == Double.doubleToLongBits(other.getSouth());
+            result = result && Double.doubleToLongBits(west) == Double.doubleToLongBits(other.getWest());
         }
         return result;
-    }
-
-    private boolean equals(final double obj1, final double obj2) {
-        return Double.doubleToLongBits(obj1) == Double.doubleToLongBits(obj2);
     }
 }

@@ -15,8 +15,6 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
-import static  org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.PLAIN_12;
 import java.awt.Rectangle;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -44,7 +42,7 @@ class InfoPanel extends BasicPanel<RoadSegment> {
     public void createComponents(final RoadSegment roadSegment) {
         y = 0;
         pnlWidth = 0;
-        final int widthLbl = getMaxWidth(FM_BOLD_12, getGuiCnf().getLblTrips(), getGuiCnf().getLblId(),
+        final int widthLbl = getMaxWidth(getFontMetricsBold(), getGuiCnf().getLblTrips(), getGuiCnf().getLblId(),
                 getGuiCnf().getLblType(), getGuiCnf().getLblStatus(), getGuiCnf().getLblConfidence());
 
         addPercentage(roadSegment.getPercentOfTrips());
@@ -58,17 +56,18 @@ class InfoPanel extends BasicPanel<RoadSegment> {
     private void addPercentage(final Double percentage) {
         if (percentage != null) {
             final String lbl = Formatter.formatDouble(percentage, true) + getGuiCnf().getLblProcent();
-            final int widthLbl = FM_BOLD_12.stringWidth(lbl.toString());
-            add(GuiBuilder.buildLabel(lbl, BOLD_12, new Rectangle(RECT_X, RECT_Y, widthLbl, LHEIGHT)));
+            final int widthLbl = getFontMetricsBold().stringWidth(lbl.toString());
+            add(GuiBuilder.buildLabel(lbl, getFontBold(), new Rectangle(RECT_X, RECT_Y, widthLbl, LHEIGHT)));
             y = RECT_Y + LHEIGHT;
         }
     }
 
     private void addTotalTrips(final Integer numberOfTrips, final int widthLbl) {
         if (numberOfTrips != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblTrips(), BOLD_12, new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(numberOfTrips.toString());
-            add(GuiBuilder.buildLabel(numberOfTrips.toString(), PLAIN_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblTrips(), getFontBold(),
+                    new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
+            add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(),
                     new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
@@ -78,9 +77,11 @@ class InfoPanel extends BasicPanel<RoadSegment> {
     private void addIdentifier(final RoadSegment roadSegment, final int widthLbl) {
         if (roadSegment.getWayId() != null && roadSegment.getFromNodeId() != null
                 && roadSegment.getToNodeId() != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblId(), BOLD_12, new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(roadSegment.toString()) + WIDTH_MARGIN;
-            add(GuiBuilder.buildLabel(roadSegment.toString(), PLAIN_12, new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblId(), getFontBold(),
+                    new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(roadSegment.toString()) + WIDTH_MARGIN;
+            add(GuiBuilder.buildLabel(roadSegment.toString(), getFontPlain(),
+                    new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = pnlWidth + widthLbl + widthVal;
             y = y + LHEIGHT;
         }
@@ -88,9 +89,10 @@ class InfoPanel extends BasicPanel<RoadSegment> {
 
     private void addRoadType(final RoadType type, final int widthLbl) {
         if (type != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblType(), BOLD_12, new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(type.toString());
-            add(GuiBuilder.buildLabel(type.toString().toLowerCase(), PLAIN_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblType(), getFontBold(),
+                    new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(type.toString());
+            add(GuiBuilder.buildLabel(type.toString().toLowerCase(), getFontPlain(),
                     new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
@@ -99,10 +101,10 @@ class InfoPanel extends BasicPanel<RoadSegment> {
 
     private void addStatus(final Status status, final int widthLbl) {
         if (status != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblStatus(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblStatus(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(status.name());
-            add(GuiBuilder.buildLabel(status.name().toLowerCase(), PLAIN_12,
+            final int widthVal = getFontMetricsPlain().stringWidth(status.name());
+            add(GuiBuilder.buildLabel(status.name().toLowerCase(), getFontPlain(),
                     new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
@@ -111,10 +113,10 @@ class InfoPanel extends BasicPanel<RoadSegment> {
 
     private void addConfidence(final OnewayConfidenceLevel confidence, final int widthLbl) {
         if (confidence != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblConfidence(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblConfidence(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(confidence.longDisplayName());
-            add(GuiBuilder.buildLabel(confidence.longDisplayName(), PLAIN_12,
+            final int widthVal = getFontMetricsPlain().stringWidth(confidence.longDisplayName());
+            add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(),
                     new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;

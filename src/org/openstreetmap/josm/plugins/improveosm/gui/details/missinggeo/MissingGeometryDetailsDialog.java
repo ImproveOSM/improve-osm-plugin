@@ -30,7 +30,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeoGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 import org.openstreetmap.josm.tools.Shortcut;
 
 
@@ -47,8 +47,8 @@ public class MissingGeometryDetailsDialog extends ToggleDialog {
     private static final Dimension DIM = new Dimension(150, 100);
 
     private static final int DLG_HEIGHT = 50;
-    private static Shortcut shortcut = Shortcut.registerShortcut(MissingGeoGuiConfig.getInstance().getLayerName(),
-            MissingGeoGuiConfig.getInstance().getLayerTlt(), KeyEvent.VK_F3, Shortcut.CTRL);
+    private static Shortcut shortcut = Shortcut.registerShortcut(MissingGeometryGuiConfig.getInstance().getLayerName(),
+            MissingGeometryGuiConfig.getInstance().getLayerTlt(), KeyEvent.VK_F3, Shortcut.CTRL);
 
     private final TilePanel pnlTile;
     private final CommentsPanel pnlComments;
@@ -59,12 +59,12 @@ public class MissingGeometryDetailsDialog extends ToggleDialog {
      * Builds a new {@code MissingGeometryDetailsDialog} object.
      */
     public MissingGeometryDetailsDialog() {
-        super(MissingGeoGuiConfig.getInstance().getLayerName(),
+        super(MissingGeometryGuiConfig.getInstance().getLayerName(),
                 IconConfig.getInstance().getMissingGeometryShortcutName(),
-                MissingGeoGuiConfig.getInstance().getLayerTlt(), shortcut, DLG_HEIGHT);
+                MissingGeometryGuiConfig.getInstance().getLayerTlt(), shortcut, DLG_HEIGHT);
 
         pnlTile = new TilePanel();
-        final JScrollPane cmpTile = GuiBuilder.buildScrollPane(MissingGeoGuiConfig.getInstance().getPnlTileTitle(),
+        final JScrollPane cmpTile = GuiBuilder.buildScrollPane(MissingGeometryGuiConfig.getInstance().getPnlTileTitle(),
                 pnlTile, getBackground(), DIM);
         pnlComments = new CommentsPanel();
 

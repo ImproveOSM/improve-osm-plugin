@@ -35,6 +35,7 @@ public class Tile {
     private Status status;
     private TileType type;
 
+
     /**
      * Builds a new object with the given arguments.
      *
@@ -66,6 +67,7 @@ public class Tile {
         this.status = status;
         this.type = type;
     }
+
 
     public Integer getNumberOfTrips() {
         return numberOfTrips;

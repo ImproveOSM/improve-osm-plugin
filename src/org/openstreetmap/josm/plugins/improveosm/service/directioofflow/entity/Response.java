@@ -21,6 +21,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.entity.BaseResponse;
 
 
 /**
+ * Defines the response of the DirectionOfFlow service.
  *
  * @author Beata
  * @version $Revision$

@@ -24,7 +24,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+
 /**
+ * Custom deserializer for the {@code Cluster} entity.
  *
  * @author Beata
  * @version $Revision$

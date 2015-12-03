@@ -1,0 +1,19 @@
+<project name="improveosm-plugin.extended">
+
+	<import file="build.xml"/>
+
+	<property name="dir.setup" value="${basedir}/setup"/>
+
+	<target name="make">
+		<antcall target="clean"/>
+		<antcall target="dist"/>
+
+		<property name="dir.multidist" value="${dir.setup}/tools/MultiDist"/>
+		<taskdef name="multidist"
+                classname="com.skobbler.tools.multidist.Engine"
+                classpath="${dir.multidist}/MultiDist.jar"/>
+		<multidist targetDir="${plugin.dist.dir}"
+                configFile="${dir.multidist}/multidist.xml"/>
+	</target>
+
+</project>

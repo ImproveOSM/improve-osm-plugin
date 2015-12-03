@@ -29,7 +29,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeoGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 
 
 /**
@@ -61,7 +61,7 @@ class ButtonPanel extends JPanel {
     ButtonPanel() {
         super(new GridLayout(ROWS, COLS));
 
-        final MissingGeoGuiConfig guiCnf = MissingGeoGuiConfig.getInstance();
+        final MissingGeometryGuiConfig guiCnf = MissingGeometryGuiConfig.getInstance();
         final IconConfig iconCnf = IconConfig.getInstance();
         btnFilter = GuiBuilder.buildButton(new DislayFilterDialog(), iconCnf.getFilterIcon(),
                 GuiConfig.getInstance().getBtnFilterTlt(), true);
@@ -69,10 +69,10 @@ class ButtonPanel extends JPanel {
                 new DisplayEditDialog(null, GuiConfig.getInstance().getDlgCommentTitle(), iconCnf.getCommentIcon());
         btnComment = GuiBuilder.buildButton(commentAction, iconCnf.getCommentIcon(), guiCnf.getBtnCommentTlt(), false);
         final DisplayEditDialog solveAction = new DisplayEditDialog(Status.SOLVED,
-                MissingGeoGuiConfig.getInstance().getDlgSolveTitle(), iconCnf.getSolvedIcon());
+                MissingGeometryGuiConfig.getInstance().getDlgSolveTitle(), iconCnf.getSolvedIcon());
         btnSolve = GuiBuilder.buildButton(solveAction, iconCnf.getSolvedIcon(), guiCnf.getBtnSolveTlt(), false);
         final DisplayEditDialog reopenAction = new DisplayEditDialog(Status.OPEN,
-                MissingGeoGuiConfig.getInstance().getDlgReopenTitle(), iconCnf.getOpenIcon());
+                MissingGeometryGuiConfig.getInstance().getDlgReopenTitle(), iconCnf.getOpenIcon());
         btnReOpen = GuiBuilder.buildButton(reopenAction, iconCnf.getOpenIcon(), guiCnf.getBtnOpenTlt(), false);
         final DisplayEditDialog invalidAction =
                 new DisplayEditDialog(Status.INVALID, guiCnf.getDlgInvalidTitle(), iconCnf.getInvalidIcon());

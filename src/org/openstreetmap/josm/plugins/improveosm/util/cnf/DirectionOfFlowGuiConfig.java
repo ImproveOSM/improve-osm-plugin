@@ -28,6 +28,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     private static final DirectionOfFlowGuiConfig INSTANCE = new DirectionOfFlowGuiConfig();
 
     private final String layerName;
+    private final String layerTxt;
     private final String layerTlt;
 
     /* button tooltips */
@@ -64,7 +65,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     /* tip info texts */
     private final String dlgTipTitle;
-    private final String dlgTipText;
+    private final String dlgTipTxt;
 
 
     DirectionOfFlowGuiConfig() {
@@ -72,6 +73,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
         /* layer texts */
         layerName = readProperty("plugin.name");
+        layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
         btnFilterTlt = readProperty("btn.filtet.tlt");
         btnLocationTlt = readProperty("btn.location.tlt");
@@ -100,7 +102,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         lblOneway = readProperty("oneway.lbl");
 
         dlgTipTitle = readProperty("dialog.tip.title");
-        dlgTipText = readProperty("dialog.tip.text");
+        dlgTipTxt = readProperty("dialog.tip.text");
     }
 
 
@@ -111,6 +113,10 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getLayerName() {
         return layerName;
+    }
+
+    public String getLayerTxt() {
+        return layerTxt;
     }
 
     public String getLayerTlt() {
@@ -209,7 +215,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         return dlgTipTitle;
     }
 
-    public String getDlgTipText() {
-        return dlgTipText;
+    public String getDlgTipTxt() {
+        return dlgTipTxt;
     }
 }

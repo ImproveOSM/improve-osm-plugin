@@ -33,6 +33,7 @@ public class OnewayFilter extends SearchFilter {
     /** default search filter */
     public static final OnewayFilter DEFAULT = new OnewayFilter(Status.OPEN, null);
 
+
     /**
      * Builds a new object with the given arguments.
      *
@@ -43,6 +44,7 @@ public class OnewayFilter extends SearchFilter {
         super(status);
         this.confidenceLevels = confidenceLevels;
     }
+
 
     public EnumSet<OnewayConfidenceLevel> getConfidenceLevels() {
         return confidenceLevels;

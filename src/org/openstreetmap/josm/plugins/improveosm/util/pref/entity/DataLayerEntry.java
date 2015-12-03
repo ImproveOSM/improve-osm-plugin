@@ -18,14 +18,15 @@ package org.openstreetmap.josm.plugins.improveosm.util.pref.entity;
 import org.openstreetmap.josm.data.Preferences.pref;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 
+
 /**
+ * Preference entry corresponding to the {@code DataLayer} entity.
  *
  * @author Beata
  * @version $Revision$
  */
 public class DataLayerEntry {
-
-    // preference entities must be declared public, otherwise JOSM preference loaded does not work!
+    // preference entities must be declared public, otherwise JOSM preference loading does not work!
 
     @pref
     private String name;

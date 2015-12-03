@@ -58,6 +58,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Defines the main functionality of the Improve-OSM plugin.
  *
  * @author Beata
  * @version $Revision$
@@ -77,9 +78,16 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
     private Timer zoomTimer;
     private boolean listenersRegistered = false;
 
+
+    /**
+     * Builds a new object. This constructor is automatically invoked by JOSM to bootstrap the plugin.
+     *
+     * @param pluginInfo the {@code PluginInfo} object
+     */
     public ImproveOsmPlugin(final PluginInformation pluginInfo) {
         super(pluginInfo);
     }
+
 
     @Override
     public PreferenceSetting getPreferenceSetting() {
@@ -142,6 +150,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         }
     }
 
+
     /* implementation of LayerChangeListener */
 
     @Override
@@ -163,14 +172,14 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
                 Main.map.remove(missingGeometryDialog);
             }
             missingGeometryDialog.setVisible(false);
-            missingGeometryDialog.getButton().setSelected(false);
+            Main.main.removeLayer(missingGeometryLayer);
             missingGeometryLayer = null;
         } else if (currentLayer instanceof DirectionOfFlowLayer) {
             if (Main.map != null) {
                 Main.map.remove(directionOfFlowDialog);
             }
             directionOfFlowDialog.setVisible(false);
-            directionOfFlowDialog.getButton().setSelected(false);
+            Main.main.removeLayer(directionOfFlowLayer);
             directionOfFlowLayer = null;
         }
 
@@ -184,6 +193,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             listenersRegistered = false;
         }
     }
+
 
     /* ZoomChangeListener method */
 
@@ -210,6 +220,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         }
     }
 
+
     /* PreferenceChangeListener method */
 
     @Override
@@ -220,36 +231,37 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             } else if (event.getKey().equals(Keys.DIRECTIONOFFLOW_FILTERS_CHANGED)) {
                 Main.worker.execute(new DirectionOfFlowUpdateThread());
             } else if (event.getKey().equals(Keys.DATA_LAYER)) {
-                updateActiveLayers();
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        updateActiveLayers();
+                    }
+                });
             }
         }
     }
 
     private void updateActiveLayers() {
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                boolean addMissingGeometry = false;
-                boolean addDirectionOfFlow = false;
-                if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
-                    addMissingGeometry = missingGeometryLayer == null;
-                } else {
-                    if (missingGeometryLayer != null) {
-                        layerRemoved(missingGeometryLayer);
-                    }
-                }
-                if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
-                    addDirectionOfFlow = directionOfFlowLayer == null;
-                } else if (directionOfFlowLayer != null) {
-                    layerRemoved(directionOfFlowLayer);
-                }
-                addDialogWindows(Main.map, addMissingGeometry, addDirectionOfFlow);
-                addLayers(addMissingGeometry, addDirectionOfFlow);
-            }
-        });
+        boolean addMissingGeometry = false;
+        boolean addDirectionOfFlow = false;
+        if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
+            addMissingGeometry = missingGeometryLayer == null;
+        } else if (missingGeometryLayer != null) {
+            layerRemoved(missingGeometryLayer);
+            missingGeometryDialog.getButton().setVisible(false);
+        }
+        if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
+            addDirectionOfFlow = directionOfFlowLayer == null;
+        } else if (directionOfFlowLayer != null) {
+            layerRemoved(directionOfFlowLayer);
+            directionOfFlowDialog.getButton().setVisible(false);
+        }
+        addDialogWindows(Main.map, addMissingGeometry, addDirectionOfFlow);
+        addLayers(addMissingGeometry, addDirectionOfFlow);
     }
+
 
     /* MouseListener implementation */
 
@@ -262,63 +274,12 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
                     && zoom > Config.getMissingGeoInstance().getMaxClusterZoom()) {
                 // select tiles
                 selectTile(event.getPoint(), event.isShiftDown());
-
             } else if (activeLayer == directionOfFlowLayer && directionOfFlowLayer.isVisible()
                     && zoom > Config.getDirectionOfFlowInstance().getMaxClusterZoom()) {
                 // select road segments
                 selectRoadSegment(event.getPoint(), event.isShiftDown());
             }
         }
-    }
-
-    private void selectTile(final Point point, final boolean multiSelect) {
-        final Tile tile = missingGeometryLayer.nearbyItem(point, multiSelect);
-        if (tile != null) {
-            if (!tile.equals(missingGeometryLayer.lastSelectedItem())) {
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final List<Comment> comments = ServiceHandler.getInstance().retrieveComments(tile);
-                        updateMissingGeometrySelectedData(tile, comments);
-                    }
-                });
-            }
-        } else {
-            // clear selection
-            updateMissingGeometrySelectedData(null, null);
-        }
-    }
-
-    private void selectRoadSegment(final Point point, final boolean multiSelect) {
-        final RoadSegment roadSegment = directionOfFlowLayer.nearbyItem(point, multiSelect);
-        if (roadSegment != null) {
-            if (!roadSegment.equals(directionOfFlowLayer.lastSelectedItem())) {
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final List<Comment> comments = ServiceHandler.getInstance().retrieveComments(roadSegment);
-                        updateDirectionOfFlowSelectedData(roadSegment, comments);
-                    }
-                });
-            }
-        } else if (!multiSelect) {
-            // clear selection
-            updateDirectionOfFlowSelectedData(null, null);
-        }
-    }
-
-    private void updateDirectionOfFlowSelectedData(final RoadSegment roadSegment, final List<Comment> comments) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                directionOfFlowDialog.updateUI(roadSegment, comments);
-                directionOfFlowLayer.updateSelectedItem(roadSegment);
-                Main.map.repaint();
-            }
-        });
     }
 
     @Override
@@ -341,6 +302,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         // no logic for this action
     }
 
+
     /* CommentObserver method */
 
     @Override
@@ -349,23 +311,48 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         if (activeLayer == missingGeometryLayer) {
             final List<Tile> selectedTiles = missingGeometryLayer.getSelectedItems();
             Main.worker.execute(new Runnable() {
-
                 @Override
                 public void run() {
                     commentTiles(comment, selectedTiles);
-
                 }
             });
         } else if (activeLayer == directionOfFlowLayer) {
             final List<RoadSegment> selectedRoadSegments = directionOfFlowLayer.getSelectedItems();
             Main.worker.execute(new Runnable() {
-
                 @Override
                 public void run() {
                     commentRoadSegments(comment, selectedRoadSegments);
-
                 }
             });
+        }
+    }
+
+
+    /* commonly used private methods and classes */
+
+    private void selectTile(final Point point, final boolean multiSelect) {
+        final Tile tile = missingGeometryLayer.nearbyItem(point, multiSelect);
+        if (tile != null) {
+            if (!tile.equals(missingGeometryLayer.lastSelectedItem())) {
+                final List<Comment> comments = ServiceHandler.getInstance().retrieveComments(tile);
+                updateMissingGeometrySelectedData(tile, comments);
+            }
+        } else {
+            // clear selection
+            updateMissingGeometrySelectedData(null, null);
+        }
+    }
+
+    private void selectRoadSegment(final Point point, final boolean multiSelect) {
+        final RoadSegment roadSegment = directionOfFlowLayer.nearbyItem(point, multiSelect);
+        if (roadSegment != null) {
+            if (!roadSegment.equals(directionOfFlowLayer.lastSelectedItem())) {
+                final List<Comment> comments = ServiceHandler.getInstance().retrieveComments(roadSegment);
+                updateDirectionOfFlowSelectedData(roadSegment, comments);
+            }
+        } else if (!multiSelect) {
+            // clear selection
+            updateDirectionOfFlowSelectedData(null, null);
         }
     }
 
@@ -381,20 +368,8 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             final List<Comment> comments = ServiceHandler.getInstance().retrieveComments(items.get(items.size() - 1));
             updateMissingGeometrySelectedData(items.get(items.size() - 1), comments);
         } else {
-            updateDirectionOfFlowSelectedData(null, null);
+            updateMissingGeometrySelectedData(null, null);
         }
-    }
-
-    private void updateMissingGeometrySelectedData(final Tile tile, final List<Comment> comments) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                missingGeometryDialog.updateUI(tile, comments);
-                missingGeometryLayer.updateSelectedItem(tile);
-                Main.map.repaint();
-            }
-        });
     }
 
     private void commentRoadSegments(final Comment comment, final List<RoadSegment> items) {
@@ -413,7 +388,29 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         }
     }
 
-    /* commonly used private methods and classes */
+    private void updateMissingGeometrySelectedData(final Tile tile, final List<Comment> comments) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                missingGeometryDialog.updateUI(tile, comments);
+                missingGeometryLayer.updateSelectedItem(tile);
+                Main.map.repaint();
+            }
+        });
+    }
+
+    private void updateDirectionOfFlowSelectedData(final RoadSegment roadSegment, final List<Comment> comments) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                directionOfFlowDialog.updateUI(roadSegment, comments);
+                directionOfFlowLayer.updateSelectedItem(roadSegment);
+                Main.map.repaint();
+            }
+        });
+    }
 
     private class MissingGeometryUpdateThread implements Runnable {
 
@@ -503,7 +500,13 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
                     actionCommand.equals(missingGeometryDialog.getName()) && missingGeometryLayer == null;
             final boolean addDirectionOfFlow =
                     actionCommand.equals(directionOfFlowDialog.getName()) && directionOfFlowLayer == null;
-            addLayers(addMissingGeometry, addDirectionOfFlow);
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    addLayers(addMissingGeometry, addDirectionOfFlow);
+                }
+            });
         }
     }
 }

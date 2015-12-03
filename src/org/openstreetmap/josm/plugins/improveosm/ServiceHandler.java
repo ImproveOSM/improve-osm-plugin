@@ -33,6 +33,8 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
+ * Executes the service operations corresponding to user actions. If an operation fails, a corresponding message is
+ * displayed to the user.
  *
  * @author Beata
  * @version $Revision$

@@ -27,7 +27,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
  */
 public class TileTypeEntry {
 
-    // preference entities must be declared public, otherwise JOSM preference loaded does not work!
+    // preference entities must be declared public, otherwise JOSM preference loading does not work!
 
     @pref
     private String name;

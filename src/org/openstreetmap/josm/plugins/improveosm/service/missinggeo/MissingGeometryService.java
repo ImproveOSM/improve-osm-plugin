@@ -32,6 +32,7 @@ import com.google.gson.GsonBuilder;
 
 
 /**
+ * Executes the MissingGeometry service methods.
  *
  * @author Beata
  * @version $Revision$
@@ -44,6 +45,7 @@ public class MissingGeometryService extends BaseService implements Service<Tile>
         builder.registerTypeAdapter(Cluster.class, new ClusterDeserializer());
         return builder;
     }
+
     @Override
     public DataSet<Tile> search(final BoundingBox bbox, final SearchFilter filter, final int zoom)
             throws ServiceException {

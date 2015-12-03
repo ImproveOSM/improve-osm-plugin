@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 
 
 /**
+ * Defines the request body of the 'comment' operation.
  *
  * @author Beata
  * @version $Revision$

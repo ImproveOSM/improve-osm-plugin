@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.service.entity;
 
 /**
+ * Defines the service response status entity. Each service response contains this information.
  *
  * @author Beata
  * @version $Revision$

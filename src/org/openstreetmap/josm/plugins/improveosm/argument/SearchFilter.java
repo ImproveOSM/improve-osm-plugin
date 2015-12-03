@@ -19,6 +19,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 
 
 /**
+ * Defines a general filter that can be applied to the data layers.
  *
  * @author Beata
  * @version $Revision$
@@ -27,9 +28,11 @@ public class SearchFilter {
 
     private final Status status;
 
+
     public SearchFilter(final Status status) {
         this.status = status;
     }
+
 
     public Status getStatus() {
         return status;

@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+
 /**
  *
  * @author Beata
@@ -28,12 +29,12 @@ final class Constraints {
     private Constraints() {}
 
     static final GridBagConstraints LBL_DATA_LAYER = new GridBagConstraints(0, 0, 1, 1, 1, 1,
-            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(7, 5, 3, 5), 0, 0);
+            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 0, 3, 0), 0, 0);
 
     static final GridBagConstraints CB_MISSING_GEOMETRY = new GridBagConstraints(0, 1, 1, 1, 1, 1,
-            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
+            GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
 
     static final GridBagConstraints CB_DIRECTION_OF_FLOW = new GridBagConstraints(0, 2, 1, 1, 1, 1,
-            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
+            GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
 
 }

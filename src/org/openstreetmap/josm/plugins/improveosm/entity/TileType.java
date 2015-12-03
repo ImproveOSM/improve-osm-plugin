@@ -17,7 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 
 
 /**
- * Defines the type of a tile.
+ * Defines the possible types a tile might have.
  *
  * @author Beata
  * @version $Revision$

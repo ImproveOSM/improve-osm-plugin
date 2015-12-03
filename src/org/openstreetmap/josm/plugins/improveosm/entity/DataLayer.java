@@ -16,11 +16,16 @@
 package org.openstreetmap.josm.plugins.improveosm.entity;
 
 /**
+ * Defines the data layers available for this plugin.
  *
  * @author Beata
  * @version $Revision$
  */
 public enum DataLayer {
 
-    MISSING_GEOMETRY, DIRECTION_OF_FLOW;
+    MISSING_GEOMETRY,
+    DIRECTION_OF_FLOW,
+
+    /** special case used to save into preference file when the user de-selects all the available Improve-OSM layers */
+    NONE;
 }

@@ -21,6 +21,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.entity.BaseResponse;
 
 
 /**
+ * Defines the response of the MissingGeometry service.
  *
  * @author Beata
  * @version $Revision$
@@ -30,9 +31,7 @@ public class Response extends BaseResponse {
 
     private List<Tile> tiles;
 
-
     public List<Tile> getTiles() {
         return tiles;
     }
-
 }

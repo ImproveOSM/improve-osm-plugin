@@ -20,6 +20,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 
 
 /**
+ * Defines the body of the comment operation.
  *
  * @author Beata
  * @version $Revision$
@@ -29,6 +30,7 @@ public class CommentRequest {
     private final String username;
     private final String text;
     private final Status status;
+
 
     public CommentRequest(final Comment comment) {
         this.username = comment.getUsername();
@@ -47,5 +49,4 @@ public class CommentRequest {
     public Status getStatus() {
         return status;
     }
-
 }

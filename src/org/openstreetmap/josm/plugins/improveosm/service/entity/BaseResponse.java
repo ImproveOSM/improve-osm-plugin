@@ -21,6 +21,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 
 
 /**
+ * Defines a generic service response.
  *
  * @author Beata
  * @version $Revision$

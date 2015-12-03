@@ -27,6 +27,7 @@ import com.google.gson.JsonSyntaxException;
 
 
 /**
+ * Provides methods commonly used by the {@code Service} implementations.
  *
  * @author Beata
  * @version $Revision$
@@ -39,12 +40,26 @@ public class BaseService {
         this.gson = createGsonBuilder().create();
     }
 
+    /**
+     * Creates a {@code GsonBuilder} used for parsing the response of the service. A specific service class need to
+     * override this method, if custom deserializers needs to be registered.
+     *
+     * @return a {@code GsonBuilder} object
+     */
     public GsonBuilder createGsonBuilder() {
         final GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(LatLon.class, new LatLonDeserializer());
         return builder;
     }
 
+    /**
+     * Executes a HTTP GET method and returns the service response. The response is transformed to the specified type.
+     *
+     * @param url represents the service URL
+     * @param responseType represents the response type
+     * @return a {@code T} object
+     * @throws ServiceException
+     */
     public <T> T executeGet(final String url, final Class<T> responseType) throws ServiceException {
         String response = null;
         try {
@@ -55,6 +70,15 @@ public class BaseService {
         return parseResponse(response, responseType);
     }
 
+    /**
+     * Executes a HTTP POST method and reads the service response. The response is transformed to the specified type.
+     *
+     * @param url represents the service URL
+     * @param content represents the request's body
+     * @param responseType represents the response type
+     * @return a {@code T} object
+     * @throws ServiceException
+     */
     public <T> T executePost(final String url, final String content, final Class<T> responseType)
             throws ServiceException {
         String response = null;
@@ -68,6 +92,29 @@ public class BaseService {
         return parseResponse(response, responseType);
     }
 
+    /**
+     * Builds a JSON representing the body of a HTTP request.
+     *
+     * @param request the object that needs to be sent
+     * @param requestType the type of the object
+     * @return a {@code String} containing the corresponding JSON
+     */
+    public <T> String buildRequest(final T request, final Class<T> requestType) {
+        return gson.toJson(request, requestType);
+    }
+
+    /**
+     * Verifies if the status is {@code HttpURLConnection.HTTP_OK}. If not the method throws an exception.
+     *
+     * @param status a {@code ResponseStatus} represents the status of a service response
+     * @throws ServiceException containing the status API message
+     */
+    public void verifyResponseStatus(final ResponseStatus status) throws ServiceException {
+        if (status != null && status.getHttpCode() != HttpURLConnection.HTTP_OK) {
+            throw new ServiceException(status.getApiMessage());
+        }
+    }
+
     private <T> T parseResponse(final String response, final Class<T> responseType) throws ServiceException {
         T root = null;
         if (response != null) {
@@ -78,15 +125,5 @@ public class BaseService {
             }
         }
         return root;
-    }
-
-    public <T> String buildRequest(final T request, final Class<T> requestType) {
-        return gson.toJson(request, requestType);
-    }
-
-    public void verifyResponseStatus(final ResponseStatus status) throws ServiceException {
-        if (status != null && status.getHttpCode() != HttpURLConnection.HTTP_OK) {
-            throw new ServiceException(status.getApiMessage());
-        }
     }
 }

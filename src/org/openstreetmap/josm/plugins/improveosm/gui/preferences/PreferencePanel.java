@@ -15,15 +15,18 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
+import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeoGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
@@ -40,21 +43,30 @@ class PreferencePanel extends JPanel {
     private final JCheckBox cbMissingGeometry;
     private final JCheckBox cbDirectionOfFlow;
 
-
     PreferencePanel() {
         super(new GridBagLayout());
 
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
+
         /* add components */
-        add(GuiBuilder.buildLabel("Data layers", BOLD_12, null), Constraints.LBL_DATA_LAYER);
-        cbMissingGeometry = GuiBuilder.buildCheckBox(MissingGeoGuiConfig.getInstance().getLayerName(), null,
-                getBackground());
+        final Font font = getFont().deriveFont(Font.PLAIN);
+        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
+        cbMissingGeometry =
+                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLayerTxt(), null, getBackground());
+        cbMissingGeometry.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(final ItemEvent event) {
+                System.out.println(cbMissingGeometry.isSelected());
+            }
+
+        });
         if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             cbMissingGeometry.setSelected(true);
         }
         add(cbMissingGeometry, Constraints.CB_MISSING_GEOMETRY);
         cbDirectionOfFlow =
-                GuiBuilder.buildCheckBox(DirectionOfFlowGuiConfig.getInstance().getLayerName(), null, getBackground());
+                GuiBuilder.buildCheckBox(DirectionOfFlowGuiConfig.getInstance().getLayerTxt(), null, getBackground());
         if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
             cbDirectionOfFlow.setSelected(true);
         }
@@ -68,6 +80,9 @@ class PreferencePanel extends JPanel {
         }
         if (cbDirectionOfFlow.isSelected()) {
             result.add(DataLayer.DIRECTION_OF_FLOW);
+        }
+        if (result.isEmpty()) {
+            result.add(DataLayer.NONE);
         }
         return result;
     }

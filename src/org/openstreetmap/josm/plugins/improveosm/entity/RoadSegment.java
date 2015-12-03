@@ -20,6 +20,7 @@ import org.openstreetmap.josm.data.coor.LatLon;
 
 
 /**
+ * Defines the attributes of the road segment business entity.
  *
  * @author Beata
  * @version $Revision$
@@ -35,6 +36,7 @@ public class RoadSegment {
     private List<LatLon> points;
     private Status status;
     private RoadType type;
+
 
     /**
      * Builds a new road segment with the given arguments.
@@ -72,6 +74,7 @@ public class RoadSegment {
         this.status = status;
         this.type = type;
     }
+
 
     public Long getWayId() {
         return wayId;

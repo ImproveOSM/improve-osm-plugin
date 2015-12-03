@@ -15,8 +15,8 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
-
 /**
+ * Holds run-time configuration.
  *
  * @author Beata
  * @version $Revision$
@@ -30,7 +30,6 @@ public final class Config extends BaseConfig {
     private final String serviceUrl;
     private final String feedbackUrl;
     private int maxClusterZoom;
-
 
     private Config(final String fileName) {
         super(fileName);

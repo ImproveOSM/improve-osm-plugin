@@ -25,6 +25,7 @@ import com.google.gson.JsonParseException;
 
 
 /**
+ * Custom deserializer for the {@code LatLon} object.
  *
  * @author Beata
  * @version $Revision$
@@ -33,6 +34,7 @@ class LatLonDeserializer implements JsonDeserializer<LatLon> {
 
     private static final String LATITUDE = "lat";
     private static final String LONGITUDE = "lon";
+
 
     @Override
     public LatLon deserialize(final JsonElement jsonElement, final Type type, final JsonDeserializationContext context)

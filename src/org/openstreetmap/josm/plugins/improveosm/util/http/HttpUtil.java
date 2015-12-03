@@ -54,6 +54,20 @@ public final class HttpUtil {
     }
 
     /**
+     * Encodes the given EnumSet using {@code HttpUtil#ENCODING} encoding. The set elements are separated by comma.
+     *
+     * @param set an {@code EnumSet}
+     * @return the encoded set
+     */
+    public static <E extends Enum<E>> String utf8Encode(final EnumSet<E> set) {
+        final StringBuilder param = new StringBuilder();
+        for (final Enum<E> item : set) {
+            param.append(item.name()).append(",");
+        }
+        return utf8Encode(param.substring(0, param.length() - 1));
+    }
+
+    /**
      * Reads the content of the given input stream and returns in string format.
      *
      * @param input a {@code InputStream} the stream which content will be read
@@ -70,13 +84,5 @@ public final class HttpUtil {
             IOUtils.closeQuietly(input);
         }
         return result;
-    }
-
-    public static <E extends Enum<E>> String utf8Encode(final EnumSet<E> list) {
-        final StringBuilder param = new StringBuilder();
-        for (final Enum<E> item : list) {
-            param.append(item.name()).append(",");
-        }
-        return utf8Encode(param.substring(0, param.length() - 1));
     }
 }

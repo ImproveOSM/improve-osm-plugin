@@ -27,7 +27,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeoGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 
 
 /**
@@ -40,7 +40,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
 
 
     public MissingGeometryLayer() {
-        super(MissingGeoGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
+        super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
     }
 
 
@@ -51,7 +51,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
 
     @Override
     public String getToolTipText() {
-        return MissingGeoGuiConfig.getInstance().getLayerTlt();
+        return MissingGeometryGuiConfig.getInstance().getLayerTlt();
     }
 
     @Override

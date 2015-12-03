@@ -30,6 +30,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.entity.R
 
 
 /**
+ * Executes the DirectionOfFlowService methods.
  *
  * @author Beata
  * @version $Revision$
@@ -62,5 +63,4 @@ public class DirectionOfFlowService extends BaseService implements Service<RoadS
         final Response root = executePost(url, content, Response.class);
         verifyResponseStatus(root.getStatus());
     }
-
 }

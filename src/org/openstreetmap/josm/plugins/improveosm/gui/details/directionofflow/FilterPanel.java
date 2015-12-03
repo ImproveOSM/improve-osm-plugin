@@ -15,7 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
+import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.util.EnumSet;
 import javax.swing.ButtonGroup;
@@ -57,7 +57,8 @@ class FilterPanel extends JPanel {
     }
 
     private void addStatusFilter(final Status status) {
-        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl(), BOLD_12, null),
+        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl(),
+                getFont().deriveFont(Font.BOLD), null),
                 Constraints.LBL_STATUS);
         rbStatusOpen =
                 GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
@@ -73,7 +74,8 @@ class FilterPanel extends JPanel {
     }
 
     private void addConfidenceFilter(final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
-        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(), BOLD_12, null),
+        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
+                getFont().deriveFont(Font.BOLD), null),
                 Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
                 OnewayConfidenceLevel.C1.name(), getBackground());

@@ -15,8 +15,6 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.PLAIN_12;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.List;
@@ -27,7 +25,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeoGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 
 
 /**
@@ -45,7 +43,7 @@ class TilePanel extends BasicPanel<Tile> {
     public void createComponents(final Tile tile) {
         y = 0;
         pnlWidth = 0;
-        final int widthLbl = getMaxWidth(FM_BOLD_12, getGuiCnf().getLblType(), getGuiCnf().getLblPointCount(),
+        final int widthLbl = getMaxWidth(getFontMetricsBold(), getGuiCnf().getLblType(), getGuiCnf().getLblPointCount(),
                 getGuiCnf().getLblTripCount(), getGuiCnf().getLblStatus(), getGuiCnf().getLblTimestamp());
 
         addIdentifier(tile, widthLbl);
@@ -60,10 +58,11 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addIdentifier(final Tile tile, final int widthLbl) {
         if (tile.getX() != null && tile.getY() != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblId(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblId(), getFontBold(),
                     new Rectangle(RECT_X, RECT_Y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(tile.toString());
-            add(GuiBuilder.buildLabel(tile.toString(), PLAIN_12, new Rectangle(widthLbl, RECT_Y, widthVal, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(tile.toString());
+            add(GuiBuilder.buildLabel(tile.toString(), getFontPlain(),
+                    new Rectangle(widthLbl, RECT_Y, widthVal, LHEIGHT)));
             pnlWidth = pnlWidth + widthLbl + widthVal;
             y = RECT_Y + LHEIGHT;
         }
@@ -71,9 +70,10 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addType(final TileType type, final int widthLbl) {
         if (type != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblType(), BOLD_12, new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(type.toString());
-            add(GuiBuilder.buildLabel(type.toString(), PLAIN_12, new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblType(), getFontBold(),
+                    new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(type.toString());
+            add(GuiBuilder.buildLabel(type.toString(), getFontPlain(), new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
         }
@@ -81,10 +81,10 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addStatus(final Status status, final int widthLbl) {
         if (status != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblStatus(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblStatus(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(status.name());
-            add(GuiBuilder.buildLabel(status.name(), PLAIN_12, new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(status.name());
+            add(GuiBuilder.buildLabel(status.name(), getFontPlain(), new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
         }
@@ -92,11 +92,11 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addTimestamp(final Long timestamp, final int widthLbl) {
         if (timestamp != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblTimestamp(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblTimestamp(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
             final String timestampStr = Formatter.formatTimestamp(timestamp);
-            final int widthVal = FM_PLAIN_12.stringWidth(timestampStr);
-            add(GuiBuilder.buildLabel(timestampStr, PLAIN_12, new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(timestampStr);
+            add(GuiBuilder.buildLabel(timestampStr, getFontPlain(), new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
         }
@@ -104,11 +104,11 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addNumberOfPoints(final List<LatLon> points, final int widthLbl) {
         if (points != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblPointCount(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblPointCount(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
             final String numberOfPoints = "" + points.size();
-            final int widthVal = FM_PLAIN_12.stringWidth(numberOfPoints);
-            add(GuiBuilder.buildLabel(numberOfPoints, PLAIN_12, new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
+            final int widthVal = getFontMetricsPlain().stringWidth(numberOfPoints);
+            add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(), new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
         }
@@ -116,17 +116,17 @@ class TilePanel extends BasicPanel<Tile> {
 
     private void addNumberOfTrips(final Integer numberOfTrips, final int widthLbl) {
         if (numberOfTrips != null) {
-            add(GuiBuilder.buildLabel(getGuiCnf().getLblTripCount(), BOLD_12,
+            add(GuiBuilder.buildLabel(getGuiCnf().getLblTripCount(), getFontBold(),
                     new Rectangle(RECT_X, y, widthLbl, LHEIGHT)));
-            final int widthVal = FM_PLAIN_12.stringWidth(numberOfTrips.toString());
-            add(GuiBuilder.buildLabel(numberOfTrips.toString(), PLAIN_12,
+            final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
+            add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(),
                     new Rectangle(widthLbl, y, widthVal, LHEIGHT)));
             pnlWidth = Math.max(pnlWidth, widthLbl + widthVal);
             y = y + LHEIGHT;
         }
     }
 
-    private MissingGeoGuiConfig getGuiCnf() {
-        return MissingGeoGuiConfig.getInstance();
+    private MissingGeometryGuiConfig getGuiCnf() {
+        return MissingGeometryGuiConfig.getInstance();
     }
 }

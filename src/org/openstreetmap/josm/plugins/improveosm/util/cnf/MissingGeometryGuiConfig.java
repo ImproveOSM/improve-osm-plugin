@@ -16,16 +16,18 @@
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 /**
+ * Holds missing geometry logic related texts.
  *
  * @author Beata
  * @version $Revision$
  */
-public final class MissingGeoGuiConfig extends BaseConfig {
+public final class MissingGeometryGuiConfig extends BaseConfig {
 
     private static final String CONFIG_FILE = "missinggeo_gui.properties";
-    private static final MissingGeoGuiConfig INSTANCE = new MissingGeoGuiConfig();
+    private static final MissingGeometryGuiConfig INSTANCE = new MissingGeometryGuiConfig();
 
     private final String layerName;
+    private final String layerTxt;
     private final String layerTlt;
 
     /* buttons related text */
@@ -60,10 +62,11 @@ public final class MissingGeoGuiConfig extends BaseConfig {
     private final String lblDisplay;
 
 
-    private MissingGeoGuiConfig() {
+    private MissingGeometryGuiConfig() {
         super(CONFIG_FILE);
 
         layerName = readProperty("layer.name");
+        layerTxt = readProperty("layer.txt");
         layerTlt = readProperty("layer.tlt");
         btnFilterTlt = readProperty("btn.filter.tlt");
         btnCommentTlt = readProperty("btn.comment.tlt");
@@ -89,12 +92,16 @@ public final class MissingGeoGuiConfig extends BaseConfig {
     }
 
 
-    public static MissingGeoGuiConfig getInstance() {
+    public static MissingGeometryGuiConfig getInstance() {
         return INSTANCE;
     }
 
     public String getLayerName() {
         return layerName;
+    }
+
+    public String getLayerTxt() {
+        return layerTxt;
     }
 
     public String getLayerTlt() {

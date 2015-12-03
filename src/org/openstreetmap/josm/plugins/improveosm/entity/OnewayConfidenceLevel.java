@@ -19,6 +19,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConf
 
 
 /**
+ * Defines the confidence levels that can be applied to the TrafficFlowDirection layer.
  *
  * @author Beata
  * @version $Revision$

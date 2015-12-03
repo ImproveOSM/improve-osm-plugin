@@ -47,7 +47,7 @@ public class TipDialog {
             final int maxZoom = Config.getDirectionOfFlowInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 isDisplayed = true;
-                final String txt = DirectionOfFlowGuiConfig.getInstance().getDlgTipText().replace("iconPath",
+                final String txt = DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt().replace("iconPath",
                         IconConfig.getInstance().getTipIconPath().toString());
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
                         GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),

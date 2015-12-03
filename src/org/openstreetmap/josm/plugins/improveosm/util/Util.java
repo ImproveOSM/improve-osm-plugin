@@ -57,12 +57,6 @@ public final class Util {
                 Math.round(Math.floor(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(2))))));
     }
 
-    public static int zoom() {
-        final Bounds bounds = Main.map.mapView.getRealBounds();
-        return zoom(bounds);
-    }
-
-
     /**
      * Computes the bounding box corresponding to the given tile identifiers.
      *

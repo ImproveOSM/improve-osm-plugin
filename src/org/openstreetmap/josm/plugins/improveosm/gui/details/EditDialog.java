@@ -15,12 +15,11 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.PLAIN_12;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -69,8 +68,9 @@ public class EditDialog extends ModalDialog implements CommentObservable {
 
     @Override
     protected void createComponents() {
-        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), BOLD_12, Color.red, false);
-        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), PLAIN_12, Color.white);
+        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
+        lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
+        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white);
 
         final JPanel pnlComment = new JPanel(new BorderLayout());
         pnlComment.setBorder(BORDER);

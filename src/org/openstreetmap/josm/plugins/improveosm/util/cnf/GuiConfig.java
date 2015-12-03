@@ -42,6 +42,8 @@ public final class GuiConfig extends BaseConfig {
     /* history panel title */
     private final String pnlHistoryTitle;
 
+    private final String preferenceLbl;
+
     /* feedback panel title */
     private final String pnlFeedbackTitle;
     private final String pnlFeedbackTxt;
@@ -69,6 +71,7 @@ public final class GuiConfig extends BaseConfig {
         dlgCommentTitle = readProperty("edit.dialog.comment.title");
         dlgFilterTitle = readProperty("dialog.filter.title");
         pnlHistoryTitle = readProperty("details.history.title");
+        preferenceLbl = readProperty("preference.lbl");
         pnlFeedbackTitle = readProperty("feedback.title");
         pnlFeedbackTxt = readProperty("feedback.txt");
         errorTitle = readProperty("error.title");
@@ -117,6 +120,10 @@ public final class GuiConfig extends BaseConfig {
 
     public String getPnlHistoryTitle() {
         return pnlHistoryTitle;
+    }
+
+    public String getPreferenceLbl() {
+        return preferenceLbl;
     }
 
     public String getPnlFeedbackTitle() {

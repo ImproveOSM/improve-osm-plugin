@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.service;
 
 /**
+ * Custom exception to be used by {@code Service}.
  *
  * @author Beata
  * @version $Revision$

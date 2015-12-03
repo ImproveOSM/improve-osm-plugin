@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 
 
 /**
+ * Defines the request body of the 'comment' operation.
  *
  * @author Beata
  * @version $Revision$
@@ -31,7 +32,6 @@ public class Request extends CommentRequest {
 
     private final List<Tile> tiles;
 
-
     public Request(final Comment comment, final List<Tile> tiles) {
         super(comment);
         this.tiles = new ArrayList<>();
@@ -39,7 +39,6 @@ public class Request extends CommentRequest {
             this.tiles.add(new Tile(tile.getX(), tile.getY()));
         }
     }
-
 
     public List<Tile> getTiles() {
         return tiles;

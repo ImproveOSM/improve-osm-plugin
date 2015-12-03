@@ -15,13 +15,13 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.BOLD_12;
-import static org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder.PLAIN_12;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+
 
 /**
  *
@@ -35,9 +35,12 @@ public abstract class BasicPanel<T> extends JPanel {
     /** the minimum size of the panel */
     private static final Dimension PANEL_MIN = new Dimension(0, 50);
 
+    private final Font fontBold;
+    private final Font fontPlain;
+
     /* font metrics */
-    protected final FontMetrics FM_PLAIN_12 = Main.map.mapView.getGraphics().getFontMetrics(PLAIN_12);
-    protected final FontMetrics FM_BOLD_12 = Main.map.mapView.getGraphics().getFontMetrics(BOLD_12);
+    private final FontMetrics fontMetricsPlain;
+    private final FontMetrics fontMetricsBold;
 
     /* constants used for computing GUI component dimensions */
     protected static final int LHEIGHT = 22;
@@ -51,6 +54,10 @@ public abstract class BasicPanel<T> extends JPanel {
     public BasicPanel() {
         setBackground(Color.white);
         updateData(null);
+        fontBold = getFont().deriveFont(Font.BOLD);
+        fontPlain = getFont().deriveFont(Font.PLAIN);
+        fontMetricsPlain = Main.map.mapView.getGraphics().getFontMetrics(fontPlain);
+        fontMetricsBold = Main.map.mapView.getGraphics().getFontMetrics(fontBold);
     }
 
     /**
@@ -88,5 +95,21 @@ public abstract class BasicPanel<T> extends JPanel {
         } else {
             setPreferredSize(PANEL_MIN);
         }
+    }
+
+    public Font getFontBold() {
+        return fontBold;
+    }
+
+    public Font getFontPlain() {
+        return fontPlain;
+    }
+
+    public FontMetrics getFontMetricsPlain() {
+        return fontMetricsPlain;
+    }
+
+    public FontMetrics getFontMetricsBold() {
+        return fontMetricsBold;
     }
 }

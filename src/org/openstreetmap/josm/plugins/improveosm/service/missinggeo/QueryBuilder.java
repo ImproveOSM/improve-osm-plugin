@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
 
 /**
+ * Builds MissingGeometryService specific HTTP queries
  *
  * @author Beata
  * @version $Revision$
@@ -68,8 +69,7 @@ final class QueryBuilder extends BaseQueryBuilder {
         return build(Config.getMissingGeoInstance().getServiceUrl(), Method.COMMENT, null);
     }
 
-
-    private static class Params {
+    private final class Params {
 
         private Params() {}
 

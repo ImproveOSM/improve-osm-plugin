@@ -54,11 +54,7 @@ import javax.swing.SwingConstants;
  */
 public final class GuiBuilder {
 
-    /* fonts */
-    public static final Font PLAIN_12 = new Font("Times New Roman", Font.PLAIN, 12);
-    public static final Font BOLD_12 = new Font("Times New Roman", Font.BOLD, 12);
-    public static final Font BOLD_13 = new Font("Times New Roman", Font.BOLD, 13);
-
+    private static final float FONT_SIZE = 11F;
 
     private GuiBuilder() {}
 
@@ -180,7 +176,7 @@ public final class GuiBuilder {
         final JRadioButton radioButton = new JRadioButton(text);
         radioButton.setActionCommand(actionCommand);
         radioButton.setBackground(backgroundColor);
-        radioButton.setFont(PLAIN_12);
+        radioButton.setFont(radioButton.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
         radioButton.setFocusable(false);
         return radioButton;
     }
@@ -208,7 +204,7 @@ public final class GuiBuilder {
      */
     public static JButton buildButton(final AbstractAction action, final String text) {
         final JButton btn = new JButton(action);
-        btn.setFont(BOLD_12);
+        btn.setFont(btn.getFont().deriveFont(Font.BOLD, FONT_SIZE));
         btn.setText(text);
         btn.setFocusable(false);
         return btn;
@@ -228,7 +224,7 @@ public final class GuiBuilder {
         if (backgroundColor != null) {
             cbbox.setBackground(backgroundColor);
         }
-        cbbox.setFont(PLAIN_12);
+        cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN));
         cbbox.setFocusPainted(false);
         return cbbox;
     }
@@ -237,13 +233,13 @@ public final class GuiBuilder {
      * Builds a new {@code JLabel} with the given arguments.
      *
      * @param text the text which will be shown on the label
-     * @param font the font of the label's text
      * @param textColor the color to be used for the displayed text
      * @param visible specifies if the label is visible or not
      * @return a {@code JLabel} object
      */
-    public static JLabel buildLabel(final String text, final Font font, final Color textColor, final boolean visible) {
-        final JLabel lbl = buildLabel(text, font, null);
+    public static JLabel buildLabel(final String text, final Color textColor, final boolean visible) {
+        final JLabel lbl = buildLabel(text, null, null);
+        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
         lbl.setForeground(textColor);
         lbl.setVisible(visible);
         return lbl;
@@ -259,7 +255,9 @@ public final class GuiBuilder {
      */
     public static JLabel buildLabel(final String text, final Font font, final Rectangle bounds) {
         final JLabel lbl = new JLabel(text);
-        lbl.setFont(font);
+        if (font != null) {
+            lbl.setFont(font);
+        }
         lbl.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         lbl.setHorizontalTextPosition(SwingConstants.LEFT);
         lbl.setVerticalTextPosition(SwingConstants.TOP);
@@ -295,12 +293,12 @@ public final class GuiBuilder {
      * @param backgroundColor the background color of the scroll pane
      * @return a {@code JTextArea} object
      */
-    public static JTextArea buildTextArea(final String text, final Font font, final Color backgroundColor) {
+    public static JTextArea buildTextArea(final String text, final Color backgroundColor) {
         final JTextArea txtArea = new JTextArea(text);
         txtArea.setBackground(backgroundColor);
         txtArea.setLineWrap(true);
         txtArea.setWrapStyleWord(true);
-        txtArea.setFont(font);
+        txtArea.setFont(txtArea.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
         txtArea.setEditable(true);
         return txtArea;
     }
@@ -320,7 +318,6 @@ public final class GuiBuilder {
         txtField.setFont(font);
         txtField.setBackground(bgColor);
         txtField.setDragEnabled(true);
-        // txtField.setBorder(null);
         final JPopupMenu menu = buildCopyPopupMenu(txtField);
         txtField.addMouseListener(new PopupMenuDisplayAdapter(txtField, menu));
         txtField.setEditable(false);

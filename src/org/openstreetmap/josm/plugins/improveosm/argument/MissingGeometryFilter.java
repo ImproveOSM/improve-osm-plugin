@@ -28,17 +28,22 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
  */
 public class MissingGeometryFilter extends SearchFilter {
 
+    /* default tile type to display */
     private static final EnumSet<TileType> DEFAULT_TYPE = EnumSet.of(TileType.ROAD);
+
+    /** default search filter to be applied */
     public static final MissingGeometryFilter DEFAULT = new MissingGeometryFilter(Status.OPEN, DEFAULT_TYPE, null);
 
     private final EnumSet<TileType> types;
     private final Integer count;
+
 
     public MissingGeometryFilter(final Status status, final EnumSet<TileType> types, final Integer count) {
         super(status);
         this.types = types;
         this.count = count;
     }
+
 
     public EnumSet<TileType> getTypes() {
         return types;
@@ -72,5 +77,4 @@ public class MissingGeometryFilter extends SearchFilter {
         }
         return result;
     }
-
 }

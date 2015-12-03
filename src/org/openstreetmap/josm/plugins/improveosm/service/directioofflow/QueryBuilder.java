@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
 
 /**
+ * Builds DirectionOfFlowService specific HTTP queries.
  *
  * @author Beata
  * @version $Revision$
@@ -60,8 +61,7 @@ final class QueryBuilder extends BaseQueryBuilder {
         return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, null);
     }
 
-
-    private static class Parameter {
+    private final class Parameter {
 
         private Parameter() {}
 

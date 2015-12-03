@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.pref;
 
 
 /**
+ * Defines preference entry keys.
  *
  * @author Beata
  * @version $Revision$
