@@ -130,7 +130,7 @@ class FilterPanel extends JPanel {
 
     private void addCountFilter(final Integer value) {
         final String lblTxt;
-        if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeoInstance().getMaxClusterZoom()) {
+        if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance().getMaxClusterZoom()) {
             lblTxt = MissingGeometryGuiConfig.getInstance().getLblTripCount();
         } else {
             lblTxt = MissingGeometryGuiConfig.getInstance().getLblPointCount();

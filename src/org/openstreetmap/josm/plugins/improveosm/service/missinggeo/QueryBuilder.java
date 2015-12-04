@@ -53,7 +53,7 @@ final class QueryBuilder extends BaseQueryBuilder {
                 query.append(EQ).append(filter.getCount());
             }
         }
-        return build(Config.getMissingGeoInstance().getServiceUrl(), Method.SEARCH, query);
+        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.SEARCH, query);
     }
 
     String buildRetrieveCommentsQuery(final Integer tileX, final Integer tileY) {
@@ -62,11 +62,11 @@ final class QueryBuilder extends BaseQueryBuilder {
         appendClientFilter(query);
         query.append(AND).append(Params.TILE_X).append(EQ).append(tileX);
         query.append(AND).append(Params.TILE_Y).append(EQ).append(tileY);
-        return build(Config.getMissingGeoInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
+        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
-        return build(Config.getMissingGeoInstance().getServiceUrl(), Method.COMMENT, null);
+        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.COMMENT, null);
     }
 
     private final class Params {

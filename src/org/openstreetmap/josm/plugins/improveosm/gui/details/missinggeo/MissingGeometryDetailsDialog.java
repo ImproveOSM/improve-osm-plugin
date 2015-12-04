@@ -70,7 +70,7 @@ public class MissingGeometryDetailsDialog extends ToggleDialog {
         pnlComments = new CommentsPanel();
 
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpTile, pnlComments,
-                new FeedbackPanel(Config.getMissingGeoInstance().getFeedbackUrl()));
+                new FeedbackPanel(Config.getMissingGeometryInstance().getFeedbackUrl()));
         pnlBtn = new ButtonPanel();
         final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
         add(pnlMain);

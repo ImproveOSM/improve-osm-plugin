@@ -16,37 +16,27 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
-import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 
 
 /**
- * Defines the filters that can be applied to the TrafficFlowDirectionLayer.
  *
  * @author Beata
  * @version $Revision$
  */
-public class OnewayFilter extends SearchFilter {
+public class TurnRestrictionFilter extends SearchFilter {
 
-    private final EnumSet<OnewayConfidenceLevel> confidenceLevels;
-
-    /** default search filter */
-    public static final OnewayFilter DEFAULT = new OnewayFilter(Status.OPEN, null);
+    private final EnumSet<TurnConfidenceLevel> confidenceLevels;
 
 
-    /**
-     * Builds a new object with the given arguments.
-     *
-     * @param status the road segment/cluster status
-     * @param confidenceLevel the list of confidence levels
-     */
-    public OnewayFilter(final Status status, final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
+    public TurnRestrictionFilter(final Status status, final EnumSet<TurnConfidenceLevel> confidenceLevels) {
         super(status);
         this.confidenceLevels = confidenceLevels;
     }
 
 
-    public EnumSet<OnewayConfidenceLevel> getConfidenceLevels() {
+    public EnumSet<TurnConfidenceLevel> getConfidenceLevels() {
         return confidenceLevels;
     }
 
@@ -64,8 +54,8 @@ public class OnewayFilter extends SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof OnewayFilter) {
-            final OnewayFilter other = (OnewayFilter) obj;
+        } else if (obj instanceof TurnRestrictionFilter) {
+            final TurnRestrictionFilter other = (TurnRestrictionFilter) obj;
             result = super.equals(obj) && (confidenceLevels == null && other.getConfidenceLevels() == null)
                     || (confidenceLevels != null && confidenceLevels.equals(other.getConfidenceLevels()));
         }

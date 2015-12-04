@@ -217,7 +217,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         final Layer activeLayer = Main.map.mapView.getActiveLayer();
         if (SwingUtilities.isLeftMouseButton(event)) {
             if (activeLayer == missingGeometryLayer && missingGeometryLayer.isVisible()
-                    && zoom > Config.getMissingGeoInstance().getMaxClusterZoom()) {
+                    && zoom > Config.getMissingGeometryInstance().getMaxClusterZoom()) {
                 // select tiles
                 selectTile(event.getPoint(), event.isShiftDown());
             } else if (activeLayer == directionOfFlowLayer && directionOfFlowLayer.isVisible()

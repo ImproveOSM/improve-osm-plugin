@@ -68,7 +68,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
         void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds,
                 final DataSet<Tile> dataSet, final List<Tile> items) {
             final int zoom = Util.zoom(bounds);
-            if (zoom > Config.getMissingGeoInstance().getMaxClusterZoom()) {
+            if (zoom > Config.getMissingGeometryInstance().getMaxClusterZoom()) {
                 // draw tiles
                 if (dataSet.getItems() != null && !dataSet.getItems().isEmpty()) {
                     for (final Tile tile : dataSet.getItems()) {
