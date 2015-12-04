@@ -113,4 +113,8 @@ public class DirectionOfFlowDetailsDialog extends ToggleDialog {
             repaint();
         }
     }
+
+    public boolean reloadComments() {
+        return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
+    }
 }

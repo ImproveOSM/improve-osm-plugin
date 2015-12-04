@@ -111,4 +111,8 @@ public class MissingGeometryDetailsDialog extends ToggleDialog {
         pnlBtn.setTile(tile);
         repaint();
     }
+
+    public boolean reloadComments() {
+        return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
+    }
 }
