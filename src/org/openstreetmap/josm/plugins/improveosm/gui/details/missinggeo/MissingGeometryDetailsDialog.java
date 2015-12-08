@@ -15,19 +15,12 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
-import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.CommentsPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicButtonPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.FeedbackPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
@@ -40,21 +33,12 @@ import org.openstreetmap.josm.tools.Shortcut;
  * @author Beata
  * @version $Revision$
  */
-public class MissingGeometryDetailsDialog extends ToggleDialog {
+public class MissingGeometryDetailsDialog extends ImproveOsmDetailsDialog<Tile> {
 
     private static final long serialVersionUID = -3541499221974100034L;
 
-    /** the preferred dimension of the panel components */
-    private static final Dimension DIM = new Dimension(150, 100);
-
-    private static final int DLG_HEIGHT = 50;
     private static Shortcut shortcut = Shortcut.registerShortcut(MissingGeometryGuiConfig.getInstance().getLayerName(),
             MissingGeometryGuiConfig.getInstance().getLayerTlt(), KeyEvent.VK_F3, Shortcut.CTRL);
-
-    private final TilePanel pnlTile;
-    private final CommentsPanel pnlComments;
-    private final ButtonPanel pnlBtn;
-
 
     /**
      * Builds a new {@code MissingGeometryDetailsDialog} object.
@@ -62,57 +46,22 @@ public class MissingGeometryDetailsDialog extends ToggleDialog {
     public MissingGeometryDetailsDialog() {
         super(MissingGeometryGuiConfig.getInstance().getLayerName(),
                 IconConfig.getInstance().getMissingGeometryShortcutName(),
-                MissingGeometryGuiConfig.getInstance().getLayerTlt(), shortcut, DLG_HEIGHT);
-
-        pnlTile = new TilePanel();
-        final JScrollPane cmpTile = GuiBuilder.buildScrollPane(MissingGeometryGuiConfig.getInstance().getPnlTileTitle(),
-                pnlTile, getBackground(), DIM);
-        pnlComments = new CommentsPanel();
-
-        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpTile, pnlComments,
-                new FeedbackPanel(Config.getMissingGeometryInstance().getFeedbackUrl()));
-        pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
-        add(pnlMain);
+                MissingGeometryGuiConfig.getInstance().getLayerTlt(), shortcut);
     }
 
 
-    /**
-     * Registers the given observer to the corresponding components.
-     *
-     * @param commentObserver a {@code CommentObserver}
-     */
-    public void registerCommentObserver(final CommentObserver commentObserver) {
-        pnlBtn.registerCommentObserver(commentObserver);
+    @Override
+    public BasicPanel<Tile> createInfoPanel() {
+        return new TilePanel();
     }
 
-    /**
-     * Updates the UI with the selected tile's information, including the comments.
-     *
-     * @param tile a {@code Tile} represents the tile's basic information
-     * @param comments a list of {@code Comment}s represents the tile's history
-     */
-    public void updateUI(final Tile tile, final List<Comment> comments) {
-        synchronized (this) {
-            pnlTile.updateData(tile);
-            pnlComments.updateData(comments);
-            pnlBtn.setTile(tile);
-            repaint();
-        }
+    @Override
+    public BasicButtonPanel<Tile> createButtonPanel() {
+        return new ButtonPanel();
     }
 
-    /**
-     * Updates the UI with the selected tile's information.
-     *
-     * @param tile a {@code Tile} represents the tile's basic information
-     */
-    public void updateUI(final Tile tile) {
-        pnlTile.updateData(tile);
-        pnlBtn.setTile(tile);
-        repaint();
-    }
-
-    public boolean reloadComments() {
-        return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
+    @Override
+    public FeedbackPanel createFeedbackPanel() {
+        return new FeedbackPanel(Config.getMissingGeometryInstance().getFeedbackUrl());
     }
 }

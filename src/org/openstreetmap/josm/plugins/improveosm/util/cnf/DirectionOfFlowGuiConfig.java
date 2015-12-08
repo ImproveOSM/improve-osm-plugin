@@ -33,15 +33,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     /* button tooltips */
     private final String btnLocationTlt;
-    private final String btnCommentTlt;
-    private final String btnSolveTlt;
-    private final String btnReopenTlt;
-    private final String btnInvalidTlt;
-
-    /* edit dialog texts */
-    private final String dlgSolveTitle;
-    private final String dlgReopenTitle;
-    private final String dlgInvalidTitle;
 
     /* filter dialog texts */
     private final String dlgFilterStatusLbl;
@@ -75,13 +66,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
         btnLocationTlt = readProperty("btn.location.tlt");
-        btnCommentTlt = readProperty("btn.comment.tlt");
-        btnSolveTlt = readProperty("btn.solve.tlt");
-        btnReopenTlt = readProperty("btn.reopen.tlt");
-        btnInvalidTlt = readProperty("btn.invalid.tlt");
-        dlgSolveTitle = readProperty("edit.dialog.solve.title");
-        dlgReopenTitle = readProperty("edit.dialog.reopen.title");
-        dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
         dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
@@ -123,34 +107,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getBtnLocationTlt() {
         return btnLocationTlt;
-    }
-
-    public String getBtnCommentTlt() {
-        return btnCommentTlt;
-    }
-
-    public String getBtnSolveTlt() {
-        return btnSolveTlt;
-    }
-
-    public String getBtnReopenTlt() {
-        return btnReopenTlt;
-    }
-
-    public String getBtnInvalidTlt() {
-        return btnInvalidTlt;
-    }
-
-    public String getDlgSolveTitle() {
-        return dlgSolveTitle;
-    }
-
-    public String getDlgReopenTitle() {
-        return dlgReopenTitle;
-    }
-
-    public String getDlgInvalidTitle() {
-        return dlgInvalidTitle;
     }
 
     public String getDlgFilterStatusLbl() {

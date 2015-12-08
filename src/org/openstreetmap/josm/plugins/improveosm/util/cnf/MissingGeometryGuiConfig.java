@@ -30,18 +30,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
     private final String layerTxt;
     private final String layerTlt;
 
-    /* buttons related text */
-    private final String btnFilterTlt;
-    private final String btnCommentTlt;
-    private final String btnOpenTlt;
-    private final String btnSolveTlt;
-    private final String btnInvalidTlt;
-
-    /* edit dialog window related texts */
-    private final String dlgSolveTitle;
-    private final String dlgReopenTitle;
-    private final String dlgInvalidTitle;
-
     /* filter dialog texts */
     private final String dlgFilterLblStatus;
     private final String dlgFilterLblType;
@@ -68,14 +56,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
         layerName = readProperty("layer.name");
         layerTxt = readProperty("layer.txt");
         layerTlt = readProperty("layer.tlt");
-        btnFilterTlt = readProperty("btn.filter.tlt");
-        btnCommentTlt = readProperty("btn.comment.tlt");
-        btnOpenTlt = readProperty("btn.open.tlt");
-        btnSolveTlt = readProperty("btn.solve.tlt");
-        btnInvalidTlt = readProperty("btn.invalid.tlt");
-        dlgSolveTitle = readProperty("edit.dialog.solve.title");
-        dlgReopenTitle = readProperty("edit.dialog.reopen.title");
-        dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
         dlgFilterLblStatus = readProperty("dialog.filter.status.lbl");
         dlgFilterLblType = readProperty("dialog.filter.type.lbl");
         dlgFilterLblWater = readProperty("dialog.filter.water.lbl");
@@ -106,38 +86,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
 
     public String getLayerTlt() {
         return layerTlt;
-    }
-
-    public String getBtnFilterTlt() {
-        return btnFilterTlt;
-    }
-
-    public String getBtnCommentTlt() {
-        return btnCommentTlt;
-    }
-
-    public String getBtnOpenTlt() {
-        return btnOpenTlt;
-    }
-
-    public String getBtnSolveTlt() {
-        return btnSolveTlt;
-    }
-
-    public String getBtnInvalidTlt() {
-        return btnInvalidTlt;
-    }
-
-    public String getDlgSolveTitle() {
-        return dlgSolveTitle;
-    }
-
-    public String getDlgReopenTitle() {
-        return dlgReopenTitle;
-    }
-
-    public String getDlgInvalidTitle() {
-        return dlgInvalidTitle;
     }
 
     public String getDlgFilterLblStatus() {

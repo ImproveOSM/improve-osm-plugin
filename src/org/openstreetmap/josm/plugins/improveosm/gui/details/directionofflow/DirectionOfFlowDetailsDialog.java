@@ -15,19 +15,12 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
-import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.CommentsPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicButtonPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.FeedbackPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -40,21 +33,12 @@ import org.openstreetmap.josm.tools.Shortcut;
  * @author Beata
  * @version $Revision$
  */
-public class DirectionOfFlowDetailsDialog extends ToggleDialog {
+public class DirectionOfFlowDetailsDialog extends ImproveOsmDetailsDialog<RoadSegment> {
 
     private static final long serialVersionUID = 6272681385708084893L;
 
-    /** the preferred dimension of the panel components */
-    private static final Dimension DIM = new Dimension(150, 100);
-
-    private static final int DLG_HEIGHT = 50;
     private static Shortcut shortcut = Shortcut.registerShortcut(DirectionOfFlowGuiConfig.getInstance().getLayerName(),
             DirectionOfFlowGuiConfig.getInstance().getLayerTlt(), KeyEvent.VK_F3, Shortcut.CTRL);
-
-    private final InfoPanel pnlInfo;
-    private final CommentsPanel pnlComments;
-    private final ButtonPanel pnlBtn;
-
 
     /**
      * Builds a new direction of flow details dialog window.
@@ -62,59 +46,21 @@ public class DirectionOfFlowDetailsDialog extends ToggleDialog {
     public DirectionOfFlowDetailsDialog() {
         super(DirectionOfFlowGuiConfig.getInstance().getLayerName(),
                 IconConfig.getInstance().getDirectionOfFlowShortcutName(),
-                DirectionOfFlowGuiConfig.getInstance().getLayerTlt(), shortcut, DLG_HEIGHT);
-
-        /* build components */
-        pnlInfo = new InfoPanel();
-        final JScrollPane cmpInfo = GuiBuilder.buildScrollPane(DirectionOfFlowGuiConfig.getInstance().getPnlInfoTitle(),
-                pnlInfo, getBackground(), DIM);
-        pnlComments = new CommentsPanel();
-        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments,
-                new FeedbackPanel(Config.getDirectionOfFlowInstance().getFeedbackUrl()));
-        pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
-        add(pnlMain);
+                DirectionOfFlowGuiConfig.getInstance().getLayerTlt(), shortcut);
     }
 
-
-    /**
-     * Registers the given observer to the corresponding components.
-     *
-     * @param commentObserver a {@code CommentObserver}
-     */
-    public void registerCommentObserver(final CommentObserver commentObserver) {
-        pnlBtn.registerCommentObserver(commentObserver);
+    @Override
+    public BasicPanel<RoadSegment> createInfoPanel() {
+        return new InfoPanel();
     }
 
-    /**
-     * Updates the UI with the given road segment.
-     *
-     * @param roadSegment a {@code RoadSegment}.
-     */
-    public void updateUI(final RoadSegment roadSegment) {
-        synchronized (this) {
-            pnlInfo.updateData(roadSegment);
-            pnlBtn.setRoadSegment(roadSegment);
-            repaint();
-        }
+    @Override
+    public BasicButtonPanel<RoadSegment> createButtonPanel() {
+        return new ButtonPanel();
     }
 
-    /**
-     * Updates the UI with the given road segment and comment list.
-     *
-     * @param roadSegment a {@code RoadSegment}
-     * @param comments a list of {@code Comment}s
-     */
-    public void updateUI(final RoadSegment roadSegment, final List<Comment> comments) {
-        synchronized (this) {
-            pnlInfo.updateData(roadSegment);
-            pnlComments.updateData(comments);
-            pnlBtn.setRoadSegment(roadSegment);
-            repaint();
-        }
-    }
-
-    public boolean reloadComments() {
-        return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
+    @Override
+    public FeedbackPanel createFeedbackPanel() {
+        return new FeedbackPanel(Config.getDirectionOfFlowInstance().getFeedbackUrl());
     }
 }

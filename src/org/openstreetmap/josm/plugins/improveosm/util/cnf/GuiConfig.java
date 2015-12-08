@@ -24,6 +24,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 public final class GuiConfig extends BaseConfig {
 
     private static final String CONFIG_FILE = "improveosm_gui.properties";
+    private static final GuiConfig INSTANCE = new GuiConfig();
 
     private final String pluginName;
     private final String pluginTxt;
@@ -34,10 +35,17 @@ public final class GuiConfig extends BaseConfig {
     private final String btnResetLbl;
 
     private final String btnFilterTlt;
+    private final String btnCommentTlt;
+    private final String btnSolveTlt;
+    private final String btnReopenTlt;
+    private final String btnInvalidTlt;
 
     /* dialog titles */
-    private final String dlgCommentTitle;
     private final String dlgFilterTitle;
+    private final String dlgCommentTitle;
+    private final String dlgSolveTitle;
+    private final String dlgReopenTitle;
+    private final String dlgInvalidTitle;
 
     /* history panel title */
     private final String pnlHistoryTitle;
@@ -57,7 +65,6 @@ public final class GuiConfig extends BaseConfig {
     private final String txtMissingUsername;
     private final String txtInvalidInteger;
 
-    private static final GuiConfig INSTANCE = new GuiConfig();
 
     private GuiConfig() {
         super(CONFIG_FILE);
@@ -68,8 +75,17 @@ public final class GuiConfig extends BaseConfig {
         btnCancelLbl = readProperty("btn.cancel.lbl");
         btnResetLbl = readProperty("btn.reset.lbl");
         btnFilterTlt = readProperty("btn.filter.tlt");
-        dlgCommentTitle = readProperty("edit.dialog.comment.title");
+        btnCommentTlt = readProperty("btn.comment.tlt");
+        btnSolveTlt = readProperty("btn.solve.tlt");
+        btnReopenTlt = readProperty("btn.reopen.tlt");
+        btnInvalidTlt = readProperty("btn.invalid.tlt");
+
         dlgFilterTitle = readProperty("dialog.filter.title");
+        dlgCommentTitle = readProperty("edit.dialog.comment.title");
+        dlgSolveTitle = readProperty("edit.dialog.solve.title");
+        dlgReopenTitle = readProperty("edit.dialog.reopen.title");
+        dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
+
         pnlHistoryTitle = readProperty("details.history.title");
         preferenceLbl = readProperty("preference.lbl");
         pnlFeedbackTitle = readProperty("feedback.title");
@@ -81,6 +97,7 @@ public final class GuiConfig extends BaseConfig {
         txtMissingUsername = readProperty("warning.missing.username");
         txtInvalidInteger = readProperty("warning.invalid.integer");
     }
+
 
     public static GuiConfig getInstance() {
         return INSTANCE;
@@ -110,12 +127,40 @@ public final class GuiConfig extends BaseConfig {
         return btnFilterTlt;
     }
 
-    public String getDlgCommentTitle() {
-        return dlgCommentTitle;
+    public String getBtnCommentTlt() {
+        return btnCommentTlt;
+    }
+
+    public String getBtnSolveTlt() {
+        return btnSolveTlt;
+    }
+
+    public String getBtnReopenTlt() {
+        return btnReopenTlt;
+    }
+
+    public String getBtnInvalidTlt() {
+        return btnInvalidTlt;
     }
 
     public String getDlgFilterTitle() {
         return dlgFilterTitle;
+    }
+
+    public String getDlgCommentTitle() {
+        return dlgCommentTitle;
+    }
+
+    public String getDlgSolveTitle() {
+        return dlgSolveTitle;
+    }
+
+    public String getDlgReopenTitle() {
+        return dlgReopenTitle;
+    }
+
+    public String getDlgInvalidTitle() {
+        return dlgInvalidTitle;
     }
 
     public String getPnlHistoryTitle() {
