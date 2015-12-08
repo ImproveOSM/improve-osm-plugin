@@ -29,6 +29,8 @@ public class TurnRestrictionFilter extends SearchFilter {
 
     private final EnumSet<TurnConfidenceLevel> confidenceLevels;
 
+    public static final TurnRestrictionFilter DEFAULT = new TurnRestrictionFilter(Status.OPEN, null);
+
 
     public TurnRestrictionFilter(final Status status, final EnumSet<TurnConfidenceLevel> confidenceLevels) {
         super(status);

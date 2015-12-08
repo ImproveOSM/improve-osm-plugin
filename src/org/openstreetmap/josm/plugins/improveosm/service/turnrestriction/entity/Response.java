@@ -27,10 +27,10 @@ import org.openstreetmap.josm.plugins.improveosm.service.entity.BaseResponse;
  */
 public class Response extends BaseResponse {
     // setters are not required,since GSON sets the fields directly using reflection.
-    private List<TurnRestriction> turnRestrictions;
+    private List<TurnRestriction> entities;
 
 
-    public List<TurnRestriction> getTurnRestrictions() {
-        return turnRestrictions;
+    public List<TurnRestriction> getEntities() {
+        return entities;
     }
 }

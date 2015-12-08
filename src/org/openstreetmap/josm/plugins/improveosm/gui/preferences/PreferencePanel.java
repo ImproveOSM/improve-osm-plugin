@@ -17,8 +17,6 @@ package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -27,6 +25,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
@@ -43,6 +42,7 @@ class PreferencePanel extends JPanel {
     /* UI components */
     private JCheckBox cbMissingGeometry;
     private JCheckBox cbDirectionOfFlow;
+    private JCheckBox cbTurnRestriction;
 
 
     PreferencePanel() {
@@ -57,14 +57,7 @@ class PreferencePanel extends JPanel {
         add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
         cbMissingGeometry =
                 GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLayerTxt(), null, getBackground());
-        cbMissingGeometry.addItemListener(new ItemListener() {
 
-            @Override
-            public void itemStateChanged(final ItemEvent event) {
-                System.out.println(cbMissingGeometry.isSelected());
-            }
-
-        });
         if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             cbMissingGeometry.setSelected(true);
         }
@@ -75,6 +68,12 @@ class PreferencePanel extends JPanel {
             cbDirectionOfFlow.setSelected(true);
         }
         add(cbDirectionOfFlow, Constraints.CB_DIRECTION_OF_FLOW);
+        cbTurnRestriction =
+                GuiBuilder.buildCheckBox(TurnRestrictionGuiConfig.getInstance().getLayerTxt(), null, getBackground());
+        if (dataLayers.contains(DataLayer.TURN_RESTRICTION)) {
+            cbTurnRestriction.setSelected(true);
+        }
+        add(cbTurnRestriction, Constraints.CB_TURN_RESTRICTION);
     }
 
     /**
@@ -89,6 +88,9 @@ class PreferencePanel extends JPanel {
         }
         if (cbDirectionOfFlow.isSelected()) {
             result.add(DataLayer.DIRECTION_OF_FLOW);
+        }
+        if (cbTurnRestriction.isSelected()) {
+            result.add(DataLayer.TURN_RESTRICTION);
         }
         if (result.isEmpty()) {
             result.add(DataLayer.NONE);

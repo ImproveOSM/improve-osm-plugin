@@ -25,7 +25,7 @@ public final class Config extends BaseConfig {
 
     private static final Config DIRECTION_OF_FLOW_INSTANCE = new Config("improveosm_dof_config.properties");
     private static final Config MISSING_GEOMETRY_INSTANCE = new Config("improveosm_mg_config.properties");
-    private static final Config TURN_RESTRICTION_INSTANCE = new Config("improveosm_mg_config.properties");
+    private static final Config TURN_RESTRICTION_INSTANCE = new Config("improveosm_tr_config.properties");
 
     private static final int MAX_CLUSTER_ZOOM = 14;
 

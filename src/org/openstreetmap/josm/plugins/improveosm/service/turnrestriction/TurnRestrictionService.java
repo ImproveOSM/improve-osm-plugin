@@ -41,7 +41,7 @@ public class TurnRestrictionService extends BaseService implements Service<TurnR
         final String url = new QueryBuilder().buildSearchQuery(bbox, (TurnRestrictionFilter) filter, zoom);
         final Response response = executeGet(url, Response.class);
         verifyResponseStatus(response.getStatus());
-        return new DataSet<>(response.getClusters(), response.getTurnRestrictions());
+        return new DataSet<>(response.getClusters(), response.getEntities());
     }
 
     @Override

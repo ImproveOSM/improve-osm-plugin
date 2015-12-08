@@ -58,7 +58,9 @@ final class LoadManager {
                 }
             }
         }
-        return dataLayers == null ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.MISSING_GEOMETRY) : dataLayers;
+        return dataLayers == null
+                ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.MISSING_GEOMETRY, DataLayer.TURN_RESTRICTION)
+                : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */

@@ -37,4 +37,7 @@ final class Constraints {
 
     static final GridBagConstraints CB_DIRECTION_OF_FLOW = new GridBagConstraints(0, 2, 1, 1, 1, 1,
             GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
+
+    static final GridBagConstraints CB_TURN_RESTRICTION = new GridBagConstraints(0, 3, 1, 1, 1, 1,
+            GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
 }

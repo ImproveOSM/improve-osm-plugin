@@ -72,7 +72,8 @@ class ButtonPanel extends JPanel {
         final DirectionOfFlowGuiConfig guiCnf = DirectionOfFlowGuiConfig.getInstance();
         final IconConfig iconCnf = IconConfig.getInstance();
 
-        btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconCnf.getFilterIcon(), guiCnf.getBtnFilterTlt(),
+        btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconCnf.getFilterIcon(),
+                GuiConfig.getInstance().getBtnFilterTlt(),
                 true);
         btnLocation = GuiBuilder.buildButton(new CopyLocationAction(), iconCnf.getLocationIcon(),
                 guiCnf.getBtnLocationTlt(), true);

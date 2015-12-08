@@ -25,6 +25,7 @@ import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 
 
 /**
@@ -176,5 +177,11 @@ public final class Util {
             tileY = ((1 << MAX_ZOOM) - 1);
         }
         return tileY;
+    }
+
+    public static TurnRestriction nearbyTurnRestriction(final List<TurnRestriction> turnRestrictions,
+            final Point point) {
+
+        return null;
     }
 }

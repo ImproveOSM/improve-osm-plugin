@@ -20,15 +20,18 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
-import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
-import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
+import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
+import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
 import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.DirectionOfFlowService;
 import org.openstreetmap.josm.plugins.improveosm.service.missinggeo.MissingGeometryService;
+import org.openstreetmap.josm.plugins.improveosm.service.turnrestriction.TurnRestrictionService;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
@@ -39,71 +42,70 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class ServiceHandler {
+final class ServiceHandler<T> {
 
-    private final MissingGeometryService missingGeometryService = new MissingGeometryService();
-    private final DirectionOfFlowService directionOfFlowService = new DirectionOfFlowService();
+    private static final ServiceHandler<Tile> MISSING_GEOMETRY_HANDLER =
+            new ServiceHandler<>(DataLayer.MISSING_GEOMETRY);
+    private static final ServiceHandler<RoadSegment> DIRECTION_OF_FLOW_HANDLER =
+            new ServiceHandler<>(DataLayer.DIRECTION_OF_FLOW);
+    private static final ServiceHandler<TurnRestriction> TURN_RESTRICTION_HANDLER =
+            new ServiceHandler<>(DataLayer.TURN_RESTRICTION);
 
-    private static final ServiceHandler INSTANCE = new ServiceHandler();
+    private Service<T> service;
 
-    static ServiceHandler getInstance() {
-        return INSTANCE;
+
+    @SuppressWarnings("unchecked")
+    private ServiceHandler(final DataLayer layerType) {
+        switch (layerType) {
+            case MISSING_GEOMETRY:
+                service = (Service<T>) new MissingGeometryService();
+                break;
+            case DIRECTION_OF_FLOW:
+                service = (Service<T>) new DirectionOfFlowService();
+                break;
+            default:
+                // turn restriction service
+                service = (Service<T>) new TurnRestrictionService();
+                break;
+        }
     }
 
 
-    DataSet<Tile> searchMissingGeometryData(final BoundingBox bbox, final int zoom) {
-        DataSet<Tile> result = new DataSet<>();
+    static ServiceHandler<Tile> getMissingGeometryHandler() {
+        return MISSING_GEOMETRY_HANDLER;
+    }
+
+    static ServiceHandler<RoadSegment> getDirectionOfFlowHandler() {
+        return DIRECTION_OF_FLOW_HANDLER;
+    }
+
+    static ServiceHandler<TurnRestriction> getTurnRestrictionHandler() {
+        return TURN_RESTRICTION_HANDLER;
+    }
+
+    DataSet<T> search(final BoundingBox bbox, final SearchFilter filter, final int zoom) {
+        DataSet<T> result = new DataSet<>();
         try {
-            final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
-            result = missingGeometryService.search(bbox, filter, zoom);
+            result = service.search(bbox, filter, zoom);
         } catch (final ServiceException e) {
             handleException(e, true);
         }
         return result;
     }
 
-    DataSet<RoadSegment> searchDirectionOfFlowData(final BoundingBox bbox, final int zoom) {
-        DataSet<RoadSegment> result = new DataSet<>();
-        try {
-            final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
-            result = directionOfFlowService.search(bbox, filter, zoom);
-        } catch (final ServiceException e) {
-            handleException(e, true);
-        }
-        return result;
-    }
-
-    List<Comment> retrieveComments(final Tile tile) {
+    List<Comment> retrieveComments(final T entity) {
         List<Comment> comments = new ArrayList<>();
         try {
-            comments = missingGeometryService.retrieveComments(tile);
+            comments = service.retrieveComments(entity);
         } catch (final ServiceException e) {
             handleException(e, false);
         }
         return comments;
     }
 
-    List<Comment> retrieveComments(final RoadSegment roadSegment) {
-        List<Comment> comments = new ArrayList<>();
+    void comment(final Comment comment, final List<T> entities) {
         try {
-            comments = directionOfFlowService.retrieveComments(roadSegment);
-        } catch (final ServiceException e) {
-            handleException(e, false);
-        }
-        return comments;
-    }
-
-    void commentTiles(final Comment comment, final List<Tile> tiles) {
-        try {
-            missingGeometryService.comment(comment, tiles);
-        } catch (final ServiceException e) {
-            handleException(e, false);
-        }
-    }
-
-    void commentRoadSegments(final Comment comment, final List<RoadSegment> roadSegments) {
-        try {
-            directionOfFlowService.comment(comment, roadSegments);
+            service.comment(comment, entities);
         } catch (final ServiceException e) {
             handleException(e, false);
         }

@@ -36,18 +36,23 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.WATE
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.image.ImageObserver;
+import javax.swing.ImageIcon;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
 
 /**
@@ -181,4 +186,25 @@ final class PaintUtil {
         graphics.fill(circle);
         graphics.draw(circle);
     }
+
+    static void drawTunRestriction(final Graphics2D graphics, final MapView mapView,
+            final TurnRestriction turnRestriction, final boolean selected) {
+        final Point point = mapView.getPoint(turnRestriction.getPoint());
+        if (mapView.contains(point)) {
+            drawIcon(graphics, IconConfig.getInstance().getTurnRestrictionIcon(), point);
+        }
+    }
+
+    private static void drawIcon(final Graphics2D g2D, final ImageIcon icon, final Point p) {
+        g2D.drawImage(icon.getImage(), p.x - (icon.getIconWidth() / 2), p.y - (icon.getIconHeight() / 2),
+                new ImageObserver() {
+
+            @Override
+            public boolean imageUpdate(final Image img, final int infoflags, final int x, final int y,
+                    final int width, final int height) {
+                return false;
+            }
+        });
+    }
+
 }

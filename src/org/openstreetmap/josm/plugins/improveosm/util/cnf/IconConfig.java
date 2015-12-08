@@ -43,6 +43,10 @@ public final class IconConfig extends BaseConfig {
     private final String missingGeometryShortcutName;
     private final Icon missingGeometryLayerIcon;
 
+    /* TurnRestriction layer icons */
+    private final String turnRestrictonShortcutName;
+    private final Icon turnRestrictonLayerIcon;
+
     /* button panel icons */
     private final ImageIcon filterIcon;
     private final ImageIcon locationIcon;
@@ -51,7 +55,10 @@ public final class IconConfig extends BaseConfig {
     private final ImageIcon openIcon;
     private final ImageIcon invalidIcon;
 
+    private final ImageIcon turnRestrictionIcon;
+
     private final URL tipIconPath;
+
 
     private IconConfig() {
         super(CONFIG_FILE);
@@ -61,6 +68,8 @@ public final class IconConfig extends BaseConfig {
         directionOfFlowlayerIcon = ImageProvider.get(readProperty("directionOfFlow.layer.icon"));
         missingGeometryShortcutName = readProperty("missingGeo.dialog.shortcut");
         missingGeometryLayerIcon = ImageProvider.get(readProperty("missingGeo.layer.icon"));
+        turnRestrictonShortcutName = readProperty("turnRestricton.dialog.shortcut");
+        turnRestrictonLayerIcon = ImageProvider.get(readProperty("turnRestriction.layer.icon"));
 
         filterIcon = ImageProvider.get(readProperty("filter.icon"));
         locationIcon = ImageProvider.get(readProperty("location.icon"));
@@ -68,9 +77,11 @@ public final class IconConfig extends BaseConfig {
         solvedIcon = ImageProvider.get(readProperty("solved.icon"));
         openIcon = ImageProvider.get(readProperty("open.icon"));
         invalidIcon = ImageProvider.get(readProperty("invalid.icon"));
+        turnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.icon"));
 
         tipIconPath = getClass().getResource(readProperty("tip.icon"));
     }
+
 
     public static IconConfig getInstance() {
         return INSTANCE;
@@ -96,6 +107,14 @@ public final class IconConfig extends BaseConfig {
         return missingGeometryLayerIcon;
     }
 
+    public String getTurnRestrictonShortcutName() {
+        return turnRestrictonShortcutName;
+    }
+
+    public Icon getTurnRestrictonLayerIcon() {
+        return turnRestrictonLayerIcon;
+    }
+
     public ImageIcon getFilterIcon() {
         return filterIcon;
     }
@@ -118,6 +137,10 @@ public final class IconConfig extends BaseConfig {
 
     public ImageIcon getInvalidIcon() {
         return invalidIcon;
+    }
+
+    public ImageIcon getTurnRestrictionIcon() {
+        return turnRestrictionIcon;
     }
 
     public URL getTipIconPath() {

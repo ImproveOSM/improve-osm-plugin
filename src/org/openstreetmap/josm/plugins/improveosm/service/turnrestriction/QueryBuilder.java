@@ -50,11 +50,11 @@ public class QueryBuilder extends BaseQueryBuilder {
         appendFormatFilter(query);
         appendClientFilter(query);
         query.append(AND).append(Parameter.TARGET_ID).append(EQ).append(targetId);
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
+        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, null);
+        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.COMMENT, null);
     }
 
     private final class Parameter {

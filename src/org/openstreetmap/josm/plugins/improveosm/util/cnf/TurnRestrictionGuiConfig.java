@@ -17,22 +17,21 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 
 /**
- * Holds direction of flow logic related texts.
+ * Holds turn restriction of related texts.
  *
  * @author Beata
  * @version $Revision$
  */
-public final class DirectionOfFlowGuiConfig extends BaseConfig {
+public final class TurnRestrictionGuiConfig extends BaseConfig {
 
-    private static final String CONFIG_FILE = "improveosm_dof_gui.properties";
-    private static final DirectionOfFlowGuiConfig INSTANCE = new DirectionOfFlowGuiConfig();
+    private static final String CONFIG_FILE = "improveosm_tr_gui.properties";
+    private static final TurnRestrictionGuiConfig INSTANCE = new TurnRestrictionGuiConfig();
 
     private final String layerName;
     private final String layerTxt;
     private final String layerTlt;
 
     /* button tooltips */
-    private final String btnLocationTlt;
     private final String btnCommentTlt;
     private final String btnSolveTlt;
     private final String btnReopenTlt;
@@ -49,32 +48,24 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     /* info panel texts */
     private final String pnlInfoTitle;
-    private final String lblTrips;
-    private final String lblId;
-    private final String lblType;
-    private final String lblProcent;
     private final String lblStatus;
+    private final String lblType;
     private final String lblConfidence;
+    private final String lblTrips;
 
     /* commonly used labels */
     private final String lblC1;
     private final String lblC2;
-    private final String lblC3;
-    private final String lblOneway;
-
-    /* tip info texts */
-    private final String dlgTipTitle;
-    private final String dlgTipTxt;
+    private final String lblTurn;
 
 
-    DirectionOfFlowGuiConfig() {
+    private TurnRestrictionGuiConfig() {
         super(CONFIG_FILE);
 
         /* layer texts */
         layerName = readProperty("plugin.name");
         layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
-        btnLocationTlt = readProperty("btn.location.tlt");
         btnCommentTlt = readProperty("btn.comment.tlt");
         btnSolveTlt = readProperty("btn.solve.tlt");
         btnReopenTlt = readProperty("btn.reopen.tlt");
@@ -86,28 +77,20 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
         pnlInfoTitle = readProperty("details.info.title");
-        lblTrips = readProperty("details.info.trips.lbl");
-        lblId = readProperty("details.info.id.lbl");
-        lblType = readProperty("details.info.type.lbl");
-        lblProcent = readProperty("details.info.procent.lbl");
         lblStatus = readProperty("status.lbl");
+        lblType = readProperty("details.info.type.lbl");
         lblConfidence = readProperty("confidence.lbl");
-
+        lblTrips = readProperty("details.info.trips.lbl");
 
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
-        lblC3 = readProperty("c3.lbl");
-        lblOneway = readProperty("oneway.lbl");
+        lblTurn = readProperty("turn.lbl");
 
-        dlgTipTitle = readProperty("dialog.tip.title");
-        dlgTipTxt = readProperty("dialog.tip.text");
     }
 
-
-    public static DirectionOfFlowGuiConfig getInstance() {
+    public static TurnRestrictionGuiConfig getInstance() {
         return INSTANCE;
     }
-
 
     public String getLayerName() {
         return layerName;
@@ -119,10 +102,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getLayerTlt() {
         return layerTlt;
-    }
-
-    public String getBtnLocationTlt() {
-        return btnLocationTlt;
     }
 
     public String getBtnCommentTlt() {
@@ -165,28 +144,20 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         return pnlInfoTitle;
     }
 
-    public String getLblTrips() {
-        return lblTrips;
-    }
-
-    public String getLblId() {
-        return lblId;
+    public String getLblStatus() {
+        return lblStatus;
     }
 
     public String getLblType() {
         return lblType;
     }
 
-    public String getLblProcent() {
-        return lblProcent;
-    }
-
-    public String getLblStatus() {
-        return lblStatus;
-    }
-
     public String getLblConfidence() {
         return lblConfidence;
+    }
+
+    public String getLblTrips() {
+        return lblTrips;
     }
 
     public String getLblC1() {
@@ -197,19 +168,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         return lblC2;
     }
 
-    public String getLblC3() {
-        return lblC3;
-    }
-
-    public String getLblOneway() {
-        return lblOneway;
-    }
-
-    public String getDlgTipTitle() {
-        return dlgTipTitle;
-    }
-
-    public String getDlgTipTxt() {
-        return dlgTipTxt;
+    public String getLblTurn() {
+        return lblTurn;
     }
 }

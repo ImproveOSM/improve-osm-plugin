@@ -45,6 +45,7 @@ final class Constants {
     static final double CLUSTER_DEF_RADIUS = 50;
     static final Color DIRECTIONOFFLOW_CLUSTER_COLOR = new Color(238, 118, 0);
     static final Color MISSINGGEO_CLUSTER_COLOR = new Color(176, 23, 31);
+    static final Color TURNRESTRICTION_CLUSTER_COLOR = new Color(30, 144, 255);
 
     /* constants used for drawing DirectionOfFlow segments */
     static final Color ROAD_SEGMENT_COLOR = new Color(238, 118, 0);
