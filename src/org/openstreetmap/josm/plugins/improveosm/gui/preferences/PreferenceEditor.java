@@ -61,7 +61,7 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
             // active layers had changed
             PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
 
-            if (Main.map != null && (selectedDataLayers.size() < DataLayer.values().length)) {
+            if (Main.map != null && (selectedDataLayers.size() < DataLayer.values().length - 1)) {
                 // some layers were removed
                 restartJosm = true;
             }
