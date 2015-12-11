@@ -54,7 +54,7 @@ import javax.swing.SwingConstants;
  */
 public final class GuiBuilder {
 
-    private static final float FONT_SIZE = 11F;
+    public static final float FONT_SIZE = 11F;
 
     private GuiBuilder() {}
 
@@ -225,7 +225,7 @@ public final class GuiBuilder {
         if (backgroundColor != null) {
             cbbox.setBackground(backgroundColor);
         }
-        cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN));
+        cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
         cbbox.setFocusPainted(false);
         return cbbox;
     }
@@ -240,7 +240,7 @@ public final class GuiBuilder {
      */
     public static JLabel buildLabel(final String text, final Color textColor, final boolean visible) {
         final JLabel lbl = buildLabel(text, null, null);
-        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
+        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD, FONT_SIZE));
         lbl.setForeground(textColor);
         lbl.setVisible(visible);
         return lbl;

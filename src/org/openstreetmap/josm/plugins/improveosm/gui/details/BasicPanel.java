@@ -57,8 +57,8 @@ public abstract class BasicPanel<T> extends JPanel {
     public BasicPanel() {
         setBackground(Color.white);
         updateData(null);
-        fontBold = getFont().deriveFont(Font.BOLD);
-        fontPlain = getFont().deriveFont(Font.PLAIN);
+        fontBold = getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE);
+        fontPlain = getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE);
         fontMetricsPlain = Main.map.mapView.getGraphics().getFontMetrics(fontPlain);
         fontMetricsBold = Main.map.mapView.getGraphics().getFontMetrics(fontBold);
     }

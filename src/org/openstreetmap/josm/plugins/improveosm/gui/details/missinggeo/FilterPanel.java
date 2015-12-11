@@ -75,7 +75,8 @@ class FilterPanel extends BasicFilterPanel {
 
 
     private void addTypesFilter(final EnumSet<TileType> types) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblType(), getFont().deriveFont(Font.BOLD), null),
+        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblType(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
                 Constraints.LBL_TYPE);
         cbTypeParking =
                 GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), getBackground());
@@ -88,7 +89,8 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludeWaterFilter(final boolean includeWater) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblWater(), getFont().deriveFont(Font.BOLD), null),
+        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblWater(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
                 Constraints.LBL_WATER);
         cbIncludeWater = GuiBuilder.buildCheckBox(getGuiCnf().getLblDisplay(), null, getBackground());
         cbIncludeWater.setSelected(includeWater);
@@ -96,7 +98,8 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludePathFilter(final boolean includePath) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblPedestrian(), getFont().deriveFont(Font.BOLD), null),
+        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblPedestrian(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
                 Constraints.LBL_PEDESTRIAN);
         cbIncludePath = GuiBuilder.buildCheckBox(getGuiCnf().getLblDisplay(), null, getBackground());
         cbIncludePath.setSelected(includePath);
@@ -112,7 +115,8 @@ class FilterPanel extends BasicFilterPanel {
         }
         add(GuiBuilder.buildLabel(lblTxt, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_COUNT);
         final String valueStr = value != null ? value.toString() : "";
-        txtCount = GuiBuilder.buildTextField(valueStr, getFont().deriveFont(Font.PLAIN), Color.white);
+        txtCount = GuiBuilder.buildTextField(valueStr, getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE),
+                Color.white);
         txtCount.setInputVerifier(
                 new PositiveIntegerVerifier(txtCount, GuiConfig.getInstance().getTxtInvalidInteger()));
         add(txtCount, Constraints.TXT_COUNT);

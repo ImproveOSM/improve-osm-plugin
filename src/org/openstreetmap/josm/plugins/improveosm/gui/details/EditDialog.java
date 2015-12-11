@@ -72,7 +72,7 @@ public class EditDialog extends ModalDialog implements CommentObservable {
     @Override
     protected void createComponents() {
         lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
-        lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
+        lblError.setFont(lblError.getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE));
         txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white);
 
         final JPanel pnlComment = new JPanel(new BorderLayout());

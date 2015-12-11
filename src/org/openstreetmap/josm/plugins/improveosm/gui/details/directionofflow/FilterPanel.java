@@ -53,7 +53,7 @@ class FilterPanel extends BasicFilterPanel {
         super(filter, DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl());
 
         add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
-                getFont().deriveFont(Font.BOLD), null),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
                 Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
                 OnewayConfidenceLevel.C1.name(), getBackground());
