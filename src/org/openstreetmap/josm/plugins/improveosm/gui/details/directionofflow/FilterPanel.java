@@ -16,18 +16,16 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
 import java.awt.Font;
-import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.EnumSet;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
@@ -36,46 +34,24 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class FilterPanel extends JPanel {
+class FilterPanel extends BasicFilterPanel {
 
     private static final long serialVersionUID = -1119298746308645030L;
 
     /* UI components */
-    private JRadioButton rbStatusOpen;
-    private JRadioButton rbStatusSolved;
-    private JRadioButton rbStatusInvalid;
-    private ButtonGroup btnGroupStatus;
-    private JCheckBox cbbConfidenceC1;
-    private JCheckBox cbbConfidenceC2;
-    private JCheckBox cbbConfidenceC3;
+    private final JCheckBox cbbConfidenceC1;
+    private final JCheckBox cbbConfidenceC2;
+    private final JCheckBox cbbConfidenceC3;
 
 
-    FilterPanel() {
-        super(new GridBagLayout());
-        final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
-        addStatusFilter(filter.getStatus());
-        addConfidenceFilter(filter.getConfidenceLevels());
-    }
+    /**
+     * Builds a new panel displaying the DirectionOfFlow layer filters.
+     *
+     * @param filter the currently selected filters
+     */
+    FilterPanel(final OnewayFilter filter) {
+        super(filter, DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl());
 
-
-    private void addStatusFilter(final Status status) {
-        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl(),
-                getFont().deriveFont(Font.BOLD), null),
-                Constraints.LBL_STATUS);
-        rbStatusOpen =
-                GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
-        rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),
-                getBackground());
-        rbStatusInvalid = GuiBuilder.buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
-                getBackground());
-        btnGroupStatus = GuiBuilder.buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
-        selectStatus(status);
-        add(rbStatusOpen, Constraints.RB_OPEN);
-        add(rbStatusSolved, Constraints.RB_SOLVED);
-        add(rbStatusInvalid, Constraints.RB_INVALID);
-    }
-
-    private void addConfidenceFilter(final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
         add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD), null),
                 Constraints.LBL_CONFIDENCE);
@@ -85,18 +61,16 @@ class FilterPanel extends JPanel {
                 OnewayConfidenceLevel.C2.name(), getBackground());
         cbbConfidenceC3 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C3.shortDisplayName(),
                 OnewayConfidenceLevel.C3.name(), getBackground());
-        selectConfidence(confidenceLevels);
+        selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
         add(cbbConfidenceC2, Constraints.CBB_C2);
         add(cbbConfidenceC3, Constraints.CBB_C3);
     }
 
 
-    OnewayFilter selectedFilters() {
-        Status status = null;
-        if (btnGroupStatus.getSelection() != null) {
-            status = Status.valueOf(btnGroupStatus.getSelection().getActionCommand());
-        }
+    @Override
+    public OnewayFilter selectedFilters() {
+        final Status status = super.selectedFilters().getStatus();
         final EnumSet<OnewayConfidenceLevel> confidenceLevels = EnumSet.noneOf(OnewayConfidenceLevel.class);
         if (cbbConfidenceC1.isSelected()) {
             confidenceLevels.add(OnewayConfidenceLevel.C1);
@@ -110,27 +84,10 @@ class FilterPanel extends JPanel {
         return status == null && confidenceLevels.isEmpty() ? null : new OnewayFilter(status, confidenceLevels);
     }
 
-    void resetFilters() {
-        selectStatus(OnewayFilter.DEFAULT.getStatus());
+    @Override
+    public void resetFilters() {
+        super.resetFilters();
         selectConfidence(OnewayFilter.DEFAULT.getConfidenceLevels());
-    }
-
-    private void selectStatus(final Status status) {
-        if (status != null) {
-            switch (status) {
-                case OPEN:
-                    rbStatusOpen.setSelected(true);
-                    break;
-                case SOLVED:
-                    rbStatusSolved.setSelected(true);
-                    break;
-                default:
-                    rbStatusInvalid.setSelected(true);
-                    break;
-            }
-        } else {
-            btnGroupStatus.clearSelection();
-        }
     }
 
     private void selectConfidence(final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
@@ -146,5 +103,23 @@ class FilterPanel extends JPanel {
             cbbConfidenceC2.setSelected(false);
             cbbConfidenceC3.setSelected(false);
         }
+    }
+
+
+    private static final class Constraints {
+
+        private Constraints() {}
+
+        private static final GridBagConstraints LBL_CONFIDENCE = new GridBagConstraints(0, 1, 1, 1, 1, 1,
+                GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
+        private static final GridBagConstraints CBB_C1 = new GridBagConstraints(1, 1, 1, 1, 1, 0,
+                GridBagConstraints.PAGE_START,
+                GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
+        private static final GridBagConstraints CBB_C2 = new GridBagConstraints(2, 1, 1, 1, 1, 0,
+                GridBagConstraints.PAGE_START,
+                GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
+        private static final GridBagConstraints CBB_C3 = new GridBagConstraints(3, 1, 1, 1, 1, 0,
+                GridBagConstraints.PAGE_START,
+                GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
     }
 }

@@ -38,7 +38,6 @@ public final class Keys {
     static final String DIRECTIONOFFLOW_CONFIDENCE_LEVEL = "improveosm.directionOfFlow.filter.confidence";
     public static final String DIRECTIONOFFLOW_FILTERS_CHANGED = "improveosm.directionOfFlow.filter.changed";
 
-
     /* missing geometry layer related properties */
     static final String MISSINGGEO_LAST_COMMENT = "improveosm.missingGeometry.comment";
     static final String MISSINGGEO_STATUS = "improveosm.missingGeometry.filter.status";
@@ -47,4 +46,10 @@ public final class Keys {
     static final String MISSINGGEO_INCLUDE_WATER = "improveosm.missingGeometry.filter.includeWater";
     static final String MISSINGGEO_INCLUDE_PATH = "improveosm.missingGeometry.filter.includePath";
     public static final String MISSINGGEO_FILTERS_CHANGED = "improveosm.missingGeometry.filter.changed";
+
+    /* turn restriction layer related properties */
+    static final String TURN_RESTRICTION_LAST_COMMENT = "improveosm.turnRestriction.comment";
+    static final String TURN_RESTRICTION_STATUS = "improveosm.turnRestriction.filter.status";
+    static final String TURN_RESTRICTION_CONFIDENCE_LEVEL = "improveosm.turnRestriction.filter.confidence";
+    public static final String TURN_RESTRICTION_FILTERS_CHANGED = "improveosm.turnRestriction.filter.changed";
 }

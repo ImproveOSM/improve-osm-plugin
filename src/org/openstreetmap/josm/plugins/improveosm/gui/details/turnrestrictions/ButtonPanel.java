@@ -15,12 +15,55 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions;
 
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicButtonPanel;
+
 
 /**
-* 
-* @author Beata
-* @version $Revision$
-*/
-class ButtonPanel {
+ * Defines the components of the button panel used in the {@code TurnRestrictionDetailsDialog} window.
+ *
+ * @author Beata
+ * @version $Revision$
+ */
+class ButtonPanel extends BasicButtonPanel<TurnRestriction> {
 
+    private static final long serialVersionUID = -224120222680639773L;
+
+    private static final int BUTTONS_COUNT = 5;
+
+
+    /**
+     * Builds a new button panel.
+     */
+    public ButtonPanel() {
+        super(BUTTONS_COUNT, new DislayFilterDialog());
+    }
+
+
+    @Override
+    public void enablePanelActions() {
+        if (getItem().getStatus() == Status.OPEN) {
+            enablePanelActions(true, true, false, true);
+        } else {
+            enablePanelActions(true, false, true, false);
+        }
+    }
+
+    /* displays the filter dialog window */
+    private static class DislayFilterDialog extends AbstractAction {
+
+        private static final long serialVersionUID = 2260459345028599219L;
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            if (event.getSource() instanceof JButton) {
+                final FilterDialog dialog = new FilterDialog();
+                dialog.setVisible(true);
+            }
+        }
+    }
 }

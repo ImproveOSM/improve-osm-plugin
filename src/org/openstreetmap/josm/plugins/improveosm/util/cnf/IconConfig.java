@@ -56,6 +56,7 @@ public final class IconConfig extends BaseConfig {
     private final ImageIcon invalidIcon;
 
     private final ImageIcon turnRestrictionIcon;
+    private final ImageIcon selectedTurnRestrictionIcon;
 
     private final URL tipIconPath;
 
@@ -68,7 +69,7 @@ public final class IconConfig extends BaseConfig {
         directionOfFlowlayerIcon = ImageProvider.get(readProperty("directionOfFlow.layer.icon"));
         missingGeometryShortcutName = readProperty("missingGeo.dialog.shortcut");
         missingGeometryLayerIcon = ImageProvider.get(readProperty("missingGeo.layer.icon"));
-        turnRestrictonShortcutName = readProperty("turnRestricton.dialog.shortcut");
+        turnRestrictonShortcutName = readProperty("turnRestriction.dialog.shortcut");
         turnRestrictonLayerIcon = ImageProvider.get(readProperty("turnRestriction.layer.icon"));
 
         filterIcon = ImageProvider.get(readProperty("filter.icon"));
@@ -78,7 +79,7 @@ public final class IconConfig extends BaseConfig {
         openIcon = ImageProvider.get(readProperty("open.icon"));
         invalidIcon = ImageProvider.get(readProperty("invalid.icon"));
         turnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.icon"));
-
+        selectedTurnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.sel.icon"));
         tipIconPath = getClass().getResource(readProperty("tip.icon"));
     }
 
@@ -141,6 +142,10 @@ public final class IconConfig extends BaseConfig {
 
     public ImageIcon getTurnRestrictionIcon() {
         return turnRestrictionIcon;
+    }
+
+    public ImageIcon getSelectedTurnRestrictionIcon() {
+        return selectedTurnRestrictionIcon;
     }
 
     public URL getTipIconPath() {

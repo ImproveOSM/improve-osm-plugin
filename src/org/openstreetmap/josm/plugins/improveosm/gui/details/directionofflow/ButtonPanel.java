@@ -40,8 +40,7 @@ class ButtonPanel extends BasicButtonPanel<RoadSegment> {
 
     private static final long serialVersionUID = 2035810847510862585L;
 
-    private static final int ROWS = 1;
-    private static final int COLS = 6;
+    private static final int BUTTONS_COUNT = 6;
 
     /* UI components */
     private final JButton btnLocation;
@@ -51,11 +50,10 @@ class ButtonPanel extends BasicButtonPanel<RoadSegment> {
      * Builds a new button panel.
      */
     ButtonPanel() {
-        super(ROWS, COLS, new DisplayFilterDialog());
+        super(BUTTONS_COUNT, new DisplayFilterDialog());
 
         btnLocation = GuiBuilder.buildButton(new CopyLocationAction(), IconConfig.getInstance().getLocationIcon(),
                 DirectionOfFlowGuiConfig.getInstance().getBtnLocationTlt(), true);
-
         add(btnLocation, 1);
     }
 

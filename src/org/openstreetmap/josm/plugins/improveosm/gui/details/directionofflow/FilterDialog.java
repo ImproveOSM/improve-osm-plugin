@@ -15,19 +15,12 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.CancelAction;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.ModalDialog;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterPanel;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
@@ -37,52 +30,31 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class FilterDialog extends ModalDialog {
+class FilterDialog extends BasicFilterDialog {
 
     private static final long serialVersionUID = 6838800795969608589L;
 
     /* dialog minimal size */
     private static final Dimension DIM = new Dimension(450, 150);
 
-    /* UI components */
-    private FilterPanel pnlFilter;
-    private JPanel pnlButton;
-
 
     /**
      * Builds a new filter panel.
      */
     FilterDialog() {
-        super(GuiConfig.getInstance().getDlgFilterTitle(), IconConfig.getInstance().getFilterIcon().getImage());
-        createComponents();
-        setSize(DIM);
-        setMinimumSize(DIM);
+        super(DIM);
+    }
+
+    @Override
+    public BasicFilterPanel createFilterPanel() {
+        final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
+        return new FilterPanel(filter);
     }
 
 
     @Override
-    protected void createComponents() {
-        pnlFilter = new FilterPanel();
-        final JButton btnReset = GuiBuilder.buildButton(new ResetAction(), GuiConfig.getInstance().getBtnResetLbl());
-        final JButton btnOk = GuiBuilder.buildButton(new OkAction(), GuiConfig.getInstance().getBtnOkLbl());
-        final JButton btnCancel =
-                GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl());
-        pnlButton = GuiBuilder.buildFlowLayoutPanel(FlowLayout.RIGHT, btnReset, btnOk, btnCancel);
-        add(pnlFilter, BorderLayout.CENTER);
-        add(pnlButton, BorderLayout.SOUTH);
-    }
-
-
-    /* if the user selects the reset button, then the search filters are reset to the default one */
-
-    private class ResetAction extends AbstractAction {
-
-        private static final long serialVersionUID = 6640018164566789264L;
-
-        @Override
-        public void actionPerformed(final ActionEvent event) {
-            pnlFilter.resetFilters();
-        }
+    public AbstractAction getOkAction() {
+        return new OkAction();
     }
 
 
@@ -95,7 +67,7 @@ class FilterDialog extends ModalDialog {
         @Override
         public void actionPerformed(final ActionEvent event) {
             final PreferenceManager prefManager = PreferenceManager.getInstance();
-            final OnewayFilter newFilter = pnlFilter.selectedFilters();
+            final OnewayFilter newFilter = (OnewayFilter) getPnlFilter().selectedFilters();
             if (newFilter != null) {
                 final OnewayFilter oldFilter = prefManager.loadOnewayFilter();
                 if (newFilter.equals(oldFilter)) {

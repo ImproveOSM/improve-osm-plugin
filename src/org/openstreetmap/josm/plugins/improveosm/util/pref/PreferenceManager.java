@@ -20,9 +20,11 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
+import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 
 
 /**
@@ -142,6 +144,8 @@ public final class PreferenceManager {
             lastComment = loadManager.loadDirectionOfFlowLastComment();
         } else if (activeLayer instanceof MissingGeometryLayer) {
             lastComment = loadManager.loadMissingGeometryLastComment();
+        } else if (activeLayer instanceof TurnRestrictionLayer) {
+            lastComment = loadManager.loadTurnRestrictionLastComment();
         }
         return lastComment;
     }
@@ -211,4 +215,40 @@ public final class PreferenceManager {
         saveManager.saveMissingGeoFilter(filter);
     }
 
+    /**
+     * Saves the user's last comment used for the TurnRestriction layer.
+     *
+     * @param comment a {@code String}
+     */
+    public void saveTurnRestrictionLastComment(final String comment) {
+        saveManager.saveTurnRestrictionLastComment(comment);
+    }
+
+    /**
+     * Saves the given flag to the preference file.
+     *
+     * @param changed a boolean value
+     */
+    public void saveTurnRestrictionFiltersChangedFlag(final boolean changed) {
+        saveManager.saveTurnRestrictionFiltersChangedFlag(changed);
+    }
+
+    /**
+     * Loads the turn restriction filter. If no filter is set, then the method returns
+     * {@code TurnRestrictionFilter#DEFAULT} filter.
+     *
+     * @return a {@code MissingGeometryFilter} object
+     */
+    public TurnRestrictionFilter loadTurnRestrictionFilter() {
+        return loadManager.loadTurnRestrictionFilter();
+    }
+
+    /**
+     * Saves the turn restriction filter to the preference file.
+     *
+     * @param filter a {@code TurnRestrictionFilter} object
+     */
+    public void saveTurnRestrictionFilter(final TurnRestrictionFilter filter) {
+        saveManager.saveTurnRestrictionFilter(filter);
+    }
 }

@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.entity;
 
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
 /**
  *
@@ -23,4 +24,37 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
  */
 public enum TurnConfidenceLevel {
 
+    C1 {
+
+        @Override
+        public String toString() {
+            return TurnRestrictionGuiConfig.getInstance().getLblC1();
+        }
+    },
+
+    C2 {
+
+        @Override
+        public String toString() {
+            return TurnRestrictionGuiConfig.getInstance().getLblC2();
+        }
+    };
+
+    /**
+     * Returns the short display name.
+     *
+     * @return a string
+     */
+    public String shortDisplayName() {
+        return toString();
+    }
+
+    /**
+     * Returns the long display name.
+     *
+     * @return a string
+     */
+    public String longDisplayName() {
+        return toString().trim() + " " + TurnRestrictionGuiConfig.getInstance().getLblTurn();
+    }
 }

@@ -32,7 +32,8 @@ public class MissingGeometryFilter extends SearchFilter {
     private static final EnumSet<TileType> DEFAULT_TYPE = EnumSet.of(TileType.ROAD);
 
     /** default search filter to be applied */
-    public static final MissingGeometryFilter DEFAULT = new MissingGeometryFilter(Status.OPEN, DEFAULT_TYPE, null);
+    public static final MissingGeometryFilter DEFAULT =
+            new MissingGeometryFilter(SearchFilter.DEFAULT.getStatus(), DEFAULT_TYPE, null);
 
     private final EnumSet<TileType> types;
     private final Integer count;

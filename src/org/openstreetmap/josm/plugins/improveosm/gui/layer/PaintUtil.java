@@ -18,6 +18,9 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARROW_ANGLE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARROW_LENGTH;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.BOTH_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_BACKGROUND_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DX;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DY;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PARKING_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PATH_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_POS_RADIUS;
@@ -32,9 +35,14 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_OPEN_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SOLVED_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_ARROW_LENGTH;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.WATER_COLOR;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
@@ -42,7 +50,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
+import java.util.List;
 import javax.swing.ImageIcon;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MapView;
@@ -51,6 +61,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnSegment;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
@@ -84,31 +95,13 @@ final class PaintUtil {
             graphics.setStroke(ROAD_SEGMENT_STROKE);
             graphics.setColor(ROAD_SEGMENT_COLOR);
         }
-        final GeneralPath path = buildPath(graphics, mapView, segment);
+        final GeneralPath path = buildPath(graphics, mapView, segment.getPoints());
         graphics.draw(path);
 
         // draw arrow
-        final Point tip = mapView.getPoint(segment.getPoints().get(segment.getPoints().size() - 1));
-        final Point tail = mapView.getPoint(segment.getPoints().get(segment.getPoints().size() - 2));
-        final double theta = Math.atan2((tip.getY() - tail.getY()), (tip.getX() - tail.getX()));
-        double rho = theta + ARROW_ANGLE;
         final double arrowLength = selected ? SEL_ARROW_LENGTH : ARROW_LENGTH;
-        for (int j = 0; j < 2; j++) {
-            graphics.draw(new Line2D.Double(tip.getX(), tip.getY(), tip.getX() - arrowLength * Math.cos(rho),
-                    tip.getY() - arrowLength * Math.sin(rho)));
-            rho = theta - ARROW_ANGLE;
-        }
-    }
-
-    private static GeneralPath buildPath(final Graphics2D graphics, final MapView mapView, final RoadSegment segment) {
-        final GeneralPath path = new GeneralPath();
-        Point point = mapView.getPoint(segment.getPoints().get(0));
-        path.moveTo(point.getX(), point.getY());
-        for (int i = 1; i < segment.getPoints().size(); i++) {
-            point = mapView.getPoint(segment.getPoints().get(i));
-            path.lineTo(point.getX(), point.getY());
-        }
-        return path;
+        drawArrow(graphics, mapView, segment.getPoints().get(segment.getPoints().size() - 1),
+                segment.getPoints().get(segment.getPoints().size() - 2), arrowLength);
     }
 
     /**
@@ -187,11 +180,67 @@ final class PaintUtil {
         graphics.draw(circle);
     }
 
+    /**
+     * Draws a turn restriction to the map. If a turn restriction is selected then also the turn segments with
+     * corresponding number of trips are drawn to the map.
+     *
+     * @param graphics the {@code Graphics2D} used for drawing
+     * @param mapView the current {@code MapView}
+     * @param turnRestriction the {@code TurnRestriction} to be drawn to the map
+     * @param selected specifies if the turn restriction is selected or not
+     */
     static void drawTunRestriction(final Graphics2D graphics, final MapView mapView,
             final TurnRestriction turnRestriction, final boolean selected) {
         final Point point = mapView.getPoint(turnRestriction.getPoint());
+        if (selected) {
+            // draw lines
+            graphics.setFont(mapView.getFont().deriveFont(Font.BOLD));
+            if (turnRestriction.getSegments() != null) {
+                graphics.setStroke(TURN_SEGMENT_STROKE);
+                for (final TurnSegment turnSegment : turnRestriction.getSegments()) {
+                    drawTurnSegment(graphics, mapView, turnSegment);
+                }
+            }
+        }
+        // draw point
         if (mapView.contains(point)) {
-            drawIcon(graphics, IconConfig.getInstance().getTurnRestrictionIcon(), point);
+            final ImageIcon icon = selected ? IconConfig.getInstance().getSelectedTurnRestrictionIcon()
+                    : IconConfig.getInstance().getTurnRestrictionIcon();
+            drawIcon(graphics, icon, point);
+        }
+    }
+
+    private static void drawTurnSegment(final Graphics2D graphics, final MapView mapView,final TurnSegment turnSegment) {
+        graphics.setColor(TURN_SEGMENT_COLOR);
+        graphics.draw(buildPath(graphics, mapView, turnSegment.getPoints()));
+        LatLon tip;
+        LatLon tail;
+        if (turnSegment.getPoints().size() > 2) {
+            final int idx = turnSegment.getPoints().size() / 2;
+            tip = turnSegment.getPoints().get(idx);
+            tail = turnSegment.getPoints().get(idx - 1);
+        } else {
+            tail = turnSegment.getPoints().get(0);
+            tip = new LatLon((turnSegment.getPoints().get(1).lat() + turnSegment.getPoints().get(0).lat()) / 2,
+                    (turnSegment.getPoints().get(1).lon() + turnSegment.getPoints().get(0).lon()) / 2);
+        }
+        drawArrow(graphics, mapView, tip, tail, TURN_ARROW_LENGTH);
+        if (turnSegment.getNumberOfTrips() != null) {
+            drawLabel(graphics, mapView, turnSegment.getNumberOfTrips().toString(), tip, tail);
+        }
+    }
+
+    private static void drawArrow(final Graphics2D graphics, final MapView mapView, final LatLon tipLatLon,
+            final LatLon tailLatLon, final double arrowLength) {
+        // draw arrow
+        final Point tip = mapView.getPoint(tipLatLon);
+        final Point tail = mapView.getPoint(tailLatLon);
+        final double theta = Math.atan2((tip.getY() - tail.getY()), (tip.getX() - tail.getX()));
+        double rho = theta + ARROW_ANGLE;
+        for (int j = 0; j < 2; j++) {
+            graphics.draw(new Line2D.Double(tip.getX(), tip.getY(), tip.getX() - arrowLength * Math.cos(rho),
+                    tip.getY() - arrowLength * Math.sin(rho)));
+            rho = theta - ARROW_ANGLE;
         }
     }
 
@@ -207,4 +256,41 @@ final class PaintUtil {
         });
     }
 
+    private static void drawLabel(final Graphics2D graphics, final MapView mapView, final String txt, final LatLon tip,
+            final LatLon tail) {
+        final Point labelPoint = mapView.getPoint(tip);
+        final int cmp = Double.compare(tip.getX(), tail.getX());
+        if (Double.compare(tip.getX(), tail.getX()) == 0) {
+            labelPoint.x += LABEL_DX;
+        } else if (cmp < 0) {
+            labelPoint.x -= LABEL_DX;
+            labelPoint.y += LABEL_DY;
+        } else {
+            labelPoint.x += LABEL_DX;
+            labelPoint.y += LABEL_DY;
+        }
+
+        final FontMetrics fontMetrics = mapView.getFontMetrics(mapView.getFont().deriveFont(Font.BOLD));
+        final Rectangle2D rect = fontMetrics.getStringBounds(txt, graphics);
+        graphics.setColor(LABEL_BACKGROUND_COLOR);
+        graphics.fillRect(labelPoint.x, labelPoint.y - fontMetrics.getAscent(), (int) rect.getWidth(),
+                (int) rect.getHeight());
+
+        graphics.setColor(Color.black);
+        graphics.drawString(txt, labelPoint.x, labelPoint.y);
+    }
+
+
+    /* commonly used private methods */
+
+    private static GeneralPath buildPath(final Graphics2D graphics, final MapView mapView, final List<LatLon> points) {
+        final GeneralPath path = new GeneralPath();
+        Point point = mapView.getPoint(points.get(0));
+        path.moveTo(point.getX(), point.getY());
+        for (int i = 1; i < points.size(); i++) {
+            point = mapView.getPoint(points.get(i));
+            path.lineTo(point.getX(), point.getY());
+        }
+        return path;
+    }
 }

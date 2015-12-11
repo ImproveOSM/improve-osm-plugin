@@ -20,13 +20,16 @@ import java.util.List;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
+import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.DataLayerEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidenceLevelEntry;
 
 
 /**
@@ -60,7 +63,7 @@ final class LoadManager {
         }
         return dataLayers == null
                 ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.MISSING_GEOMETRY, DataLayer.TURN_RESTRICTION)
-                : dataLayers;
+                        : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */
@@ -75,8 +78,7 @@ final class LoadManager {
     }
 
     OnewayFilter loadOnewayFilter() {
-        final String statusStr = Main.pref.get(Keys.DIRECTIONOFFLOW_STATUS);
-        final Status status = statusStr != null && !statusStr.isEmpty() ? Status.valueOf(statusStr) : null;
+        final Status status = loadStatusFilter(Keys.DIRECTIONOFFLOW_STATUS);
 
         final List<OnewayConfidenceLevelEntry> entries =
                 Main.pref.getListOfStructs(Keys.DIRECTIONOFFLOW_STATUS, OnewayConfidenceLevelEntry.class);
@@ -91,6 +93,7 @@ final class LoadManager {
                 : new OnewayFilter(status, confidenceLevels);
     }
 
+
     /* MissingGeometyLayer related methods */
 
     String loadMissingGeometryLastComment() {
@@ -99,8 +102,7 @@ final class LoadManager {
     }
 
     MissingGeometryFilter loadMissingGeometryFilter() {
-        final String statusStr = Main.pref.get(Keys.MISSINGGEO_STATUS);
-        final Status status = statusStr != null && !statusStr.isEmpty() ? Status.valueOf(statusStr) : null;
+        final Status status = loadStatusFilter(Keys.MISSINGGEO_STATUS);
         final List<TileTypeEntry> entries = Main.pref.getListOfStructs(Keys.MISSINGGEO_TYPE, TileTypeEntry.class);
         EnumSet<TileType> types = null;
         if (entries != null && !entries.isEmpty()) {
@@ -114,5 +116,36 @@ final class LoadManager {
         final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
         return status == null && types == null ? MissingGeometryFilter.DEFAULT
                 : new MissingGeometryFilter(status, types, count);
+    }
+
+
+    /* TurnRestrictionLayer related methods */
+
+    String loadTurnRestrictionLastComment() {
+        final String comment = Main.pref.get(Keys.TURN_RESTRICTION_LAST_COMMENT);
+        return comment == null ? "" : comment;
+    }
+
+    TurnRestrictionFilter loadTurnRestrictionFilter() {
+        final Status status = loadStatusFilter(Keys.TURN_RESTRICTION_STATUS);
+        final List<TurnConfidenceLevelEntry> entries =
+                Main.pref.getListOfStructs(Keys.TURN_RESTRICTION_CONFIDENCE_LEVEL, TurnConfidenceLevelEntry.class);
+        EnumSet<TurnConfidenceLevel> confidenceLevels = null;
+        if (entries != null && !entries.isEmpty()) {
+            confidenceLevels = EnumSet.noneOf(TurnConfidenceLevel.class);
+            for (final TurnConfidenceLevelEntry entry : entries) {
+                confidenceLevels.add(TurnConfidenceLevel.valueOf(entry.getName()));
+            }
+        }
+        return status == null && confidenceLevels == null ? TurnRestrictionFilter.DEFAULT
+                : new TurnRestrictionFilter(status, confidenceLevels);
+    }
+
+
+    /* commonly used method */
+
+    private Status loadStatusFilter(final String key) {
+        final String statusStr = Main.pref.get(key);
+        return statusStr != null && !statusStr.isEmpty() ? Status.valueOf(statusStr) : null;
     }
 }

@@ -48,6 +48,7 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
 
     /* info panel texts */
     private final String pnlInfoTitle;
+    private final String lblId;
     private final String lblStatus;
     private final String lblType;
     private final String lblConfidence;
@@ -77,9 +78,10 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
         pnlInfoTitle = readProperty("details.info.title");
-        lblStatus = readProperty("status.lbl");
+        lblId = readProperty("details.info.id.lbl");
+        lblStatus = readProperty("details.info.status.lbl");
         lblType = readProperty("details.info.type.lbl");
-        lblConfidence = readProperty("confidence.lbl");
+        lblConfidence = readProperty("details.info.confidence.lbl");
         lblTrips = readProperty("details.info.trips.lbl");
 
         lblC1 = readProperty("c1.lbl");
@@ -142,6 +144,10 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
 
     public String getPnlInfoTitle() {
         return pnlInfoTitle;
+    }
+
+    public String getLblId() {
+        return lblId;
     }
 
     public String getLblStatus() {

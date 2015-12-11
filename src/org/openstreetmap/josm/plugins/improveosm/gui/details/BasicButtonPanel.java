@@ -29,6 +29,8 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
 
 /**
+ * Defines an abstract panel displaying the common buttons of the right side dialog window. Specific button panel's
+ * should extend this class.
  *
  * @author Beata
  * @version $Revision$
@@ -37,6 +39,7 @@ public abstract class BasicButtonPanel<T> extends JPanel {
 
     private static final long serialVersionUID = -5740658979188410760L;
 
+    private static final int ROWS = 1;
     private static final Dimension DIM = new Dimension(200, 23);
 
     /* UI components */
@@ -50,11 +53,15 @@ public abstract class BasicButtonPanel<T> extends JPanel {
     private T item;
     private CommentObserver commentObserver;
 
+
     /**
-     * Builds a new button panel.
+     * Builds a new button panel with the given arguments.
+     *
+     * @param buttonCount the number of buttons that the panel has
+     * @param filterAction the filter button's action
      */
-    public BasicButtonPanel(final int rows, final int cols, final AbstractAction filterAction) {
-        super(new GridLayout(rows, cols));
+    public BasicButtonPanel(final int buttonCount, final AbstractAction filterAction) {
+        super(new GridLayout(ROWS, buttonCount));
         final GuiConfig guiCnf = GuiConfig.getInstance();
         final IconConfig iconCnf = IconConfig.getInstance();
 
@@ -81,6 +88,7 @@ public abstract class BasicButtonPanel<T> extends JPanel {
         setPreferredSize(DIM);
     }
 
+
     /**
      * Sets the currently selected road segment. The button panel button's state is modified based on the selected
      * segment status.
@@ -100,8 +108,19 @@ public abstract class BasicButtonPanel<T> extends JPanel {
         return item;
     }
 
+    /**
+     * Enables/disables the button panel actions's based on the specific layer's logic.
+     */
     public abstract void enablePanelActions();
 
+    /**
+     * Enables/disables the button panel buttons based on the given flags.
+     *
+     * @param commentFlag enables/disables the comment button
+     * @param solveFlag enables/disables the solve button
+     * @param reopenFlag enables/disables the reopen button
+     * @param invalidFlag enables/disables the invalid button
+     */
     public void enablePanelActions(final boolean commentFlag, final boolean solveFlag, final boolean reopenFlag,
             final boolean invalidFlag) {
         btnComment.setEnabled(commentFlag);
@@ -110,6 +129,11 @@ public abstract class BasicButtonPanel<T> extends JPanel {
         btnInvalid.setEnabled(invalidFlag);
     }
 
+    /**
+     * Registers the comment observer.
+     *
+     * @param commentObserver a {@code CommentObserver} object
+     */
     public void registerCommentObserver(final CommentObserver commentObserver) {
         this.commentObserver = commentObserver;
     }

@@ -40,6 +40,12 @@ class InfoPanel extends BasicPanel<RoadSegment> {
     private int pnlWidth = 0;
 
 
+    InfoPanel() {
+        super();
+        setName(getGuiCnf().getPnlInfoTitle());
+    }
+
+
     @Override
     public void createComponents(final RoadSegment roadSegment) {
         y = 0;

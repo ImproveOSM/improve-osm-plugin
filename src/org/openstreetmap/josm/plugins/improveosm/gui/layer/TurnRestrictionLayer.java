@@ -29,7 +29,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
+
 /**
+ * Defines the TurnRestrictionLayer main functionality.
  *
  * @author Beata
  * @version $Revision$
@@ -39,6 +41,7 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     public TurnRestrictionLayer() {
         super(TurnRestrictionGuiConfig.getInstance().getLayerName(), new TurnRestrictionPaintHandler());
     }
+
 
     @Override
     public Icon getIcon() {
@@ -56,6 +59,9 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     }
 
 
+    /*
+     * Draws the layer's data items to the map.
+     */
     private static class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
 
         @Override

@@ -17,23 +17,19 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.util.EnumSet;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
@@ -44,15 +40,11 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class FilterPanel extends JPanel {
+class FilterPanel extends BasicFilterPanel {
 
     private static final long serialVersionUID = -2111695621098772652L;
 
     /* UI components */
-    private JRadioButton rbStatusOpen;
-    private JRadioButton rbStatusSolved;
-    private JRadioButton rbStatusInvalid;
-    private ButtonGroup btnGroupStatus;
     private JCheckBox cbTypeParking;
     private JCheckBox cbTypeRoad;
     private JCheckBox cbTypeBoth;
@@ -66,12 +58,9 @@ class FilterPanel extends JPanel {
      *
      * @param tileFilter specifies if the tile or cluster filters needs to be displayed
      */
-    FilterPanel() {
-        super(new GridBagLayout());
+    FilterPanel(final MissingGeometryFilter filter) {
+        super(filter, MissingGeometryGuiConfig.getInstance().getDlgFilterLblStatus());
 
-        final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
-
-        addStatusFilter(filter.getStatus());
         addTypesFilter(filter.getTypes());
         boolean includeWater = false;
         boolean includePath = false;
@@ -84,20 +73,6 @@ class FilterPanel extends JPanel {
         addCountFilter(filter.getCount());
     }
 
-
-    private void addStatusFilter(final Status status) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblStatus(), getFont().deriveFont(Font.BOLD), null),
-                Constraints.LBL_STATUS);
-        rbStatusOpen = GuiBuilder.buildRadioButton(Status.OPEN.toString(), Status.OPEN.name(), getBackground());
-        rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.toString(), Status.SOLVED.name(), getBackground());
-        rbStatusInvalid =
-                GuiBuilder.buildRadioButton(Status.INVALID.toString(), Status.INVALID.name(), getBackground());
-        btnGroupStatus = GuiBuilder.buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
-        selectStatus(status);
-        add(rbStatusOpen, Constraints.RB_OPEN);
-        add(rbStatusSolved, Constraints.RB_SOLVED);
-        add(rbStatusInvalid, Constraints.RB_INVALID);
-    }
 
     private void addTypesFilter(final EnumSet<TileType> types) {
         add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblType(), getFont().deriveFont(Font.BOLD), null),
@@ -146,8 +121,9 @@ class FilterPanel extends JPanel {
     /**
      * Resets the filters to it's initial state.
      */
-    void resetFilters() {
-        selectStatus(MissingGeometryFilter.DEFAULT.getStatus());
+    @Override
+    public void resetFilters() {
+        super.resetFilters();
         selectTypes(MissingGeometryFilter.DEFAULT.getTypes());
         cbIncludeWater.setSelected(false);
         cbIncludePath.setSelected(false);
@@ -162,13 +138,11 @@ class FilterPanel extends JPanel {
      *
      * @return a {@code SearchFilter} object
      */
-    MissingGeometryFilter selectedFilters() {
+    @Override
+    public MissingGeometryFilter selectedFilters() {
         MissingGeometryFilter filter = null;
         if (txtCount.getInputVerifier().verify(txtCount)) {
-            Status status = null;
-            if (btnGroupStatus.getSelection() != null) {
-                status = Status.valueOf(btnGroupStatus.getSelection().getActionCommand());
-            }
+            final Status status = super.selectedFilters().getStatus();
             final String countStr = txtCount.getText().trim();
             final Integer count = countStr.isEmpty() ? null : Integer.parseInt(countStr);
             final EnumSet<TileType> types = selectedTypes();
@@ -197,28 +171,6 @@ class FilterPanel extends JPanel {
         return types;
     }
 
-    private MissingGeometryGuiConfig getGuiCnf() {
-        return MissingGeometryGuiConfig.getInstance();
-    }
-
-    private void selectStatus(final Status status) {
-        if (status != null) {
-            switch (status) {
-                case OPEN:
-                    rbStatusOpen.setSelected(true);
-                    break;
-                case SOLVED:
-                    rbStatusSolved.setSelected(true);
-                    break;
-                default:
-                    rbStatusInvalid.setSelected(true);
-                    break;
-            }
-        } else {
-            btnGroupStatus.clearSelection();
-        }
-    }
-
     private void selectTypes(final EnumSet<TileType> types) {
         if (types != null && !types.isEmpty()) {
             boolean selected = types.contains(TileType.ROAD);
@@ -232,5 +184,9 @@ class FilterPanel extends JPanel {
             cbTypeParking.setSelected(false);
             cbTypeBoth.setSelected(false);
         }
+    }
+
+    private MissingGeometryGuiConfig getGuiCnf() {
+        return MissingGeometryGuiConfig.getInstance();
     }
 }

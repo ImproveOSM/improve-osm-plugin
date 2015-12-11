@@ -36,6 +36,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
  */
 public final class Util {
 
+    private static final double POZ_DIST = 15.0;
     private static final double SEG_DIST = 4.0;
     private static final int DEGREE_180 = 180;
     private static final int DEGREE_360 = 360;
@@ -179,9 +180,31 @@ public final class Util {
         return tileY;
     }
 
+    /**
+     * Returns the turn restriction corresponding to the given point.
+     *
+     * @param turnRestrictions a list of available {@code TurnRestriction}s
+     * @param point a {@code Point} represents the location where the user clicked on the map
+     * @return a {@code TurnRestriction} object
+     */
     public static TurnRestriction nearbyTurnRestriction(final List<TurnRestriction> turnRestrictions,
             final Point point) {
+        double minDist = Double.MAX_VALUE;
+        TurnRestriction result = null;
+        if (turnRestrictions != null) {
+            for (final TurnRestriction turnRestriction : turnRestrictions) {
+                final double dist = distance(point, turnRestriction.getPoint());
+                if (dist <= minDist && dist <= POZ_DIST) {
+                    minDist = dist;
+                    result = turnRestriction;
+                }
+            }
+        }
+        return result;
+    }
 
-        return null;
+    private static double distance(final Point2D fromPoint, final LatLon toLatLon) {
+        final Point toPoint = Main.map.mapView.getPoint(toLatLon);
+        return new Point2D.Double(fromPoint.getX(), fromPoint.getY()).distance(toPoint);
     }
 }

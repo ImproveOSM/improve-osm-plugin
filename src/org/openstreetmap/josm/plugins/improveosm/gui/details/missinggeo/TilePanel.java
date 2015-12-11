@@ -41,6 +41,12 @@ class TilePanel extends BasicPanel<Tile> {
     private int pnlWidth = 0;
 
 
+    TilePanel() {
+        super();
+        setName(getGuiCnf().getPnlTileTitle());
+    }
+
+
     @Override
     public void createComponents(final Tile tile) {
         y = 0;

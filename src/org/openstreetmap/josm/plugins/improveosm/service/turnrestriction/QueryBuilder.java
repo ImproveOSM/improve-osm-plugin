@@ -49,7 +49,7 @@ public class QueryBuilder extends BaseQueryBuilder {
         final StringBuilder query = new StringBuilder();
         appendFormatFilter(query);
         appendClientFilter(query);
-        query.append(AND).append(Parameter.TARGET_ID).append(EQ).append(targetId);
+        query.append(AND).append(Parameter.TARGET_ID).append(EQ).append(HttpUtil.utf8Encode(targetId));
         return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 

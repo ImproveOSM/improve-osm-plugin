@@ -68,6 +68,16 @@ final class Constants {
     static final Color PATH_COLOR = new Color(160, 82, 45);
     static final double POINT_POS_RADIUS = 5;
 
+    /* constants used for drawing TurnRestriction segments */
+    static final Color TURN_SEGMENT_COLOR = new Color(255, 0, 0);
+    static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    static final double TURN_ARROW_LENGTH = 11;
+
+    /* constants used for drawing a label containing a string */
+    static final Color LABEL_BACKGROUND_COLOR = new Color(255, 222, 173);
+    static final int LABEL_DX = 13;
+    static final int LABEL_DY = 19;
+
     static final Map<RenderingHints.Key, Object> RENDERING_MAP = createRenderingMap();
 
     private static Map<RenderingHints.Key, Object> createRenderingMap() {

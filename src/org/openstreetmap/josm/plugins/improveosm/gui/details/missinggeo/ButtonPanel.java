@@ -33,16 +33,14 @@ class ButtonPanel extends BasicButtonPanel<Tile> {
 
     private static final long serialVersionUID = 7563325113402557461L;
 
-    private static final int ROWS = 1;
-    private static final int COLS = 5;
-
+    private static final int BUTTONS_COUNT = 5;
 
 
     /**
      * Builds a new object.
      */
     ButtonPanel() {
-        super(ROWS, COLS, new DislayFilterDialog());
+        super(BUTTONS_COUNT, new DislayFilterDialog());
     }
 
 

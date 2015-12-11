@@ -26,6 +26,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
  */
 public class SearchFilter {
 
+    public static final SearchFilter DEFAULT = new SearchFilter(Status.OPEN);
     private final Status status;
 
 

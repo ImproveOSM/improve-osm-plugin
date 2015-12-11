@@ -21,12 +21,15 @@ import java.util.List;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
+import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.DataLayerEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidenceLevelEntry;
 
 
 /**
@@ -118,5 +121,34 @@ final class SaveManager {
     void saveMissingGeometryFiltersChangedFlag(final boolean changed) {
         Main.pref.put(Keys.MISSINGGEO_FILTERS_CHANGED, "");
         Main.pref.put(Keys.MISSINGGEO_FILTERS_CHANGED, "" + changed);
+    }
+
+
+    /* TurnRestriction layer related methods */
+
+    void saveTurnRestrictionLastComment(final String comment) {
+        Main.pref.put(Keys.TURN_RESTRICTION_LAST_COMMENT, comment);
+    }
+
+    void saveTurnRestrictionFilter(final TurnRestrictionFilter filter) {
+        if (filter != null) {
+            // status
+            final String status = filter.getStatus() != null ? filter.getStatus().name() : "";
+            Main.pref.put(Keys.TURN_RESTRICTION_STATUS, status);
+
+            // confidence levels
+            final List<TurnConfidenceLevelEntry> entries = new ArrayList<TurnConfidenceLevelEntry>();
+            if (filter.getConfidenceLevels() != null) {
+                for (final TurnConfidenceLevel confidence : filter.getConfidenceLevels()) {
+                    entries.add(new TurnConfidenceLevelEntry(confidence));
+                }
+            }
+            Main.pref.putListOfStructs(Keys.TURN_RESTRICTION_CONFIDENCE_LEVEL, entries, TurnConfidenceLevelEntry.class);
+        }
+    }
+
+    void saveTurnRestrictionFiltersChangedFlag(final boolean changed) {
+        Main.pref.put(Keys.TURN_RESTRICTION_FILTERS_CHANGED, "");
+        Main.pref.put(Keys.TURN_RESTRICTION_FILTERS_CHANGED, "" + changed);
     }
 }
