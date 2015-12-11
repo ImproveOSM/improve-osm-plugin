@@ -19,8 +19,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARRO
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARROW_LENGTH;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.BOTH_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_BACKGROUND_COLOR;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DX;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DY;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DIST;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PARKING_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PATH_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_POS_RADIUS;
@@ -261,13 +260,13 @@ final class PaintUtil {
         final Point labelPoint = mapView.getPoint(tip);
         final int cmp = Double.compare(tip.getX(), tail.getX());
         if (Double.compare(tip.getX(), tail.getX()) == 0) {
-            labelPoint.x += LABEL_DX;
+            labelPoint.x += LABEL_DIST;
         } else if (cmp < 0) {
-            labelPoint.x -= LABEL_DX;
-            labelPoint.y += LABEL_DY;
+            labelPoint.x -= LABEL_DIST;
+            labelPoint.y -= LABEL_DIST;
         } else {
-            labelPoint.x += LABEL_DX;
-            labelPoint.y += LABEL_DY;
+            labelPoint.x += LABEL_DIST;
+            labelPoint.y += LABEL_DIST;
         }
 
         final FontMetrics fontMetrics = mapView.getFontMetrics(mapView.getFont().deriveFont(Font.BOLD));

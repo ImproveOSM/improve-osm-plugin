@@ -75,8 +75,7 @@ final class Constants {
 
     /* constants used for drawing a label containing a string */
     static final Color LABEL_BACKGROUND_COLOR = new Color(255, 222, 173);
-    static final int LABEL_DX = 13;
-    static final int LABEL_DY = 19;
+    static final int LABEL_DIST = 20;
 
     static final Map<RenderingHints.Key, Object> RENDERING_MAP = createRenderingMap();
 

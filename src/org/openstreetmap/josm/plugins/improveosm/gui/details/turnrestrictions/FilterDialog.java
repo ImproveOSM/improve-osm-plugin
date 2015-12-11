@@ -26,7 +26,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 /**
  * Dialog window that displays the data filters.
- * 
+ *
  * @author Beata
  * @version $Revision$
  */
@@ -35,7 +35,7 @@ class FilterDialog extends BasicFilterDialog {
     private static final long serialVersionUID = -1004737094751848643L;
 
     /* dialog minimal size */
-    private static final Dimension DIM = new Dimension(450, 150);
+    private static final Dimension DIM = new Dimension(480, 150);
 
 
     public FilterDialog() {
