@@ -66,8 +66,8 @@ public class OnewayFilter extends SearchFilter {
             result = true;
         } else if (obj instanceof OnewayFilter) {
             final OnewayFilter other = (OnewayFilter) obj;
-            result = super.equals(obj) && (confidenceLevels == null && other.getConfidenceLevels() == null)
-                    || (confidenceLevels != null && confidenceLevels.equals(other.getConfidenceLevels()));
+            result = super.equals(obj) && ((confidenceLevels == null && other.getConfidenceLevels() == null)
+                    || (confidenceLevels != null && confidenceLevels.equals(other.getConfidenceLevels())));
         }
         return result;
     }
