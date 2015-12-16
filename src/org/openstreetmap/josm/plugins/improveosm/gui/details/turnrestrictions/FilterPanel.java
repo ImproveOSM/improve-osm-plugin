@@ -55,9 +55,9 @@ class FilterPanel extends BasicFilterPanel {
         add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
-                OnewayConfidenceLevel.C1.name(), getBackground());
+                TurnConfidenceLevel.C1.name(), getBackground());
         cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
-                OnewayConfidenceLevel.C2.name(), getBackground());
+                TurnConfidenceLevel.C2.name(), getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
         add(cbbConfidenceC2, Constraints.CBB_C2);
@@ -86,9 +86,9 @@ class FilterPanel extends BasicFilterPanel {
 
     private void selectConfidence(final EnumSet<TurnConfidenceLevel> confidenceLevels) {
         if (confidenceLevels != null) {
-            boolean selected = confidenceLevels.contains(OnewayConfidenceLevel.C1);
+            boolean selected = confidenceLevels.contains(TurnConfidenceLevel.C1);
             cbbConfidenceC1.setSelected(selected);
-            selected = confidenceLevels.contains(OnewayConfidenceLevel.C2);
+            selected = confidenceLevels.contains(TurnConfidenceLevel.C2);
             cbbConfidenceC2.setSelected(selected);
         } else {
             cbbConfidenceC1.setSelected(false);

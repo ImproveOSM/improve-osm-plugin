@@ -54,6 +54,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.Tip
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
@@ -129,7 +130,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
 
     @Override
     public void layerAdded(final Layer newLayer) {
-        if (newLayer instanceof MissingGeometryLayer || newLayer instanceof DirectionOfFlowLayer) {
+        if (newLayer instanceof ImproveOsmLayer) {
             zoomChanged();
         }
     }
@@ -290,7 +291,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
     private void selectTurnRestriction(final Point point, final boolean multiSelect) {
         final TurnRestriction turnRestriction = turnRestrictionLayer.nearbyItem(point, multiSelect);
         if (turnRestriction != null) {
-            System.out.println("turn restr:" + turnRestriction.getId());
             if (!turnRestriction.equals(turnRestrictionLayer.lastSelectedItem())) {
                 final List<Comment> comments =
                         ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
@@ -463,6 +463,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         if (addTurnRestriction) {
             turnRestrictionLayer = new TurnRestrictionLayer();
             Main.main.addLayer(turnRestrictionLayer);
+            turnRestrictionDialog.showDialog();
         }
     }
 

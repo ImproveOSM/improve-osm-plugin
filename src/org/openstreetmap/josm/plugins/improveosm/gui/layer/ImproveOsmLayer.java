@@ -32,7 +32,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
  * @version $Revision$
  * @param <T>
  */
-abstract class ImproveOsmLayer<T> extends AbstractLayer {
+public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
     private final PaintHandler<T> paintHandler;
 
