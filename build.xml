@@ -82,7 +82,7 @@
 				<attribute name="Author" value="telenav" />
 				<attribute name="Plugin-Class" value="org.openstreetmap.josm.plugins.improveosm.ImproveOsmPlugin" />
 				<attribute name="Plugin-Date" value="${TSTAMP}" />
-				<attribute name="Plugin-Description" value="This project is helping you improve the OSM map." />
+				<attribute name="Plugin-Description" value="This project is helping you improve the OSM map by pointing at probable missing geometries (roads, parkings, path and water trails), missing traffic flow direction or missing turn restrictions in OSM." />
 				<attribute name="Plugin-Link" value="https://wiki.openstreetmap.org/wiki/JOSM/Plugins/ImproveOsm" />
 				<attribute name="Plugin-Icon" value="images/improveosm_logo_50x50.png" />
 				<attribute name="Plugin-Mainversion" value="1" />
