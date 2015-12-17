@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.pref;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import org.openstreetmap.josm.Main;
@@ -51,9 +52,8 @@ final class LoadManager {
     }
 
     boolean loadOldPluginsFlag() {
-        final String oldMissingGeoFlag = Main.pref.get(Keys.OLD_MISSINGGEO_PLUGIN);
-        final String oldDirectionOfFlowFlag = Main.pref.get(Keys.OLD_DIRECTIONOFFLOW_PLUGIN);
-        return (!oldMissingGeoFlag.isEmpty() || !oldDirectionOfFlowFlag.isEmpty());
+        final Collection<String> plugins = Main.pref.getCollection(Keys.PLUGINS);
+        return plugins.contains("missingRoads") || plugins.contains("trafficFlowDirection");
     }
 
     public boolean loadOldPluginsWarningSuppressFlag() {

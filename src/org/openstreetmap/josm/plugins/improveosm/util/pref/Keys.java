@@ -54,6 +54,5 @@ public final class Keys {
     public static final String TURN_RESTRICTION_FILTERS_CHANGED = "improveosm.turnRestriction.filter.changed";
 
     static final String OLD_PLUGINS_WARNING_SUPPRESS = "improveosm.oldPlugins.warning.suppress";
-    static final String OLD_MISSINGGEO_PLUGIN = "missingGeometry.error.suppress";
-    static final String OLD_DIRECTIONOFFLOW_PLUGIN = "directionOfFlow.error.suppress";
+    static final String PLUGINS = "plugins";
 }
