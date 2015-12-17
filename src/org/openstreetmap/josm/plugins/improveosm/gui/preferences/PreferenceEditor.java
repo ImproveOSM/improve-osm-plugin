@@ -18,7 +18,6 @@ package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 import java.awt.BorderLayout;
 import java.util.EnumSet;
 import javax.swing.JPanel;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
@@ -57,14 +56,14 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
         final EnumSet<DataLayer> selectedDataLayers = pnlPreference.selectedDataLayers();
         final EnumSet<DataLayer> oldDataLayers = PreferenceManager.getInstance().loadDataLayers();
         boolean restartJosm = false;
+        for (final DataLayer dataLayer : oldDataLayers) {
+            if (!selectedDataLayers.contains(dataLayer)) {
+                restartJosm = true;
+            }
+        }
         if (!selectedDataLayers.equals(oldDataLayers)) {
             // active layers had changed
             PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
-
-            if (Main.map != null && (selectedDataLayers.size() < DataLayer.values().length - 1)) {
-                // some layers were removed
-                restartJosm = true;
-            }
         }
         return restartJosm;
     }
