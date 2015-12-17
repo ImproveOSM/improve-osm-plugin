@@ -31,6 +31,11 @@
 				<name>service.url</name>
 				<value>http://fcd-ss.skobbler.net:2680/missingGeoService_dev/</value>
 			</property>
+				<property>
+				<location>improveosm_tr_config.properties</location>
+				<name>service.url</name>
+				<value>http://fcd-ss.skobbler.net:2680/turnRestrictionService_dev/</value>
+			</property>
 		</archive>
 
 	</distribution>
@@ -45,6 +50,11 @@
 				<location>improveosm_mg_config.properties</location>
 				<name>service.url</name>
 				<value>http://missingroads.skobbler.net/missingGeoService/</value>
+			</property>
+				<property>
+				<location>improveosm_tr_config.properties</location>
+				<name>service.url</name>
+				<value>http://improve-osm.skobbler.net:9191/turnRestrictionService/</value>
 			</property>
 		</archive>
 	</distribution>
