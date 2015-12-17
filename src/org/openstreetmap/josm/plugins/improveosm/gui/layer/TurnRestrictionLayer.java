@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURNRESTRICTION_CLUSTER_COLOR;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import org.openstreetmap.josm.data.Bounds;
@@ -57,6 +58,24 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     TurnRestriction nearbyItem(final Point point) {
         return Util.nearbyTurnRestriction(getDataSet().getItems(), point);
     }
+
+    @Override
+    public void updateSelectedItems() {
+        final List<TurnRestriction> newList = new ArrayList<>();
+        for (final TurnRestriction item : this.getSelectedItems()) {
+            if (getDataSet().getItems().contains(item)){
+                if( item.getTurnRestrictions() == null) {
+                    newList.add(item);
+                } else {
+                    final int idx = getDataSet().getItems().indexOf(item);
+                    final TurnRestriction newItem = getDataSet().getItems().get(idx);
+                    newList.add(newItem);
+                }
+            }
+            setSelectedItems(newList);
+        }
+    }
+
 
 
     /*

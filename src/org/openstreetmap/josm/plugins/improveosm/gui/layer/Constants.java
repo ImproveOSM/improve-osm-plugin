@@ -66,15 +66,20 @@ final class Constants {
     static final Color BOTH_COLOR = new Color(30, 30, 30);
     static final Color WATER_COLOR = new Color(0, 0, 238);
     static final Color PATH_COLOR = new Color(160, 82, 45);
-    static final double POINT_POS_RADIUS = 5;
+    static final int POINT_POS_RADIUS = 5;
 
     /* constants used for drawing TurnRestriction segments */
     static final Color TURN_SEGMENT_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final double TURN_ARROW_LENGTH = 11;
+    static final int COMPLEX_TURN_RADIUS = 20;
+    static final int COMPLEX_TURN_SEL_RADIUS = 30;
+    static final float COMPLEX_TURN_FONT_SIZE = 11F;
+    static final float TURN_SEGMENT_FONT_SIZE = 12F;
 
     /* constants used for drawing a label containing a string */
-    static final Color LABEL_BACKGROUND_COLOR = new Color(255, 222, 173);
+    static final Composite LABEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75F);
+    static final Color LABEL_BACKGROUND_COLOR = Color.white;
     static final int LABEL_DIST = 20;
 
     static final Map<RenderingHints.Key, Object> RENDERING_MAP = createRenderingMap();

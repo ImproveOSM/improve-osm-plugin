@@ -52,7 +52,7 @@ public final class ClusterConfig extends BaseConfig {
             if (keyStr.startsWith("zoom_")) {
                 final String mapKeyStr = keyStr.replace("zoom_", "");
                 final int mapKey = Integer.parseInt(mapKeyStr);
-                final List<Double> list = readProperties(keyStr);
+                final List<Double> list = readDoubleProperties(keyStr);
                 map.put(mapKey, list);
             }
         }

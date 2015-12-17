@@ -27,14 +27,24 @@ import org.openstreetmap.josm.data.coor.LatLon;
  */
 public class TurnRestriction {
 
-    private final String id;
-    private final List<TurnSegment> segments;
+    private String id;
+    private List<TurnSegment> segments;
     private final LatLon point;
-    private final Status status;
-    private final String turnType;
-    private final TurnConfidenceLevel confidenceLevel;
-    private final Integer numberOfPasses;
+    private Status status;
+    private String turnType;
+    private TurnConfidenceLevel confidenceLevel;
+    private Integer numberOfPasses;
 
+    /*
+     * this field is used together with point for situations where there are several turn restrictions located in the
+     * same point
+     */
+    private List<TurnRestriction> turnRestrictions;
+
+    public TurnRestriction(final LatLon point, final List<TurnRestriction> turnRestrictions) {
+        this.point = point;
+        this.turnRestrictions = turnRestrictions;
+    }
 
     public TurnRestriction(final String id, final List<TurnSegment> segments, final LatLon point, final Status status,
             final String turnType, final TurnConfidenceLevel confidenceLevel, final Integer numberOfPasses) {
@@ -46,7 +56,6 @@ public class TurnRestriction {
         this.confidenceLevel = confidenceLevel;
         this.numberOfPasses = numberOfPasses;
     }
-
 
     public String getId() {
         return id;
@@ -76,33 +85,38 @@ public class TurnRestriction {
         return numberOfPasses;
     }
 
+    public List<TurnRestriction> getTurnRestrictions() {
+        return turnRestrictions;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        if (id != null) {
+
+            result = prime * result + id.hashCode();
+        } else {
+
+            result = prime * result + ((point == null) ? 0 : point.hashCode());
+        }
         return result;
     }
 
     @Override
     public boolean equals(final Object obj) {
+        boolean result = false;
         if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof TurnRestriction)) {
-            return false;
-        }
-        final TurnRestriction other = (TurnRestriction) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
+            result = true;
+        } else if (obj instanceof TurnRestriction) {
+            final TurnRestriction other = (TurnRestriction) obj;
+            if (id != null && other.getId() != null) {
+                result = id.equals(other.getId());
+            } else {
+                result = ((point == null && other.getPoint() == null)
+                        || (point != null && point.equals(other.getPoint())));
             }
-        } else if (!id.equals(other.id)) {
-            return false;
         }
-        return true;
+        return result;
     }
 }

@@ -59,6 +59,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
@@ -74,8 +75,8 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-public class ImproveOsmPlugin extends Plugin
-implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, MouseListener, CommentObserver {
+public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -91,7 +92,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
     private Timer zoomTimer;
     private boolean listenersRegistered = false;
 
-
     /**
      * Builds a new object. This constructor is automatically invoked by JOSM to bootstrap the plugin.
      *
@@ -100,7 +100,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
     public ImproveOsmPlugin(final PluginInformation pluginInfo) {
         super(pluginInfo);
     }
-
 
     @Override
     public PreferenceSetting getPreferenceSetting() {
@@ -160,7 +159,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         }
     }
 
-
     /* ZoomChangeListener method */
 
     @Override
@@ -188,7 +186,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             zoomTimer.start();
         }
     }
-
 
     /* PreferenceChangeListener method */
 
@@ -238,7 +235,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         addDialogWindows(Main.map, addMissingGeometry, addDirectionOfFlow, addTurnRestriction);
         addLayers(addMissingGeometry, addDirectionOfFlow, addTurnRestriction);
     }
-
 
     /* MouseListener implementation */
 
@@ -291,11 +287,12 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
     private void selectTurnRestriction(final Point point, final boolean multiSelect) {
         final TurnRestriction turnRestriction = turnRestrictionLayer.nearbyItem(point, multiSelect);
         if (turnRestriction != null) {
-            if (!turnRestriction.equals(turnRestrictionLayer.lastSelectedItem())) {
-                final List<Comment> comments =
-                        ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
-                updateTurnRestrictionSelectedData(turnRestriction, comments);
+            List<Comment> comments = null;
+            if (turnRestriction.getTurnRestrictions() == null
+                    && !turnRestriction.equals(turnRestrictionLayer.lastSelectedItem())) {
+                comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
             }
+            updateTurnRestrictionSelectedData(turnRestriction, comments);
         } else if (!multiSelect) {
             // clear selection
             updateTurnRestrictionSelectedData(null, null);
@@ -322,6 +319,24 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         // no logic for this action
     }
 
+    @Override
+    public void selectItem(final TurnRestriction turnRestriction) {
+        System.out.println("select item from list");
+        // TODO Auto-generated method stub
+        final List<Comment> comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
+
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                turnRestrictionDialog.updateUI(turnRestriction, comments);
+                turnRestrictionLayer.updateSelectedItem(null);
+                turnRestrictionLayer.updateSelectedItem(turnRestriction);
+                Main.map.repaint();
+            }
+        });
+    }
+
     /* CommentObserver method */
 
     @Override
@@ -330,6 +345,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         if (activeLayer == missingGeometryLayer) {
             final List<Tile> selectedTiles = missingGeometryLayer.getSelectedItems();
             Main.worker.execute(new Runnable() {
+
                 @Override
                 public void run() {
                     commentTiles(comment, selectedTiles);
@@ -338,6 +354,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         } else if (activeLayer == directionOfFlowLayer) {
             final List<RoadSegment> selectedRoadSegments = directionOfFlowLayer.getSelectedItems();
             Main.worker.execute(new Runnable() {
+
                 @Override
                 public void run() {
                     commentRoadSegments(comment, selectedRoadSegments);
@@ -346,6 +363,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         } else if (activeLayer == turnRestrictionLayer) {
             final List<TurnRestriction> selectedTurnRestrictions = turnRestrictionLayer.getSelectedItems();
             Main.worker.execute(new Runnable() {
+
                 @Override
                 public void run() {
                     commentTurnRestrictions(comment, selectedTurnRestrictions);
@@ -406,7 +424,6 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
         }
     }
 
-
     /* commonly used private methods and classes */
 
     private void addDialogWindows(final MapFrame newMapFrame, final boolean addMissingGeometry,
@@ -438,6 +455,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             turnRestrictionDialog.getButton().addActionListener(new ToggleButtonActionListener());
             turnRestrictionDialog.getButton().setSelected(true);
             turnRestrictionDialog.registerCommentObserver(this);
+            turnRestrictionDialog.registerSelectionObserver(this);
         }
     }
 
@@ -622,8 +640,8 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
                 if (!result.getClusters().isEmpty()) {
                     // clear segment details
                     turnRestrictionDialog.updateUI(null, null);
-                } else if (result.getItems().contains(turnRestriction)) {
-                    if (turnRestrictionDialog.reloadComments()) {
+                } else if (turnRestriction != null) {
+                    if (turnRestriction.getTurnRestrictions() == null && turnRestrictionDialog.reloadComments()) {
                         final List<Comment> comments =
                                 ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
                         turnRestrictionDialog.updateUI(turnRestriction, comments);
@@ -635,6 +653,7 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
                 }
             }
         }
+
     }
 
     private class ToggleButtonActionListener implements ActionListener {
@@ -651,13 +670,13 @@ implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, M
             final String actionCommand = event.getActionCommand();
             final boolean addMissingGeometry =
                     actionCommand.equals(MissingGeometryGuiConfig.getInstance().getLayerName())
-                    && missingGeometryLayer == null;
+                            && missingGeometryLayer == null;
             final boolean addDirectionOfFlow =
                     actionCommand.equals(DirectionOfFlowGuiConfig.getInstance().getLayerName())
-                    && directionOfFlowLayer == null;
+                            && directionOfFlowLayer == null;
             final boolean addTurnRestriction =
                     actionCommand.equals(TurnRestrictionGuiConfig.getInstance().getLayerName())
-                    && turnRestrictionLayer == null;
+                            && turnRestrictionLayer == null;
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override

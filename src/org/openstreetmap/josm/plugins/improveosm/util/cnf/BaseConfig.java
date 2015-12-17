@@ -73,12 +73,29 @@ class BaseConfig {
      * @param key a {@code String}
      * @return
      */
-    List<Double> readProperties(final String key) {
+    List<Double> readDoubleProperties(final String key) {
         final String values = properties.getProperty(key);
         final List<Double> valueList = new ArrayList<>();
         if (values != null && !values.isEmpty()) {
             for (final String value : values.split(SEPARATOR)) {
                 valueList.add(Double.parseDouble(value));
+            }
+        }
+        return valueList;
+    }
+
+    /**
+     * Reads a list of properties associated with the given key.
+     *
+     * @param key a {@code String}
+     * @return
+     */
+    List<String> readProperties(final String key) {
+        final String values = properties.getProperty(key);
+        final List<String> valueList = new ArrayList<>();
+        if (values != null && !values.isEmpty()) {
+            for (final String value : values.split(SEPARATOR)) {
+                valueList.add(value);
             }
         }
         return valueList;

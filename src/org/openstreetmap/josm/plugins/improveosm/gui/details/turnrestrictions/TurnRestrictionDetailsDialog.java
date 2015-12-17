@@ -21,6 +21,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicButtonPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.FeedbackPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
+import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
@@ -64,5 +65,10 @@ public class TurnRestrictionDetailsDialog extends ImproveOsmDetailsDialog<TurnRe
     @Override
     public FeedbackPanel createFeedbackPanel() {
         return new FeedbackPanel(Config.getTurnRestrictionInstance().getFeedbackUrl());
+    }
+
+    public void registerSelectionObserver(final TurnRestrictionSelectionObserver observer) {
+        final InfoPanel infoPanel = (InfoPanel) getPnlInfo();
+        infoPanel.registerSelectionObserver(observer);
     }
 }

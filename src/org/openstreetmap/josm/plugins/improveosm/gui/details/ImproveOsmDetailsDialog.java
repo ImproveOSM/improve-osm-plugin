@@ -41,6 +41,7 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
     private final CommentsPanel pnlComments;
     private final BasicButtonPanel<T> pnlBtn;
 
+
     /**
      * Builds a new direction of flow details dialog window.
      */
@@ -58,6 +59,7 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
         final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
         add(pnlMain);
     }
+
 
     public abstract BasicPanel<T> createInfoPanel();
 
@@ -104,5 +106,9 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
 
     public boolean reloadComments() {
         return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
+    }
+
+    public BasicPanel<T> getPnlInfo() {
+        return pnlInfo;
     }
 }

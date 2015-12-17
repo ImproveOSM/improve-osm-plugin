@@ -99,4 +99,15 @@ public final class Formatter {
         dateTimeFormat.setTimeZone(TimeZone.getDefault());
         return timestamp != null ? dateTimeFormat.format(new Date(timestamp * UNIX_TSTP)) : "";
     }
+
+    /**
+     * Formats the given string representing a turn type. The method removes all the '_' characters and transforms the
+     * given value to lower case.
+     *
+     * @param turnType a {@code String}
+     * @return a formatted string
+     */
+    public static String formatTurnType(final String turnType) {
+        return turnType.toLowerCase().replace("_", " ");
+    }
 }

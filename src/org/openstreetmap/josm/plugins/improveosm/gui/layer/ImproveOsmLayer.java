@@ -30,7 +30,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
  *
  * @author Beata
  * @version $Revision$
- * @param <T>
+ * @param <T> the implementation layer object type
  */
 public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
@@ -40,7 +40,13 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
     private List<T> selectedItems;
 
 
-    ImproveOsmLayer(final String layerName, final PaintHandler<T> paintHandler) {
+    /**
+     * Builds a new layer with the given arguments.
+     *
+     * @param layerName the name of the layer
+     * @param paintHandler the handler responsible of drawing the layer elements
+     */
+    public ImproveOsmLayer(final String layerName, final PaintHandler<T> paintHandler) {
         super(layerName);
         this.paintHandler = paintHandler;
         this.selectedItems = new ArrayList<>();
@@ -65,16 +71,24 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
     public void setDataSet(final DataSet<T> dataSet) {
         this.dataSet = dataSet;
         if (!selectedItems.isEmpty() && !this.dataSet.getItems().isEmpty()) {
-            final List<T> newList = new ArrayList<>();
-            for (final T item : this.selectedItems) {
-                if (this.dataSet.getItems().contains(item)) {
-                    final int idx = this.dataSet.getItems().indexOf(item);
-                    final T newItem = this.dataSet.getItems().get(idx);
-                    newList.add(newItem);
-                }
-            }
-            this.selectedItems = newList;
+            updateSelectedItems();
         }
+    }
+
+    /**
+     * Updates the selected items based on the current data set. Previously selected items that are not present in the
+     * current data set will be removed.
+     */
+    public void updateSelectedItems() {
+        final List<T> newList = new ArrayList<>();
+        for (final T item : this.selectedItems) {
+            if (this.dataSet.getItems().contains(item)) {
+                final int idx = this.dataSet.getItems().indexOf(item);
+                final T newItem = this.dataSet.getItems().get(idx);
+                newList.add(newItem);
+            }
+        }
+        this.selectedItems = newList;
     }
 
     /**
@@ -134,5 +148,9 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
     public List<T> getSelectedItems() {
         return selectedItems;
+    }
+
+    void setSelectedItems(final List<T> selectedItems) {
+        this.selectedItems = selectedItems;
     }
 }

@@ -35,7 +35,7 @@ public abstract class BasicPanel<T> extends JPanel {
     private static final long serialVersionUID = -1712483793218733712L;
 
     /** the minimum size of the panel */
-    private static final Dimension PANEL_MIN = new Dimension(0, 50);
+    public static final Dimension PANEL_MIN = new Dimension(0, 50);
 
     private final Font fontBold;
     private final Font fontPlain;
@@ -91,7 +91,7 @@ public abstract class BasicPanel<T> extends JPanel {
      *
      * @param obj an object of type T
      */
-    public final void updateData(final T obj) {
+    public void updateData(final T obj) {
         removeAll();
         if (obj != null) {
             setLayout(null);

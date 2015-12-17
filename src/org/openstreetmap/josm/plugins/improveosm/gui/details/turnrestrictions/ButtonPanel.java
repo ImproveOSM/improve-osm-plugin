@@ -46,10 +46,12 @@ class ButtonPanel extends BasicButtonPanel<TurnRestriction> {
 
     @Override
     public void enablePanelActions() {
-        if (getItem().getStatus() == Status.OPEN) {
-            enablePanelActions(true, true, false, true);
-        } else {
-            enablePanelActions(true, false, true, false);
+        if (getItem().getTurnRestrictions() == null) {
+            if (getItem().getStatus() == Status.OPEN) {
+                enablePanelActions(true, true, false, true);
+            } else {
+                enablePanelActions(true, false, true, false);
+            }
         }
     }
 

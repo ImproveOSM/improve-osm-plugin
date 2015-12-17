@@ -42,7 +42,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 
@@ -98,8 +97,7 @@ public final class GuiBuilder {
      */
     public static JScrollPane buildScrollPane(final Component component, final Color backgroundColor,
             final boolean borderVisible) {
-        final JScrollPane scrollPane = new JScrollPane(component, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        final JScrollPane scrollPane = new JScrollPane(component);
         scrollPane.setBackground(backgroundColor);
         scrollPane.setAutoscrolls(true);
         if (borderVisible) {
@@ -123,6 +121,7 @@ public final class GuiBuilder {
         if (name != null) {
             scrollPane.setName(name);
         }
+        scrollPane.setMinimumSize(prefSize);
         scrollPane.setPreferredSize(prefSize);
         return scrollPane;
     }

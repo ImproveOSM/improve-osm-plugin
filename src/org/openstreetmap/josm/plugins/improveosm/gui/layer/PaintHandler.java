@@ -51,6 +51,7 @@ abstract class PaintHandler<T> {
             final DataSet<T> dataSet, final List<T> items);
 
     /**
+     * Draws the given list of clusters to the map.
      *
      * @param graphics a {@code Graphics2D} used to drawing to the map
      * @param mapView the current {@code MapView}
@@ -63,8 +64,8 @@ abstract class PaintHandler<T> {
         final SortedMap<Integer, Double> clusterRadiusMap = generateClusterRadiusMap(zoom, clusters);
         graphics.setComposite(CLUSTER_COMPOSITE);
         for (final Cluster cluster : clusters) {
-            final Double radius = clusterRadius(clusterRadiusMap, cluster.getSize());
-            PaintUtil.drawCircle(graphics, mapView.getPoint2D(cluster.getPoint()), color, radius);
+            final Integer radius = clusterRadius(clusterRadiusMap, cluster.getSize()).intValue();
+            PaintUtil.drawCircle(graphics, mapView.getPoint(cluster.getPoint()), color, radius);
         }
         graphics.setComposite(NORMAL_COMPOSITE);
     }

@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+import java.util.List;
 
 /**
  * Holds turn restriction of related texts.
@@ -53,6 +54,8 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     private final String lblType;
     private final String lblConfidence;
     private final String lblTrips;
+    private final String tblTitle;
+    private final List<String> tblHeader;
 
     /* commonly used labels */
     private final String lblC1;
@@ -83,7 +86,8 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         lblType = readProperty("details.info.type.lbl");
         lblConfidence = readProperty("details.info.confidence.lbl");
         lblTrips = readProperty("details.info.trips.lbl");
-
+        tblTitle = readProperty("details.info.tbl.title");
+        tblHeader = readProperties("details.info.tbl.header");
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
         lblTurn = readProperty("turn.lbl");
@@ -164,6 +168,14 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
 
     public String getLblTrips() {
         return lblTrips;
+    }
+
+    public String getTblTitle() {
+        return tblTitle;
+    }
+
+    public List<String> getTblHeader() {
+        return tblHeader;
     }
 
     public String getLblC1() {
