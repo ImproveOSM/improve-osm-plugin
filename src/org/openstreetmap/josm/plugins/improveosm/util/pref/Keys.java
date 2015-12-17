@@ -52,4 +52,8 @@ public final class Keys {
     static final String TURN_RESTRICTION_STATUS = "improveosm.turnRestriction.filter.status";
     static final String TURN_RESTRICTION_CONFIDENCE_LEVEL = "improveosm.turnRestriction.filter.confidence";
     public static final String TURN_RESTRICTION_FILTERS_CHANGED = "improveosm.turnRestriction.filter.changed";
+
+    static final String OLD_PLUGINS_WARNING_SUPPRESS = "improveosm.oldPlugins.warning.suppress";
+    static final String OLD_MISSINGGEO_PLUGIN = "missingGeometry.error.suppress";
+    static final String OLD_DIRECTIONOFFLOW_PLUGIN = "directionOfFlow.error.suppress";
 }

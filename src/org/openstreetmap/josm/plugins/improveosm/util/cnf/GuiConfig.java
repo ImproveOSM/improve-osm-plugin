@@ -64,6 +64,7 @@ public final class GuiConfig extends BaseConfig {
     private final String txtInvalidComment;
     private final String txtMissingUsername;
     private final String txtInvalidInteger;
+    private final String txtOldPlugins;
 
 
     private GuiConfig() {
@@ -96,6 +97,7 @@ public final class GuiConfig extends BaseConfig {
         txtInvalidComment = readProperty("warning.invalid.comment");
         txtMissingUsername = readProperty("warning.missing.username");
         txtInvalidInteger = readProperty("warning.invalid.integer");
+        txtOldPlugins = readProperty("warning.deprecated");
     }
 
 
@@ -201,5 +203,9 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtInvalidInteger() {
         return txtInvalidInteger;
+    }
+
+    public String getTxtOldPlugins() {
+        return txtOldPlugins;
     }
 }

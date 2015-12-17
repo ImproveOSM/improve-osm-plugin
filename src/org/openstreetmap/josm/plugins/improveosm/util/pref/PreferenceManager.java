@@ -87,6 +87,18 @@ public final class PreferenceManager {
         saveManager.saveErrorSuppressFlag(flag);
     }
 
+    public boolean loadOldPluginsFlag() {
+        return loadManager.loadOldPluginsFlag();
+    }
+
+    public void saveOldPluginsWarningSuppressFlag(final boolean flag) {
+        saveManager.saveOldPluginsWarningSuppressFlag(flag);
+    }
+
+    public boolean loadOldPluginsWarningSuppressFlag() {
+        return loadManager.loadOldPluginsWarningSuppressFlag();
+    }
+
     /**
      * Loads the selected data layers.
      *

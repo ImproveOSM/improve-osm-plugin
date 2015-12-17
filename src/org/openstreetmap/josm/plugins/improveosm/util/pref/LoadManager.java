@@ -50,6 +50,16 @@ final class LoadManager {
         return Main.pref.getBoolean(Keys.SUPPRESS_ERROR);
     }
 
+    boolean loadOldPluginsFlag() {
+        final String oldMissingGeoFlag = Main.pref.get(Keys.OLD_MISSINGGEO_PLUGIN);
+        final String oldDirectionOfFlowFlag = Main.pref.get(Keys.OLD_DIRECTIONOFFLOW_PLUGIN);
+        return (!oldMissingGeoFlag.isEmpty() || !oldDirectionOfFlowFlag.isEmpty());
+    }
+
+    public boolean loadOldPluginsWarningSuppressFlag() {
+        return Main.pref.getBoolean(Keys.OLD_PLUGINS_WARNING_SUPPRESS);
+    }
+
     EnumSet<DataLayer> loadDataLayers() {
         final List<DataLayerEntry> entries = Main.pref.getListOfStructs(Keys.DATA_LAYER, DataLayerEntry.class);
         EnumSet<DataLayer> dataLayers = null;
@@ -63,7 +73,7 @@ final class LoadManager {
         }
         return (dataLayers == null || dataLayers.isEmpty())
                 ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.DIRECTION_OF_FLOW, DataLayer.TURN_RESTRICTION)
-                : dataLayers;
+                        : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */

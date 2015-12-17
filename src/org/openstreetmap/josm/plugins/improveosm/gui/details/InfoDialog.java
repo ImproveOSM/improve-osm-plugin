@@ -13,26 +13,44 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
+package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
-
 /**
- * Helper class, displays an info dialog window.
  *
  * @author Beata
  * @version $Revision$
  */
-public class TipDialog {
+public class InfoDialog {
 
     private static boolean isDisplayed = false;
+
+    /**
+     * Displays a warning message to the user.
+     */
+    public synchronized void displayOldPluginsDialog() {
+        if (!isDisplayed) {
+            final boolean oldPluginsInstalled = PreferenceManager.getInstance().loadOldPluginsFlag();
+            if (oldPluginsInstalled && !PreferenceManager.getInstance().loadOldPluginsWarningSuppressFlag()) {
+                isDisplayed = true;
+                final String txt = GuiConfig.getInstance().getTxtOldPlugins();
+                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+                        GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),
+                        GuiConfig.getInstance().getPluginName(), JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE, null, null, null);
+                final boolean flag = val == JOptionPane.YES_OPTION;
+                PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
+                isDisplayed = false;
+            }
+        }
+    }
 
     /**
      * Displays editing tips for the user. The dialog window is displayed when the plugin enters from cluster view to
@@ -52,8 +70,7 @@ public class TipDialog {
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
                         GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null, null, null);
+                        JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;
                 PreferenceManager.getInstance().saveDirectionOfFlowTipSuppressFlag(flag);
                 isDisplayed = false;

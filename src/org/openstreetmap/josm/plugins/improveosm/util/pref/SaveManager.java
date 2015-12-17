@@ -49,6 +49,10 @@ final class SaveManager {
         Main.pref.put(Keys.SUPPRESS_ERROR, flag);
     }
 
+    void saveOldPluginsWarningSuppressFlag(final boolean flag) {
+        Main.pref.put(Keys.OLD_PLUGINS_WARNING_SUPPRESS, flag);
+    }
+
     void saveDataLayers(final EnumSet<DataLayer> dataLayers) {
         final List<DataLayerEntry> entries = new ArrayList<>();
         if (dataLayers != null) {

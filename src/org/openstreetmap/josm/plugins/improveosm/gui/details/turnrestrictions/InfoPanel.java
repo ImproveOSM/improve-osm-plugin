@@ -100,10 +100,7 @@ final class InfoPanel extends BasicPanel<TurnRestriction> {
         final JPanel pnlTable = new JPanel(new BorderLayout());
         pnlTable.add(tblTurnRestrictions.getTableHeader(), BorderLayout.NORTH);
         pnlTable.add(tblTurnRestrictions, BorderLayout.CENTER);
-        // pnlTable.setPreferredSize(tblTurnRestrictions.getPreferredSize());
-        // pnlTable.setSize(tblTurnRestrictions.getPreferredSize());
         add(pnlTable, BorderLayout.CENTER);
-        System.out.println(pnlTable.getPreferredSize().width);
         y = LHEIGHT + y + pnlTable.getHeight();
         pnlWidth = pnlTable.getPreferredSize().width + 2 * SPACE_Y;
     }

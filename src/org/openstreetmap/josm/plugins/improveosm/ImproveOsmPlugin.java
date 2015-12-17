@@ -49,8 +49,8 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.InfoDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowDetailsDialog;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.TipDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
@@ -76,7 +76,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -180,6 +180,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                     if (turnRestrictionLayer != null && turnRestrictionLayer.isVisible()) {
                         Main.worker.execute(new TurnRestrictionUpdateThread());
                     }
+                    new InfoDialog().displayOldPluginsDialog();
                 }
             });
             zoomTimer.setRepeats(false);
@@ -321,8 +322,6 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
     @Override
     public void selectItem(final TurnRestriction turnRestriction) {
-        System.out.println("select item from list");
-        // TODO Auto-generated method stub
         final List<Comment> comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -577,7 +576,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
                         @Override
                         public void run() {
-                            new TipDialog().displayDialog(zoom);
+                            new InfoDialog().displayDialog(zoom);
                             directionOfFlowLayer.setDataSet(result);
                             updateSelection(result);
                             Main.map.repaint();
@@ -670,13 +669,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             final String actionCommand = event.getActionCommand();
             final boolean addMissingGeometry =
                     actionCommand.equals(MissingGeometryGuiConfig.getInstance().getLayerName())
-                            && missingGeometryLayer == null;
+                    && missingGeometryLayer == null;
             final boolean addDirectionOfFlow =
                     actionCommand.equals(DirectionOfFlowGuiConfig.getInstance().getLayerName())
-                            && directionOfFlowLayer == null;
+                    && directionOfFlowLayer == null;
             final boolean addTurnRestriction =
                     actionCommand.equals(TurnRestrictionGuiConfig.getInstance().getLayerName())
-                            && turnRestrictionLayer == null;
+                    && turnRestrictionLayer == null;
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
