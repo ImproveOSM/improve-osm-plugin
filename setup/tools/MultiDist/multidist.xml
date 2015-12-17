@@ -44,17 +44,17 @@
 			<property>
 				<location>improveosm_dof_config.properties</location>
 				<name>service.url</name>
-				<value>http://improve-osm.skobbler.net:9090/directionOfFlowService/</value>
+				<value>http://directionofflow.skobbler.net:9090/directionOfFlowService/</value>
 			</property>
 			<property>
 				<location>improveosm_mg_config.properties</location>
 				<name>service.url</name>
-				<value>http://missingroads.skobbler.net/missingGeoService/</value>
+				<value>http://missingroads.skobbler.net:8080/missingGeoService/</value>
 			</property>
 				<property>
 				<location>improveosm_tr_config.properties</location>
 				<name>service.url</name>
-				<value>http://improve-osm.skobbler.net:9191/turnRestrictionService/</value>
+				<value>http://turnRestrictionService.skobbler.net:9191/turnRestrictionService/</value>
 			</property>
 		</archive>
 	</distribution>
