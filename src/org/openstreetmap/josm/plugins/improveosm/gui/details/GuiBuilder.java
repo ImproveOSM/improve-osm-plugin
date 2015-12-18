@@ -320,7 +320,7 @@ public final class GuiBuilder {
         txtField.setDragEnabled(true);
         final JPopupMenu menu = buildCopyPopupMenu(txtField);
         txtField.addMouseListener(new PopupMenuDisplayAdapter(txtField, menu));
-        txtField.setEditable(false);
+        txtField.setEditable(true);
         return txtField;
     }
 
