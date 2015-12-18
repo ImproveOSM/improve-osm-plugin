@@ -76,7 +76,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -293,7 +293,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                 if (turnRestriction.getTurnRestrictions() != null) {
                     shouldSelect = turnRestrictionLayer.getSelectedItems().isEmpty();
                 } else {
-                    shouldSelect = true;
+                    final TurnRestriction lastSelectedItem = turnRestrictionLayer.lastSelectedItem();
+                    if ((lastSelectedItem == null)
+                            || (lastSelectedItem != null && lastSelectedItem.getTurnRestrictions() == null)) {
+                        shouldSelect = true;
+                    }
                 }
             } else {
                 shouldSelect = true;
@@ -681,13 +685,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             final String actionCommand = event.getActionCommand();
             final boolean addMissingGeometry =
                     actionCommand.equals(MissingGeometryGuiConfig.getInstance().getLayerName())
-                            && missingGeometryLayer == null;
+                    && missingGeometryLayer == null;
             final boolean addDirectionOfFlow =
                     actionCommand.equals(DirectionOfFlowGuiConfig.getInstance().getLayerName())
-                            && directionOfFlowLayer == null;
+                    && directionOfFlowLayer == null;
             final boolean addTurnRestriction =
                     actionCommand.equals(TurnRestrictionGuiConfig.getInstance().getLayerName())
-                            && turnRestrictionLayer == null;
+                    && turnRestrictionLayer == null;
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
