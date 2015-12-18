@@ -26,6 +26,8 @@ import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
+import org.openstreetmap.josm.plugins.improveosm.util.Util;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.DataLayerEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
@@ -117,8 +119,10 @@ final class SaveManager {
                 }
             }
             Main.pref.putListOfStructs(Keys.MISSINGGEO_TYPE, entries, TileTypeEntry.class);
+            final String countKey = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance()
+                    .getMaxClusterZoom() ? Keys.MISSINGGEO_TRIP_COUNT : Keys.MISSINGGEO_POINT_COUNT;
             final String count = filter.getCount() != null ? filter.getCount().toString() : "";
-            Main.pref.put(Keys.MISSINGGEO_COUNT, count);
+            Main.pref.put(countKey, count);
         }
     }
 

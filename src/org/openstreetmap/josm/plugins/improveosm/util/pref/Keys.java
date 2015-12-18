@@ -42,7 +42,8 @@ public final class Keys {
     static final String MISSINGGEO_LAST_COMMENT = "improveosm.missingGeometry.comment";
     static final String MISSINGGEO_STATUS = "improveosm.missingGeometry.filter.status";
     static final String MISSINGGEO_TYPE = "improveosm.missingGeometry.filter.type";
-    static final String MISSINGGEO_COUNT = "improveosm.missingGeometry.filter.count";
+    static final String MISSINGGEO_POINT_COUNT = "improveosm.missingGeometry.filter.pointCount";
+    static final String MISSINGGEO_TRIP_COUNT = "improveosm.missingGeometry.filter.tripCount";
     static final String MISSINGGEO_INCLUDE_WATER = "improveosm.missingGeometry.filter.includeWater";
     static final String MISSINGGEO_INCLUDE_PATH = "improveosm.missingGeometry.filter.includePath";
     public static final String MISSINGGEO_FILTERS_CHANGED = "improveosm.missingGeometry.filter.changed";

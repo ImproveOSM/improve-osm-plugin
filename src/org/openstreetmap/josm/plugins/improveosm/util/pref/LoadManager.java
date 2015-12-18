@@ -27,6 +27,8 @@ import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
+import org.openstreetmap.josm.plugins.improveosm.util.Util;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.DataLayerEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
@@ -122,12 +124,14 @@ final class LoadManager {
             }
         }
 
-        final String valueStr = Main.pref.get(Keys.MISSINGGEO_COUNT).trim();
+        String valueStr =
+                Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance().getMaxClusterZoom()
+                        ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
+        valueStr = valueStr.trim();
         final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
         return status == null && types == null ? MissingGeometryFilter.DEFAULT
                 : new MissingGeometryFilter(status, types, count);
     }
-
 
     /* TurnRestrictionLayer related methods */
 
