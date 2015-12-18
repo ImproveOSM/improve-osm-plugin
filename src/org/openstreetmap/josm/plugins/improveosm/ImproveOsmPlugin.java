@@ -546,7 +546,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         private void updateSelection(final DataSet<Tile> result) {
             if (result != null) {
                 final Tile tile = missingGeometryLayer.lastSelectedItem();
-                if (result.getItems().contains(tile)) {
+                if (tile != null) {
                     if (missingGeometryDialog.reloadComments()) {
                         final List<Comment> comments =
                                 ServiceHandler.getMissingGeometryHandler().retrieveComments(tile);
@@ -593,7 +593,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 if (!result.getClusters().isEmpty()) {
                     // clear segment details
                     directionOfFlowDialog.updateUI(null, null);
-                } else if (result.getItems().contains(roadSegment)) {
+                } else if (roadSegment != null) {
                     if (directionOfFlowDialog.reloadComments()) {
                         final List<Comment> comments =
                                 ServiceHandler.getDirectionOfFlowHandler().retrieveComments(roadSegment);

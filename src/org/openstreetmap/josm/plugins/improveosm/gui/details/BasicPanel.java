@@ -35,7 +35,7 @@ public abstract class BasicPanel<T> extends JPanel {
     private static final long serialVersionUID = -1712483793218733712L;
 
     /** the minimum size of the panel */
-    public static final Dimension PANEL_MIN = new Dimension(0, 50);
+    public static final Dimension PANEL_MIN = new Dimension(0, 10);
 
     private final Font fontBold;
     private final Font fontPlain;

@@ -91,7 +91,7 @@ final class LoadManager {
         final Status status = loadStatusFilter(Keys.DIRECTIONOFFLOW_STATUS);
 
         final List<OnewayConfidenceLevelEntry> entries =
-                Main.pref.getListOfStructs(Keys.DIRECTIONOFFLOW_STATUS, OnewayConfidenceLevelEntry.class);
+                Main.pref.getListOfStructs(Keys.DIRECTIONOFFLOW_CONFIDENCE_LEVEL, OnewayConfidenceLevelEntry.class);
         EnumSet<OnewayConfidenceLevel> confidenceLevels = null;
         if (entries != null && !entries.isEmpty()) {
             confidenceLevels = EnumSet.noneOf(OnewayConfidenceLevel.class);
