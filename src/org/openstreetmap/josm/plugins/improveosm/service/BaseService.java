@@ -34,11 +34,8 @@ import com.google.gson.JsonSyntaxException;
  */
 public class BaseService {
 
-    private final Gson gson;
+    private final Gson gson = createGsonBuilder().create();
 
-    public BaseService() {
-        this.gson = createGsonBuilder().create();
-    }
 
     /**
      * Creates a {@code GsonBuilder} used for parsing the response of the service. A specific service class need to

@@ -53,11 +53,6 @@ class FilterPanel extends BasicFilterPanel {
     private JTextField txtCount;
 
 
-    /**
-     * Builds a new filter panel.
-     *
-     * @param tileFilter specifies if the tile or cluster filters needs to be displayed
-     */
     FilterPanel(final MissingGeometryFilter filter) {
         super(filter, MissingGeometryGuiConfig.getInstance().getDlgFilterLblStatus());
 

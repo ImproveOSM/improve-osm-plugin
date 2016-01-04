@@ -18,7 +18,9 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
 
+
 /**
+ * Defines the attributes of a turn segments.
  *
  * @author Beata
  * @version $Revision$
@@ -29,6 +31,12 @@ public class TurnSegment {
     private final Integer numberOfTrips;
 
 
+    /**
+     * Builds a turn segment based on the given arguments.
+     *
+     * @param points represent the geometry of the segment
+     * @param numberOfTrips represents the number of trips that passed the segment
+     */
     public TurnSegment(final List<LatLon> points, final Integer numberOfTrips) {
         this.points = points;
         this.numberOfTrips = numberOfTrips;

@@ -15,10 +15,14 @@
  */
 package org.openstreetmap.josm.plugins.improveosm;
 
+import java.util.List;
 import javax.swing.SwingUtilities;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
+import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 
 /**
@@ -27,6 +31,14 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
  * @version $Revision$
  */
 abstract class UpdateThread<T> implements Runnable {
+
+    private final ImproveOsmDetailsDialog<T> dialog;
+    private final ImproveOsmLayer<T> layer;
+
+    UpdateThread(final ImproveOsmDetailsDialog<T> dialog, final ImproveOsmLayer<T> layer) {
+        this.dialog = dialog;
+        this.layer = layer;
+    }
 
     @Override
     public void run() {
@@ -39,7 +51,8 @@ abstract class UpdateThread<T> implements Runnable {
 
                     @Override
                     public void run() {
-                        updateUI(result);
+                        layer.setDataSet(result);
+                        updateSelection(result);
                         Main.map.repaint();
                     }
                 });
@@ -50,5 +63,21 @@ abstract class UpdateThread<T> implements Runnable {
 
     abstract DataSet<T> searchData(BoundingBox bbox, int zoom);
 
-    abstract void updateUI(DataSet<T> result);
+    private void updateSelection(final DataSet<T> result) {
+        if (result != null) {
+            final T item = layer.lastSelectedItem();
+            if (item != null) {
+                if (dialog.reloadComments()) {
+                    final List<Comment> comments = retrieveComments(item);
+                    dialog.updateUI(item, comments);
+                } else {
+                    dialog.updateUI(item);
+                }
+            } else {
+                dialog.updateUI(null, null);
+            }
+        }
+    }
+
+    abstract List<Comment> retrieveComments(T item);
 }

@@ -16,13 +16,11 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.MISSINGGEO_CLUSTER_COLOR;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.List;
 import javax.swing.Icon;
-import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
-import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
@@ -38,6 +36,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConf
  */
 public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
 
+    /**
+     * Builds a new MissingGeometry layer.
+     */
     public MissingGeometryLayer() {
         super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
     }
@@ -65,27 +66,19 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
     private static class MissingGeometryHanlder extends PaintHandler<Tile> {
 
         @Override
-        void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds,
-                final DataSet<Tile> dataSet, final List<Tile> items) {
-            final int zoom = Util.zoom(bounds);
-            if (zoom > Config.getMissingGeometryInstance().getMaxClusterZoom()) {
-                // draw tiles
-                if (dataSet.getItems() != null && !dataSet.getItems().isEmpty()) {
-                    for (final Tile tile : dataSet.getItems()) {
-                        if (!items.contains(tile)) {
-                            PaintUtil.drawTile(graphics, mapView, tile, false);
-                        }
-                    }
-                    for (final Tile tile : items) {
-                        PaintUtil.drawTile(graphics, mapView, tile, true);
-                    }
-                }
-            } else {
-                // display clusters
-                if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
-                    drawClusters(graphics, mapView, dataSet.getClusters(), zoom, MISSINGGEO_CLUSTER_COLOR);
-                }
-            }
+        boolean displayClusters(final int zoom) {
+            return zoom <= Config.getMissingGeometryInstance().getMaxClusterZoom();
+        }
+
+        @Override
+        void drawItem(final Graphics2D graphics, final MapView mapView, final Tile item,
+                final boolean selected) {
+            PaintUtil.drawTile(graphics, mapView, item, selected);
+        }
+
+        @Override
+        Color getClusterColor() {
+            return MISSINGGEO_CLUSTER_COLOR;
         }
     }
 }

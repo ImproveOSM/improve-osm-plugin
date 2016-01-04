@@ -25,5 +25,4 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 public enum RoadType {
 
     HIGHWAY, FREEWAY, LOW_SPEED_ROAD, THROUGHWAY, LOCAL_ROAD;
-
 }

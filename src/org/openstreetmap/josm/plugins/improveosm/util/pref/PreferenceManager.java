@@ -42,10 +42,12 @@ public final class PreferenceManager {
     private final LoadManager loadManager;
     private final SaveManager saveManager;
 
+
     private PreferenceManager() {
         loadManager = new LoadManager();
         saveManager = new SaveManager();
     }
+
 
     public static PreferenceManager getInstance() {
         return INSTANCE;
@@ -87,16 +89,32 @@ public final class PreferenceManager {
         saveManager.saveErrorSuppressFlag(flag);
     }
 
+    /**
+     * Loads the 'old plugin' flag. This flag is used to check whether the user has also installed the
+     * MissingRoads/TrafficFlow direction plugins.
+     *
+     * @return a boolean value
+     */
     public boolean loadOldPluginsFlag() {
         return loadManager.loadOldPluginsFlag();
     }
 
-    public void saveOldPluginsWarningSuppressFlag(final boolean flag) {
-        saveManager.saveOldPluginsWarningSuppressFlag(flag);
-    }
-
+    /**
+     * Loads the 'old plugin warning suppress' flag.
+     *
+     * @return a boolean value
+     */
     public boolean loadOldPluginsWarningSuppressFlag() {
         return loadManager.loadOldPluginsWarningSuppressFlag();
+    }
+
+    /**
+     * Saves the 'old plugin warning suppress' flag.
+     *
+     * @param flag a boolean value.
+     */
+    public void saveOldPluginsWarningSuppressFlag(final boolean flag) {
+        saveManager.saveOldPluginsWarningSuppressFlag(flag);
     }
 
     /**
@@ -182,7 +200,7 @@ public final class PreferenceManager {
     }
 
     /**
-     * Saves the oneway filter user by the DirectionOfFlow layer into the preference file.
+     * Saves the one-way filter user by the DirectionOfFlow layer into the preference file.
      *
      * @param filter a {@code Oneway} filter
      */

@@ -58,7 +58,7 @@ final class LoadManager {
         return plugins.contains("missingRoads") || plugins.contains("trafficFlowDirection");
     }
 
-    public boolean loadOldPluginsWarningSuppressFlag() {
+    boolean loadOldPluginsWarningSuppressFlag() {
         return Main.pref.getBoolean(Keys.OLD_PLUGINS_WARNING_SUPPRESS);
     }
 
@@ -126,11 +126,11 @@ final class LoadManager {
 
         String valueStr =
                 Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance().getMaxClusterZoom()
-                        ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
-        valueStr = valueStr.trim();
-        final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
-        return status == null && types == null ? MissingGeometryFilter.DEFAULT
-                : new MissingGeometryFilter(status, types, count);
+                ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
+                valueStr = valueStr.trim();
+                final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
+                return status == null && types == null ? MissingGeometryFilter.DEFAULT
+                        : new MissingGeometryFilter(status, types, count);
     }
 
     /* TurnRestrictionLayer related methods */

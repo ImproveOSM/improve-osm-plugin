@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
+import org.openstreetmap.josm.plugins.improveosm.entity.EntityUtil;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 
@@ -55,7 +56,7 @@ public class OnewayFilter extends SearchFilter {
         final int prime = 31;
         int result = 1;
         result = prime + super.hashCode();
-        result = prime * result + ((confidenceLevels == null) ? 0 : confidenceLevels.hashCode());
+        result = prime * result + EntityUtil.hashCode(confidenceLevels);
         return result;
     }
 
@@ -66,8 +67,7 @@ public class OnewayFilter extends SearchFilter {
             result = true;
         } else if (obj instanceof OnewayFilter) {
             final OnewayFilter other = (OnewayFilter) obj;
-            result = super.equals(obj) && ((confidenceLevels == null && other.getConfidenceLevels() == null)
-                    || (confidenceLevels != null && confidenceLevels.equals(other.getConfidenceLevels())));
+            result = super.equals(obj) && EntityUtil.bothNullOrEqual(confidenceLevels, other.getConfidenceLevels());
         }
         return result;
     }

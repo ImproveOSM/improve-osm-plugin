@@ -38,7 +38,7 @@ class FilterDialog extends BasicFilterDialog {
     private static final Dimension DIM = new Dimension(480, 150);
 
 
-    public FilterDialog() {
+    FilterDialog() {
         super(DIM);
     }
 

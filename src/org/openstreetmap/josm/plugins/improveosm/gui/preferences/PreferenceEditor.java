@@ -37,6 +37,9 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
     private final PreferencePanel pnlPreference;
 
 
+    /**
+     * Builds a new preference editor, displaying settings for the available data layers.
+     */
     public PreferenceEditor() {
         super(IconConfig.getInstance().getPluginIconName(), GuiConfig.getInstance().getPluginName(),
                 GuiConfig.getInstance().getPluginTxt());

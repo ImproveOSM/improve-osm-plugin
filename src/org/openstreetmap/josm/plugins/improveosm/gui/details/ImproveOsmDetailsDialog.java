@@ -27,6 +27,7 @@ import org.openstreetmap.josm.tools.Shortcut;
 
 
 /**
+ * Defines the common functionality of the ImproveOsm details dialog windows.
  *
  * @author Beata
  * @version $Revision$
@@ -34,9 +35,12 @@ import org.openstreetmap.josm.tools.Shortcut;
 public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
 
     private static final long serialVersionUID = 614130882392599446L;
+
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
     private static final int DLG_HEIGHT = 50;
+
+    /* dialog components */
     private final BasicPanel<T> pnlInfo;
     private final CommentsPanel pnlComments;
     private final BasicButtonPanel<T> pnlBtn;
@@ -61,10 +65,25 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
     }
 
 
+    /**
+     * Creates an information panel displaying details of the selected item.
+     *
+     * @return a {@code BasicPanel} object
+     */
     public abstract BasicPanel<T> createInfoPanel();
 
+    /**
+     * Creates the button panel.
+     *
+     * @return a {@code BasicButtonPanel} object
+     */
     public abstract BasicButtonPanel<T> createButtonPanel();
 
+    /**
+     * Creates the feedback panel.
+     *
+     * @return a {@code FeedbackPanel} object
+     */
     public abstract FeedbackPanel createFeedbackPanel();
 
     /**
@@ -104,6 +123,11 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
         }
     }
 
+    /**
+     * Checks if the comments should be reloaded or not.
+     *
+     * @return true/false depending on the comments panel content
+     */
     public boolean reloadComments() {
         return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
     }

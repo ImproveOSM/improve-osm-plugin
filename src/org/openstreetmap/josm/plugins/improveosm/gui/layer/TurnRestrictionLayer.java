@@ -16,14 +16,13 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURNRESTRICTION_CLUSTER_COLOR;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
-import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
-import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
@@ -39,6 +38,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConf
  */
 public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
 
+    /**
+     * Builds a new TurnRestriction layer.
+     */
     public TurnRestrictionLayer() {
         super(TurnRestrictionGuiConfig.getInstance().getLayerName(), new TurnRestrictionPaintHandler());
     }
@@ -77,35 +79,25 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     }
 
 
-
     /*
      * Draws the layer's data items to the map.
      */
     private static class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
 
         @Override
-        void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds,
-                final DataSet<TurnRestriction> dataSet, final List<TurnRestriction> items) {
-            final int zoom = Util.zoom(bounds);
-            if (zoom > Config.getTurnRestrictionInstance().getMaxClusterZoom()) {
-                // display segments
-                if (dataSet.getItems() != null && !dataSet.getItems().isEmpty()) {
-                    for (final TurnRestriction turnRestriction : dataSet.getItems()) {
-                        if (!items.contains(turnRestriction)) {
-                            PaintUtil.drawTunRestriction(graphics, mapView, turnRestriction, false);
-                        }
-                    }
-                    for (final TurnRestriction turnRestriction : items) {
-                        PaintUtil.drawTunRestriction(graphics, mapView, turnRestriction, true);
-                    }
-                }
-            } else {
-                // display clusters
-                if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
-                    drawClusters(graphics, mapView, dataSet.getClusters(), zoom, TURNRESTRICTION_CLUSTER_COLOR);
-                }
-            }
+        boolean displayClusters(final int zoom) {
+            return zoom <= Config.getTurnRestrictionInstance().getMaxClusterZoom();
         }
 
+        @Override
+        void drawItem(final Graphics2D graphics, final MapView mapView, final TurnRestriction item,
+                final boolean selected) {
+            PaintUtil.drawTunRestriction(graphics, mapView, item, selected);
+        }
+
+        @Override
+        Color getClusterColor() {
+            return TURNRESTRICTION_CLUSTER_COLOR;
+        }
     }
 }

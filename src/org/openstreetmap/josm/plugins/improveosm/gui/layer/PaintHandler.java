@@ -27,6 +27,7 @@ import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.Cluster;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
+import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.ClusterConfig;
 
 
@@ -47,19 +48,37 @@ abstract class PaintHandler<T> {
      * @param dataSet the {@code DataSet} to draw to the map
      * @param items a list of selected items
      */
-    abstract void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds,
-            final DataSet<T> dataSet, final List<T> items);
+    void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds, final DataSet<T> dataSet,
+            final List<T> selectedItems) {
+        final int zoom = Util.zoom(bounds);
+        if (displayClusters(zoom)) {
+            if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
+                drawClusters(graphics, mapView, dataSet.getClusters(), zoom, getClusterColor());
+            }
+        } else {
+            if (dataSet.getItems() != null && !dataSet.getItems().isEmpty()) {
+                drawItems(graphics, mapView, dataSet.getItems(), selectedItems);
+            }
+        }
+    }
 
     /**
-     * Draws the given list of clusters to the map.
+     * Verifies if for the given zoom should draw clusters or not.
      *
-     * @param graphics a {@code Graphics2D} used to drawing to the map
-     * @param mapView the current {@code MapView}
-     * @param clusters a list of {@code Cluster}s to be drawn
      * @param zoom the current zoom level
-     * @param color the {@code Color} to be used for representing the clusters
+     * @return true/false
      */
-    void drawClusters(final Graphics2D graphics, final MapView mapView, final List<Cluster> clusters, final int zoom,
+    abstract boolean displayClusters(int zoom);
+
+    /**
+     * Returns the cluster color.
+     *
+     * @return a {@code Color} object
+     */
+    abstract Color getClusterColor();
+
+    private void drawClusters(final Graphics2D graphics, final MapView mapView, final List<Cluster> clusters,
+            final int zoom,
             final Color color) {
         final SortedMap<Integer, Double> clusterRadiusMap = generateClusterRadiusMap(zoom, clusters);
         graphics.setComposite(CLUSTER_COMPOSITE);
@@ -104,4 +123,26 @@ abstract class PaintHandler<T> {
         }
         return radius != null ? radius : CLUSTER_DEF_RADIUS;
     }
+
+    private void drawItems(final Graphics2D graphics, final MapView mapView, final List<T> items,
+            final List<T> selectedItems) {
+        for (final T item : items) {
+            if (!selectedItems.contains(item)) {
+                drawItem(graphics, mapView, item, false);
+            }
+        }
+        for (final T item : selectedItems) {
+            drawItem(graphics, mapView, item, true);
+        }
+    }
+
+    /**
+     * Draws the given item to the map.
+     *
+     * @param graphics a {@code Graphics2D} used to drawing to the map
+     * @param mapView the current {@code MapView}
+     * @param item the item to be drawn
+     * @param selected specifies if the item is selected or not
+     */
+    abstract void drawItem(final Graphics2D graphics, final MapView mapView, final T item, final boolean selected);
 }

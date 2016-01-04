@@ -44,12 +44,7 @@ class FilterPanel extends BasicFilterPanel {
     private final JCheckBox cbbConfidenceC2;
 
 
-    /**
-     * Builds a new panel displaying the TurnRestrictionLayer filters.
-     *
-     * @param filter the currently selected filters
-     */
-    public FilterPanel(final TurnRestrictionFilter filter) {
+    FilterPanel(final TurnRestrictionFilter filter) {
         super(filter, TurnRestrictionGuiConfig.getInstance().getDlgFilterStatusLbl());
 
         add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),

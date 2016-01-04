@@ -41,11 +41,29 @@ public class TurnRestriction {
      */
     private List<TurnRestriction> turnRestrictions;
 
+    /**
+     * Builds a complex turn restriction.
+     *
+     * @param point a {@code LatLon} represents the turn restrictions location
+     * @param turnRestrictions the list of {@code TurnRestriction} available
+     */
     public TurnRestriction(final LatLon point, final List<TurnRestriction> turnRestrictions) {
         this.point = point;
         this.turnRestrictions = turnRestrictions;
     }
 
+    /**
+     * Builds a simple turn restriction.
+     *
+     * @param id the unique identifier
+     * @param segments represents the segments that leads to the turn restriction and the segments that follows after
+     * the turn restriction
+     * @param point a {@code LatLon} represents the turn restriction location
+     * @param status indicates the turn restriction state
+     * @param turnType the turn restriction type
+     * @param confidenceLevel the turn restriction confidence level
+     * @param numberOfPasses the number of trips that passed the turn restriction
+     */
     public TurnRestriction(final String id, final List<TurnSegment> segments, final LatLon point, final Status status,
             final String turnType, final TurnConfidenceLevel confidenceLevel, final Integer numberOfPasses) {
         this.id = id;
@@ -56,6 +74,7 @@ public class TurnRestriction {
         this.confidenceLevel = confidenceLevel;
         this.numberOfPasses = numberOfPasses;
     }
+
 
     public String getId() {
         return id;
@@ -94,11 +113,9 @@ public class TurnRestriction {
         final int prime = 31;
         int result = 1;
         if (id != null) {
-
             result = prime * result + id.hashCode();
         } else {
-
-            result = prime * result + ((point == null) ? 0 : point.hashCode());
+            result = prime * result + EntityUtil.hashCode(point);
         }
         return result;
     }
@@ -113,8 +130,7 @@ public class TurnRestriction {
             if (id != null && other.getId() != null) {
                 result = id.equals(other.getId());
             } else {
-                result = ((point == null && other.getPoint() == null)
-                        || (point != null && point.equals(other.getPoint())));
+                result = EntityUtil.bothNullOrEqual(point, other.getPoint());
             }
         }
         return result;

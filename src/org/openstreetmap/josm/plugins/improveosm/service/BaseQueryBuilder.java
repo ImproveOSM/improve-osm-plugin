@@ -60,13 +60,20 @@ public class BaseQueryBuilder {
     public static final char EQ = '=';
     public static final char AND = '&';
 
+    public void appendGeneralSearchFilters(final StringBuilder query, final BoundingBox bbox, final int zoom) {
+        appendFormatFilter(query);
+        appendClientFilter(query);
+        appendBoundingBoxFilter(query, bbox);
+        appendZoomFilter(query, zoom);
+    }
+
     /**
      * Appends the bounding box filter to the given query.
      *
      * @param query represents the HTTP query string
      * @param bbox a {@code BoundingBox} object
      */
-    public void appendBoundingBoxFilter(final StringBuilder query, final BoundingBox bbox) {
+    private void appendBoundingBoxFilter(final StringBuilder query, final BoundingBox bbox) {
         query.append(AND).append(Parameter.NORTH.toString()).append(EQ).append(bbox.getNorth());
         query.append(AND).append(Parameter.SOUTH.toString()).append(EQ).append(bbox.getSouth());
         query.append(AND).append(Parameter.EAST.toString()).append(EQ).append(bbox.getEast());
@@ -101,7 +108,7 @@ public class BaseQueryBuilder {
      * @param query represents the HTTP query string
      * @param zoom represents the current zoom level.
      */
-    public void appendZoomFilter(final StringBuilder query, final int zoom) {
+    private void appendZoomFilter(final StringBuilder query, final int zoom) {
         query.append(AND).append(Parameter.ZOOM.toString()).append(EQ).append(zoom);
     }
 
@@ -112,7 +119,6 @@ public class BaseQueryBuilder {
      */
     public void appendClientFilter(final StringBuilder query) {
         query.append(AND).append(Parameter.CLIENT.toString()).append(EQ).append(Parameter.JOSM.toString());
-
     }
 
     /**

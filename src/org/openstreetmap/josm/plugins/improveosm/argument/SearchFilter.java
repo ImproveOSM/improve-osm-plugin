@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
+import org.openstreetmap.josm.plugins.improveosm.entity.EntityUtil;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 
 
@@ -43,7 +44,7 @@ public class SearchFilter {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + EntityUtil.hashCode(status);
         return result;
     }
 
@@ -54,8 +55,7 @@ public class SearchFilter {
             result = true;
         } else if (obj instanceof SearchFilter) {
             final SearchFilter other = (SearchFilter) obj;
-            result = (status == null && other.getStatus() == null)
-                    || (status != null && status.equals(other.getStatus()));
+            result = EntityUtil.bothNullOrEqual(status, other.getStatus());
 
         }
         return result;

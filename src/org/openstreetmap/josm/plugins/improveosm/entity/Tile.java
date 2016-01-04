@@ -98,24 +98,24 @@ public class Tile {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + EntityUtil.hashCode(x);
+        result = prime * result + EntityUtil.hashCode(y);
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj) {
         boolean result = false;
         if (this == obj) {
             result = true;
         } else if (obj instanceof Tile) {
             final Tile other = (Tile) obj;
-            result = (x == null && other.getX() == null) || (x != null && x.equals(other.getX()));
-            result = result && ((y == null && other.getY() == null) || (y != null && y.equals(other.getY())));
+            result = EntityUtil.bothNullOrEqual(x, other.getX());
+            result = result && EntityUtil.bothNullOrEqual(y, other.getY());
         }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((x == null) ? 0 : x.hashCode());
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
         return result;
     }
 

@@ -43,9 +43,6 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
     private TurnRestrictionSelectionObserver observer;
 
 
-    /**
-     * Builds an empty turn restriction table.
-     */
     TurnRestrictionTable() {
         super(new TurnRestrictionsTableModel(null));
 

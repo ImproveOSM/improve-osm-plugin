@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
+import org.openstreetmap.josm.plugins.improveosm.entity.EntityUtil;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 
@@ -28,17 +29,22 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
  */
 public class MissingGeometryFilter extends SearchFilter {
 
-    /* default tile type to display */
-    private static final EnumSet<TileType> DEFAULT_TYPE = EnumSet.of(TileType.ROAD);
-
-    /** default search filter to be applied */
-    public static final MissingGeometryFilter DEFAULT =
-            new MissingGeometryFilter(SearchFilter.DEFAULT.getStatus(), DEFAULT_TYPE, null);
-
     private final EnumSet<TileType> types;
     private final Integer count;
 
+    /** default search filter to be applied */
+    public static final MissingGeometryFilter DEFAULT =
+            new MissingGeometryFilter(SearchFilter.DEFAULT.getStatus(), EnumSet.of(TileType.ROAD), null);
 
+
+    /**
+     * Builds a new filter with the given argument.
+     *
+     * @param status defines the tile/cluster status. Only tiles/clusters that has the specified status are displayed.
+     * @param types defines the tile type. Only tiles/clusters with the specified types are displayed.
+     * @param count defines the number of points/trips. Only clusters/tiles that has at least the given number of
+     * points/trips are displayed.
+     */
     public MissingGeometryFilter(final Status status, final EnumSet<TileType> types, final Integer count) {
         super(status);
         this.types = types;
@@ -58,8 +64,8 @@ public class MissingGeometryFilter extends SearchFilter {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((count == null) ? 0 : count.hashCode());
-        result = prime * result + ((types == null) ? 0 : types.hashCode());
+        result = prime * result + EntityUtil.hashCode(count);
+        result = prime * result + EntityUtil.hashCode(types);
         return result;
     }
 
@@ -71,10 +77,8 @@ public class MissingGeometryFilter extends SearchFilter {
         } else if (obj instanceof MissingGeometryFilter) {
             final MissingGeometryFilter other = (MissingGeometryFilter) obj;
             result = super.equals(other);
-            result = result && ((count == null && other.getCount() == null)
-                    || (count != null && count.equals(other.getCount())));
-            result = result && ((types == null && other.getTypes() == null)
-                    || (types != null && types.equals(other.getTypes())));
+            result = result && EntityUtil.bothNullOrEqual(count, other.getCount());
+            result = result && EntityUtil.bothNullOrEqual(types, other.getTypes());
         }
         return result;
     }

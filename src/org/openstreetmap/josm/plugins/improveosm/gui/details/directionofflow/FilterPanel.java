@@ -44,11 +44,6 @@ class FilterPanel extends BasicFilterPanel {
     private final JCheckBox cbbConfidenceC3;
 
 
-    /**
-     * Builds a new panel displaying the DirectionOfFlow layer filters.
-     *
-     * @param filter the currently selected filters
-     */
     FilterPanel(final OnewayFilter filter) {
         super(filter, DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl());
 

@@ -36,10 +36,7 @@ class ButtonPanel extends BasicButtonPanel<TurnRestriction> {
     private static final int BUTTONS_COUNT = 5;
 
 
-    /**
-     * Builds a new button panel.
-     */
-    public ButtonPanel() {
+    ButtonPanel() {
         super(BUTTONS_COUNT, new DislayFilterDialog());
     }
 
@@ -54,6 +51,7 @@ class ButtonPanel extends BasicButtonPanel<TurnRestriction> {
             }
         }
     }
+
 
     /* displays the filter dialog window */
     private static class DislayFilterDialog extends AbstractAction {

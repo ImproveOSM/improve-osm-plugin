@@ -36,8 +36,6 @@ class TableHeaderCellRenderer extends JLabel implements TableCellRenderer {
 
     private static final long serialVersionUID = 9111934633585458749L;
 
-    TableHeaderCellRenderer() {}
-
 
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,

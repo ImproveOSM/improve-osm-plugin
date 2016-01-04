@@ -36,9 +36,7 @@ class ButtonPanel extends BasicButtonPanel<Tile> {
     private static final int BUTTONS_COUNT = 5;
 
 
-    /**
-     * Builds a new object.
-     */
+
     ButtonPanel() {
         super(BUTTONS_COUNT, new DislayFilterDialog());
     }

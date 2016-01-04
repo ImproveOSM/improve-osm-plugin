@@ -94,11 +94,11 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
         return (rowIndex > -1 && rowIndex < data.size()) ? data.get(rowIndex) : null;
     }
 
-    public void setData(final List<TurnRestriction> data) {
+    void setData(final List<TurnRestriction> data) {
         this.data = data != null ? new ArrayList<>(data) : null;
     }
 
-    public List<TurnRestriction> getData() {
+    List<TurnRestriction> getData() {
         return data;
     }
 }

@@ -46,9 +46,6 @@ class ButtonPanel extends BasicButtonPanel<RoadSegment> {
     private final JButton btnLocation;
 
 
-    /**
-     * Builds a new button panel.
-     */
     ButtonPanel() {
         super(BUTTONS_COUNT, new DisplayFilterDialog());
 

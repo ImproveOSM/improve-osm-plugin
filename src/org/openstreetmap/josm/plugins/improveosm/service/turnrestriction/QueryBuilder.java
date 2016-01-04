@@ -30,10 +30,7 @@ public class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final TurnRestrictionFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendFormatFilter(query);
-        appendClientFilter(query);
-        appendBoundingBoxFilter(query, bbox);
-        appendZoomFilter(query, zoom);
+        appendGeneralSearchFilters(query, bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());

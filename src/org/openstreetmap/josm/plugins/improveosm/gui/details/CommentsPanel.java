@@ -29,12 +29,12 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
  * @author Beata
  * @version $Revision$
  */
-public class CommentsPanel extends BasicPanel<List<Comment>> {
+class CommentsPanel extends BasicPanel<List<Comment>> {
 
     private static final long serialVersionUID = -1002962542315503824L;
 
 
-    public CommentsPanel() {
+    CommentsPanel() {
         setName(GuiConfig.getInstance().getPnlHistoryTitle());
     }
 

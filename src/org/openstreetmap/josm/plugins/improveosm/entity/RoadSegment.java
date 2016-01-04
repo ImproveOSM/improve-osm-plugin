@@ -116,9 +116,9 @@ public class RoadSegment {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((wayId == null) ? 0 : wayId.hashCode());
-        result = prime * result + ((fromNodeId == null) ? 0 : fromNodeId.hashCode());
-        result = prime * result + ((toNodeId == null) ? 0 : toNodeId.hashCode());
+        result = prime * result + EntityUtil.hashCode(wayId);
+        result = prime * result + EntityUtil.hashCode(fromNodeId);
+        result = prime * result + EntityUtil.hashCode(toNodeId);
         return result;
     }
 
@@ -129,11 +129,9 @@ public class RoadSegment {
             result = true;
         } else if (obj instanceof RoadSegment) {
             final RoadSegment other = (RoadSegment) obj;
-            result = (wayId == null && other.getWayId() == null) || (wayId != null && wayId.equals(other.getWayId()));
-            result = result && ((fromNodeId == null && other.getFromNodeId() == null)
-                    || (fromNodeId != null && fromNodeId.equals(other.getFromNodeId())));
-            result = result && ((toNodeId == null && other.getToNodeId() == null)
-                    || (toNodeId != null && toNodeId.equals(other.getToNodeId())));
+            result = EntityUtil.bothNullOrEqual(wayId, other.getWayId());
+            result = result && EntityUtil.bothNullOrEqual(fromNodeId, other.getFromNodeId());
+            result = result && EntityUtil.bothNullOrEqual(toNodeId, other.getToNodeId());
         }
         return result;
     }

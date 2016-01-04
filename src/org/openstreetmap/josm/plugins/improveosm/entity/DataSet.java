@@ -32,11 +32,20 @@ public class DataSet<T> {
     private final List<T> items;
 
 
+    /**
+     * Builds an empty data set.
+     */
     public DataSet() {
         clusters = new ArrayList<>();
         items = new ArrayList<>();
     }
 
+    /**
+     * Builds a data set based on the given arguments.
+     *
+     * @param clusters a list of {@code Cluster}s. If not null, the list is ordered by size ascending.
+     * @param items a list if {@code T} items
+     */
     public DataSet(final List<Cluster> clusters, final List<T> items) {
         this.clusters = clusters == null ? new ArrayList<Cluster>() : clusters;
         if (!this.clusters.isEmpty()) {
