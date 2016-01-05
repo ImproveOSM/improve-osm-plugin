@@ -173,27 +173,27 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             // if timer is running restart it
             zoomTimer.restart();
         } else {
-            zoomTimer = new Timer(SEARCH_DELAY, new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent event) {
-                    if (missingGeometryLayer != null && missingGeometryLayer.isVisible()) {
-                        Main.worker
-                        .execute(new MissingGeometryUpdateThread(missingGeometryDialog, missingGeometryLayer));
-                    }
-                    if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
-                        Main.worker
-                        .execute(new DirectionOfFlowUpdateThread(directionOfFlowDialog, directionOfFlowLayer));
-                    }
-                    if (turnRestrictionLayer != null && turnRestrictionLayer.isVisible()) {
-                        Main.worker
-                        .execute(new TurnRestrictionUpdateThread(turnRestrictionDialog, turnRestrictionLayer));
-                    }
-                    new InfoDialog().displayOldPluginsDialog();
-                }
-            });
+            zoomTimer = new Timer(SEARCH_DELAY, new ZoomActionListener());
             zoomTimer.setRepeats(false);
             zoomTimer.start();
+        }
+    }
+
+
+    private final class ZoomActionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            if (missingGeometryLayer != null && missingGeometryLayer.isVisible()) {
+                Main.worker.execute(new MissingGeometryUpdateThread(missingGeometryDialog, missingGeometryLayer));
+            }
+            if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
+                Main.worker.execute(new DirectionOfFlowUpdateThread(directionOfFlowDialog, directionOfFlowLayer));
+            }
+            if (turnRestrictionLayer != null && turnRestrictionLayer.isVisible()) {
+                Main.worker.execute(new TurnRestrictionUpdateThread(turnRestrictionDialog, turnRestrictionLayer));
+            }
+            new InfoDialog().displayOldPluginsDialog();
         }
     }
 
