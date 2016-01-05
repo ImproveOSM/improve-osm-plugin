@@ -148,6 +148,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.main.removeLayer(directionOfFlowLayer);
             directionOfFlowLayer = null;
         } else if (currentLayer instanceof TurnRestrictionLayer) {
+            turnRestrictionDialog.hideDialog();
             Main.main.removeLayer(turnRestrictionLayer);
             turnRestrictionLayer = null;
         }
