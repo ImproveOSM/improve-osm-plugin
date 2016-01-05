@@ -25,7 +25,10 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDi
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 
+
 /**
+ * Downloads the data from the current bounding box using the current filters and updates the UI accordingly. This class
+ * defines the common functionality of the data update process.
  *
  * @author Beata
  * @version $Revision$
@@ -34,6 +37,7 @@ abstract class UpdateThread<T> implements Runnable {
 
     private final ImproveOsmDetailsDialog<T> dialog;
     private final ImproveOsmLayer<T> layer;
+
 
     UpdateThread(final ImproveOsmDetailsDialog<T> dialog, final ImproveOsmLayer<T> layer) {
         this.dialog = dialog;
@@ -47,12 +51,25 @@ abstract class UpdateThread<T> implements Runnable {
             if (bbox != null) {
                 final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
                 final DataSet<T> result = searchData(bbox, zoom);
+
+                // update UI
                 SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
                         layer.setDataSet(result);
-                        updateSelection(result);
+                        if (result != null) {
+                            final T item = layer.lastSelectedItem();
+                            if (item != null) {
+                                if (dialog.reloadComments()) {
+                                    dialog.updateUI(item, retrieveComments(item));
+                                } else {
+                                    dialog.updateUI(item);
+                                }
+                            } else {
+                                dialog.updateUI(null, null);
+                            }
+                        }
                         Main.map.repaint();
                     }
                 });
@@ -61,23 +78,20 @@ abstract class UpdateThread<T> implements Runnable {
         }
     }
 
+    /**
+     * Searches for data in the given bounding box and zoom level.
+     *
+     * @param bbox the current searching area
+     * @param zoom the current zoom level
+     * @return a {@code DataSet}
+     */
     abstract DataSet<T> searchData(BoundingBox bbox, int zoom);
 
-    private void updateSelection(final DataSet<T> result) {
-        if (result != null) {
-            final T item = layer.lastSelectedItem();
-            if (item != null) {
-                if (dialog.reloadComments()) {
-                    final List<Comment> comments = retrieveComments(item);
-                    dialog.updateUI(item, comments);
-                } else {
-                    dialog.updateUI(item);
-                }
-            } else {
-                dialog.updateUI(null, null);
-            }
-        }
-    }
-
+    /**
+     * Retrieves the comments of the selected item.
+     *
+     * @param item the currently selected object
+     * @return a list of {@code Comment}s
+     */
     abstract List<Comment> retrieveComments(T item);
 }
