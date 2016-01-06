@@ -32,7 +32,8 @@ public class OnewayFilter extends SearchFilter {
     private final EnumSet<OnewayConfidenceLevel> confidenceLevels;
 
     /** default search filter */
-    public static final OnewayFilter DEFAULT = new OnewayFilter(SearchFilter.DEFAULT.getStatus(), null);
+    public static final OnewayFilter DEFAULT =
+            new OnewayFilter(SearchFilter.DEFAULT.getStatus(), EnumSet.of(OnewayConfidenceLevel.C1));
 
 
     /**

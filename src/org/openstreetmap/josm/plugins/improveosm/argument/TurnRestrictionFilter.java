@@ -32,7 +32,8 @@ public class TurnRestrictionFilter extends SearchFilter {
     private final EnumSet<TurnConfidenceLevel> confidenceLevels;
 
     /** default filter to be applied if no filter is set/user reset's the filter */
-    public static final TurnRestrictionFilter DEFAULT = new TurnRestrictionFilter(Status.OPEN, null);
+    public static final TurnRestrictionFilter DEFAULT =
+            new TurnRestrictionFilter(Status.OPEN, EnumSet.of(TurnConfidenceLevel.C1));
 
 
     /**
