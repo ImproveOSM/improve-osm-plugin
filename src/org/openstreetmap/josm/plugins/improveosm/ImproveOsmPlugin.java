@@ -568,7 +568,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
         @Override
         List<Comment> retrieveComments(final TurnRestriction item) {
-            return ServiceHandler.getTurnRestrictionHandler().retrieveComments(item);
+            return item.getTurnRestrictions() == null
+                    ? ServiceHandler.getTurnRestrictionHandler().retrieveComments(item) : null;
         }
 
     }
