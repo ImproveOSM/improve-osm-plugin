@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.Formatter;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
 

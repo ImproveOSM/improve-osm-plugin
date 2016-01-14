@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 
 
 /**

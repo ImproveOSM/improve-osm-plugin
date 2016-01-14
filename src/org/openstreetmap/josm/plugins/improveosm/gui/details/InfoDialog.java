@@ -17,11 +17,12 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+
 
 /**
  *
@@ -43,8 +44,8 @@ public class InfoDialog {
                 final String txt = GuiConfig.getInstance().getTxtOldPlugins();
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
                         GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),
-                        GuiConfig.getInstance().getPluginName(), JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE, null, null, null);
+                        GuiConfig.getInstance().getPluginName(), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;
                 PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
                 isDisplayed = false;
@@ -65,10 +66,9 @@ public class InfoDialog {
             final int maxZoom = Config.getDirectionOfFlowInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 isDisplayed = true;
-                final String txt = DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt().replace("iconPath",
-                        IconConfig.getInstance().getTipIconPath().toString());
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),
+                        GuiBuilder.buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
+                                Main.parent.getBackground()),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;

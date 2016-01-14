@@ -32,6 +32,9 @@ import javax.swing.border.EmptyBorder;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.CancelAction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.ModalDialog;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObservable;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -44,7 +47,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-public class EditDialog extends ModalDialog implements CommentObservable {
+class EditDialog extends ModalDialog implements CommentObservable {
 
     private static final long serialVersionUID = 586082110516333909L;
     private static final Dimension DIM = new Dimension(300, 200);
@@ -62,7 +65,7 @@ public class EditDialog extends ModalDialog implements CommentObservable {
      * @param title the title of the dialog
      * @param icon the icon of the dialog
      */
-    public EditDialog(final Status status, final String title, final Image icon) {
+    EditDialog(final Status status, final String title, final Image icon) {
         super(title, icon, DIM);
         this.status = status;
         createComponents();
@@ -70,7 +73,7 @@ public class EditDialog extends ModalDialog implements CommentObservable {
 
 
     @Override
-    protected void createComponents() {
+    public void createComponents() {
         lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
         lblError.setFont(lblError.getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE));
         txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white);

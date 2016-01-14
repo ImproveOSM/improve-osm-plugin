@@ -35,11 +35,11 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
  */
 abstract class UpdateThread<T> implements Runnable {
 
-    private final ImproveOsmDetailsDialog<T> dialog;
+    private final ImproveOsmDetailsDialog dialog;
     private final ImproveOsmLayer<T> layer;
 
 
-    UpdateThread(final ImproveOsmDetailsDialog<T> dialog, final ImproveOsmLayer<T> layer) {
+    UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
         this.dialog = dialog;
         this.layer = layer;
     }
@@ -58,15 +58,9 @@ abstract class UpdateThread<T> implements Runnable {
                     @Override
                     public void run() {
                         layer.setDataSet(result);
-                        if (result != null) {
+                        if (result != null && Main.map.mapView.getActiveLayer().equals(layer)) {
                             final T item = layer.lastSelectedItem();
-                            if (item != null) {
-                                if (dialog.reloadComments()) {
-                                    dialog.updateUI(item, retrieveComments(item));
-                                } else {
-                                    dialog.updateUI(item);
-                                }
-                            } else {
+                            if (item == null) {
                                 dialog.updateUI(null, null);
                             }
                         }

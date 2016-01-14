@@ -24,8 +24,8 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -70,9 +70,8 @@ class FilterPanel extends BasicFilterPanel {
 
 
     private void addTypesFilter(final EnumSet<TileType> types) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblType(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
-                Constraints.LBL_TYPE);
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_TYPE);
         cbTypeParking =
                 GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), getBackground());
         cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(), TileType.ROAD.name(), getBackground());
@@ -84,19 +83,19 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludeWaterFilter(final boolean includeWater) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblWater(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
-                Constraints.LBL_WATER);
-        cbIncludeWater = GuiBuilder.buildCheckBox(getGuiCnf().getLblDisplay(), null, getBackground());
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_WATER);
+        cbIncludeWater =
+                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
         cbIncludeWater.setSelected(includeWater);
         add(cbIncludeWater, Constraints.RB_WATER);
     }
 
     private void addIncludePathFilter(final boolean includePath) {
-        add(GuiBuilder.buildLabel(getGuiCnf().getDlgFilterLblPedestrian(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
-                Constraints.LBL_PEDESTRIAN);
-        cbIncludePath = GuiBuilder.buildCheckBox(getGuiCnf().getLblDisplay(), null, getBackground());
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
+                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_PEDESTRIAN);
+        cbIncludePath =
+                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
         cbIncludePath.setSelected(includePath);
         add(cbIncludePath, Constraints.RB_PATH);
     }
@@ -128,8 +127,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-                txtCount.setText(txt);
-                txtCount.setBackground(Color.white);
+        txtCount.setText(txt);
+        txtCount.setBackground(Color.white);
     }
 
     /**
@@ -183,9 +182,5 @@ class FilterPanel extends BasicFilterPanel {
             cbTypeParking.setSelected(false);
             cbTypeBoth.setSelected(false);
         }
-    }
-
-    private MissingGeometryGuiConfig getGuiCnf() {
-        return MissingGeometryGuiConfig.getInstance();
     }
 }
