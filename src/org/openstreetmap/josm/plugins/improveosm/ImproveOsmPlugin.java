@@ -118,8 +118,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             final boolean addTurnRestriction = dataLayers.contains(DataLayer.TURN_RESTRICTION);
             if (!GraphicsEnvironment.isHeadless()) {
                 addDialogWindows(newMapFrame, addMissingGeometry, addDirectionOfFlow, addTurnRestriction);
+                addLayers(addMissingGeometry, addDirectionOfFlow, addTurnRestriction);
             }
-            addLayers(addMissingGeometry, addDirectionOfFlow, addTurnRestriction);
         }
     }
 
