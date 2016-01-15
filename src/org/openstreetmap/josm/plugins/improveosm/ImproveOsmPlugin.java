@@ -179,6 +179,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
             }
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
+                if (Main.map.mapView.getActiveLayer() == directionOfFlowLayer) {
+                    new InfoDialog().displayDialog(Util.zoom(Main.map.mapView.getRealBounds()));
+                }
                 Main.worker.execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
             }
             if (turnRestrictionLayer != null && turnRestrictionLayer.isVisible()) {
