@@ -57,17 +57,7 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
     @Override
     public boolean ok() {
         final EnumSet<DataLayer> selectedDataLayers = pnlPreference.selectedDataLayers();
-        final EnumSet<DataLayer> oldDataLayers = PreferenceManager.getInstance().loadDataLayers();
-        boolean restartJosm = false;
-        for (final DataLayer dataLayer : oldDataLayers) {
-            if (!selectedDataLayers.contains(dataLayer)) {
-                restartJosm = true;
-            }
-        }
-        if (!selectedDataLayers.equals(oldDataLayers)) {
-            // active layers had changed
-            PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
-        }
-        return restartJosm;
+        PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
+        return false;
     }
 }

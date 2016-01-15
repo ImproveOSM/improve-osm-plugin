@@ -15,95 +15,127 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
+import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
+import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
+import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.RoadSegmentInfoPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.TileInfoPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionInfoPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Shortcut;
 
 
 /**
- * Defines the common functionality of the ImproveOsm details dialog windows.
+ * Defines the common functionality of the ImeproveOsm details dialog windows.
  *
  * @author Beata
  * @version $Revision$
  */
-public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
+public class ImproveOsmDetailsDialog extends ToggleDialog {
 
     private static final long serialVersionUID = 614130882392599446L;
+
+    private static Shortcut shortcut = Shortcut.registerShortcut(GuiConfig.getInstance().getPluginName(),
+            GuiConfig.getInstance().getPluginName(), KeyEvent.VK_F3, Shortcut.CTRL);
 
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
     private static final int DLG_HEIGHT = 50;
 
     /* dialog components */
-    private final BasicPanel<T> pnlInfo;
+    private final JScrollPane cmpInfo;
+    private final TileInfoPanel pnlTileInfo;
+    private final RoadSegmentInfoPanel pnlRoadSegmentInfo;
+    private final TurnRestrictionInfoPanel pnlTurnRestrictionInfo;
     private final CommentsPanel pnlComments;
-    private final BasicButtonPanel<T> pnlBtn;
+    private final ButtonPanel pnlBtn;
 
 
     /**
      * Builds a new direction of flow details dialog window.
      */
-    public ImproveOsmDetailsDialog(final String layerName, final String shortcutName, final String tooltip,
-            final Shortcut shortcut) {
-        super(layerName, shortcutName, tooltip, shortcut, DLG_HEIGHT);
+    public ImproveOsmDetailsDialog() {
+        super(GuiConfig.getInstance().getDialogTitle(), IconConfig.getInstance().getDialogShortcutName(),
+                GuiConfig.getInstance().getPluginName(), shortcut, DLG_HEIGHT);
 
         /* build components */
-        pnlInfo = createInfoPanel();
-        final JScrollPane cmpInfo = GuiBuilder.buildScrollPane(pnlInfo.getName(), pnlInfo, getBackground(), DIM);
+        pnlTileInfo = new TileInfoPanel();
+        pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
+        pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
+
+        cmpInfo = GuiBuilder.buildScrollPane(GuiConfig.getInstance().getPnlInfoTitle(), GuiBuilder.buildEmptyPanel(),
+                Color.white, DIM);
         pnlComments = new CommentsPanel();
-        final FeedbackPanel pnlFeedback = createFeedbackPanel();
-        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, pnlFeedback);
-        pnlBtn = createButtonPanel();
+        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        pnlBtn = new ButtonPanel();
         final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
         add(pnlMain);
     }
 
+    /**
+     * Registers the comment observer to the corresponding UI component.
+     *
+     * @param observer a {@code CommentObserver} object
+     */
+    public void registerCommentObserver(final CommentObserver observer) {
+        pnlBtn.registerCommentObserver(observer);
+    }
 
     /**
-     * Creates an information panel displaying details of the selected item.
+     * Registers the turn restriction selection observer to the corresponding UI component.
      *
-     * @return a {@code BasicPanel} object
+     * @param observer a {@code TurnRestrictionSelectionObserver} object
      */
-    public abstract BasicPanel<T> createInfoPanel();
-
-    /**
-     * Creates the button panel.
-     *
-     * @return a {@code BasicButtonPanel} object
-     */
-    public abstract BasicButtonPanel<T> createButtonPanel();
-
-    /**
-     * Creates the feedback panel.
-     *
-     * @return a {@code FeedbackPanel} object
-     */
-    public abstract FeedbackPanel createFeedbackPanel();
-
-    /**
-     * Registers the given observer to the corresponding components.
-     *
-     * @param commentObserver a {@code CommentObserver}
-     */
-    public void registerCommentObserver(final CommentObserver commentObserver) {
-        pnlBtn.registerCommentObserver(commentObserver);
+    public void registerTurnRestrictionSelectionObserver(final TurnRestrictionSelectionObserver observer) {
+        pnlTurnRestrictionInfo.registerSelectionObserver(observer);
     }
 
     /**
      * Updates the UI with the given road segment.
      *
-     * @param roadSegment a {@code RoadSegment}.
+     * @param <T> the selected object
      */
-    public void updateUI(final T item) {
+    public <T> void updateUI(final T item) {
         synchronized (this) {
-            pnlInfo.updateData(item);
-            pnlBtn.setItem(item);
+            pnlBtn.enablePanelActions(item);
+            final Layer activeLayer = Main.map.mapView.getActiveLayer();
+            final Component cmpInfoView = cmpInfo.getViewport().getView();
+            if (activeLayer instanceof MissingGeometryLayer) {
+                pnlTileInfo.updateData((Tile) item);
+                if (!(cmpInfoView instanceof TileInfoPanel)) {
+                    cmpInfo.setViewportView(pnlTileInfo);
+                }
+            } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                pnlRoadSegmentInfo.updateData((RoadSegment) item);
+                if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
+                    cmpInfo.setViewportView(pnlRoadSegmentInfo);
+                }
+            } else if (activeLayer instanceof TurnRestrictionLayer) {
+                pnlTurnRestrictionInfo.updateData((TurnRestriction) item);
+                if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
+                    cmpInfo.setViewportView(pnlTurnRestrictionInfo);
+                }
+            }
+            cmpInfo.revalidate();
             repaint();
         }
     }
@@ -111,28 +143,14 @@ public abstract class ImproveOsmDetailsDialog<T> extends ToggleDialog {
     /**
      * Updates the UI with the given road segment and comment list.
      *
-     * @param roadSegment a {@code RoadSegment}
+     * @param <T> the selected object
      * @param comments a list of {@code Comment}s
      */
-    public void updateUI(final T item, final List<Comment> comments) {
+    public <T> void updateUI(final T item, final List<Comment> comments) {
         synchronized (this) {
-            pnlInfo.updateData(item);
+            pnlBtn.enablePanelActions(item);
             pnlComments.updateData(comments);
-            pnlBtn.setItem(item);
-            repaint();
+            updateUI(item);
         }
-    }
-
-    /**
-     * Checks if the comments should be reloaded or not.
-     *
-     * @return true/false depending on the comments panel content
-     */
-    public boolean reloadComments() {
-        return pnlComments.getComponents() == null || pnlComments.getComponents().length == 0;
-    }
-
-    public BasicPanel<T> getPnlInfo() {
-        return pnlInfo;
     }
 }

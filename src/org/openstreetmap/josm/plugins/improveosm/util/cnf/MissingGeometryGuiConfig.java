@@ -37,11 +37,8 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
     private final String dlgFilterLblPedestrian;
 
     /* details panel related texts */
-    private final String pnlTileTitle;
-    private final String pnlHistoryTitle;
     private final String lblId;
     private final String lblTimestamp;
-    private final String lblStatus;
     private final String lblType;
 
     /* commonly used texts */
@@ -60,11 +57,8 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
         dlgFilterLblType = readProperty("dialog.filter.type.lbl");
         dlgFilterLblWater = readProperty("dialog.filter.water.lbl");
         dlgFilterLblPedestrian = readProperty("dialog.filter.pedestrian.lbl");
-        pnlTileTitle = readProperty("details.tile.title");
-        pnlHistoryTitle = readProperty("details.history.title");
         lblId = readProperty("details.id.lbl");
         lblTimestamp = readProperty("details.time.lbl");
-        lblStatus = readProperty("details.status.lbl");
         lblType = readProperty("details.type.lbl");
         lblTripCount = readProperty("lbl.tripCount");
         lblPointCount = readProperty("lbl.pointCount");
@@ -104,24 +98,12 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
         return dlgFilterLblPedestrian;
     }
 
-    public String getPnlTileTitle() {
-        return pnlTileTitle;
-    }
-
-    public String getPnlHistoryTitle() {
-        return pnlHistoryTitle;
-    }
-
     public String getLblId() {
         return lblId;
     }
 
     public String getLblTimestamp() {
         return lblTimestamp;
-    }
-
-    public String getLblStatus() {
-        return lblStatus;
     }
 
     public String getLblType() {
