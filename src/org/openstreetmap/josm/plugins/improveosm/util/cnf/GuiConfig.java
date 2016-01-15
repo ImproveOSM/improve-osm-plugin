@@ -28,14 +28,12 @@ public final class GuiConfig extends BaseConfig {
 
     private final String pluginName;
     private final String pluginTxt;
-    private final String dialogTitle;
 
     /* button texts */
     private final String btnOkLbl;
     private final String btnCancelLbl;
     private final String btnResetLbl;
 
-    /* button tool-tips */
     private final String btnFilterTlt;
     private final String btnCommentTlt;
     private final String btnSolveTlt;
@@ -49,23 +47,17 @@ public final class GuiConfig extends BaseConfig {
     private final String dlgReopenTitle;
     private final String dlgInvalidTitle;
 
-    /* info panel title */
-    private final String pnlInfoTitle;
-
     /* history panel title */
     private final String pnlHistoryTitle;
 
-    /* preference panel text */
     private final String preferenceLbl;
-
-    /* commonly used texts */
-    private final String lblCopy;
-    private final String lblStatus;
-    private final String lblConfidence;
 
     /* feedback panel title */
     private final String pnlFeedbackTitle;
     private final String pnlFeedbackTxt;
+    /* error texts */
+    private final String errorTitle;
+    private final String txtFeedbackUrlError;
 
     /* warning texts */
     private final String warningTitle;
@@ -74,22 +66,15 @@ public final class GuiConfig extends BaseConfig {
     private final String txtInvalidInteger;
     private final String txtOldPlugins;
 
-    /* error texts */
-    private final String errorTitle;
-    private final String txtFeedbackUrlError;
-
 
     private GuiConfig() {
         super(CONFIG_FILE);
 
         pluginName = readProperty("plugin.name");
         pluginTxt = readProperty("plugin.txt");
-        dialogTitle = readProperty("dialog.title");
-
         btnOkLbl = readProperty("btn.ok.lbl");
         btnCancelLbl = readProperty("btn.cancel.lbl");
         btnResetLbl = readProperty("btn.reset.lbl");
-
         btnFilterTlt = readProperty("btn.filter.tlt");
         btnCommentTlt = readProperty("btn.comment.tlt");
         btnSolveTlt = readProperty("btn.solve.tlt");
@@ -102,25 +87,17 @@ public final class GuiConfig extends BaseConfig {
         dlgReopenTitle = readProperty("edit.dialog.reopen.title");
         dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
 
-        pnlInfoTitle = readProperty("details.info.title");
         pnlHistoryTitle = readProperty("details.history.title");
         preferenceLbl = readProperty("preference.lbl");
-
-        lblCopy = readProperty("copy.lbl");
-        lblStatus = readProperty("status.lbl");
-        lblConfidence = readProperty("confidence.lbl");
-
         pnlFeedbackTitle = readProperty("feedback.title");
         pnlFeedbackTxt = readProperty("feedback.txt");
-
+        errorTitle = readProperty("error.title");
+        txtFeedbackUrlError = readProperty("error.feedback");
         warningTitle = readProperty("warning.title");
         txtInvalidComment = readProperty("warning.invalid.comment");
         txtMissingUsername = readProperty("warning.missing.username");
         txtInvalidInteger = readProperty("warning.invalid.integer");
         txtOldPlugins = readProperty("warning.deprecated");
-
-        errorTitle = readProperty("error.title");
-        txtFeedbackUrlError = readProperty("error.feedback");
     }
 
 
@@ -128,17 +105,12 @@ public final class GuiConfig extends BaseConfig {
         return INSTANCE;
     }
 
-
     public String getPluginName() {
         return pluginName;
     }
 
     public String getPluginTxt() {
         return pluginTxt;
-    }
-
-    public String getDialogTitle() {
-        return dialogTitle;
     }
 
     public String getBtnOkLbl() {
@@ -193,10 +165,6 @@ public final class GuiConfig extends BaseConfig {
         return dlgInvalidTitle;
     }
 
-    public String getPnlInfoTitle() {
-        return pnlInfoTitle;
-    }
-
     public String getPnlHistoryTitle() {
         return pnlHistoryTitle;
     }
@@ -205,24 +173,20 @@ public final class GuiConfig extends BaseConfig {
         return preferenceLbl;
     }
 
-    public String getLblCopy() {
-        return lblCopy;
-    }
-
-    public String getLblStatus() {
-        return lblStatus;
-    }
-
-    public String getLblConfidence() {
-        return lblConfidence;
-    }
-
     public String getPnlFeedbackTitle() {
         return pnlFeedbackTitle;
     }
 
     public String getPnlFeedbackTxt() {
         return pnlFeedbackTxt;
+    }
+
+    public String getErrorTitle() {
+        return errorTitle;
+    }
+
+    public String getTxtFeedbackUrlError() {
+        return txtFeedbackUrlError;
     }
 
     public String getWarningTitle() {
@@ -243,13 +207,5 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtOldPlugins() {
         return txtOldPlugins;
-    }
-
-    public String getErrorTitle() {
-        return errorTitle;
-    }
-
-    public String getTxtFeedbackUrlError() {
-        return txtFeedbackUrlError;
     }
 }

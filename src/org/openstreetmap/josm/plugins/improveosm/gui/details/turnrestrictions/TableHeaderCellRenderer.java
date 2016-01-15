@@ -23,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 
 
 /**

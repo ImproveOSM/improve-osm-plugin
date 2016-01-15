@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -32,45 +33,54 @@ public final class IconConfig extends BaseConfig {
 
     private static final String CONFIG_FILE = "improveosm_icon.properties";
 
-    /* plugin icon */
     private final String pluginIconName;
 
-    /* dialog shotrcut name */
-    private final String dialogShortcutName;
-
-    /* data layer icons */
+    /* DirectionOfFlow layer icons */
+    private final String directionOfFlowShortcutName;
     private final Icon directionOfFlowlayerIcon;
+
+    /* MissingGeometry layer icons */
+    private final String missingGeometryShortcutName;
     private final Icon missingGeometryLayerIcon;
+
+    /* TurnRestriction layer icons */
+    private final String turnRestrictonShortcutName;
     private final Icon turnRestrictonLayerIcon;
 
     /* button panel icons */
     private final ImageIcon filterIcon;
+    private final ImageIcon locationIcon;
     private final ImageIcon commentIcon;
-    private final ImageIcon solveIcon;
-    private final ImageIcon reopenIcon;
+    private final ImageIcon solvedIcon;
+    private final ImageIcon openIcon;
     private final ImageIcon invalidIcon;
 
-    /* turn restriction icons */
     private final ImageIcon turnRestrictionIcon;
     private final ImageIcon selectedTurnRestrictionIcon;
+
+    private final URL tipIconPath;
 
 
     private IconConfig() {
         super(CONFIG_FILE);
 
         pluginIconName = readProperty("plugin.icon");
-        dialogShortcutName = readProperty("dialog.shortcut");
+        directionOfFlowShortcutName = readProperty("directionOfFlow.dialog.shortcut");
         directionOfFlowlayerIcon = ImageProvider.get(readProperty("directionOfFlow.layer.icon"));
+        missingGeometryShortcutName = readProperty("missingGeo.dialog.shortcut");
         missingGeometryLayerIcon = ImageProvider.get(readProperty("missingGeo.layer.icon"));
+        turnRestrictonShortcutName = readProperty("turnRestriction.dialog.shortcut");
         turnRestrictonLayerIcon = ImageProvider.get(readProperty("turnRestriction.layer.icon"));
 
         filterIcon = ImageProvider.get(readProperty("filter.icon"));
+        locationIcon = ImageProvider.get(readProperty("location.icon"));
         commentIcon = ImageProvider.get(readProperty("comment.icon"));
-        solveIcon = ImageProvider.get(readProperty("solve.icon"));
-        reopenIcon = ImageProvider.get(readProperty("open.icon"));
+        solvedIcon = ImageProvider.get(readProperty("solved.icon"));
+        openIcon = ImageProvider.get(readProperty("open.icon"));
         invalidIcon = ImageProvider.get(readProperty("invalid.icon"));
         turnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.icon"));
         selectedTurnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.sel.icon"));
+        tipIconPath = getClass().getResource(readProperty("tip.icon"));
     }
 
 
@@ -78,21 +88,28 @@ public final class IconConfig extends BaseConfig {
         return INSTANCE;
     }
 
-
     public String getPluginIconName() {
         return pluginIconName;
     }
 
-    public String getDialogShortcutName() {
-        return dialogShortcutName;
+    public String getDirectionOfFlowShortcutName() {
+        return directionOfFlowShortcutName;
     }
 
     public Icon getDirectionOfFlowlayerIcon() {
         return directionOfFlowlayerIcon;
     }
 
+    public String getMissingGeometryShortcutName() {
+        return missingGeometryShortcutName;
+    }
+
     public Icon getMissingGeometryLayerIcon() {
         return missingGeometryLayerIcon;
+    }
+
+    public String getTurnRestrictonShortcutName() {
+        return turnRestrictonShortcutName;
     }
 
     public Icon getTurnRestrictonLayerIcon() {
@@ -103,16 +120,20 @@ public final class IconConfig extends BaseConfig {
         return filterIcon;
     }
 
+    public ImageIcon getLocationIcon() {
+        return locationIcon;
+    }
+
     public ImageIcon getCommentIcon() {
         return commentIcon;
     }
 
-    public ImageIcon getSolveIcon() {
-        return solveIcon;
+    public ImageIcon getSolvedIcon() {
+        return solvedIcon;
     }
 
-    public ImageIcon getReopenIcon() {
-        return reopenIcon;
+    public ImageIcon getOpenIcon() {
+        return openIcon;
     }
 
     public ImageIcon getInvalidIcon() {
@@ -125,5 +146,9 @@ public final class IconConfig extends BaseConfig {
 
     public ImageIcon getSelectedTurnRestrictionIcon() {
         return selectedTurnRestrictionIcon;
+    }
+
+    public URL getTipIconPath() {
+        return tipIconPath;
     }
 }

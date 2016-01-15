@@ -20,9 +20,6 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 
 

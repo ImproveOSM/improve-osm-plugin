@@ -21,7 +21,7 @@ import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;

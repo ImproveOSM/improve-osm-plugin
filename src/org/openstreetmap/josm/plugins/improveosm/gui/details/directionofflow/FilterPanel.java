@@ -23,8 +23,8 @@ import javax.swing.JCheckBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.BasicFilterPanel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 
 

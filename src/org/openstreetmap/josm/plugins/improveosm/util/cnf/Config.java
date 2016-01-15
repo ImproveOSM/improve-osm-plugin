@@ -30,6 +30,7 @@ public final class Config extends BaseConfig {
     private static final int MAX_CLUSTER_ZOOM = 14;
 
     private final String serviceUrl;
+    private final String feedbackUrl;
     private int maxClusterZoom;
 
 
@@ -39,6 +40,8 @@ public final class Config extends BaseConfig {
         if (serviceUrl == null) {
             throw new ExceptionInInitializerError("Missing service url.");
         }
+
+        feedbackUrl = readProperty("feedback.url");
 
         try {
             maxClusterZoom = Integer.parseInt(readProperty("zoom.cluster.max"));
@@ -62,6 +65,10 @@ public final class Config extends BaseConfig {
 
     public String getServiceUrl() {
         return serviceUrl;
+    }
+
+    public String getFeedbackUrl() {
+        return feedbackUrl;
     }
 
     public int getMaxClusterZoom() {

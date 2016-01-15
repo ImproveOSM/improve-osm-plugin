@@ -39,10 +39,13 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     private final String dlgFilterConfidenceLbl;
 
     /* info panel texts */
+    private final String pnlInfoTitle;
     private final String lblTrips;
     private final String lblId;
     private final String lblType;
     private final String lblProcent;
+    private final String lblStatus;
+    private final String lblConfidence;
 
     /* commonly used labels */
     private final String lblC1;
@@ -66,10 +69,13 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
+        pnlInfoTitle = readProperty("details.info.title");
         lblTrips = readProperty("details.info.trips.lbl");
         lblId = readProperty("details.info.id.lbl");
         lblType = readProperty("details.info.type.lbl");
         lblProcent = readProperty("details.info.procent.lbl");
+        lblStatus = readProperty("status.lbl");
+        lblConfidence = readProperty("confidence.lbl");
 
 
         lblC1 = readProperty("c1.lbl");
@@ -111,6 +117,10 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         return dlgFilterConfidenceLbl;
     }
 
+    public String getPnlInfoTitle() {
+        return pnlInfoTitle;
+    }
+
     public String getLblTrips() {
         return lblTrips;
     }
@@ -125,6 +135,14 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getLblProcent() {
         return lblProcent;
+    }
+
+    public String getLblStatus() {
+        return lblStatus;
+    }
+
+    public String getLblConfidence() {
+        return lblConfidence;
     }
 
     public String getLblC1() {

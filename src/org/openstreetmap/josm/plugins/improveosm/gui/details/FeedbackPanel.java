@@ -27,8 +27,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.FeedbackConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.tools.OpenBrowser;
 
@@ -39,13 +37,20 @@ import org.openstreetmap.josm.tools.OpenBrowser;
  * @author Beata
  * @version $Revision$
  */
-class FeedbackPanel extends JPanel implements HyperlinkListener {
+public class FeedbackPanel extends JPanel implements HyperlinkListener {
 
     private static final long serialVersionUID = 204168291291342844L;
     private static final Dimension DIM = new Dimension(150, 100);
 
+    private final String url;
 
-    FeedbackPanel() {
+
+    /**
+     * Builds a new panel.
+     */
+    public FeedbackPanel(final String url) {
+        this.url = url;
+
         setLayout(new BorderLayout());
         setName(GuiConfig.getInstance().getPnlFeedbackTitle());
         createComponents();
@@ -66,7 +71,7 @@ class FeedbackPanel extends JPanel implements HyperlinkListener {
     public void hyperlinkUpdate(final HyperlinkEvent event) {
         if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             try {
-                OpenBrowser.displayUrl(new URI(FeedbackConfig.getInstance().getUrl()));
+                OpenBrowser.displayUrl(new URI(url));
             } catch (final Exception e) {
                 JOptionPane.showMessageDialog(Main.parent, tr(GuiConfig.getInstance().getTxtFeedbackUrlError()),
                         tr(GuiConfig.getInstance().getErrorTitle()), JOptionPane.ERROR_MESSAGE);
