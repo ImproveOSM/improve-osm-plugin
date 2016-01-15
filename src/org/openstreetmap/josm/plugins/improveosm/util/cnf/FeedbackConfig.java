@@ -21,7 +21,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
  * @author Beata
  * @version $Revision$
  */
-public class FeedbackConfig extends BaseConfig {
+public final class FeedbackConfig extends BaseConfig {
 
     private static final String CONFIG_FILE = "improveosm_feedback_config.properties";
 
