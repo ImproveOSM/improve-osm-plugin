@@ -150,7 +150,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             MapView.removeLayerChangeListener(this);
             NavigatableComponent.removeZoomChangeListener(this);
             Main.pref.removePreferenceChangeListener(this);
-            Main.map.mapView.removeMouseListener(this);
+            if (Main.map != null) {
+                Main.map.mapView.removeMouseListener(this);
+            }
             listenersRegistered = false;
             detailsDialog.hideDialog();
         }
