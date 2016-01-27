@@ -72,7 +72,7 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
 
     @Override
     public void notifyObserver(final TurnRestriction item) {
-        observer.selectItem(item);
+        observer.selectSimpleTurnRestriction(item);
     }
 
     @Override

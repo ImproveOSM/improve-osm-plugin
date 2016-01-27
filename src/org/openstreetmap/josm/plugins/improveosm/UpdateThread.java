@@ -15,11 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm;
 
-import java.util.List;
 import javax.swing.SwingUtilities;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
-import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
@@ -80,12 +78,4 @@ abstract class UpdateThread<T> implements Runnable {
      * @return a {@code DataSet}
      */
     abstract DataSet<T> searchData(BoundingBox bbox, int zoom);
-
-    /**
-     * Retrieves the comments of the selected item.
-     *
-     * @param item the currently selected object
-     * @return a list of {@code Comment}s
-     */
-    abstract List<Comment> retrieveComments(T item);
 }

@@ -23,10 +23,5 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
  */
 public enum DataLayer {
 
-    MISSING_GEOMETRY,
-    DIRECTION_OF_FLOW,
-    TURN_RESTRICTION,
-
-    /** special case used to save into preference file when the user de-selects all the available Improve-OSM layers */
-    NONE;
+    MISSING_GEOMETRY, DIRECTION_OF_FLOW, TURN_RESTRICTION;
 }

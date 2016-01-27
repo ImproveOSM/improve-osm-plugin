@@ -20,6 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
@@ -148,7 +149,7 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
     }
 
     public List<T> getSelectedItems() {
-        return selectedItems;
+        return new CopyOnWriteArrayList<>(selectedItems);
     }
 
     void setSelectedItems(final List<T> selectedItems) {

@@ -73,6 +73,7 @@ public final class GuiConfig extends BaseConfig {
     private final String txtMissingUsername;
     private final String txtInvalidInteger;
     private final String txtOldPlugins;
+    private final String txtDataLayerSettings;
 
     /* error texts */
     private final String errorTitle;
@@ -118,7 +119,7 @@ public final class GuiConfig extends BaseConfig {
         txtMissingUsername = readProperty("warning.missing.username");
         txtInvalidInteger = readProperty("warning.invalid.integer");
         txtOldPlugins = readProperty("warning.deprecated");
-
+        txtDataLayerSettings = readProperty("warning.datalayer.settings");
         errorTitle = readProperty("error.title");
         txtFeedbackUrlError = readProperty("error.feedback");
     }
@@ -243,6 +244,10 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtOldPlugins() {
         return txtOldPlugins;
+    }
+
+    public String getTxtDataLayerSettings() {
+        return txtDataLayerSettings;
     }
 
     public String getErrorTitle() {

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.gui.details;
+package org.openstreetmap.josm.plugins.improveosm.gui;
 
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;

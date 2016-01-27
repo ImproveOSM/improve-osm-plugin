@@ -68,12 +68,10 @@ final class LoadManager {
         if (entries != null && !entries.isEmpty()) {
             dataLayers = EnumSet.noneOf(DataLayer.class);
             for (final DataLayerEntry entry : entries) {
-                if (!entry.getName().equals(DataLayer.NONE.name())) {
-                    dataLayers.add(DataLayer.valueOf(entry.getName()));
-                }
+                dataLayers.add(DataLayer.valueOf(entry.getName()));
             }
         }
-        return (dataLayers == null || dataLayers.isEmpty())
+        return dataLayers == null
                 ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.DIRECTION_OF_FLOW, DataLayer.TURN_RESTRICTION)
                         : dataLayers;
     }
@@ -104,7 +102,6 @@ final class LoadManager {
         return status == null && confidenceLevels == null ? OnewayFilter.DEFAULT
                 : new OnewayFilter(status, confidenceLevels);
     }
-
 
     /* MissingGeometyLayer related methods */
 
@@ -154,7 +151,6 @@ final class LoadManager {
         return status == null && confidenceLevels == null ? TurnRestrictionFilter.DEFAULT
                 : new TurnRestrictionFilter(status, confidenceLevels);
     }
-
 
     /* commonly used method */
 

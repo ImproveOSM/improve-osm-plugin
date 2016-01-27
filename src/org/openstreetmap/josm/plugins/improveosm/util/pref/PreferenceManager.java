@@ -181,12 +181,19 @@ public final class PreferenceManager {
     }
 
     /**
-     * Saves the user's last comment used for the DirectionOfFlow layer.
+     * Saves the user's last comment in the preference file based on the given active layer.
      *
-     * @param comment a {@code String}
+     * @param activeLayer the current active layer
+     * @param comment a {@code String} value
      */
-    public void saveDirectionOfFlowLastComment(final String comment) {
-        saveManager.saveDirectionOfFlowLastComment(comment);
+    public void saveLastComment(final Layer activeLayer, final String comment) {
+        if (activeLayer instanceof MissingGeometryLayer) {
+            saveManager.saveMissingGeoLastComment(comment);
+        } else if (activeLayer instanceof DirectionOfFlowLayer) {
+            saveManager.saveDirectionOfFlowLastComment(comment);
+        } else if (activeLayer instanceof TurnRestrictionLayer) {
+            saveManager.saveTurnRestrictionLastComment(comment);
+        }
     }
 
     /**
@@ -206,15 +213,6 @@ public final class PreferenceManager {
      */
     public void saveOnewayFilter(final OnewayFilter filter) {
         saveManager.saveOnewayFilter(filter);
-    }
-
-    /**
-     * Saves the user's last comment used for the MissingGeometry layer.
-     *
-     * @param comment a {@code String}
-     */
-    public void saveMissingGeometryLastComment(final String comment) {
-        saveManager.saveMissingGeoLastComment(comment);
     }
 
     /**
@@ -243,15 +241,6 @@ public final class PreferenceManager {
      */
     public void saveMissingGeometryFilter(final MissingGeometryFilter filter) {
         saveManager.saveMissingGeoFilter(filter);
-    }
-
-    /**
-     * Saves the user's last comment used for the TurnRestriction layer.
-     *
-     * @param comment a {@code String}
-     */
-    public void saveTurnRestrictionLastComment(final String comment) {
-        saveManager.saveTurnRestrictionLastComment(comment);
     }
 
     /**

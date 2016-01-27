@@ -25,5 +25,5 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
  */
 public interface TurnRestrictionSelectionObserver {
 
-    void selectItem(TurnRestriction item);
+    void selectSimpleTurnRestriction(TurnRestriction item);
 }

@@ -22,7 +22,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMP
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_SEL_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_BACKGROUND_COLOR;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_COMPOSITE ;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DIST;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORMAL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PARKING_COLOR;
@@ -67,6 +67,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnSegment;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.tools.Pair;
 
 
 /**
@@ -78,7 +79,6 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 final class PaintUtil {
 
     private PaintUtil() {}
-
 
     /**
      * Draws a road segment to the map. A selected road segment is drawn with a different color and stroke.
@@ -178,7 +178,7 @@ final class PaintUtil {
      */
     static void drawCircle(final Graphics2D graphics, final Point point, final Color color, final int radius) {
         graphics.setColor(color);
-        graphics.fillOval(point.x- radius/2, point.y-radius/2, radius, radius);
+        graphics.fillOval(point.x - radius / 2, point.y - radius / 2, radius, radius);
     }
 
     /**
@@ -195,20 +195,16 @@ final class PaintUtil {
         final Point point = mapView.getPoint(turnRestriction.getPoint());
         if (turnRestriction.getTurnRestrictions() != null) {
             // draw complex turn restriction
+
             final int radius = selected ? COMPLEX_TURN_SEL_RADIUS : COMPLEX_TURN_RADIUS;
             drawCircle(graphics, point, TURN_SEGMENT_COLOR, radius);
             drawTurnRestrictionCount(graphics, mapView, turnRestriction.getTurnRestrictions().size(), point, radius);
         } else {
             // draw simple turn restriction
+
             if (selected) {
                 // draw turn segments
-                graphics.setFont(mapView.getFont().deriveFont(Font.BOLD));
-                if (turnRestriction.getSegments() != null) {
-                    graphics.setStroke(TURN_SEGMENT_STROKE);
-                    for (final TurnSegment turnSegment : turnRestriction.getSegments()) {
-                        drawTurnSegment(graphics, mapView, turnSegment);
-                    }
-                }
+                drawTurnSegments(graphics, mapView, turnRestriction);
             }
 
             // draw turn restriction
@@ -221,8 +217,7 @@ final class PaintUtil {
     }
 
     private static void drawTurnRestrictionCount(final Graphics2D graphics, final MapView mapView, final int count,
-            final Point point,
-            final int radius) {
+            final Point point, final int radius) {
         graphics.setColor(Color.white);
         graphics.setFont(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
         final FontMetrics fm = mapView.getFontMetrics(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
@@ -230,30 +225,49 @@ final class PaintUtil {
         graphics.drawString(text, point.x - fm.stringWidth(text) / 2, point.y - fm.getHeight() / 2 + fm.getAscent());
     }
 
-    private static void drawTurnSegment(final Graphics2D graphics, final MapView mapView,final TurnSegment turnSegment) {
-        graphics.setColor(TURN_SEGMENT_COLOR);
-        graphics.draw(buildPath(graphics, mapView, turnSegment.getPoints()));
-        LatLon tip;
-        LatLon tail;
-        if (turnSegment.getPoints().size() > 2) {
-            final int idx = turnSegment.getPoints().size() / 2;
-            tip = turnSegment.getPoints().get(idx);
-            tail = turnSegment.getPoints().get(idx - 1);
-        } else {
-            tail = turnSegment.getPoints().get(0);
-            tip = new LatLon((turnSegment.getPoints().get(1).lat() + turnSegment.getPoints().get(0).lat()) / 2,
-                    (turnSegment.getPoints().get(1).lon() + turnSegment.getPoints().get(0).lon()) / 2);
-        }
-        drawArrow(graphics, mapView, tip, tail, TURN_ARROW_LENGTH);
-        if (turnSegment.getNumberOfTrips() != null && turnSegment.getNumberOfTrips() > 0) {
-            drawText(graphics, mapView, " " + turnSegment.getNumberOfTrips().toString() + " ", tip, tail);
+    private static void drawTurnSegments(final Graphics2D graphics, final MapView mapView,
+            final TurnRestriction turnRestriction) {
+        graphics.setFont(mapView.getFont().deriveFont(Font.BOLD));
+        if (turnRestriction.getSegments() != null) {
+            graphics.setStroke(TURN_SEGMENT_STROKE);
+
+            // draw segments
+            for (final TurnSegment turnSegment : turnRestriction.getSegments()) {
+                graphics.setColor(TURN_SEGMENT_COLOR);
+                graphics.draw(buildPath(graphics, mapView, turnSegment.getPoints()));
+                final Pair<LatLon, LatLon> pair = tipTailPoints(turnSegment.getPoints());
+                drawArrow(graphics, mapView, pair.a, pair.b, TURN_ARROW_LENGTH);
+            }
+
+            // draw labels
+            final TurnSegment firstSegment = turnRestriction.getSegments().get(0);
+            drawText(graphics, mapView, firstSegment.getPoints(), "" + firstSegment.getNumberOfTrips());
+            final TurnSegment lastSegment = turnRestriction.getSegments().get(turnRestriction.getSegments().size() - 1);
+            drawText(graphics, mapView, lastSegment.getPoints(), "" + turnRestriction.getNumberOfPasses());
+
         }
     }
 
-    private static void drawText(final Graphics2D graphics, final MapView mapView, final String txt, final LatLon tip,
-            final LatLon tail) {
-        final Point labelPoint = mapView.getPoint(tip);
-        final int cmp = Double.compare(tip.getX(), tail.getX());
+    private static Pair<LatLon, LatLon> tipTailPoints(final List<LatLon> points) {
+        LatLon tip;
+        LatLon tail;
+        if (points.size() > 2) {
+            final int idx = points.size() / 2;
+            tip = points.get(idx);
+            tail = points.get(idx - 1);
+        } else {
+            tail = points.get(0);
+            tip = new LatLon((points.get(1).lat() + points.get(0).lat()) / 2,
+                    (points.get(1).lon() + points.get(0).lon()) / 2);
+        }
+        return new Pair<LatLon, LatLon>(tip, tail);
+    }
+
+    private static void drawText(final Graphics2D graphics, final MapView mapView, final List<LatLon> points,
+            final String txt) {
+        final Pair<LatLon, LatLon> tipTailPoints = tipTailPoints(points);
+        final Point labelPoint = mapView.getPoint(tipTailPoints.a);
+        final int cmp = Double.compare(tipTailPoints.a.getX(), tipTailPoints.b.getX());
         if (cmp == 0) {
             labelPoint.x += LABEL_DIST;
         } else if (cmp < 0) {
