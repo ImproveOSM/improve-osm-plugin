@@ -85,6 +85,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     private Timer zoomTimer;
     private boolean listenersRegistered = false;
 
+
     /**
      * Builds a new object. This constructor is automatically invoked by JOSM to bootstrap the plugin.
      *
@@ -93,6 +94,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     public ImproveOsmPlugin(final PluginInformation pluginInfo) {
         super(pluginInfo);
     }
+
 
     @Override
     public PreferenceSetting getPreferenceSetting() {
@@ -377,6 +379,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
             if (comment.getStatus() != null) {
                 // status changed - refresh data (possible to select only 1 status from filters)
+                layer.updateSelectedItem(null);
                 Main.worker.execute(updateThread);
             } else {
                 if (items.equals(layer.getSelectedItems())) {
