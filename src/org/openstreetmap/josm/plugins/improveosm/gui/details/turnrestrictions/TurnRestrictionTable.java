@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
@@ -37,11 +38,10 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObservable {
 
     private static final long serialVersionUID = -2793471615446950298L;
-    private static final int COLUMN_SPACE = 8;
+    private static final int COLUMN_SPACE = 2;
     private static final int COLUMNS = 5;
     private static final int TBL_ROW_HEIGHT = 23;
     private TurnRestrictionSelectionObserver observer;
-
 
     TurnRestrictionTable() {
         super(new TurnRestrictionsTableModel(null));
@@ -52,7 +52,7 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
         getTableHeader().setReorderingAllowed(false);
         getTableHeader().setResizingAllowed(false);
 
-        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setRowHeight(TBL_ROW_HEIGHT);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -63,7 +63,6 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
             column.setResizable(false);
         }
     }
-
 
     @Override
     public void addObserver(final TurnRestrictionSelectionObserver observer) {
@@ -94,22 +93,37 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
     void updateData(final List<TurnRestriction> data) {
         ((TurnRestrictionsTableModel) getModel()).setData(data);
         clearSelection();
-        columnResize();
+        adjustColumnSizes();
     }
 
-    private void columnResize() {
-        for (int column = 0; column < COLUMNS; column++) {
-            final TableColumn tableColumn = getColumnModel().getColumn(column);
-            int width = 0;
-            for (int row = 0; row < getRowCount(); row++) {
-                final TableCellRenderer renderer = getCellRenderer(row, column);
-                final Component comp = prepareRenderer(renderer, row, column);
-                width = Math.max(comp.getPreferredSize().width, width + 2 * getIntercellSpacing().width * COLUMN_SPACE);
+    private void adjustColumnSizes() {
+        final DefaultTableColumnModel colModel = (DefaultTableColumnModel) getColumnModel();
+        for (int i = 0; i < getColumnCount(); i++) {
+            final TableColumn col = colModel.getColumn(i);
+            int width;
+
+            TableCellRenderer renderer = col.getHeaderRenderer();
+            if (renderer == null) {
+                renderer = getTableHeader().getDefaultRenderer();
             }
-            tableColumn.setMinWidth(width);
-            tableColumn.setPreferredWidth(width);
+            Component comp = renderer.getTableCellRendererComponent(this, col.getHeaderValue(), false, false, 0, 0);
+            width = comp.getPreferredSize().width;
+
+            for (int r = 0; r < getRowCount(); r++) {
+                renderer = getCellRenderer(r, i);
+                comp = renderer.getTableCellRendererComponent(this, this.getValueAt(r, i), false, false, r, i);
+                final int currentWidth = comp.getPreferredSize().width;
+                width = Math.max(width, currentWidth);
+            }
+
+            width += 2 * COLUMN_SPACE;
+
+            col.setPreferredWidth(width);
+            col.setWidth(width);
+            col.setMinWidth(width);
         }
     }
+
 
     /**
      * Checks if the turn restrictions table contains or not the given turn restriction.
