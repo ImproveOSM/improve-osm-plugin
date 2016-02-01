@@ -78,7 +78,7 @@ final class Constants {
     static final float TURN_SEGMENT_FONT_SIZE = 12F;
 
     /* constants used for drawing a label containing a string */
-    static final Composite LABEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85F);
+    static final Composite LABEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.90F);
     static final Color LABEL_BACKGROUND_COLOR = Color.white;
     static final int LABEL_DIST = 15;
 
