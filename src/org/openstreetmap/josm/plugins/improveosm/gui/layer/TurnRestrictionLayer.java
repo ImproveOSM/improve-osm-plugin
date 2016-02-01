@@ -45,7 +45,6 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
         super(TurnRestrictionGuiConfig.getInstance().getLayerName(), new TurnRestrictionPaintHandler());
     }
 
-
     @Override
     public Icon getIcon() {
         return IconConfig.getInstance().getTurnRestrictonLayerIcon();
@@ -62,11 +61,11 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     }
 
     @Override
-    public void updateSelectedItems() {
+    void updateSelectedItems() {
         final List<TurnRestriction> newList = new ArrayList<>();
         for (final TurnRestriction item : this.getSelectedItems()) {
-            if (getDataSet().getItems().contains(item)){
-                if( item.getTurnRestrictions() == null) {
+            if (getDataSet().getItems().contains(item)) {
+                if (item.getTurnRestrictions() == null) {
                     newList.add(item);
                 } else {
                     final int idx = getDataSet().getItems().indexOf(item);
@@ -77,7 +76,6 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
             setSelectedItems(newList);
         }
     }
-
 
     /*
      * Draws the layer's data items to the map.

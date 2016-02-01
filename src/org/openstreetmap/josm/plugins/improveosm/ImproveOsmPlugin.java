@@ -50,6 +50,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.InfoDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.layer.AbstractLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
@@ -114,8 +115,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     /* implementation of LayerChangeListener */
 
     @Override
-    public void activeLayerChange(final Layer layer1, final Layer layer2) {
-        // nothing to add here
+    public void activeLayerChange(final Layer oldLayer, final Layer newLayer) {
+        if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null, null);
+            }
+        }
     }
 
     @Override
@@ -472,12 +481,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             final IconToggleButton btn = (IconToggleButton) event.getSource();
             if (btn.isSelected()) {
                 btn.setSelected(true);
-            } else {
-                btn.setSelected(false);
-                btn.setFocusable(false);
-            }
-
-            if (missingGeometryLayer == null && directionOfFlowLayer == null && turnRestrictionLayer == null) {
+                // add deleted improve osm layers from Layers window
                 SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
@@ -486,6 +490,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                         Main.map.repaint();
                     }
                 });
+
+            } else {
+                btn.setSelected(false);
+                btn.setFocusable(false);
             }
         }
     }

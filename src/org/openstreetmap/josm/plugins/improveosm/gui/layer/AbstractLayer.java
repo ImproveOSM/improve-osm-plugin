@@ -28,9 +28,9 @@ import org.openstreetmap.josm.gui.layer.Layer;
  * @author Beata
  * @version $Revision$
  */
-abstract class AbstractLayer extends Layer {
+public abstract class AbstractLayer extends Layer {
 
-    AbstractLayer(final String layerName) {
+    public AbstractLayer(final String layerName) {
         super(layerName);
     }
 
