@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.service.entity;
 
+import java.util.List;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 
@@ -25,17 +26,19 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
  * @author Beata
  * @version $Revision$
  */
-public class CommentRequest {
+public class CommentRequest<T> {
 
     private final String username;
     private final String text;
     private final Status status;
+    private final List<T> targetIds;
 
 
-    public CommentRequest(final Comment comment) {
+    public CommentRequest(final Comment comment, final List<T> targetIds) {
         this.username = comment.getUsername();
         this.text = comment.getText();
         this.status = comment.getStatus();
+        this.targetIds = targetIds;
     }
 
     public String getUsername() {
@@ -48,5 +51,9 @@ public class CommentRequest {
 
     public Status getStatus() {
         return status;
+    }
+
+    public List<T> getTargetIds() {
+        return targetIds;
     }
 }

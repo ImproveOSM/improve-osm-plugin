@@ -29,8 +29,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseService;
 import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
-import org.openstreetmap.josm.plugins.improveosm.service.turnrestriction.entity.Request;
-import org.openstreetmap.josm.plugins.improveosm.service.turnrestriction.entity.Response;
+import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 
 
 /**
@@ -92,9 +91,13 @@ public class TurnRestrictionService extends BaseService implements Service<TurnR
 
     @Override
     public void comment(final Comment comment, final List<TurnRestriction> entities) throws ServiceException {
+        final List<String> targetIds = new ArrayList<>();
+        for (final TurnRestriction turnRestriction : entities) {
+            targetIds.add(turnRestriction.getId());
+        }
+        final CommentRequest<String> requestBody = new CommentRequest<>(comment, targetIds);
+        final String content = buildRequest(requestBody, CommentRequest.class);
         final String url = new QueryBuilder().buildCommentQuery();
-        final Request commentRequest = new Request(comment, entities);
-        final String content = buildRequest(commentRequest, Request.class);
         final Response root = executePost(url, content, Response.class);
         verifyResponseStatus(root.getStatus());
     }

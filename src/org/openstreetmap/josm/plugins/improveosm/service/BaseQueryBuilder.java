@@ -48,7 +48,7 @@ public class BaseQueryBuilder {
 
     /* commonly used parameters */
     private enum Parameter {
-        NORTH, SOUTH, EAST, WEST, ZOOM, STATUS, FORMAT, JOSN, CLIENT, JOSM;
+        NORTH, SOUTH, EAST, WEST, ZOOM, STATUS, FORMAT, JOSN, CLIENT, JOSM, VERSION;
 
         @Override
         public String toString() {
@@ -60,9 +60,15 @@ public class BaseQueryBuilder {
     public static final char EQ = '=';
     public static final char AND = '&';
 
-    public void appendGeneralSearchFilters(final StringBuilder query, final BoundingBox bbox, final int zoom) {
+    public void appendGeneralParameters(final StringBuilder query, final String version) {
         appendFormatFilter(query);
         appendClientFilter(query);
+        appendVersionFilter(query, version);
+    }
+
+    public void appendGeneralSearchFilters(final StringBuilder query, final String version, final BoundingBox bbox,
+            final int zoom) {
+        appendGeneralParameters(query, version);
         appendBoundingBoxFilter(query, bbox);
         appendZoomFilter(query, zoom);
     }
@@ -119,6 +125,10 @@ public class BaseQueryBuilder {
      */
     public void appendClientFilter(final StringBuilder query) {
         query.append(AND).append(Parameter.CLIENT.toString()).append(EQ).append(Parameter.JOSM.toString());
+    }
+
+    public void appendVersionFilter(final StringBuilder query, final String version) {
+        query.append(AND).append(Parameter.VERSION.toString()).append(EQ).append(HttpUtil.utf8Encode(version));
     }
 
     /**

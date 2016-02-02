@@ -31,6 +31,7 @@ public final class Config extends BaseConfig {
 
     private final String serviceUrl;
     private int maxClusterZoom;
+    private final String version;
 
 
     private Config(final String fileName) {
@@ -45,6 +46,7 @@ public final class Config extends BaseConfig {
         } catch (final NumberFormatException e) {
             maxClusterZoom = MAX_CLUSTER_ZOOM;
         }
+        version = readProperty("version");
     }
 
 
@@ -66,5 +68,9 @@ public final class Config extends BaseConfig {
 
     public int getMaxClusterZoom() {
         return maxClusterZoom;
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

@@ -58,6 +58,7 @@ public class BaseService {
      * @throws ServiceException if the operation fail
      */
     public <T> T executeGet(final String url, final Class<T> responseType) throws ServiceException {
+        System.out.println("GET :" + url);
         String response = null;
         try {
             response = new HttpConnector(url, HttpMethod.GET).read();
@@ -78,6 +79,7 @@ public class BaseService {
      */
     public <T> T executePost(final String url, final String content, final Class<T> responseType)
             throws ServiceException {
+        System.out.println("POST: " + url);
         String response = null;
         try {
             final HttpConnector connector = new HttpConnector(url, HttpMethod.POST);

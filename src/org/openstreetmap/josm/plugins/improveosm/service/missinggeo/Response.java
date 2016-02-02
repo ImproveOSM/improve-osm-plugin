@@ -13,24 +13,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.service.turnrestriction.entity;
+package org.openstreetmap.josm.plugins.improveosm.service.missinggeo;
 
 import java.util.List;
-import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.service.entity.BaseResponse;
 
 
 /**
+ * Defines the response of the MissingGeometry service.
  *
  * @author Beata
  * @version $Revision$
  */
-public class Response extends BaseResponse {
+class Response extends BaseResponse {
     // setters are not required,since GSON sets the fields directly using reflection.
-    private List<TurnRestriction> entities;
 
+    private List<Tile> tiles;
 
-    public List<TurnRestriction> getEntities() {
-        return entities;
+    List<Tile> getTiles() {
+        return tiles;
     }
 }
