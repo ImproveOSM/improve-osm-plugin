@@ -38,25 +38,6 @@
 			</property>
 		</archive>
 	</distribution>
-		<distribution type="development2">
-		<archive file="ImproveOsm.jar">
-			<property>
-				<location>improveosm_dof_config.properties</location>
-				<name>service.url</name>
-				<value>http://fcd-ss.skobbler.net:2680/directionOfFlowService_dev2/</value>
-			</property>
-			<property>
-				<location>improveosm_mg_config.properties</location>
-				<name>service.url</name>
-				<value>http://fcd-ss.skobbler.net:2680/missingGeoService_dev2/</value>
-			</property>
-				<property>
-				<location>improveosm_tr_config.properties</location>
-				<name>service.url</name>
-				<value>http://fcd-ss.skobbler.net:2680/turnRestrictionService_dev2/</value>
-			</property>
-		</archive>
-	</distribution>
 	<distribution type="production">
 		<archive file="ImproveOsm.jar">
 			<property>
