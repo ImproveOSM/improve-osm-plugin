@@ -9,19 +9,16 @@
 	<property name="plugin.dist.dir" value="${basedir}/dist" />
 	<property name="plugin.lib.dir" value="${basedir}/lib" />
 	<property name="plugin.images.dir" value="${basedir}/images" />
-	<property name="plugin.jar" value="${plugin.dist.dir}/ImproveOsm.jar" />
+	<property name="plugin.name" value="ImproveOsm.jar" />
 
 	<!--
     **********************************************************
     ** init - initializes the build
     **********************************************************
     -->
-	<target name="init">
-		<mkdir dir="${plugin.build.dir}" />
-	</target>
 
 	<path id="classpath">
-		<fileset dir="${plugin.lib.dir}" includes="**/*.jar" />
+		<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm*.jar" />
 	</path>
 
 	<!--
@@ -29,11 +26,26 @@
     ** compile - complies the source tree
     **********************************************************
     -->
+	<target name="clean">
+		<delete dir="${plugin.dist.dir}" />
+		<delete dir="${plugin.build.dir}" />
+		<delete dir="${plugin.apidoc.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${plugin.build.dir}" />
+	</target>
+	<property name="JOSM_lib" value="josm-tested.jar"/>
+	<echo message="${JOSM_lib}"/>
 	<target name="compile" depends="init">
-		<echo message="compiling sources for  ${plugin.jar} ... " />
-		<javac srcdir="src" classpathref="classpath" debug="true" 
-                destdir="${plugin.build.dir}" includeantruntime="true"
-                excludes="**/package-info.java">
+
+		<path id="libs">
+			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
+			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}"/>
+		</path>
+		
+		<javac srcdir="src" debug="true" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="libs">
+			
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
@@ -46,8 +58,7 @@
     -->
 	<target name="javadoc">
 		<mkdir dir="${plugin.apidoc.dir}" />
-		<javadoc destdir="${plugin.apidoc.dir}" source="1.7" 
-			classpathref="classpath" windowtitle="MissingGeometry plugin API">
+		<javadoc destdir="${plugin.apidoc.dir}" source="1.7" classpathref="classpath" windowtitle="MissingGeometry plugin API">
 			<link href="http://java.sun.com/javase/7/docs/api/" />
 			<packageset dir="${plugin.src.dir}">
 			</packageset>
@@ -61,7 +72,7 @@
     **********************************************************
     -->
 	<target name="dist" depends="compile">
-		<echo message="creating ${plugin.jar} ... " />
+		<echo message="creating ${plugin.dist.dir}/${plugin.name} ... " />
 		<mkdir dir="${plugin.dist.dir}" />
 		<copy todir="${plugin.build.dir}">
 			<fileset dir="resources" />
@@ -75,7 +86,8 @@
 				<include name="LICENSE" />
 			</fileset>
 		</copy>
-		<jar destfile="${plugin.jar}" basedir="${plugin.build.dir}">
+		<echo message=""/>
+		<jar destfile="${plugin.dist.dir}/${plugin.name}" basedir="${plugin.build.dir}">
 			<zipfileset src="${plugin.lib.dir}/gson-2.4.jar" />
 			<zipfileset src="${plugin.lib.dir}/commons-io-2.4.jar" />
 			<manifest>
@@ -87,21 +99,17 @@
 				<attribute name="Plugin-Icon" value="images/improveosm_logo_50x50.png" />
 				<attribute name="Plugin-Mainversion" value="1" />
 				<attribute name="Plugin-Version" value="${build-label}" />
-				<attribute name="Plugin-Early" value="true"/>
+				<attribute name="Plugin-Early" value="true" />
 			</manifest>
 		</jar>
 	</target>
-
+	
+	
 	<!--
     **********************************************************
     ** clean - clean up the build environment
     **********************************************************
     -->
-	<target name="clean">
-		<delete dir="${plugin.dist.dir}" />
-		<delete dir="${plugin.build.dir}" />
-		<delete dir="${plugin.apidoc.dir}" />
-	</target>
 
 	<!--
     **********************************************************
@@ -115,7 +123,7 @@
 				<os family="windows" />
 			</and>
 		</condition>
-		<delete file="${josm.plugins.dir}/${plugin.jar}" failonerror="false" />
-		<copy file="${plugin.jar}" todir="${josm.plugins.dir}" />
+		<delete file="${josm.plugins.dir}/${plugin.name}" failonerror="false" />
+		<copy file="${plugin.dist.dir}/${plugin.name}" todir="${josm.plugins.dir}" />
 	</target>
 </project>
