@@ -15,19 +15,18 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.service.missinggeo;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
-import org.openstreetmap.josm.plugins.improveosm.entity.Cluster;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseService;
 import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
-import org.openstreetmap.josm.plugins.improveosm.service.missinggeo.entity.Request;
-import org.openstreetmap.josm.plugins.improveosm.service.missinggeo.entity.Response;
+import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 import com.google.gson.GsonBuilder;
 
 
@@ -42,7 +41,6 @@ public class MissingGeometryService extends BaseService implements Service<Tile>
     @Override
     public GsonBuilder createGsonBuilder() {
         final GsonBuilder builder = super.createGsonBuilder();
-        builder.registerTypeAdapter(Cluster.class, new ClusterDeserializer());
         return builder;
     }
 
@@ -66,8 +64,12 @@ public class MissingGeometryService extends BaseService implements Service<Tile>
     @Override
     public void comment(final Comment comment, final List<Tile> entities) throws ServiceException {
         final String url = new QueryBuilder().buildCommentQuery();
-        final Request commentRequest = new Request(comment, entities);
-        final String content = buildRequest(commentRequest, Request.class);
+        final List<Tile> targetIds = new ArrayList<>();
+        for (final Tile tile : targetIds) {
+            targetIds.add(new Tile(tile.getX(), tile.getY()));
+        }
+        final CommentRequest<Tile> requestBody = new CommentRequest<>(comment, entities);
+        final String content = buildRequest(requestBody, CommentRequest.class);
         final Response root = executePost(url, content, Response.class);
         verifyResponseStatus(root.getStatus());
     }

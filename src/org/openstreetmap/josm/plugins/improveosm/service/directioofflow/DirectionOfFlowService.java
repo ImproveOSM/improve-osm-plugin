@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.service.directioofflow;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
@@ -25,8 +26,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseService;
 import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
-import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.entity.Request;
-import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.entity.Response;
+import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 
 
 /**
@@ -36,6 +36,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.entity.R
  * @version $Revision$
  */
 public class DirectionOfFlowService extends BaseService implements Service<RoadSegment> {
+
 
     @Override
     public DataSet<RoadSegment> search(final BoundingBox bbox, final SearchFilter filter, final int zoom)
@@ -58,8 +59,13 @@ public class DirectionOfFlowService extends BaseService implements Service<RoadS
     @Override
     public void comment(final Comment comment, final List<RoadSegment> entities) throws ServiceException {
         final String url = new QueryBuilder().buildCommentQuery();
-        final Request commentRequest = new Request(comment, entities);
-        final String content = buildRequest(commentRequest, Request.class);
+        final List<RoadSegment> targetIds = new ArrayList<>();
+        for (final RoadSegment roadSegment : targetIds) {
+            targetIds.add(
+                    new RoadSegment(roadSegment.getWayId(), roadSegment.getFromNodeId(), roadSegment.getToNodeId()));
+        }
+        final CommentRequest<RoadSegment> requestBody = new CommentRequest<>(comment, targetIds);
+        final String content = buildRequest(requestBody, CommentRequest.class);
         final Response root = executePost(url, content, Response.class);
         verifyResponseStatus(root.getStatus());
     }

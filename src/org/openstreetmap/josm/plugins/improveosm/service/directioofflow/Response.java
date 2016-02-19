@@ -13,25 +13,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.service.missinggeo.entity;
+package org.openstreetmap.josm.plugins.improveosm.service.directioofflow;
 
 import java.util.List;
-import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.service.entity.BaseResponse;
 
 
 /**
- * Defines the response of the MissingGeometry service.
+ * Defines the response of the DirectionOfFlow service.
  *
  * @author Beata
  * @version $Revision$
  */
-public class Response extends BaseResponse {
+class Response extends BaseResponse {
     // setters are not required,since GSON sets the fields directly using reflection.
 
-    private List<Tile> tiles;
+    private List<RoadSegment> roadSegments;
 
-    public List<Tile> getTiles() {
-        return tiles;
+    List<RoadSegment> getRoadSegments() {
+        return roadSegments;
     }
 }

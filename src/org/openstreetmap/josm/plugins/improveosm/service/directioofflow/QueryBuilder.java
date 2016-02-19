@@ -32,7 +32,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final OnewayFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralSearchFilters(query, bbox, zoom);
+        appendGeneralSearchFilters(query, Config.getDirectionOfFlowInstance().getVersion(), bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());
@@ -46,8 +46,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     String buildRetrieveCommentsQuery(final Long wayId, final Long fromNodeId, final Long toNodeId) {
         final StringBuilder query = new StringBuilder();
-        appendFormatFilter(query);
-        appendClientFilter(query);
+        appendGeneralParameters(query, Config.getDirectionOfFlowInstance().getVersion());
         query.append(AND).append(Parameter.WAY_ID).append(EQ).append(wayId);
         query.append(AND).append(Parameter.FROM_NODE_ID).append(EQ).append(fromNodeId);
         query.append(AND).append(Parameter.TO_NODE_ID).append(EQ).append(toNodeId);
@@ -55,8 +54,11 @@ final class QueryBuilder extends BaseQueryBuilder {
     }
 
     String buildCommentQuery() {
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, null);
+        final StringBuilder query = new StringBuilder();
+        appendGeneralParameters(query, Config.getDirectionOfFlowInstance().getVersion());
+        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, query);
     }
+
 
     private final class Parameter {
 

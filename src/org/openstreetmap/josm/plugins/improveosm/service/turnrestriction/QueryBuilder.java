@@ -21,16 +21,17 @@ import org.openstreetmap.josm.plugins.improveosm.service.BaseQueryBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
+
 /**
  *
  * @author Beata
  * @version $Revision$
  */
-public class QueryBuilder extends BaseQueryBuilder {
+final class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final TurnRestrictionFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralSearchFilters(query, bbox, zoom);
+        appendGeneralSearchFilters(query, Config.getTurnRestrictionInstance().getVersion(), bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());
@@ -44,15 +45,17 @@ public class QueryBuilder extends BaseQueryBuilder {
 
     String buildRetrieveCommentsQuery(final String targetId) {
         final StringBuilder query = new StringBuilder();
-        appendFormatFilter(query);
-        appendClientFilter(query);
+        appendGeneralParameters(query, Config.getTurnRestrictionInstance().getVersion());
         query.append(AND).append(Parameter.TARGET_ID).append(EQ).append(HttpUtil.utf8Encode(targetId));
         return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
-        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.COMMENT, null);
+        final StringBuilder query = new StringBuilder();
+        appendGeneralParameters(query, Config.getTurnRestrictionInstance().getVersion());
+        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.COMMENT, query);
     }
+
 
     private final class Parameter {
 
