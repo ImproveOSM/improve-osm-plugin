@@ -18,7 +18,13 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 import org.openstreetmap.josm.Main;
 
 
@@ -48,10 +54,20 @@ public abstract class ModalDialog extends JDialog {
         setIconImage(icon);
         setSize(size);
         setMinimumSize(size);
+        getRootPane().registerKeyboardAction(new EscListener(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     /**
      * Creates the UI components.
      */
     public abstract void createComponents();
+
+    private final class EscListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            ModalDialog.this.dispatchEvent(new WindowEvent(ModalDialog.this, WindowEvent.WINDOW_CLOSING));
+        }
+    }
 }
