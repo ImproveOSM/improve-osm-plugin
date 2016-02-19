@@ -83,7 +83,7 @@
 		<copy todir="${plugin.build.dir}">
 			<fileset dir=".">
 				<include name="README" />
-				<include name="LICENSE" />
+				<include name="LICENSE.txt" />
 			</fileset>
 		</copy>
 		<echo message=""/>
