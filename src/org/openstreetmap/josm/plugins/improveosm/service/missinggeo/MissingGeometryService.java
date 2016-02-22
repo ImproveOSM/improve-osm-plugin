@@ -65,7 +65,7 @@ public class MissingGeometryService extends BaseService implements Service<Tile>
     public void comment(final Comment comment, final List<Tile> entities) throws ServiceException {
         final String url = new QueryBuilder().buildCommentQuery();
         final List<Tile> targetIds = new ArrayList<>();
-        for (final Tile tile : targetIds) {
+        for (final Tile tile : entities) {
             targetIds.add(new Tile(tile.getX(), tile.getY()));
         }
         final CommentRequest<Tile> requestBody = new CommentRequest<>(comment, entities);

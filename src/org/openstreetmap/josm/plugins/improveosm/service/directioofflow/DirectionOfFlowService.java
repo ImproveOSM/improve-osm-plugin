@@ -60,7 +60,7 @@ public class DirectionOfFlowService extends BaseService implements Service<RoadS
     public void comment(final Comment comment, final List<RoadSegment> entities) throws ServiceException {
         final String url = new QueryBuilder().buildCommentQuery();
         final List<RoadSegment> targetIds = new ArrayList<>();
-        for (final RoadSegment roadSegment : targetIds) {
+        for (final RoadSegment roadSegment : entities) {
             targetIds.add(
                     new RoadSegment(roadSegment.getWayId(), roadSegment.getFromNodeId(), roadSegment.getToNodeId()));
         }
