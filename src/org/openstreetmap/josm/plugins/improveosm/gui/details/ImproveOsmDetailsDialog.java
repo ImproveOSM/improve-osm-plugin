@@ -37,6 +37,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.Tu
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
+import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -55,7 +56,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private static final long serialVersionUID = 614130882392599446L;
 
     private static Shortcut shortcut = Shortcut.registerShortcut(GuiConfig.getInstance().getPluginName(),
-            GuiConfig.getInstance().getPluginName(), KeyEvent.VK_F3, Shortcut.CTRL);
+            GuiConfig.getInstance().getPluginName(), KeyEvent.VK_F3, Shortcut.NONE);
 
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
@@ -75,7 +76,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
      */
     public ImproveOsmDetailsDialog() {
         super(GuiConfig.getInstance().getDialogTitle(), IconConfig.getInstance().getDialogShortcutName(),
-                GuiConfig.getInstance().getPluginName(), shortcut, DLG_HEIGHT);
+                GuiConfig.getInstance().getPluginName(), shortcut, DLG_HEIGHT, true, PreferenceEditor.class);
 
         /* build components */
         pnlTileInfo = new TileInfoPanel();
@@ -88,7 +89,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
         final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
-        add(pnlMain);
+        add(createLayout(pnlMain, false, null));
     }
 
     /**
