@@ -57,7 +57,7 @@ public final class Formatter {
      * @return a string containing the given {@code Comment}s
      */
     public static String formatComments(final List<Comment> comments) {
-        final StringBuilder sb = new StringBuilder("<html><body><font size='3' face='times new roman'>");
+        final StringBuilder sb = new StringBuilder("<html><body>");
         for (final Comment comment : comments) {
             sb.append(("<b>"));
             sb.append(formatTimestamp(comment.getTimestamp()));
@@ -73,7 +73,7 @@ public final class Formatter {
             sb.append("comment: ").append(comment.getText());
             sb.append("<br>");
         }
-        sb.append("</font></body></html>");
+        sb.append("</body></html>");
         return sb.toString();
     }
 

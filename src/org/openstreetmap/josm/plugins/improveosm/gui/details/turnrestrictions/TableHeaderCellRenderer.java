@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 
 
 /**
@@ -48,7 +47,7 @@ class TableHeaderCellRenderer extends JLabel implements TableCellRenderer {
         } else {
             setForeground(Color.black);
         }
-        final Font font = Main.map.getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE);
+        final Font font = Main.map.getFont().deriveFont(Font.BOLD);
         setFont(font);
         setBorder(BorderFactory.createRaisedBevelBorder());
         setText(value.toString());

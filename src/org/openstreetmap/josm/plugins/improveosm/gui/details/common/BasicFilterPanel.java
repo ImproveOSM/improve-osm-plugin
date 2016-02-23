@@ -56,8 +56,7 @@ public abstract class BasicFilterPanel extends JPanel {
 
 
     private void addStatusFilter(final String statusLbl, final Status status) {
-        add(GuiBuilder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
-                Constraints.LBL_STATUS);
+        add(GuiBuilder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_STATUS);
         rbStatusOpen =
                 GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
         rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),

@@ -48,7 +48,7 @@ class FilterPanel extends BasicFilterPanel {
         super(filter, TurnRestrictionGuiConfig.getInstance().getDlgFilterStatusLbl());
 
         add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_CONFIDENCE);
+                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
                 TurnConfidenceLevel.C1.name(), getBackground());
         cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),

@@ -29,6 +29,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -38,6 +39,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
 
 
 /**
@@ -47,8 +50,6 @@ import javax.swing.SwingConstants;
  * @version $Revision$
  */
 public final class GuiBuilder {
-
-    public static final float FONT_SIZE = 11F;
 
     private GuiBuilder() {}
 
@@ -182,7 +183,7 @@ public final class GuiBuilder {
         final JRadioButton radioButton = new JRadioButton(text);
         radioButton.setActionCommand(actionCommand);
         radioButton.setBackground(backgroundColor);
-        radioButton.setFont(radioButton.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+        radioButton.setFont(radioButton.getFont().deriveFont(Font.PLAIN));
         radioButton.setFocusable(false);
         return radioButton;
     }
@@ -210,7 +211,7 @@ public final class GuiBuilder {
      */
     public static JButton buildButton(final AbstractAction action, final String text) {
         final JButton btn = new JButton(action);
-        btn.setFont(btn.getFont().deriveFont(Font.BOLD, FONT_SIZE));
+        btn.setFont(btn.getFont().deriveFont(Font.BOLD));
         btn.setText(text);
         btn.setFocusable(false);
         return btn;
@@ -230,7 +231,7 @@ public final class GuiBuilder {
         if (backgroundColor != null) {
             cbbox.setBackground(backgroundColor);
         }
-        cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+        cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN));
         cbbox.setFocusPainted(false);
         return cbbox;
     }
@@ -245,7 +246,7 @@ public final class GuiBuilder {
      */
     public static JLabel buildLabel(final String text, final Color textColor, final boolean visible) {
         final JLabel lbl = buildLabel(text, null, null);
-        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD, FONT_SIZE));
+        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
         lbl.setForeground(textColor);
         lbl.setVisible(visible);
         return lbl;
@@ -285,11 +286,29 @@ public final class GuiBuilder {
         if (background != null) {
             txtPane.setBackground(background);
         }
+        txtPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
         txtPane.setCaretPosition(0);
         txtPane.setEditable(false);
         txtPane.setContentType("text/html");
         txtPane.setText(txt);
         return txtPane;
+    }
+
+    /**
+     * Builds a new {@code JEditorPane} with the given arguments.
+     *
+     * @param txt the text to be displayed on the text pane
+     * @param listener the {code HyperlinkListener} the corresponding listener
+     * @return a {@code JEditorPane} object
+     */
+    public static JEditorPane buildEditorPane(final String txt, final HyperlinkListener listener) {
+        final JEditorPane txtEditor = new JEditorPane("text/html", "");
+        txtEditor.setEditorKit(new HTMLEditorKit());
+        txtEditor.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+        txtEditor.setEditable(false);
+        txtEditor.setText(txt);
+        txtEditor.addHyperlinkListener(listener);
+        return txtEditor;
     }
 
     /**
@@ -301,10 +320,11 @@ public final class GuiBuilder {
      */
     public static JTextArea buildTextArea(final String text, final Color backgroundColor) {
         final JTextArea txtArea = new JTextArea(text);
+        txtArea.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
         txtArea.setBackground(backgroundColor);
         txtArea.setLineWrap(true);
         txtArea.setWrapStyleWord(true);
-        txtArea.setFont(txtArea.getFont().deriveFont(Font.PLAIN, FONT_SIZE));
+        txtArea.setFont(txtArea.getFont().deriveFont(Font.PLAIN));
         txtArea.setEditable(true);
         return txtArea;
     }
@@ -319,9 +339,9 @@ public final class GuiBuilder {
      * @param bounds the bounds of the text area
      * @return a {@code JTextField} object
      */
-    public static JTextField buildTextField(final String txt, final Font font, final Color bgColor) {
+    public static JTextField buildTextField(final String txt, final Color bgColor) {
         final JTextField txtField = new JTextField(txt);
-        txtField.setFont(font);
+        txtField.setFont(txtField.getFont().deriveFont(Font.PLAIN));
         txtField.setBackground(bgColor);
         txtField.setDragEnabled(true);
         txtField.setEditable(true);

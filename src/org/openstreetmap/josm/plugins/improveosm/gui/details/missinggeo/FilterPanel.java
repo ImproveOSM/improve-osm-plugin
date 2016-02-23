@@ -71,7 +71,7 @@ class FilterPanel extends BasicFilterPanel {
 
     private void addTypesFilter(final EnumSet<TileType> types) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_TYPE);
+                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_TYPE);
         cbTypeParking =
                 GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), getBackground());
         cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(), TileType.ROAD.name(), getBackground());
@@ -84,7 +84,7 @@ class FilterPanel extends BasicFilterPanel {
 
     private void addIncludeWaterFilter(final boolean includeWater) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_WATER);
+                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_WATER);
         cbIncludeWater =
                 GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
         cbIncludeWater.setSelected(includeWater);
@@ -93,7 +93,7 @@ class FilterPanel extends BasicFilterPanel {
 
     private void addIncludePathFilter(final boolean includePath) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null), Constraints.LBL_PEDESTRIAN);
+                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_PEDESTRIAN);
         cbIncludePath =
                 GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
         cbIncludePath.setSelected(includePath);
@@ -109,8 +109,7 @@ class FilterPanel extends BasicFilterPanel {
         }
         add(GuiBuilder.buildLabel(lblTxt, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_COUNT);
         final String valueStr = value != null ? value.toString() : "";
-        txtCount = GuiBuilder.buildTextField(valueStr, getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE),
-                Color.white);
+        txtCount = GuiBuilder.buildTextField(valueStr, Color.white);
         txtCount.setInputVerifier(
                 new PositiveIntegerVerifier(txtCount, GuiConfig.getInstance().getTxtInvalidInteger()));
         add(txtCount, Constraints.TXT_COUNT);
@@ -127,8 +126,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-        txtCount.setText(txt);
-        txtCount.setBackground(Color.white);
+                txtCount.setText(txt);
+                txtCount.setBackground(Color.white);
     }
 
     /**

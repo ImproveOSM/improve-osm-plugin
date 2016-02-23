@@ -48,8 +48,7 @@ class FilterPanel extends BasicFilterPanel {
         super(filter, DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl());
 
         add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
-                getFont().deriveFont(Font.BOLD, GuiBuilder.FONT_SIZE), null),
-                Constraints.LBL_CONFIDENCE);
+                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
                 OnewayConfidenceLevel.C1.name(), getBackground());
         cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
@@ -108,13 +107,10 @@ class FilterPanel extends BasicFilterPanel {
         private static final GridBagConstraints LBL_CONFIDENCE = new GridBagConstraints(0, 1, 1, 1, 1, 1,
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
         private static final GridBagConstraints CBB_C1 = new GridBagConstraints(1, 1, 1, 1, 1, 0,
-                GridBagConstraints.PAGE_START,
-                GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
+                GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
         private static final GridBagConstraints CBB_C2 = new GridBagConstraints(2, 1, 1, 1, 1, 0,
-                GridBagConstraints.PAGE_START,
-                GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
+                GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
         private static final GridBagConstraints CBB_C3 = new GridBagConstraints(3, 1, 1, 1, 1, 0,
-                GridBagConstraints.PAGE_START,
-                GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
+                GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
     }
 }

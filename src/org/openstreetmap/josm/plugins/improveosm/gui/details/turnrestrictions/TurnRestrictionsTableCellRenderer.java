@@ -22,7 +22,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 
 
 /**
@@ -40,7 +39,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
             final boolean hasFocus, final int row, final int column) {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        setFont(Main.map.getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE));
+        setFont(Main.map.getFont().deriveFont(Font.PLAIN));
         if (value != null) {
             String txt = "";
             if (value instanceof Status) {
