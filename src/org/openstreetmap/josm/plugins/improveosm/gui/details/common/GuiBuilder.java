@@ -51,6 +51,8 @@ import javax.swing.text.html.HTMLEditorKit;
  */
 public final class GuiBuilder {
 
+    public static final float FONT_SIZE = 12F;
+
     private GuiBuilder() {}
 
 
@@ -322,6 +324,7 @@ public final class GuiBuilder {
         final JTextArea txtArea = new JTextArea(text);
         txtArea.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
         txtArea.setBackground(backgroundColor);
+        txtArea.setFont(txtArea.getFont().deriveFont(FONT_SIZE));
         txtArea.setLineWrap(true);
         txtArea.setWrapStyleWord(true);
         txtArea.setFont(txtArea.getFont().deriveFont(Font.PLAIN));
