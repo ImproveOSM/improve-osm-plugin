@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="improveosm-plugin" default="dist" basedir=".">
-
+<project name="improveosm-plugin" xmlns:if="ant:if" default="dist" basedir=".">
 	<property name="plugin.main.version" value="1.0" />
 
 	<property name="plugin.build.dir" value="${basedir}/build/classes" />
@@ -35,17 +34,13 @@
 	<target name="init" depends="clean">
 		<mkdir dir="${plugin.build.dir}" />
 	</target>
-	<property name="JOSM_lib" value="josm-tested.jar"/>
-	<echo message="${JOSM_lib}"/>
+	<property name="JOSM_lib" value="josm-tested.jar" />
 	<target name="compile" depends="init">
-
 		<path id="libs">
 			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
-			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}"/>
+			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}" />
 		</path>
-		
 		<javac srcdir="src" debug="true" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="libs">
-			
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
@@ -77,6 +72,9 @@
 		<copy todir="${plugin.build.dir}">
 			<fileset dir="resources" />
 		</copy>
+		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_dof_config.properties" match="${url.key}" replace="${dof_url}" />
+		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_mg_config.properties" match="${url.key}" replace="${mg_url}" />
+		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_tr_config.properties" match="${url.key}" replace="${tr_url}" />
 		<copy todir="${plugin.build.dir}/images">
 			<fileset dir="images" />
 		</copy>
@@ -86,7 +84,7 @@
 				<include name="LICENSE.txt" />
 			</fileset>
 		</copy>
-		<echo message=""/>
+		<echo message="" />
 		<jar destfile="${plugin.dist.dir}/${plugin.name}" basedir="${plugin.build.dir}">
 			<zipfileset src="${plugin.lib.dir}/gson-2.4.jar" />
 			<zipfileset src="${plugin.lib.dir}/commons-io-2.4.jar" />
@@ -103,8 +101,8 @@
 			</manifest>
 		</jar>
 	</target>
-	
-	
+
+
 	<!--
     **********************************************************
     ** clean - clean up the build environment
