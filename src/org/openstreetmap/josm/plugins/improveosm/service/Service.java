@@ -27,6 +27,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T> the object type served by the service
  */
 public interface Service<T> {
 

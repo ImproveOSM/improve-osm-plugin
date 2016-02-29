@@ -39,7 +39,7 @@ public class DataLayerEntry {
     /**
      * Builds a new object based on the given confidence level.
      *
-     * @param confidenceLevel a {@code ConfidenceLevel}
+     * @param dataLayer a {@code DataLayer} object
      */
     public DataLayerEntry(final DataLayer dataLayer) {
         this.name = dataLayer.name();

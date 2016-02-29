@@ -59,7 +59,6 @@ public class InfoDialog {
      * reinstalled.
      *
      * @param zoom the current zoom level
-     * @param prevZoom the previous zoom level
      */
     public synchronized void displayDialog(final int zoom) {
         if (!isDisplayed) {

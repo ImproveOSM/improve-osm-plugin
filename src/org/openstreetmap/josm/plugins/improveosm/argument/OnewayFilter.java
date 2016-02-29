@@ -40,7 +40,7 @@ public class OnewayFilter extends SearchFilter {
      * Builds a new object with the given arguments.
      *
      * @param status the road segment/cluster status
-     * @param confidenceLevel the list of confidence levels
+     * @param confidenceLevels the list of confidence levels
      */
     public OnewayFilter(final Status status, final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
         super(status);

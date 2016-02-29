@@ -98,7 +98,7 @@ final class PaintUtil {
             graphics.setStroke(ROAD_SEGMENT_STROKE);
             graphics.setColor(ROAD_SEGMENT_COLOR);
         }
-        final GeneralPath path = buildPath(graphics, mapView, segment.getPoints());
+        final GeneralPath path = buildPath(mapView, segment.getPoints());
         graphics.draw(path);
 
         // draw arrow
@@ -120,7 +120,7 @@ final class PaintUtil {
         final Color tileColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
                 : (tile.getStatus() == Status.SOLVED ? TILE_SOLVED_COLOR : TILE_INVALID_COLOR);
         graphics.setColor(tileColor);
-        final GeneralPath path = buildPath(graphics, mapView, tile);
+        final GeneralPath path = buildPath(mapView, tile);
         graphics.draw(path);
         final Composite composite = selected ? TILE_SEL_COMPOSITE : TILE_COMPOSITE;
         graphics.setComposite(composite);
@@ -133,7 +133,7 @@ final class PaintUtil {
         }
     }
 
-    private static GeneralPath buildPath(final Graphics2D g2D, final MapView mv, final Tile tile) {
+    private static GeneralPath buildPath(final MapView mv, final Tile tile) {
         final BoundingBox bbox = Util.tileToBoundingBox(tile.getX(), tile.getY());
         final Point northEast = mv.getPoint(new LatLon(bbox.getNorth(), bbox.getEast()));
         final Point northWest = mv.getPoint(new LatLon(bbox.getSouth(), bbox.getWest()));
@@ -198,7 +198,7 @@ final class PaintUtil {
 
             final int radius = selected ? COMPLEX_TURN_SEL_RADIUS : COMPLEX_TURN_RADIUS;
             drawCircle(graphics, point, TURN_SEGMENT_COLOR, radius);
-            drawTurnRestrictionCount(graphics, mapView, turnRestriction.getTurnRestrictions().size(), point, radius);
+            drawTurnRestrictionCount(graphics, mapView, turnRestriction.getTurnRestrictions().size(), point);
         } else {
             // draw simple turn restriction
 
@@ -217,7 +217,7 @@ final class PaintUtil {
     }
 
     private static void drawTurnRestrictionCount(final Graphics2D graphics, final MapView mapView, final int count,
-            final Point point, final int radius) {
+            final Point point) {
         graphics.setColor(Color.white);
         graphics.setFont(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
         final FontMetrics fm = mapView.getFontMetrics(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
@@ -234,7 +234,7 @@ final class PaintUtil {
             // draw segments
             for (final TurnSegment turnSegment : turnRestriction.getSegments()) {
                 graphics.setColor(TURN_SEGMENT_COLOR);
-                graphics.draw(buildPath(graphics, mapView, turnSegment.getPoints()));
+                graphics.draw(buildPath(mapView, turnSegment.getPoints()));
                 final Pair<LatLon, LatLon> pair = tipTailPoints(turnSegment.getPoints());
                 drawArrow(graphics, mapView, pair.a, pair.b, TURN_ARROW_LENGTH);
             }
@@ -321,7 +321,7 @@ final class PaintUtil {
         }
     }
 
-    private static GeneralPath buildPath(final Graphics2D graphics, final MapView mapView, final List<LatLon> points) {
+    private static GeneralPath buildPath(final MapView mapView, final List<LatLon> points) {
         final GeneralPath path = new GeneralPath();
         Point point = mapView.getPoint(points.get(0));
         path.moveTo(point.getX(), point.getY());

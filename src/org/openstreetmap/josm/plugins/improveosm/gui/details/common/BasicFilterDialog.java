@@ -44,6 +44,8 @@ public abstract class BasicFilterDialog extends ModalDialog {
 
     /**
      * Builds a new filter panel.
+     * 
+     * @param dimension the filter dialog's initial size
      */
     public BasicFilterDialog(final Dimension dimension) {
         super(GuiConfig.getInstance().getDlgFilterTitle(), IconConfig.getInstance().getFilterIcon().getImage(),

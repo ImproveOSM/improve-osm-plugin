@@ -111,8 +111,9 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     }
 
     /**
-     * Updates the UI with the given road segment.
+     * Updates the UI with the properties of the given object
      *
+     * @param item the selected item
      * @param <T> the selected object
      */
     public <T> void updateUI(final T item) {
@@ -142,8 +143,9 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     }
 
     /**
-     * Updates the UI with the given road segment and comment list.
+     * Updates the UI with the given object's properties and comment list.
      *
+     * @param item the selected item
      * @param <T> the selected object
      * @param comments a list of {@code Comment}s
      */

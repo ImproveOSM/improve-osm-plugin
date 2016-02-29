@@ -29,6 +29,7 @@ import org.openstreetmap.josm.Main;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T> the type of the object who's details is displayed in the panel
  */
 public abstract class BasicPanel<T> extends JPanel {
 

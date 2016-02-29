@@ -25,6 +25,7 @@ import java.util.List;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T> the object type
  */
 public class DataSet<T> {
 

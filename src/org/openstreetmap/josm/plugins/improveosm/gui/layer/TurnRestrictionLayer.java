@@ -24,6 +24,8 @@ import java.util.List;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -75,6 +77,11 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
             }
             setSelectedItems(newList);
         }
+    }
+
+    @Override
+    BasicFilterDialog getFilterDialog() {
+        return new TurnRestrictionFilterDialog();
     }
 
     /*

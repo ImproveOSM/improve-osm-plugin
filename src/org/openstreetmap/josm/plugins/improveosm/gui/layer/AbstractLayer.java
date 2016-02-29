@@ -15,11 +15,16 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.openstreetmap.josm.data.osm.visitor.BoundingXYVisitor;
 import org.openstreetmap.josm.gui.dialogs.LayerListDialog;
 import org.openstreetmap.josm.gui.dialogs.LayerListPopup;
 import org.openstreetmap.josm.gui.layer.Layer;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
 
 /**
@@ -45,8 +50,24 @@ public abstract class AbstractLayer extends Layer {
         final LayerListDialog layerListDialog = LayerListDialog.getInstance();
         return new Action[] { layerListDialog.createActivateLayerAction(this),
                 layerListDialog.createShowHideLayerAction(), layerListDialog.createDeleteLayerAction(),
-                SeparatorLayerAction.INSTANCE, new LayerListPopup.InfoAction(this) };
+                SeparatorLayerAction.INSTANCE, getFilterAction(), SeparatorLayerAction.INSTANCE,
+                new LayerListPopup.InfoAction(this) };
     }
+
+    private Action getFilterAction() {
+        return new AbstractAction(GuiConfig.getInstance().getDlgFilterTitle(),
+                IconConfig.getInstance().getFilterIcon()) {
+
+            private static final long serialVersionUID = -3017461809233825500L;
+
+            @Override
+            public void actionPerformed(final ActionEvent event) {
+                getFilterDialog().setVisible(true);
+            }
+        };
+    }
+
+    abstract BasicFilterDialog getFilterDialog();
 
     @Override
     public boolean isMergable(final Layer layer) {

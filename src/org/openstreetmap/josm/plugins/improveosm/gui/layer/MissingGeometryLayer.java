@@ -22,6 +22,8 @@ import java.awt.Point;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -59,6 +61,10 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
         return Util.nearbyTile(getDataSet().getItems(), point);
     }
 
+    @Override
+    BasicFilterDialog getFilterDialog() {
+        return new MissingGeometryFilterDialog();
+    }
 
     /*
      * Draws the layer's data items to the map.

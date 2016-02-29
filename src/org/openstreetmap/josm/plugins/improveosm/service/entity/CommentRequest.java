@@ -25,6 +25,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T> defines the type of target ids
  */
 public class CommentRequest<T> {
 

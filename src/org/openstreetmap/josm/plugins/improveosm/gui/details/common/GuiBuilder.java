@@ -120,7 +120,7 @@ public final class GuiBuilder {
      *
      * @param name the name of the scroll pane
      * @param component the component to added into the scroll pane
-     * @param bgColor the background color of the scroll pane
+     * @param backgroundColor the background color of the scroll pane
      * @param prefSize the preferred size of the component
      * @return a {@code JScrollPane} object
      */
@@ -155,6 +155,7 @@ public final class GuiBuilder {
      * @param action the {@code AbstractAction} to be executed when the button is clicked
      * @param icon the {@code Icon} to be displayed on the button
      * @param tooltip the tooltip to display on mouse hover
+     * @param enabled if true the button is enabled
      * @return a {@code JButton}
      */
     public static JButton buildButton(final AbstractAction action, final Icon icon, final String tooltip,
@@ -316,7 +317,7 @@ public final class GuiBuilder {
     /**
      * Builds a new {@code JTextArea} with the given arguments.
      *
-     * @param font the font to be used
+     * @param text the text to be displayed
      * @param backgroundColor the background color of the scroll pane
      * @return a {@code JTextArea} object
      */
@@ -337,9 +338,7 @@ public final class GuiBuilder {
      * for this field.
      *
      * @param txt the text to be displayed on the text field
-     * @param font the font of the texts
      * @param bgColor the background color
-     * @param bounds the bounds of the text area
      * @return a {@code JTextField} object
      */
     public static JTextField buildTextField(final String txt, final Color bgColor) {

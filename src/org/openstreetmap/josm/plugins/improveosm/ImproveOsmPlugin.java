@@ -294,8 +294,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     shouldSelect = turnRestrictionLayer.getSelectedItems().isEmpty();
                 } else {
                     final TurnRestriction lastSelectedItem = turnRestrictionLayer.lastSelectedItem();
-                    if ((lastSelectedItem == null)
-                            || (lastSelectedItem != null && lastSelectedItem.getTurnRestrictions() == null)) {
+                    if ((lastSelectedItem == null) || (lastSelectedItem.getTurnRestrictions() == null)) {
                         shouldSelect = true;
                     }
                 }

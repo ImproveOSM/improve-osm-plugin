@@ -22,6 +22,8 @@ import java.awt.Point;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
@@ -58,6 +60,10 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
         return Util.nearbyRoadSegment(getDataSet().getItems(), point);
     }
 
+    @Override
+    BasicFilterDialog getFilterDialog() {
+        return new DirectionOfFlowFilterDialog();
+    }
 
     /*
      * Draws the layer's data items to the map.

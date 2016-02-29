@@ -58,6 +58,7 @@ public class RoadSegment {
      * @param fromNodeId the identifier of the OSM node which marks the start of this road segment
      * @param toNodeId the identifier of the OSM node which marks the end of this road segment
      * @param numberOfTrips the number of trips that passed through the road segment
+     * @param percentOfTrips the percent of trips that passed through the road segment
      * @param confidenceLevel the measure of confidence with which this road segment is marked as one way
      * @param points the geometry of the segment, ordered in the direction of the one way restriction
      * @param status the status of the road segment

@@ -40,7 +40,7 @@ public final class HttpUtil {
     /**
      * Encodes the given parameter using {@code HttpUtil#ENCODING} encoding.
      *
-     * @param param the parameter to be encoded
+     * @param content the text to be encoded
      * @return the encoded parameter
      */
     public static String utf8Encode(final String content) {

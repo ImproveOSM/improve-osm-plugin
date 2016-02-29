@@ -46,27 +46,24 @@ abstract class UpdateThread<T> implements Runnable {
     public void run() {
         if (Main.map != null && Main.map.mapView != null) {
             final BoundingBox bbox = new BoundingBox(Main.map.mapView);
-            if (bbox != null) {
-                final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
-                final DataSet<T> result = searchData(bbox, zoom);
+            final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
+            final DataSet<T> result = searchData(bbox, zoom);
 
-                // update UI
-                SwingUtilities.invokeLater(new Runnable() {
+            // update UI
+            SwingUtilities.invokeLater(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        layer.setDataSet(result);
-                        if (result != null && Main.map.mapView.getActiveLayer().equals(layer)) {
-                            final T item = layer.lastSelectedItem();
-                            if (item == null) {
-                                dialog.updateUI(null, null);
-                            }
+                @Override
+                public void run() {
+                    layer.setDataSet(result);
+                    if (result != null && Main.map.mapView.getActiveLayer().equals(layer)) {
+                        final T item = layer.lastSelectedItem();
+                        if (item == null) {
+                            dialog.updateUI(null, null);
                         }
-                        Main.map.repaint();
                     }
-                });
-
-            }
+                    Main.map.repaint();
+                }
+            });
         }
     }
 
