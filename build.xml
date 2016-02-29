@@ -10,6 +10,11 @@
 	<property name="plugin.name" value="ImproveOsm.jar" />
 	<property name="JOSM_lib" value="josm-tested.jar" />
 
+	 <tstamp>
+	    <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	  </tstamp>
+
+	
 	<!--
     **********************************************************
     ** compile - complies the source tree
@@ -85,7 +90,7 @@
 			<manifest>
 				<attribute name="Author" value="telenav" />
 				<attribute name="Plugin-Class" value="org.openstreetmap.josm.plugins.improveosm.ImproveOsmPlugin" />
-				<attribute name="Plugin-Date" value="${TSTAMP}" />
+				<attribute name="Plugin-Date" value="${TODAY}" />
 				<attribute name="Plugin-Description" value="This plugin is helping you improve the OSM map by pointing at probable missing geometries (roads, parkings, path and water trails), missing traffic flow direction or missing turn restrictions in OSM." />
 				<attribute name="Plugin-Link" value="https://wiki.openstreetmap.org/wiki/JOSM/Plugins/ImproveOsm" />
 				<attribute name="Plugin-Icon" value="images/improveosm_logo_50x50.png" />
