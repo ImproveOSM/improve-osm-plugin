@@ -147,7 +147,7 @@ class ButtonPanel extends JPanel {
         @Override
         public void actionPerformed(final ActionEvent event) {
             if (Main.map != null) {
-                final Layer activeLayer = Main.map.mapView.getActiveLayer();
+                final Layer activeLayer = Util.getImproveOsmLayer();
                 if (activeLayer instanceof MissingGeometryLayer) {
                     new MissingGeometryFilterDialog().setVisible(true);
                 } else if (activeLayer instanceof DirectionOfFlowLayer) {

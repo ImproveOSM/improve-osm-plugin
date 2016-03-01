@@ -80,7 +80,7 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
      * Updates the selected items based on the current data set. Previously selected items that are not present in the
      * current data set will be removed.
      */
-     void updateSelectedItems() {
+    void updateSelectedItems() {
         final List<T> newList = new ArrayList<>();
         for (final T item : this.selectedItems) {
             if (this.dataSet.getItems().contains(item)) {
@@ -145,6 +145,10 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
     public DataSet<T> getDataSet() {
         return dataSet;
+    }
+
+    public boolean hasSelectedItems() {
+        return selectedItems != null && !selectedItems.isEmpty();
     }
 
     public List<T> getSelectedItems() {
