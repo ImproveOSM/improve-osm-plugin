@@ -23,7 +23,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
@@ -119,7 +118,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     public <T> void updateUI(final T item) {
         synchronized (this) {
             pnlBtn.enablePanelActions(item);
-            final Layer activeLayer = Main.map.mapView.getActiveLayer();
+            final Layer activeLayer = Util.getImproveOsmLayer();
             final Component cmpInfoView = cmpInfo.getViewport().getView();
             if (activeLayer instanceof MissingGeometryLayer) {
                 pnlTileInfo.updateData((Tile) item);

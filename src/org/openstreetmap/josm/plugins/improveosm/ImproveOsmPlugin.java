@@ -181,6 +181,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
         @Override
         public void actionPerformed(final ActionEvent event) {
+            System.out.println(" missing geo:" + missingGeometryLayer.isBackgroundLayer() + " ,"
+                    + missingGeometryLayer.isVisible());
             if (missingGeometryLayer != null && missingGeometryLayer.isVisible()) {
                 Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
             }
@@ -350,19 +352,18 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public synchronized void createComment(final Comment comment) {
-        final Layer activeLayer = Main.map.mapView.getActiveLayer();
-        PreferenceManager.getInstance().saveLastComment(activeLayer, comment.getText());
+        final List<Layer> layers = Main.map.mapView.getAllLayersAsList();
         Main.worker.execute(new Runnable() {
 
             @Override
             public void run() {
-                if (activeLayer == missingGeometryLayer) {
+                if (layers.contains(missingGeometryLayer) && missingGeometryLayer.hasSelectedItems()) {
                     createComment(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer,
                             new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer), comment);
-                } else if (activeLayer == directionOfFlowLayer) {
+                } else if (layers.contains(directionOfFlowLayer) && directionOfFlowLayer.hasSelectedItems()) {
                     createComment(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer,
                             new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer), comment);
-                } else if (activeLayer == turnRestrictionLayer) {
+                } else if (layers.contains(turnRestrictionLayer) && turnRestrictionLayer.hasSelectedItems()) {
                     createComment(ServiceHandler.getTurnRestrictionHandler(), turnRestrictionLayer,
                             new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer), comment);
                 }
@@ -372,19 +373,21 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     private <T> void createComment(final ServiceHandler<T> handler, final ImproveOsmLayer<T> layer,
             final UpdateThread<T> updateThread, final Comment comment) {
+        PreferenceManager.getInstance().saveLastComment(layer, comment.getText());
         final List<T> items = layer.getSelectedItems();
-        if (items != null && !items.isEmpty()) {
-            handler.comment(comment, items);
+        handler.comment(comment, items);
 
-            if (comment.getStatus() != null) {
-                // status changed - refresh data (possible to select only 1 status from filters)
-                layer.updateSelectedItem(null);
-                Main.worker.execute(updateThread);
-            } else {
-                if (items.equals(layer.getSelectedItems())) {
-                    final T item = items.get(items.size() - 1);
-                    retrieveComments(handler, layer, item);
-                }
+        if (comment.getStatus() != null) {
+            // status changed - refresh data (possible to select only 1 status from filters)
+
+            if (!Main.map.mapView.getActiveLayer().equals(layer)) {
+                updateSelectedData(layer, null, null);
+            }
+            Main.worker.execute(updateThread);
+        } else {
+            if (items.equals(layer.getSelectedItems())) {
+                final T item = items.get(items.size() - 1);
+                retrieveComments(handler, layer, item);
             }
         }
     }
