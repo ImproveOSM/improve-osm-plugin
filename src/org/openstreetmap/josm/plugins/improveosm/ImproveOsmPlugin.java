@@ -181,8 +181,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            System.out.println(" missing geo:" + missingGeometryLayer.isBackgroundLayer() + " ,"
-                    + missingGeometryLayer.isVisible());
             if (missingGeometryLayer != null && missingGeometryLayer.isVisible()) {
                 Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
             }
