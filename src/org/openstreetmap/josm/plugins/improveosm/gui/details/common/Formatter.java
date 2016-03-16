@@ -18,9 +18,9 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 
 
 /**
@@ -51,28 +51,28 @@ public final class Formatter {
     }
 
     /**
-     * Formats the given collection of {@code Comment}s using html tags.
+     * Formats the given comment using HTML tags.
      *
-     * @param comments a collection of {@code Comment}s
+     * @param comment a {@code Comment} to be formatted
      * @return a string containing the given {@code Comment}s
      */
-    public static String formatComments(final List<Comment> comments) {
+    public static String formatComment(final Comment comment) {
         final StringBuilder sb = new StringBuilder("<html><body>");
-        for (final Comment comment : comments) {
-            sb.append(("<b>"));
-            sb.append(formatTimestamp(comment.getTimestamp()));
-            sb.append(", ").append(comment.getUsername());
-            sb.append("</b><br>");
-            if (comment.getStatus() != null) {
-                sb.append("changed status to ");
-                sb.append(comment.getStatus());
-                sb.append("<br>").append("with ");
-            } else {
-                sb.append("added ");
-            }
-            sb.append("comment: ").append(comment.getText());
-            sb.append("<br>");
+        sb.append(("<b>"));
+        sb.append(formatTimestamp(comment.getTimestamp()));
+        sb.append(", ").append(comment.getUsername());
+        sb.append("</b><br>");
+        if (comment.getStatus() != null) {
+            sb.append("changed status to ");
+            sb.append(comment.getStatus());
+            sb.append("<br>").append("with ");
+        } else {
+            sb.append("added ");
         }
+        sb.append("comment: ");
+        final String txt = comment.getText().length() > Config.getInstance().getCommentDisplayLength()
+                ? comment.getText().substring(0, Config.getInstance().getCommentDisplayLength()) : comment.getText();
+        sb.append(txt);
         sb.append("</body></html>");
         return sb.toString();
     }

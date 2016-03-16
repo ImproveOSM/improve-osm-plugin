@@ -29,6 +29,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Cluster;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.ClusterConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 
 
 /**
@@ -51,7 +52,7 @@ abstract class PaintHandler<T> {
     void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds, final DataSet<T> dataSet,
             final List<T> selectedItems) {
         final int zoom = Util.zoom(bounds);
-        if (displayClusters(zoom)) {
+        if (zoom <= Config.getInstance().getMaxClusterZoom()) {
             if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
                 drawClusters(graphics, mapView, dataSet.getClusters(), zoom, getClusterColor());
             }
@@ -62,13 +63,6 @@ abstract class PaintHandler<T> {
         }
     }
 
-    /**
-     * Verifies if for the given zoom should draw clusters or not.
-     *
-     * @param zoom the current zoom level
-     * @return true/false
-     */
-    abstract boolean displayClusters(int zoom);
 
     /**
      * Returns the cluster color.

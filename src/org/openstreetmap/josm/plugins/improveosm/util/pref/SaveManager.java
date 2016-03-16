@@ -119,8 +119,9 @@ final class SaveManager {
                 }
             }
             Main.pref.putListOfStructs(Keys.MISSINGGEO_TYPE, entries, TileTypeEntry.class);
-            final String countKey = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance()
-                    .getMaxClusterZoom() ? Keys.MISSINGGEO_TRIP_COUNT : Keys.MISSINGGEO_POINT_COUNT;
+            final String countKey =
+                    Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                            ? Keys.MISSINGGEO_TRIP_COUNT : Keys.MISSINGGEO_POINT_COUNT;
             final String count = filter.getCount() != null ? filter.getCount().toString() : "";
             Main.pref.put(countKey, count);
         }

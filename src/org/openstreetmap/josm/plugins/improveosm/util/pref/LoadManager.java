@@ -73,7 +73,7 @@ final class LoadManager {
         }
         return dataLayers == null
                 ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.DIRECTION_OF_FLOW, DataLayer.TURN_RESTRICTION)
-                        : dataLayers;
+                : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */
@@ -121,13 +121,12 @@ final class LoadManager {
             }
         }
 
-        String valueStr =
-                Util.zoom(Main.map.mapView.getRealBounds()) > Config.getMissingGeometryInstance().getMaxClusterZoom()
+        String valueStr = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
-                valueStr = valueStr.trim();
-                final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
-                return status == null && types == null ? MissingGeometryFilter.DEFAULT
-                        : new MissingGeometryFilter(status, types, count);
+        valueStr = valueStr.trim();
+        final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
+        return status == null && types == null ? MissingGeometryFilter.DEFAULT
+                : new MissingGeometryFilter(status, types, count);
     }
 
     /* TurnRestrictionLayer related methods */

@@ -19,6 +19,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseQueryBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.ServiceConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
 
@@ -32,7 +33,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final MissingGeometryFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralSearchFilters(query, Config.getMissingGeometryInstance().getVersion(), bbox, zoom);
+        appendGeneralSearchFilters(query, ServiceConfig.getMissingGeometryInstance().getVersion(), bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());
@@ -42,7 +43,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
             }
             if (filter.getCount() != null) {
-                if (zoom > Config.getDirectionOfFlowInstance().getMaxClusterZoom()) {
+                if (zoom > Config.getInstance().getMaxClusterZoom()) {
                     query.append(AND).append(Params.NO_TRIPS);
                 } else {
                     query.append(AND).append(Params.NO_POINTS);
@@ -50,21 +51,21 @@ final class QueryBuilder extends BaseQueryBuilder {
                 query.append(EQ).append(filter.getCount());
             }
         }
-        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.SEARCH, query);
+        return build(ServiceConfig.getMissingGeometryInstance().getServiceUrl(), Method.SEARCH, query);
     }
 
     String buildRetrieveCommentsQuery(final Integer tileX, final Integer tileY) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getMissingGeometryInstance().getVersion());
+        appendGeneralParameters(query, ServiceConfig.getMissingGeometryInstance().getVersion());
         query.append(AND).append(Params.TILE_X).append(EQ).append(tileX);
         query.append(AND).append(Params.TILE_Y).append(EQ).append(tileY);
-        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
+        return build(ServiceConfig.getMissingGeometryInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getMissingGeometryInstance().getVersion());
-        return build(Config.getMissingGeometryInstance().getServiceUrl(), Method.COMMENT, query);
+        appendGeneralParameters(query, ServiceConfig.getMissingGeometryInstance().getVersion());
+        return build(ServiceConfig.getMissingGeometryInstance().getServiceUrl(), Method.COMMENT, query);
     }
 
     private final class Params {

@@ -62,7 +62,7 @@ public class InfoDialog {
      */
     public synchronized void displayDialog(final int zoom) {
         if (!isDisplayed) {
-            final int maxZoom = Config.getDirectionOfFlowInstance().getMaxClusterZoom();
+            final int maxZoom = Config.getInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 isDisplayed = true;
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,

@@ -25,7 +25,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 
@@ -70,11 +69,6 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
      * Draws the layer's data items to the map.
      */
     private static class MissingGeometryHanlder extends PaintHandler<Tile> {
-
-        @Override
-        boolean displayClusters(final int zoom) {
-            return zoom <= Config.getMissingGeometryInstance().getMaxClusterZoom();
-        }
 
         @Override
         void drawItem(final Graphics2D graphics, final MapView mapView, final Tile item,

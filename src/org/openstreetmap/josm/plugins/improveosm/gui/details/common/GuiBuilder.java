@@ -52,6 +52,7 @@ import javax.swing.text.html.HTMLEditorKit;
 public final class GuiBuilder {
 
     public static final float FONT_SIZE = 12F;
+    private static final int SCROLL_BAR_UNIT = 100;
 
     private GuiBuilder() {}
 
@@ -66,6 +67,7 @@ public final class GuiBuilder {
         pnl.setBackground(Color.white);
         return pnl;
     }
+
 
     /**
      * Builds a new bordered layout panel that has a center and a south component.
@@ -112,6 +114,8 @@ public final class GuiBuilder {
         if (borderVisible) {
             scrollPane.setBorder(BorderFactory.createLineBorder(Color.gray));
         }
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(SCROLL_BAR_UNIT);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLL_BAR_UNIT);
         return scrollPane;
     }
 
@@ -132,6 +136,7 @@ public final class GuiBuilder {
         }
         scrollPane.setMinimumSize(prefSize);
         scrollPane.setPreferredSize(prefSize);
+
         return scrollPane;
     }
 
@@ -319,9 +324,10 @@ public final class GuiBuilder {
      *
      * @param text the text to be displayed
      * @param backgroundColor the background color of the scroll pane
+     * @param editable specifies if the text component can be edited or not
      * @return a {@code JTextArea} object
      */
-    public static JTextArea buildTextArea(final String text, final Color backgroundColor) {
+    public static JTextArea buildTextArea(final String text, final Color backgroundColor, final boolean editable) {
         final JTextArea txtArea = new JTextArea(text);
         txtArea.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
         txtArea.setBackground(backgroundColor);
@@ -329,7 +335,7 @@ public final class GuiBuilder {
         txtArea.setLineWrap(true);
         txtArea.setWrapStyleWord(true);
         txtArea.setFont(txtArea.getFont().deriveFont(Font.PLAIN));
-        txtArea.setEditable(true);
+        txtArea.setEditable(editable);
         return txtArea;
     }
 

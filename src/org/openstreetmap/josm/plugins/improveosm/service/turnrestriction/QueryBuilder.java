@@ -18,7 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.service.turnrestriction;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseQueryBuilder;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.ServiceConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
 
@@ -31,7 +31,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final TurnRestrictionFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralSearchFilters(query, Config.getTurnRestrictionInstance().getVersion(), bbox, zoom);
+        appendGeneralSearchFilters(query, ServiceConfig.getTurnRestrictionInstance().getVersion(), bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());
@@ -40,20 +40,20 @@ final class QueryBuilder extends BaseQueryBuilder {
                 query.append(HttpUtil.utf8Encode(filter.getConfidenceLevels()));
             }
         }
-        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.SEARCH, query);
+        return build(ServiceConfig.getTurnRestrictionInstance().getServiceUrl(), Method.SEARCH, query);
     }
 
     String buildRetrieveCommentsQuery(final String targetId) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getTurnRestrictionInstance().getVersion());
+        appendGeneralParameters(query, ServiceConfig.getTurnRestrictionInstance().getVersion());
         query.append(AND).append(Parameter.TARGET_ID).append(EQ).append(HttpUtil.utf8Encode(targetId));
-        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
+        return build(ServiceConfig.getTurnRestrictionInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getTurnRestrictionInstance().getVersion());
-        return build(Config.getTurnRestrictionInstance().getServiceUrl(), Method.COMMENT, query);
+        appendGeneralParameters(query, ServiceConfig.getTurnRestrictionInstance().getVersion());
+        return build(ServiceConfig.getTurnRestrictionInstance().getServiceUrl(), Method.COMMENT, query);
     }
 
 

@@ -253,21 +253,19 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void mouseClicked(final MouseEvent event) {
         if (SwingUtilities.isLeftMouseButton(event)) {
-            final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
             final Layer activeLayer = Main.map.mapView.getActiveLayer();
             final Point point = event.getPoint();
             final boolean multiSelect = event.isShiftDown();
-            if (activeLayer instanceof MissingGeometryLayer
-                    && zoom > Config.getMissingGeometryInstance().getMaxClusterZoom()) {
-                // select tiles
-                selectItem(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer, point, multiSelect);
-            } else if (activeLayer instanceof DirectionOfFlowLayer
-                    && zoom > Config.getDirectionOfFlowInstance().getMaxClusterZoom()) {
-                // select road segments
-                selectItem(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer, point, multiSelect);
-            } else if (activeLayer instanceof TurnRestrictionLayer
-                    && zoom > Config.getTurnRestrictionInstance().getMaxClusterZoom()) {
-                selectTurnRestriction(point, multiSelect);
+            if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
+                if (activeLayer instanceof MissingGeometryLayer) {
+                    // select tiles
+                    selectItem(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer, point, multiSelect);
+                } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                    // select road segments
+                    selectItem(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer, point, multiSelect);
+                } else if (activeLayer instanceof TurnRestrictionLayer) {
+                    selectTurnRestriction(point, multiSelect);
+                }
             }
         }
     }

@@ -27,7 +27,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
@@ -88,11 +87,6 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
      * Draws the layer's data items to the map.
      */
     private static class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
-
-        @Override
-        boolean displayClusters(final int zoom) {
-            return zoom <= Config.getTurnRestrictionInstance().getMaxClusterZoom();
-        }
 
         @Override
         void drawItem(final Graphics2D graphics, final MapView mapView, final TurnRestriction item,
