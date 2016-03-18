@@ -25,7 +25,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 
@@ -70,10 +69,6 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
      */
     private static class DirectionOfFlowPaintHandler extends PaintHandler<RoadSegment> {
 
-        @Override
-        boolean displayClusters(final int zoom) {
-            return zoom <= Config.getDirectionOfFlowInstance().getMaxClusterZoom();
-        }
 
         @Override
         void drawItem(final Graphics2D graphics, final MapView mapView, final RoadSegment item,

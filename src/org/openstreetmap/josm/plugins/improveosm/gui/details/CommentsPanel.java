@@ -16,12 +16,11 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 
@@ -36,6 +35,9 @@ class CommentsPanel extends BasicPanel<List<Comment>> {
 
     private static final long serialVersionUID = -1002962542315503824L;
 
+    private static final Dimension DIM = new Dimension(150, 100);
+    private CommentsList commentsList;
+
 
     CommentsPanel() {
         setName(GuiConfig.getInstance().getPnlHistoryTitle());
@@ -45,11 +47,9 @@ class CommentsPanel extends BasicPanel<List<Comment>> {
     @Override
     public void createComponents(final List<Comment> comments) {
         setLayout(new BorderLayout());
-        final String txt = Formatter.formatComments(comments);
-        final JTextPane txtPane = GuiBuilder.buildTextPane(txt, null);
-        final JScrollPane cmp = GuiBuilder.buildScrollPane(GuiConfig.getInstance().getPnlHistoryTitle(), txtPane,
-                getBackground(), null);
+        commentsList = new CommentsList(comments.toArray(new Comment[0]));
+        final JScrollPane cmp = GuiBuilder.buildScrollPane(GuiConfig.getInstance().getPnlHistoryTitle(), commentsList,
+                getBackground(), DIM);
         add(cmp, BorderLayout.CENTER);
-
     }
 }

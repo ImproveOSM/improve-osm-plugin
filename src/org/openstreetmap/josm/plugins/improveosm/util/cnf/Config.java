@@ -15,62 +15,69 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+
 /**
- * Holds run-time configuration.
+ * Holds commonly used run time properties.
  *
  * @author Beata
  * @version $Revision$
  */
 public final class Config extends BaseConfig {
 
-    private static final Config DIRECTION_OF_FLOW_INSTANCE = new Config("improveosm_dof_config.properties");
-    private static final Config MISSING_GEOMETRY_INSTANCE = new Config("improveosm_mg_config.properties");
-    private static final Config TURN_RESTRICTION_INSTANCE = new Config("improveosm_tr_config.properties");
+    private static final Config INSTANCE = new Config();
+
+    private static final String CONFIG_FILE = "improveosm_config.properties";
 
     private static final int MAX_CLUSTER_ZOOM = 14;
+    private static final int MAX_COMMENT_LENGTH = 500;
+    private static final int MAX_COMMENT_DISPLAY_LENGTH = 150;
 
-    private final String serviceUrl;
+
     private int maxClusterZoom;
-    private final String version;
+    private int commentMaxLength;
+    private int commentDisplayLength;
+    private final String feedbackUrl;
 
 
-    private Config(final String fileName) {
-        super(fileName);
-        serviceUrl = readProperty("service.url");
-        if (serviceUrl == null) {
-            throw new ExceptionInInitializerError("Missing service url.");
-        }
+    private Config() {
+        super(CONFIG_FILE);
+        feedbackUrl = readProperty("feedback.url");
 
         try {
             maxClusterZoom = Integer.parseInt(readProperty("zoom.cluster.max"));
         } catch (final NumberFormatException e) {
             maxClusterZoom = MAX_CLUSTER_ZOOM;
         }
-        version = readProperty("version");
+        try {
+            commentMaxLength = Integer.parseInt(readProperty("comment.max.length"));
+        } catch (final NumberFormatException e) {
+            commentMaxLength = MAX_COMMENT_LENGTH;
+        }
+
+        try {
+            commentDisplayLength = Integer.parseInt(readProperty("comment.display.max.length"));
+        } catch (final NumberFormatException e) {
+            commentDisplayLength = MAX_COMMENT_DISPLAY_LENGTH;
+        }
     }
 
-
-    public static Config getDirectionOfFlowInstance() {
-        return DIRECTION_OF_FLOW_INSTANCE;
-    }
-
-    public static Config getMissingGeometryInstance() {
-        return MISSING_GEOMETRY_INSTANCE;
-    }
-
-    public static Config getTurnRestrictionInstance() {
-        return TURN_RESTRICTION_INSTANCE;
-    }
-
-    public String getServiceUrl() {
-        return serviceUrl;
+    public static Config getInstance() {
+        return INSTANCE;
     }
 
     public int getMaxClusterZoom() {
         return maxClusterZoom;
     }
 
-    public String getVersion() {
-        return version;
+    public int getCommentMaxLength() {
+        return commentMaxLength;
+    }
+
+    public int getCommentDisplayLength() {
+        return commentDisplayLength;
+    }
+
+    public String getFeedbackUrl() {
+        return feedbackUrl;
     }
 }

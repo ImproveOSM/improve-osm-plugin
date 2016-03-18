@@ -18,7 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.service.directioofflow;
 import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseQueryBuilder;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.ServiceConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
 
 
@@ -32,7 +32,7 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     String buildSearchQuery(final BoundingBox bbox, final OnewayFilter filter, final int zoom) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralSearchFilters(query, Config.getDirectionOfFlowInstance().getVersion(), bbox, zoom);
+        appendGeneralSearchFilters(query, ServiceConfig.getDirectionOfFlowInstance().getVersion(), bbox, zoom);
 
         if (filter != null) {
             appendStatusFilter(query, filter.getStatus());
@@ -41,22 +41,22 @@ final class QueryBuilder extends BaseQueryBuilder {
                 query.append(HttpUtil.utf8Encode(filter.getConfidenceLevels()));
             }
         }
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.SEARCH, query);
+        return build(ServiceConfig.getDirectionOfFlowInstance().getServiceUrl(), Method.SEARCH, query);
     }
 
     String buildRetrieveCommentsQuery(final Long wayId, final Long fromNodeId, final Long toNodeId) {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getDirectionOfFlowInstance().getVersion());
+        appendGeneralParameters(query, ServiceConfig.getDirectionOfFlowInstance().getVersion());
         query.append(AND).append(Parameter.WAY_ID).append(EQ).append(wayId);
         query.append(AND).append(Parameter.FROM_NODE_ID).append(EQ).append(fromNodeId);
         query.append(AND).append(Parameter.TO_NODE_ID).append(EQ).append(toNodeId);
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
+        return build(ServiceConfig.getDirectionOfFlowInstance().getServiceUrl(), Method.RETRIEVE_COMMENTS, query);
     }
 
     String buildCommentQuery() {
         final StringBuilder query = new StringBuilder();
-        appendGeneralParameters(query, Config.getDirectionOfFlowInstance().getVersion());
-        return build(Config.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, query);
+        appendGeneralParameters(query, ServiceConfig.getDirectionOfFlowInstance().getVersion());
+        return build(ServiceConfig.getDirectionOfFlowInstance().getServiceUrl(), Method.COMMENT, query);
     }
 
 

@@ -29,6 +29,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -37,6 +40,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.ModalDialog;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObservable;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
@@ -76,8 +80,8 @@ class EditDialog extends ModalDialog implements CommentObservable {
     public void createComponents() {
         lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
         lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
-        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white);
-
+        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true);
+        txtComment.setDocument(new EditDocument());
         final JPanel pnlComment = new JPanel(new BorderLayout());
         pnlComment.setBorder(BORDER);
         pnlComment.add(GuiBuilder.buildScrollPane(txtComment, Color.white, true), BorderLayout.CENTER);
@@ -106,6 +110,17 @@ class EditDialog extends ModalDialog implements CommentObservable {
         this.observer = observer;
     }
 
+    private final class EditDocument extends PlainDocument {
+
+        private static final long serialVersionUID = -6861902595242696120L;
+
+        @Override
+        public void insertString(final int offs, final String str, final AttributeSet a) throws BadLocationException {
+            if (str != null && txtComment.getText().length() <= Config.getInstance().getCommentMaxLength()) {
+                super.insertString(offs, str, a);
+            }
+        }
+    }
 
     /* Handles the comment operation */
 
