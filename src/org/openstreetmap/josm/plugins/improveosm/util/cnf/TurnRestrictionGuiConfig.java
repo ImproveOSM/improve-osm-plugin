@@ -37,9 +37,9 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     private final String dlgFilterConfidenceLbl;
 
     /* info panel texts */
-    private final String lblId;
     private final String lblType;
-    private final String lblTrips;
+    private final String lblFirstSegmentTrips;
+    private final String lblLastSegmentTrips;
     private final String tblTitle;
     private final List<String> tblHeader;
 
@@ -59,9 +59,9 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
-        lblId = readProperty("details.info.id.lbl");
         lblType = readProperty("details.info.type.lbl");
-        lblTrips = readProperty("details.info.trips.lbl");
+        lblFirstSegmentTrips = readProperty("details.info.segment.first.lbl");
+        lblLastSegmentTrips = readProperty("details.info.segment.last.lbl");
         tblTitle = readProperty("details.info.tbl.title");
         tblHeader = readProperties("details.info.tbl.header");
         lblC1 = readProperty("c1.lbl");
@@ -94,16 +94,16 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         return dlgFilterConfidenceLbl;
     }
 
-    public String getLblId() {
-        return lblId;
-    }
-
     public String getLblType() {
         return lblType;
     }
 
-    public String getLblTrips() {
-        return lblTrips;
+    public String getLblFirstSegmentTrips() {
+        return lblFirstSegmentTrips;
+    }
+
+    public String getLblLastSegmentTrips() {
+        return lblLastSegmentTrips;
     }
 
     public String getTblTitle() {
