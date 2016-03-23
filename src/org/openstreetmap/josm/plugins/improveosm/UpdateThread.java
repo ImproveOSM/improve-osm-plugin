@@ -59,6 +59,9 @@ abstract class UpdateThread<T> implements Runnable {
                         final T item = layer.lastSelectedItem();
                         if (item == null) {
                             dialog.updateUI(null, null);
+                        } else if (shouldClearSelection(item)) {
+                            layer.updateSelectedItem(item);
+                            dialog.updateUI(null, null);
                         }
                     }
                     Main.map.repaint();
@@ -66,6 +69,8 @@ abstract class UpdateThread<T> implements Runnable {
             });
         }
     }
+
+    abstract boolean shouldClearSelection(T item);
 
     /**
      * Searches for data in the given bounding box and zoom level.
