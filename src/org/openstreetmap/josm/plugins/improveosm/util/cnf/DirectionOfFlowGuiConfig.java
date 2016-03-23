@@ -40,7 +40,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     /* info panel texts */
     private final String lblTrips;
-    private final String lblId;
     private final String lblType;
     private final String lblProcent;
 
@@ -58,25 +57,19 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     DirectionOfFlowGuiConfig() {
         super(CONFIG_FILE);
 
-        /* layer texts */
         layerName = readProperty("plugin.name");
         layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
         btnLocationTlt = readProperty("btn.location.tlt");
         dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
         dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
-
         lblTrips = readProperty("details.info.trips.lbl");
-        lblId = readProperty("details.info.id.lbl");
         lblType = readProperty("details.info.type.lbl");
         lblProcent = readProperty("details.info.procent.lbl");
-
-
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
         lblC3 = readProperty("c3.lbl");
         lblOneway = readProperty("oneway.lbl");
-
         dlgTipTitle = readProperty("dialog.tip.title");
         dlgTipTxt = readProperty("dialog.tip.text");
     }
@@ -113,10 +106,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getLblTrips() {
         return lblTrips;
-    }
-
-    public String getLblId() {
-        return lblId;
     }
 
     public String getLblType() {

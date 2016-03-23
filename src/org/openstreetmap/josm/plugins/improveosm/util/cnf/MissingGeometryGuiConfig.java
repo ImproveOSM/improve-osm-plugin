@@ -37,7 +37,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
     private final String dlgFilterLblPedestrian;
 
     /* details panel related texts */
-    private final String lblId;
     private final String lblTimestamp;
     private final String lblType;
 
@@ -57,7 +56,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
         dlgFilterLblType = readProperty("dialog.filter.type.lbl");
         dlgFilterLblWater = readProperty("dialog.filter.water.lbl");
         dlgFilterLblPedestrian = readProperty("dialog.filter.pedestrian.lbl");
-        lblId = readProperty("details.id.lbl");
         lblTimestamp = readProperty("details.time.lbl");
         lblType = readProperty("details.type.lbl");
         lblTripCount = readProperty("lbl.tripCount");
@@ -96,10 +94,6 @@ public final class MissingGeometryGuiConfig extends BaseConfig {
 
     public String getDlgFilterLblPedestrian() {
         return dlgFilterLblPedestrian;
-    }
-
-    public String getLblId() {
-        return lblId;
     }
 
     public String getLblTimestamp() {

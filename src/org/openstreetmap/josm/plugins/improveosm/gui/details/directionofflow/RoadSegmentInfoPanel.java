@@ -36,7 +36,6 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
 
     private static final long serialVersionUID = 4836239803613790133L;
-    private static final int WIDTH_MARGIN = 5;
 
 
     /**
@@ -51,12 +50,11 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
     public void createComponents(final RoadSegment roadSegment) {
         final DirectionOfFlowGuiConfig dofGuiCnf = DirectionOfFlowGuiConfig.getInstance();
         final GuiConfig guiCnf = GuiConfig.getInstance();
-        final int widthLbl = getMaxWidth(getFontMetricsBold(), dofGuiCnf.getLblTrips(), dofGuiCnf.getLblId(),
-                dofGuiCnf.getLblType(), guiCnf.getLblStatus(), guiCnf.getLblConfidence());
+        final int widthLbl = getMaxWidth(getFontMetricsBold(), dofGuiCnf.getLblTrips(), dofGuiCnf.getLblType(),
+                guiCnf.getLblStatus(), guiCnf.getLblConfidence());
 
         addPercentage(roadSegment.getPercentOfTrips());
         addTotalTrips(roadSegment.getNumberOfTrips(), widthLbl);
-        addIdentifier(roadSegment, widthLbl);
         addRoadType(roadSegment.getType(), widthLbl);
         addStatus(roadSegment.getStatus(), widthLbl);
         addConfidence(roadSegment.getConfidenceLevel(), widthLbl);
@@ -78,19 +76,6 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
             add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
-            incrementPnlY();
-        }
-    }
-
-    private void addIdentifier(final RoadSegment roadSegment, final int widthLbl) {
-        if (roadSegment.getWayId() != null && roadSegment.getFromNodeId() != null
-                && roadSegment.getToNodeId() != null) {
-            add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblId(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(roadSegment.toString()) + WIDTH_MARGIN;
-            add(GuiBuilder.buildLabel(roadSegment.toString(), getFontPlain(),
                     new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();

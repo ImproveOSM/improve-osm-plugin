@@ -48,11 +48,10 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     @Override
     public void createComponents(final Tile tile) {
         final MissingGeometryGuiConfig mgGuiCnf = MissingGeometryGuiConfig.getInstance();
-        final int widthLbl = getMaxWidth(getFontMetricsBold(), mgGuiCnf.getLblId(), mgGuiCnf.getLblType(),
+        final int widthLbl = getMaxWidth(getFontMetricsBold(), mgGuiCnf.getLblType(),
                 mgGuiCnf.getLblPointCount(), mgGuiCnf.getLblTripCount(), GuiConfig.getInstance().getLblStatus(),
                 mgGuiCnf.getLblTimestamp());
 
-        addIdentifier(tile, widthLbl);
         addType(tile.getType(), widthLbl);
         addStatus(tile.getStatus(), widthLbl);
         addTimestamp(tile.getTimestamp(), widthLbl);
@@ -60,18 +59,6 @@ public class TileInfoPanel extends BasicPanel<Tile> {
         addNumberOfPoints(tile.getPoints(), widthLbl);
         final int pnlHeight = getPnlY() + SPACE_Y;
         setPreferredSize(new Dimension(getPnlWidth() + SPACE_Y, pnlHeight));
-    }
-
-    private void addIdentifier(final Tile tile, final int widthLbl) {
-        if (tile.getX() != null && tile.getY() != null) {
-            add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblId(), getFontBold(),
-                    new Rectangle(RECT_X, RECT_Y, widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(tile.toString());
-            add(GuiBuilder.buildLabel(tile.toString(), getFontPlain(),
-                    new Rectangle(widthLbl, RECT_Y, widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
-            incrementPnlY();
-        }
     }
 
     private void addType(final TileType type, final int widthLbl) {

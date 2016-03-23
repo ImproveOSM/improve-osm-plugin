@@ -74,13 +74,13 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
             }
             final TurnRestrictionGuiConfig trGuiCnf = TurnRestrictionGuiConfig.getInstance();
             final GuiConfig guiCnf = GuiConfig.getInstance();
-            final int widthLbl = getMaxWidth(getFontMetricsBold(), trGuiCnf.getLblId(), guiCnf.getLblStatus(),
-                    trGuiCnf.getLblType(), guiCnf.getLblConfidence(), trGuiCnf.getLblTrips());
-            addIdentifier(turnRestriction.getId(), widthLbl);
+            final int widthLbl = getMaxWidth(getFontMetricsBold(), guiCnf.getLblStatus(), trGuiCnf.getLblType(),
+                    guiCnf.getLblConfidence());
+            addFirstSegmentTrips(turnRestriction.getSegments().get(0).getNumberOfTrips());
+            addLastSegmentTrips(turnRestriction.getNumberOfPasses());
             addStatus(turnRestriction.getStatus(), widthLbl);
             addTurnType(turnRestriction.getTurnType(), widthLbl);
             addTurnConfidence(turnRestriction.getConfidenceLevel(), widthLbl);
-            addPasses(turnRestriction.getNumberOfPasses(), widthLbl);
         }
         setPreferredSize(new Dimension(getPnlWidth() + SPACE_Y, getPnlY()));
     }
@@ -103,13 +103,20 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
         setPnlWidth(pnlTable.getPreferredSize().width + 2 * SPACE_Y);
     }
 
-    private void addIdentifier(final String id, final int widthLbl) {
-        if (id != null) {
-            add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblId(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(id);
-            add(GuiBuilder.buildLabel(id, getFontPlain(), new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
+    private void addFirstSegmentTrips(final Integer trips) {
+        if (trips != null) {
+            final String lbl = trips + " " + TurnRestrictionGuiConfig.getInstance().getLblFirstSegmentTrips();
+            final int widthLbl = getFontMetricsBold().stringWidth(lbl.toString());
+            add(GuiBuilder.buildLabel(lbl, getFontBold(), new Rectangle(RECT_X, RECT_Y, widthLbl, LHEIGHT)));
+            incrementPnlY();
+        }
+    }
+
+    private void addLastSegmentTrips(final Integer trips) {
+        if (trips != null) {
+            final String lbl = trips + " " + TurnRestrictionGuiConfig.getInstance().getLblLastSegmentTrips();
+            final int widthLbl = getFontMetricsBold().stringWidth(lbl.toString());
+            add(GuiBuilder.buildLabel(lbl, getFontBold(), new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
             incrementPnlY();
         }
     }
@@ -144,18 +151,6 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(confidence.longDisplayName());
             add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
-            incrementPnlY();
-        }
-    }
-
-    private void addPasses(final Integer passes, final int widthLbl) {
-        if (passes != null) {
-            add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblTrips(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(passes.toString());
-            add(GuiBuilder.buildLabel(passes.toString(), getFontPlain(),
                     new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();

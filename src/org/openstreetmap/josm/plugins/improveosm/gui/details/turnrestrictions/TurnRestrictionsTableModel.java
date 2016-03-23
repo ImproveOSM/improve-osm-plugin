@@ -34,10 +34,10 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -6609573772691997993L;
 
     private static final int IDX_TYPE = 0;
-    private static final int IDX_CONFIDENCE = 1;
-    private static final int IDX_PASSES = 2;
-    private static final int IDX_STATUS = 3;
-    private static final int IDX_IDENTIFIER = 4;
+    private static final int IDX_FIRST_SEG_TRIPS = 1;
+    private static final int IDX_LAST_SEG_TRIPS = 2;
+    private static final int IDX_CONFIDENCE = 3;
+    private static final int IDX_STATUS = 4;
 
     private List<TurnRestriction> data;
 
@@ -70,17 +70,17 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
                 case IDX_TYPE:
                     value = Formatter.formatTurnType(turnRestricion.getTurnType());
                     break;
+                case IDX_FIRST_SEG_TRIPS:
+                    value = turnRestricion.getSegments().get(0).getNumberOfTrips();
+                    break;
+                case IDX_LAST_SEG_TRIPS:
+                    value = turnRestricion.getNumberOfPasses();
+                    break;
                 case IDX_CONFIDENCE:
                     value = turnRestricion.getConfidenceLevel();
                     break;
-                case IDX_PASSES:
-                    value = turnRestricion.getNumberOfPasses();
-                    break;
                 case IDX_STATUS:
                     value = turnRestricion.getStatus();
-                    break;
-                case IDX_IDENTIFIER:
-                    value = turnRestricion.getId();
                     break;
                 default:
                     value = rowIndex;
