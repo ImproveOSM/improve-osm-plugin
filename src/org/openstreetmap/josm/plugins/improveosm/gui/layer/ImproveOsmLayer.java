@@ -71,7 +71,7 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
      */
     public void setDataSet(final DataSet<T> dataSet) {
         this.dataSet = dataSet;
-        if (!selectedItems.isEmpty() && (!dataSet.getClusters().isEmpty())) {
+        if (!selectedItems.isEmpty() || (!dataSet.getClusters().isEmpty())) {
             updateSelectedItems();
         }
     }

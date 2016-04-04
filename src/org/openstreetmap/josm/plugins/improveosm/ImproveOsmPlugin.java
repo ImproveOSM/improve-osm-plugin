@@ -471,7 +471,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         boolean shouldClearSelection(final RoadSegment item) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
-            return !(filter.getConfidenceLevels().contains(item.getConfidenceLevel())
+            return !((filter.getConfidenceLevels() == null
+                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel()))
                     && filter.getStatus().equals(item.getStatus()));
         }
     }
@@ -492,7 +493,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         boolean shouldClearSelection(final TurnRestriction item) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
-            return !(filter.getConfidenceLevels().contains(item.getConfidenceLevel())
+            return !((filter.getConfidenceLevels() == null
+                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel()))
                     && filter.getStatus().equals(item.getStatus()));
         }
     }
