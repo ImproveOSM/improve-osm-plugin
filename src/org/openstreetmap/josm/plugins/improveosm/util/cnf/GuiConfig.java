@@ -105,9 +105,9 @@ public final class GuiConfig extends BaseConfig {
         dlgSolveTitle = readProperty("edit.dialog.solve.title");
         dlgReopenTitle = readProperty("edit.dialog.reopen.title");
         dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
-        menuSolveCommentTitle = readProperty("edit.menu.solve.title");
-        menuReopenCommentTitle = readProperty("edit.menu.reopen.title");
-        menuInvalidCommentTitle = readProperty("edit.menu.invalid.title");
+        menuSolveCommentTitle = readProperty("edit.menu.solve.comment.title");
+        menuReopenCommentTitle = readProperty("edit.menu.reopen.comment.title");
+        menuInvalidCommentTitle = readProperty("edit.menu.invalid.comment.title");
 
         pnlInfoTitle = readProperty("details.info.title");
         pnlHistoryTitle = readProperty("details.history.title");

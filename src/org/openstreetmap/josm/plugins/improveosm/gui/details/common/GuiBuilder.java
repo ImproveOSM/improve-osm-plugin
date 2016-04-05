@@ -33,7 +33,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -358,16 +357,14 @@ public final class GuiBuilder {
         return txtField;
     }
 
-
-    public static JPopupMenu buildPopupMenu(final AbstractAction actionItem1, final AbstractAction actionItem2,
-            final String titleItem1, final String titleItem2) {
-        final JPopupMenu menu = new JPopupMenu();
-        menu.add(buildMenuItem(actionItem1, titleItem1));
-        menu.add(buildMenuItem(actionItem2, titleItem2));
-        return menu;
-    }
-
-    private static JMenuItem buildMenuItem(final AbstractAction action, final String title) {
+    /**
+     * Builds a new {@code JMenuItem} object with the given arguments.
+     *
+     * @param action the {@code AbstractAction} to be executed when the menu item is selected
+     * @param title the menu item's title
+     * @return a {@code JMenuItem} object
+     */
+    public static JMenuItem buildMenuItem(final AbstractAction action, final String title) {
         final JMenuItem menuItem = new JMenuItem(action);
         menuItem.setText(title);
         return menuItem;
