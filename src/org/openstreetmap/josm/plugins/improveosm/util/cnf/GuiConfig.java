@@ -42,12 +42,15 @@ public final class GuiConfig extends BaseConfig {
     private final String btnReopenTlt;
     private final String btnInvalidTlt;
 
-    /* dialog titles */
+    /* edit dialog texts */
     private final String dlgFilterTitle;
     private final String dlgCommentTitle;
     private final String dlgSolveTitle;
     private final String dlgReopenTitle;
     private final String dlgInvalidTitle;
+    private final String menuSolveCommentTitle;
+    private final String menuReopenCommentTitle;
+    private final String menuInvalidCommentTitle;
 
     /* info panel title */
     private final String pnlInfoTitle;
@@ -102,6 +105,9 @@ public final class GuiConfig extends BaseConfig {
         dlgSolveTitle = readProperty("edit.dialog.solve.title");
         dlgReopenTitle = readProperty("edit.dialog.reopen.title");
         dlgInvalidTitle = readProperty("edit.dialog.invalid.title");
+        menuSolveCommentTitle = readProperty("edit.menu.solve.comment.title");
+        menuReopenCommentTitle = readProperty("edit.menu.reopen.comment.title");
+        menuInvalidCommentTitle = readProperty("edit.menu.invalid.comment.title");
 
         pnlInfoTitle = readProperty("details.info.title");
         pnlHistoryTitle = readProperty("details.history.title");
@@ -192,6 +198,18 @@ public final class GuiConfig extends BaseConfig {
 
     public String getDlgInvalidTitle() {
         return dlgInvalidTitle;
+    }
+
+    public String getMenuSolveCommentTitle() {
+        return menuSolveCommentTitle;
+    }
+
+    public String getMenuReopenCommentTitle() {
+        return menuReopenCommentTitle;
+    }
+
+    public String getMenuInvalidCommentTitle() {
+        return menuInvalidCommentTitle;
     }
 
     public String getPnlInfoTitle() {

@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -28,6 +29,8 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.DisplayEditDialogAction;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.EditPopupMenu;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
@@ -73,18 +76,20 @@ class ButtonPanel extends JPanel {
         btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
                 guiConfig.getBtnFilterTlt(), true);
         btnComment = GuiBuilder.buildButton(
-                new DisplayEditDialog(null, guiConfig.getDlgCommentTitle(), iconConfig.getCommentIcon()),
+                new DisplayEditDialogAction(null, guiConfig.getDlgCommentTitle(), iconConfig.getCommentIcon()),
                 iconConfig.getCommentIcon(), guiConfig.getBtnCommentTlt(), false);
         btnSolve = GuiBuilder.buildButton(
-                new DisplayEditDialog(Status.SOLVED, guiConfig.getDlgSolveTitle(), iconConfig.getSolveIcon()),
+                new DisplayEditPopupMenu(Status.SOLVED, guiConfig.getDlgSolveTitle(),
+                        guiConfig.getMenuSolveCommentTitle(), iconConfig.getSolveIcon()),
                 iconConfig.getSolveIcon(), guiConfig.getBtnSolveTlt(), false);
         btnReopen = GuiBuilder.buildButton(
-                new DisplayEditDialog(Status.OPEN, guiConfig.getDlgReopenTitle(), iconConfig.getReopenIcon()),
+                new DisplayEditPopupMenu(Status.OPEN, guiConfig.getDlgReopenTitle(),
+                        guiConfig.getMenuReopenCommentTitle(), iconConfig.getReopenIcon()),
                 iconConfig.getReopenIcon(), guiConfig.getBtnReopenTlt(), false);
         btnInvalid = GuiBuilder.buildButton(
-                new DisplayEditDialog(Status.INVALID, guiConfig.getDlgInvalidTitle(), iconConfig.getInvalidIcon()),
+                new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
+                        guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
                 iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
-
         add(btnFilter);
         add(btnComment);
         add(btnSolve);
@@ -160,26 +165,33 @@ class ButtonPanel extends JPanel {
     }
 
     /*
-     * Displays an edit dialog window for the following user actions: comment, solve, reopen, invalidate.
+     * Displays a pop-up menu for the following actions: solve item, re-open item and invalidate item.
      */
-    private final class DisplayEditDialog extends AbstractAction {
+    private final class DisplayEditPopupMenu extends AbstractAction {
 
-        private static final long serialVersionUID = 3577509903506411276L;
+        private static final long serialVersionUID = 8129418961741501231L;
+        private static final int POZ_Y = 4;
         private final Status status;
-        private final String title;
+        private final String titleEdit;
+        private final String titleEditComment;
         private final ImageIcon icon;
 
-        private DisplayEditDialog(final Status status, final String title, final ImageIcon icon) {
+
+        private DisplayEditPopupMenu(final Status status, final String titleEdit, final String titleEditComment,
+                final ImageIcon icon) {
             this.status = status;
-            this.title = title;
+            this.titleEdit = titleEdit;
+            this.titleEditComment = titleEditComment;
             this.icon = icon;
         }
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            final EditDialog dialog = new EditDialog(status, title, icon.getImage());
-            dialog.registerObserver(commentObserver);
-            dialog.setVisible(true);
+            final EditPopupMenu menu = new EditPopupMenu(status, titleEdit, titleEditComment, icon);
+            menu.registerCommentObserver(commentObserver);
+            final JButton cmpParent = (JButton) event.getSource();
+            final Point point = cmpParent.getMousePosition();
+            menu.show(cmpParent, point.x, point.y - cmpParent.getWidth() / POZ_Y);
         }
     }
 }

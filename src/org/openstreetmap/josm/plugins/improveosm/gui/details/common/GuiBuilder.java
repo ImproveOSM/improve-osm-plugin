@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -354,5 +355,18 @@ public final class GuiBuilder {
         txtField.setDragEnabled(true);
         txtField.setEditable(true);
         return txtField;
+    }
+
+    /**
+     * Builds a new {@code JMenuItem} object with the given arguments.
+     *
+     * @param action the {@code AbstractAction} to be executed when the menu item is selected
+     * @param title the menu item's title
+     * @return a {@code JMenuItem} object
+     */
+    public static JMenuItem buildMenuItem(final AbstractAction action, final String title) {
+        final JMenuItem menuItem = new JMenuItem(action);
+        menuItem.setText(title);
+        return menuItem;
     }
 }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.gui.details;
+package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,7 +31,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
  * @author Beata
  * @version $Revision$
  */
-class CommentsPanel extends BasicPanel<List<Comment>> {
+public class CommentsPanel extends BasicPanel<List<Comment>> {
 
     private static final long serialVersionUID = -1002962542315503824L;
 
@@ -39,7 +39,7 @@ class CommentsPanel extends BasicPanel<List<Comment>> {
     private CommentsList commentsList;
 
 
-    CommentsPanel() {
+    public CommentsPanel() {
         setName(GuiConfig.getInstance().getPnlHistoryTitle());
     }
 

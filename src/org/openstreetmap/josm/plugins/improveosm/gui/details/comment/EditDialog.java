@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.gui.details;
+package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,10 +21,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
@@ -32,7 +29,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.CancelAction;
@@ -89,7 +85,7 @@ class EditDialog extends ModalDialog implements CommentObservable {
         add(pnlComment, BorderLayout.CENTER);
 
         final JPanel pnlBtn = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-        pnlBtn.add(GuiBuilder.buildButton(new AddCommentAction(), GuiConfig.getInstance().getBtnOkLbl()));
+        pnlBtn.add(GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl()));
         pnlBtn.add(GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
 
         final JPanel pnlSouth = new JPanel(new BorderLayout());
@@ -122,35 +118,36 @@ class EditDialog extends ModalDialog implements CommentObservable {
         }
     }
 
+
     /* Handles the comment operation */
 
-    private class AddCommentAction extends AbstractAction {
+    private final class AddCommentAction extends BasicCommentAction {
 
         private static final long serialVersionUID = -7862363740212492052L;
 
+        private AddCommentAction(final Status status) {
+            super(status);
+        }
+
         @Override
-        public void actionPerformed(final ActionEvent event) {
-            final String text = txtComment.getText().trim();
+        String getCommentText() {
+            return txtComment.getText().trim();
+        }
+
+        @Override
+        boolean isValid() {
+            boolean result = true;
+            final String text = getCommentText();
             if (text.isEmpty()) {
                 lblError.setVisible(true);
+                result = false;
             } else {
                 if (lblError.isVisible()) {
                     lblError.setVisible(false);
                 }
                 dispose();
-                final String username = PreferenceManager.getInstance().loadOsmUsername();
-                if (username.isEmpty()) {
-                    final String newUsername =
-                            JOptionPane.showInputDialog(Main.parent, GuiConfig.getInstance().getTxtMissingUsername(),
-                                    GuiConfig.getInstance().getWarningTitle(), JOptionPane.WARNING_MESSAGE);
-                    if (newUsername != null && !newUsername.isEmpty()) {
-                        PreferenceManager.getInstance().saveOsmUsername(newUsername);
-                        notifyObserver(new Comment(newUsername, null, text, status));
-                    }
-                } else {
-                    notifyObserver(new Comment(username, null, text, status));
-                }
             }
+            return result;
         }
     }
 }
