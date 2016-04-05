@@ -31,7 +31,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -354,5 +356,20 @@ public final class GuiBuilder {
         txtField.setDragEnabled(true);
         txtField.setEditable(true);
         return txtField;
+    }
+
+
+    public static JPopupMenu buildPopupMenu(final AbstractAction actionItem1, final AbstractAction actionItem2,
+            final String titleItem1, final String titleItem2) {
+        final JPopupMenu menu = new JPopupMenu();
+        menu.add(buildMenuItem(actionItem1, titleItem1));
+        menu.add(buildMenuItem(actionItem2, titleItem2));
+        return menu;
+    }
+
+    private static JMenuItem buildMenuItem(final AbstractAction action, final String title) {
+        final JMenuItem menuItem = new JMenuItem(action);
+        menuItem.setText(title);
+        return menuItem;
     }
 }

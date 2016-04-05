@@ -62,17 +62,25 @@ public final class Formatter {
         sb.append(formatTimestamp(comment.getTimestamp()));
         sb.append(", ").append(comment.getUsername());
         sb.append("</b><br>");
+        final String txt =
+                comment.getText() != null ? comment.getText().length() > Config.getInstance().getCommentDisplayLength()
+                        ? comment.getText().substring(0, Config.getInstance().getCommentDisplayLength())
+                        : comment.getText() : "";
+        sb.append(txt);
         if (comment.getStatus() != null) {
             sb.append("changed status to ");
             sb.append(comment.getStatus());
-            sb.append("<br>").append("with ");
-        } else {
+            if (!txt.isEmpty()) {
+                sb.append("<br>").append("with ");
+                sb.append(txt);
+            }
+
+        } else if (!txt.isEmpty()) {
             sb.append("added ");
+            sb.append("<br>").append("with ");
+            sb.append(txt);
         }
-        sb.append("comment: ");
-        final String txt = comment.getText().length() > Config.getInstance().getCommentDisplayLength()
-                ? comment.getText().substring(0, Config.getInstance().getCommentDisplayLength()) : comment.getText();
-        sb.append(txt);
+
         sb.append("</body></html>");
         return sb.toString();
     }

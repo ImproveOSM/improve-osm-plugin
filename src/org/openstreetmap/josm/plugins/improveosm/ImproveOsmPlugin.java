@@ -449,9 +449,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         boolean shouldClearSelection(final Tile item) {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
-            return !(filter.getStatus() == item.getStatus()
-                    && (filter.getTypes() == null || filter.getTypes().contains(item.getType()))
-                    && (filter.getCount() == null || filter.getCount() <= item.getNumberOfTrips()));
+            boolean result = filter.getStatus() == item.getStatus();
+            result = result && (filter.getTypes() == null || filter.getTypes().contains(item.getType()));
+            result = result && (filter.getCount() == null || filter.getCount() <= item.getNumberOfTrips());
+            return result;
         }
     }
 
@@ -471,9 +472,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         boolean shouldClearSelection(final RoadSegment item) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
-            return !((filter.getConfidenceLevels() == null
-                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel()))
-                    && filter.getStatus().equals(item.getStatus()));
+            boolean result = filter.getConfidenceLevels() == null
+                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel());
+            result = result && filter.getStatus().equals(item.getStatus());
+            return result;
         }
     }
 
@@ -493,9 +495,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         boolean shouldClearSelection(final TurnRestriction item) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
-            return !((filter.getConfidenceLevels() == null
-                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel()))
-                    && filter.getStatus().equals(item.getStatus()));
+            boolean result = (filter.getConfidenceLevels() == null
+                    || filter.getConfidenceLevels().contains(item.getConfidenceLevel()));
+            result = result && filter.getStatus().equals(item.getStatus());
+            return result;
         }
     }
 

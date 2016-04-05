@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm.gui.details;
+package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,7 +51,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class EditDialog extends ModalDialog implements CommentObservable {
+public class EditDialog extends ModalDialog implements CommentObservable {
 
     private static final long serialVersionUID = 586082110516333909L;
     private static final Dimension DIM = new Dimension(300, 200);
@@ -69,7 +69,7 @@ class EditDialog extends ModalDialog implements CommentObservable {
      * @param title the title of the dialog
      * @param icon the icon of the dialog
      */
-    EditDialog(final Status status, final String title, final Image icon) {
+    public EditDialog(final Status status, final String title, final Image icon) {
         super(title, icon, DIM);
         this.status = status;
         createComponents();
