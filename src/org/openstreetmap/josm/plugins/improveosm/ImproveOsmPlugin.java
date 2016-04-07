@@ -406,8 +406,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
             Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
-                    JComponent.WHEN_FOCUSED);
+                    KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
         }
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
