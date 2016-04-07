@@ -17,12 +17,18 @@ package org.openstreetmap.josm.plugins.improveosm;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EnumSet;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.openstreetmap.josm.Main;
@@ -71,7 +77,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+
+    private static final String COPY_ACTION = "Copy";
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -397,6 +405,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             MapView.addLayerChangeListener(this);
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
+            Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
         }
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
@@ -441,13 +451,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         }
 
         @Override
-        DataSet<Tile> searchData(final BoundingBox bbox, final int zoom) {
+                DataSet<Tile> searchData(final BoundingBox bbox, final int zoom) {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
             return ServiceHandler.getMissingGeometryHandler().search(bbox, filter, zoom);
         }
 
         @Override
-        boolean shouldClearSelection(final Tile item) {
+                boolean shouldClearSelection(final Tile item) {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
             boolean result = filter.getStatus() == item.getStatus();
             result = result && (filter.getTypes() == null || filter.getTypes().contains(item.getType()));
@@ -464,13 +474,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         }
 
         @Override
-        DataSet<RoadSegment> searchData(final BoundingBox bbox, final int zoom) {
+                DataSet<RoadSegment> searchData(final BoundingBox bbox, final int zoom) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
             return ServiceHandler.getDirectionOfFlowHandler().search(bbox, filter, zoom);
         }
 
         @Override
-        boolean shouldClearSelection(final RoadSegment item) {
+                boolean shouldClearSelection(final RoadSegment item) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
             boolean result = filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel());
@@ -487,13 +497,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         }
 
         @Override
-        DataSet<TurnRestriction> searchData(final BoundingBox bbox, final int zoom) {
+                DataSet<TurnRestriction> searchData(final BoundingBox bbox, final int zoom) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
             return ServiceHandler.getTurnRestrictionHandler().search(bbox, filter, zoom);
         }
 
         @Override
-        boolean shouldClearSelection(final TurnRestriction item) {
+                boolean shouldClearSelection(final TurnRestriction item) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
             boolean result = (filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel()));
@@ -522,6 +532,34 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             } else {
                 btn.setSelected(false);
                 btn.setFocusable(false);
+            }
+        }
+    }
+
+    private final class CopyAction extends AbstractAction {
+
+        private static final long serialVersionUID = -6108419035272335873L;
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            if (event.getActionCommand().equals(COPY_ACTION)) {
+                final Layer activeLayer = Main.map.mapView.getActiveLayer();
+                String selection = "";
+                if (activeLayer instanceof MissingGeometryLayer) {
+                    if (missingGeometryLayer.hasSelectedItems()) {
+                        selection = missingGeometryLayer.getSelectedItems().toString();
+                    }
+                } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                    if (directionOfFlowLayer.hasSelectedItems()) {
+                        selection = directionOfFlowLayer.getSelectedItems().toString();
+                    }
+                } else if (activeLayer instanceof TurnRestrictionLayer) {
+                    if (turnRestrictionLayer.hasSelectedItems()) {
+                        selection = turnRestrictionLayer.getSelectedItems().toString();
+                    }
+                }
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(selection),
+                        new StringSelection(selection));
             }
         }
     }
