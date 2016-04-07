@@ -77,7 +77,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     private static final String COPY_ACTION = "Copy";
 
@@ -406,7 +406,8 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
             Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
+                    KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                    JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
         }
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
@@ -451,13 +452,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         }
 
         @Override
-                DataSet<Tile> searchData(final BoundingBox bbox, final int zoom) {
+        DataSet<Tile> searchData(final BoundingBox bbox, final int zoom) {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
             return ServiceHandler.getMissingGeometryHandler().search(bbox, filter, zoom);
         }
 
         @Override
-                boolean shouldClearSelection(final Tile item) {
+        boolean shouldClearSelection(final Tile item) {
             final MissingGeometryFilter filter = PreferenceManager.getInstance().loadMissingGeometryFilter();
             boolean result = filter.getStatus() == item.getStatus();
             result = result && (filter.getTypes() == null || filter.getTypes().contains(item.getType()));
@@ -474,13 +475,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         }
 
         @Override
-                DataSet<RoadSegment> searchData(final BoundingBox bbox, final int zoom) {
+        DataSet<RoadSegment> searchData(final BoundingBox bbox, final int zoom) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
             return ServiceHandler.getDirectionOfFlowHandler().search(bbox, filter, zoom);
         }
 
         @Override
-                boolean shouldClearSelection(final RoadSegment item) {
+        boolean shouldClearSelection(final RoadSegment item) {
             final OnewayFilter filter = PreferenceManager.getInstance().loadOnewayFilter();
             boolean result = filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel());
@@ -497,13 +498,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         }
 
         @Override
-                DataSet<TurnRestriction> searchData(final BoundingBox bbox, final int zoom) {
+        DataSet<TurnRestriction> searchData(final BoundingBox bbox, final int zoom) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
             return ServiceHandler.getTurnRestrictionHandler().search(bbox, filter, zoom);
         }
 
         @Override
-                boolean shouldClearSelection(final TurnRestriction item) {
+        boolean shouldClearSelection(final TurnRestriction item) {
             final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
             boolean result = (filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel()));
