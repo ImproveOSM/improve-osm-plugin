@@ -17,8 +17,6 @@ package org.openstreetmap.josm.plugins.improveosm;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -68,6 +66,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.Keys;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import org.openstreetmap.josm.tools.Utils;
 
 
 /**
@@ -558,8 +557,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                         selection = turnRestrictionLayer.getSelectedItems().toString();
                     }
                 }
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(selection),
-                        new StringSelection(selection));
+                Utils.copyToClipboard(selection);
             }
         }
     }
