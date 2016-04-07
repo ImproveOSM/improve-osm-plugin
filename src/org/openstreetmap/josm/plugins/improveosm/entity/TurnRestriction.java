@@ -135,4 +135,9 @@ public class TurnRestriction {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return id != null ? id : (turnRestrictions != null ? turnRestrictions.toString() : "");
+    }
 }

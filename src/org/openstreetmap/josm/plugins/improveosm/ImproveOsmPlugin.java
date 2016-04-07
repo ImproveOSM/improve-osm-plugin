@@ -17,12 +17,18 @@ package org.openstreetmap.josm.plugins.improveosm;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EnumSet;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.openstreetmap.josm.Main;
@@ -72,6 +78,8 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
 PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+
+    private static final String COPY_ACTION = "Copy";
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -397,6 +405,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             MapView.addLayerChangeListener(this);
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
+            Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                    JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
         }
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
@@ -522,6 +533,34 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             } else {
                 btn.setSelected(false);
                 btn.setFocusable(false);
+            }
+        }
+    }
+
+    private final class CopyAction extends AbstractAction {
+
+        private static final long serialVersionUID = -6108419035272335873L;
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            if (event.getActionCommand().equals(COPY_ACTION)) {
+                final Layer activeLayer = Main.map.mapView.getActiveLayer();
+                String selection = "";
+                if (activeLayer instanceof MissingGeometryLayer) {
+                    if (missingGeometryLayer.hasSelectedItems()) {
+                        selection = missingGeometryLayer.getSelectedItems().toString();
+                    }
+                } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                    if (directionOfFlowLayer.hasSelectedItems()) {
+                        selection = directionOfFlowLayer.getSelectedItems().toString();
+                    }
+                } else if (activeLayer instanceof TurnRestrictionLayer) {
+                    if (turnRestrictionLayer.hasSelectedItems()) {
+                        selection = turnRestrictionLayer.getSelectedItems().toString();
+                    }
+                }
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(selection),
+                        new StringSelection(selection));
             }
         }
     }
