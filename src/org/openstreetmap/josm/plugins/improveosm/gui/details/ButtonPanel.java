@@ -24,6 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -31,6 +32,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.DisplayEditDialogAction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.EditPopupMenu;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
@@ -41,6 +43,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.tools.Utils;
 
 
 /**
@@ -64,8 +67,10 @@ class ButtonPanel extends JPanel {
     private final JButton btnSolve;
     private final JButton btnReopen;
     private final JButton btnInvalid;
+    private final JButton btnLocation;
 
     private CommentObserver commentObserver;
+    private LatLon selectedItemCoordinate;
 
 
     ButtonPanel() {
@@ -90,14 +95,16 @@ class ButtonPanel extends JPanel {
                 new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
                         guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
                 iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
+        btnLocation = GuiBuilder.buildButton(new CopyLocationAction(), iconConfig.getLocationIcon(),
+                guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
         add(btnComment);
         add(btnSolve);
         add(btnReopen);
         add(btnInvalid);
+        add(btnLocation);
         setPreferredSize(DIM);
     }
-
 
     void registerCommentObserver(final CommentObserver commentObserver) {
         this.commentObserver = commentObserver;
@@ -112,14 +119,23 @@ class ButtonPanel extends JPanel {
     <T> void enablePanelActions(final T item) {
         if (item == null) {
             enablePanelActions(false, false, false, false);
+            selectedItemCoordinate = null;
         } else {
             Status status = null;
             if (item instanceof Tile) {
-                status = ((Tile) item).getStatus();
+                final Tile tile = (Tile) item;
+                status = tile.getStatus();
+                selectedItemCoordinate = tile.getPoints().get(0);
             } else if (item instanceof RoadSegment) {
-                status = ((RoadSegment) item).getStatus();
+                final RoadSegment roadSegment = (RoadSegment) item;
+                status = roadSegment.getStatus();
+                selectedItemCoordinate = roadSegment.getPoints().get(0);
             } else if (item instanceof TurnRestriction) {
-                status = ((TurnRestriction) item).getStatus();
+                final TurnRestriction turnRestriction = (TurnRestriction) item;
+                status = turnRestriction.getStatus();
+                selectedItemCoordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
+                        : (turnRestriction.getTurnRestrictions() != null
+                        ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
             }
             if (status != null) {
                 if (status == Status.OPEN) {
@@ -192,6 +208,22 @@ class ButtonPanel extends JPanel {
             final JButton cmpParent = (JButton) event.getSource();
             final Point point = cmpParent.getMousePosition();
             menu.show(cmpParent, point.x, point.y - cmpParent.getWidth() / POZ_Y);
+        }
+    }
+
+    /*
+     * Copies the currently selected element's coordinate/first coordinate or the center coordinates if no element is
+     * selected.
+     */
+    private final class CopyLocationAction extends AbstractAction {
+
+        private static final long serialVersionUID = -7481740371748226905L;
+
+        @Override
+        public void actionPerformed(final ActionEvent event) {
+            final LatLon location = selectedItemCoordinate != null ? selectedItemCoordinate
+                    : Main.map.mapView.getRealBounds().getCenter();
+            Utils.copyToClipboard(Formatter.formatLatLon(location));
         }
     }
 }

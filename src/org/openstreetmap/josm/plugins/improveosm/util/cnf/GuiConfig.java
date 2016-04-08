@@ -41,6 +41,7 @@ public final class GuiConfig extends BaseConfig {
     private final String btnSolveTlt;
     private final String btnReopenTlt;
     private final String btnInvalidTlt;
+    private final String btnLocationTlt;
 
     /* edit dialog texts */
     private final String dlgFilterTitle;
@@ -99,6 +100,7 @@ public final class GuiConfig extends BaseConfig {
         btnSolveTlt = readProperty("btn.solve.tlt");
         btnReopenTlt = readProperty("btn.reopen.tlt");
         btnInvalidTlt = readProperty("btn.invalid.tlt");
+        btnLocationTlt = readProperty("btn.location.tlt");
 
         dlgFilterTitle = readProperty("dialog.filter.title");
         dlgCommentTitle = readProperty("edit.dialog.comment.title");
@@ -178,6 +180,10 @@ public final class GuiConfig extends BaseConfig {
 
     public String getBtnInvalidTlt() {
         return btnInvalidTlt;
+    }
+
+    public String getBtnLocationTlt() {
+        return btnLocationTlt;
     }
 
     public String getDlgFilterTitle() {
