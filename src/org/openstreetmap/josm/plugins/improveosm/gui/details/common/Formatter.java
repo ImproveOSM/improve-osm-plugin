@@ -67,19 +67,16 @@ public final class Formatter {
                 comment.getText() != null ? comment.getText().length() > Config.getInstance().getCommentDisplayLength()
                         ? comment.getText().substring(0, Config.getInstance().getCommentDisplayLength())
                         : comment.getText() : "";
-        sb.append(txt);
         if (comment.getStatus() != null) {
             sb.append("changed status to ");
             sb.append(comment.getStatus());
             if (!txt.isEmpty()) {
-                sb.append("<br>").append("with ");
+                sb.append("<br>").append("with comment:");
                 sb.append(txt);
             }
 
         } else if (!txt.isEmpty()) {
-            sb.append("added ");
-            sb.append("<br>").append("with ");
-            sb.append(txt);
+            sb.append("added comment:").append(txt);
         }
 
         sb.append("</body></html>");

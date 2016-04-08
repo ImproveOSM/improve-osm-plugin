@@ -108,6 +108,7 @@ class ButtonPanel extends JPanel {
 
     void registerCommentObserver(final CommentObserver commentObserver) {
         this.commentObserver = commentObserver;
+        ((DisplayEditDialogAction) btnComment.getAction()).registerCommentObserver(commentObserver);
     }
 
     /**
