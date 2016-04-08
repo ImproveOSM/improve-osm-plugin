@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -29,12 +30,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.CancelAction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.ModalDialog;
-import org.openstreetmap.josm.plugins.improveosm.observer.CommentObservable;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -47,15 +46,15 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-class EditDialog extends ModalDialog implements CommentObservable {
+class EditDialog extends ModalDialog {
 
     private static final long serialVersionUID = 586082110516333909L;
     private static final Dimension DIM = new Dimension(300, 200);
     private static final Border BORDER = new EmptyBorder(5, 5, 2, 5);
-    private CommentObserver observer;
     private final Status status;
     private JLabel lblError;
     private JTextArea txtComment;
+    private JButton btnOk;
 
 
     /**
@@ -76,6 +75,7 @@ class EditDialog extends ModalDialog implements CommentObservable {
     public void createComponents() {
         lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
         lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
+
         txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true);
         txtComment.setDocument(new EditDocument());
         final JPanel pnlComment = new JPanel(new BorderLayout());
@@ -85,7 +85,8 @@ class EditDialog extends ModalDialog implements CommentObservable {
         add(pnlComment, BorderLayout.CENTER);
 
         final JPanel pnlBtn = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-        pnlBtn.add(GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl()));
+        btnOk = GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
+        pnlBtn.add(btnOk);
         pnlBtn.add(GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
 
         final JPanel pnlSouth = new JPanel(new BorderLayout());
@@ -94,16 +95,9 @@ class EditDialog extends ModalDialog implements CommentObservable {
         add(pnlSouth, BorderLayout.SOUTH);
     }
 
-    @Override
-    public void notifyObserver(final Comment comment) {
-        if (observer != null) {
-            observer.createComment(comment);
-        }
-    }
 
-    @Override
-    public void registerObserver(final CommentObserver observer) {
-        this.observer = observer;
+    public void registerCommentObserver(final CommentObserver observer) {
+        ((AddCommentAction) btnOk.getAction()).registerObserver(observer);
     }
 
     private final class EditDocument extends PlainDocument {

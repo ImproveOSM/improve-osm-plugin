@@ -51,7 +51,7 @@ public class DisplayEditDialogAction extends AbstractAction {
     @Override
     public void actionPerformed(final ActionEvent event) {
         final EditDialog dialog = new EditDialog(status, title, icon.getImage());
-        dialog.registerObserver(commentObserver);
+        dialog.registerCommentObserver(commentObserver);
         dialog.setVisible(true);
     }
 }

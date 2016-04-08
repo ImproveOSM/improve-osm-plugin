@@ -207,7 +207,13 @@ class ButtonPanel extends JPanel {
             menu.registerCommentObserver(commentObserver);
             final JButton cmpParent = (JButton) event.getSource();
             final Point point = cmpParent.getMousePosition();
-            menu.show(cmpParent, point.x, point.y - cmpParent.getWidth() / POZ_Y);
+            int x = 0;
+            int y = 0;
+            if (cmpParent.getMousePosition() != null) {
+                x = point.x;
+                y = point.y - cmpParent.getWidth() / POZ_Y;
+            }
+            menu.show(cmpParent, x, y);
         }
     }
 
