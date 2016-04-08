@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 
@@ -106,5 +107,15 @@ public final class Formatter {
      */
     public static String formatTurnType(final String turnType) {
         return turnType.toLowerCase().replace("_", " ");
+    }
+
+    /**
+     * Formats the given coordinate in 'latitude,longitude' format.
+     *
+     * @param latLon a {@code LatLon} object
+     * @return a formatted string
+     */
+    public static String formatLatLon(final LatLon latLon) {
+        return latLon == null ? "" : latLon.getY() + "," + latLon.getX();
     }
 }
