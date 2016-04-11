@@ -15,6 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+import java.util.EnumSet;
+import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+
 
 /**
  * Holds commonly used run time properties.
@@ -38,6 +41,7 @@ public final class Config extends BaseConfig {
     private int commentDisplayLength;
     private final String feedbackUrl;
 
+    private final EnumSet<DataLayer> enabledDataLayers;
 
     private Config() {
         super(CONFIG_FILE);
@@ -59,7 +63,14 @@ public final class Config extends BaseConfig {
         } catch (final NumberFormatException e) {
             commentDisplayLength = MAX_COMMENT_DISPLAY_LENGTH;
         }
+
+        final String enabledDataLayersValue = readProperty("layers.enabled");
+        enabledDataLayers = EnumSet.noneOf(DataLayer.class);
+        for (final String value : enabledDataLayersValue.split(SEPARATOR)) {
+            enabledDataLayers.add(DataLayer.valueOf(value));
+        }
     }
+
 
     public static Config getInstance() {
         return INSTANCE;
@@ -79,5 +90,9 @@ public final class Config extends BaseConfig {
 
     public String getFeedbackUrl() {
         return feedbackUrl;
+    }
+
+    public EnumSet<DataLayer> getEnabledDataLayers() {
+        return enabledDataLayers;
     }
 }

@@ -64,16 +64,18 @@ final class LoadManager {
 
     EnumSet<DataLayer> loadDataLayers() {
         final List<DataLayerEntry> entries = Main.pref.getListOfStructs(Keys.DATA_LAYER, DataLayerEntry.class);
+        final EnumSet<DataLayer> enabledLayers = Config.getInstance().getEnabledDataLayers();
         EnumSet<DataLayer> dataLayers = null;
         if (entries != null && !entries.isEmpty()) {
             dataLayers = EnumSet.noneOf(DataLayer.class);
             for (final DataLayerEntry entry : entries) {
-                dataLayers.add(DataLayer.valueOf(entry.getName()));
+                final DataLayer layer = DataLayer.valueOf(entry.getName());
+                if (enabledLayers.contains(layer)) {
+                    dataLayers.add(DataLayer.valueOf(entry.getName()));
+                }
             }
         }
-        return dataLayers == null
-                ? EnumSet.of(DataLayer.MISSING_GEOMETRY, DataLayer.DIRECTION_OF_FLOW, DataLayer.TURN_RESTRICTION)
-                : dataLayers;
+        return dataLayers == null || dataLayers.isEmpty() ? enabledLayers : dataLayers;
     }
 
     /* DirectionOfFlowLayer related methods */
@@ -123,10 +125,10 @@ final class LoadManager {
 
         String valueStr = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
-        valueStr = valueStr.trim();
-        final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
-        return status == null && types == null ? MissingGeometryFilter.DEFAULT
-                : new MissingGeometryFilter(status, types, count);
+                valueStr = valueStr.trim();
+                final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
+                return status == null && types == null ? MissingGeometryFilter.DEFAULT
+                        : new MissingGeometryFilter(status, types, count);
     }
 
     /* TurnRestrictionLayer related methods */

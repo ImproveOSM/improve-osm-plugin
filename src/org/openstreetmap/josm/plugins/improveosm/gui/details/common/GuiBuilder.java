@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -242,6 +243,13 @@ public final class GuiBuilder {
         }
         cbbox.setFont(cbbox.getFont().deriveFont(Font.PLAIN));
         cbbox.setFocusPainted(false);
+        return cbbox;
+    }
+
+    public static JCheckBox buildCheckBox(final ActionListener actionListener, final String text,
+            final Color backgroundColor) {
+        final JCheckBox cbbox = buildCheckBox(text, null, backgroundColor);
+        cbbox.addActionListener(actionListener);
         return cbbox;
     }
 
