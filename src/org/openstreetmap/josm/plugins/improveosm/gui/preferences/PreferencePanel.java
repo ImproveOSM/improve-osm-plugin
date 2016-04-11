@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
@@ -47,6 +48,7 @@ class PreferencePanel extends JPanel {
     private JCheckBox cbDirectionOfFlow;
     private JCheckBox cbTurnRestriction;
 
+
     PreferencePanel() {
         super(new GridBagLayout());
         createComponents();
@@ -54,25 +56,36 @@ class PreferencePanel extends JPanel {
 
     private void createComponents() {
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
+        final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
         final Font font = getFont().deriveFont(Font.PLAIN);
+
         add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
-        cbMissingGeometry =
-                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLayerTxt(), null, getBackground());
-        cbMissingGeometry.addActionListener(new DataLayersSelectionAction());
+
+        cbMissingGeometry = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+                MissingGeometryGuiConfig.getInstance().getLayerTxt(), getBackground());
+        if (!enabledDataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
+            cbMissingGeometry.setEnabled(false);
+        }
         if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             cbMissingGeometry.setSelected(true);
         }
         add(cbMissingGeometry, Constraints.CB_MISSING_GEOMETRY);
-        cbDirectionOfFlow =
-                GuiBuilder.buildCheckBox(DirectionOfFlowGuiConfig.getInstance().getLayerTxt(), null, getBackground());
-        cbDirectionOfFlow.addActionListener(new DataLayersSelectionAction());
+
+        cbDirectionOfFlow = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+                DirectionOfFlowGuiConfig.getInstance().getLayerTxt(), getBackground());
+        if (!enabledDataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
+            cbDirectionOfFlow.setEnabled(false);
+        }
         if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
             cbDirectionOfFlow.setSelected(true);
         }
         add(cbDirectionOfFlow, Constraints.CB_DIRECTION_OF_FLOW);
-        cbTurnRestriction =
-                GuiBuilder.buildCheckBox(TurnRestrictionGuiConfig.getInstance().getLayerTxt(), null, getBackground());
-        cbTurnRestriction.addActionListener(new DataLayersSelectionAction());
+
+        cbTurnRestriction = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+                TurnRestrictionGuiConfig.getInstance().getLayerTxt(), getBackground());
+        if (!enabledDataLayers.contains(DataLayer.TURN_RESTRICTION)) {
+            cbTurnRestriction.setEnabled(false);
+        }
         if (dataLayers.contains(DataLayer.TURN_RESTRICTION)) {
             cbTurnRestriction.setSelected(true);
         }
@@ -98,6 +111,7 @@ class PreferencePanel extends JPanel {
         return result;
     }
 
+
     private final class DataLayersSelectionAction implements ActionListener {
 
         @Override
@@ -106,9 +120,16 @@ class PreferencePanel extends JPanel {
             if (!source.isSelected() && !cbMissingGeometry.isSelected() && !cbDirectionOfFlow.isSelected()
                     && !cbTurnRestriction.isSelected()) {
                 JOptionPane.showMessageDialog(PreferencePanel.this, GuiConfig.getInstance().getTxtDataLayerSettings());
-                cbMissingGeometry.setSelected(true);
-                cbDirectionOfFlow.setSelected(true);
-                cbTurnRestriction.setSelected(true);
+                final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
+                if (enabledDataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
+                    cbMissingGeometry.setSelected(true);
+                }
+                if (enabledDataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
+                    cbDirectionOfFlow.setSelected(true);
+                }
+                if (enabledDataLayers.contains(DataLayer.TURN_RESTRICTION)) {
+                    cbTurnRestriction.setSelected(true);
+                }
             }
         }
     }

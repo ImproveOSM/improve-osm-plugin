@@ -32,7 +32,7 @@ import java.util.Set;
  */
 class BaseConfig {
 
-    private static final String SEPARATOR = ",";
+    static final String SEPARATOR = ",";
     private final Properties properties;
 
 
