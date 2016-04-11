@@ -21,7 +21,6 @@ import java.awt.Insets;
 import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
-import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
@@ -51,7 +50,7 @@ class FilterPanel extends BasicFilterPanel {
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_CONFIDENCE);
         cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
                 TurnConfidenceLevel.C1.name(), getBackground());
-        cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
+        cbbConfidenceC2 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C2.shortDisplayName(),
                 TurnConfidenceLevel.C2.name(), getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
