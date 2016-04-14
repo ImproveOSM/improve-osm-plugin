@@ -4,7 +4,7 @@
 	<property name="plugin.build.dir" value="${basedir}/build/classes" />
 	<property name="plugin.apidoc.dir" value="${basedir}/build/doc" />
 	<property name="plugin.src.dir" value="${basedir}/src" />
-	<property name="plugin.dist.dir" value="${basedir}/dist" />
+	<property name="plugin.dist.dir" value="${basedir}/dist1" />
 	<property name="plugin.lib.dir" value="${basedir}/lib" />
 	<property name="plugin.images.dir" value="${basedir}/images" />
 	<property name="plugin.name" value="ImproveOsm.jar" />
@@ -31,7 +31,7 @@
 			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
 			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}" />
 		</path>
-		<javac srcdir="src" debug="false" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="classpath">
+		<javac srcdir="src" debug="true" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="classpath">
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
@@ -74,6 +74,7 @@
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_dof_config.properties" match="${url.key}" replace="${dof_url}" />
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_mg_config.properties" match="${url.key}" replace="${mg_url}" />
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_tr_config.properties" match="${url.key}" replace="${tr_url}" />
+		<replaceregexp if:set="layers.enabled=*" file="${plugin.build.dir}/improveosm_config.properties" match="${layers.enabled}" replace="${layers}" />
 		<copy todir="${plugin.build.dir}/images">
 			<fileset dir="images" />
 		</copy>
