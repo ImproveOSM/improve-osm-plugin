@@ -74,7 +74,7 @@
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_dof_config.properties" match="${url.key}" replace="${dof_url}" />
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_mg_config.properties" match="${url.key}" replace="${mg_url}" />
 		<replaceregexp if:set="url.key" file="${plugin.build.dir}/improveosm_tr_config.properties" match="${url.key}" replace="${tr_url}" />
-		<replaceregexp if:set="layers.enabled=*" file="${plugin.build.dir}/improveosm_config.properties" match="${layers.enabled}" replace="${layers}" />
+		<replaceregexp if:set="layers.key" file="${plugin.build.dir}/improveosm_config.properties" match="${layers.enabled}" replace="${layers}" />
 		<copy todir="${plugin.build.dir}/images">
 			<fileset dir="images" />
 		</copy>
