@@ -4,7 +4,7 @@
 	<property name="plugin.build.dir" value="${basedir}/build/classes" />
 	<property name="plugin.apidoc.dir" value="${basedir}/build/doc" />
 	<property name="plugin.src.dir" value="${basedir}/src" />
-	<property name="plugin.dist.dir" value="${basedir}/dist1" />
+	<property name="plugin.dist.dir" value="${basedir}/dist" />
 	<property name="plugin.lib.dir" value="${basedir}/lib" />
 	<property name="plugin.images.dir" value="${basedir}/images" />
 	<property name="plugin.name" value="ImproveOsm.jar" />
