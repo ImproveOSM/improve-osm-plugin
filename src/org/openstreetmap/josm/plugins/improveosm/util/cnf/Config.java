@@ -65,9 +65,13 @@ public final class Config extends BaseConfig {
         }
 
         final String enabledDataLayersValue = readProperty("layers.enabled");
-        enabledDataLayers = EnumSet.noneOf(DataLayer.class);
-        for (final String value : enabledDataLayersValue.split(SEPARATOR)) {
-            enabledDataLayers.add(DataLayer.valueOf(value));
+        if (enabledDataLayersValue != null && !enabledDataLayersValue.isEmpty()) {
+            enabledDataLayers = EnumSet.noneOf(DataLayer.class);
+            for (final String value : enabledDataLayersValue.split(SEPARATOR)) {
+                enabledDataLayers.add(DataLayer.valueOf(value));
+            }
+        } else {
+            enabledDataLayers = EnumSet.allOf(DataLayer.class);
         }
     }
 
