@@ -60,7 +60,7 @@ abstract class UpdateThread<T> implements Runnable {
                         if (item == null) {
                             dialog.updateUI(null, null);
                         } else if (shouldClearSelection(item)) {
-                            layer.updateSelectedItem(item);
+                            layer.updateSelectedItem(null);
                             dialog.updateUI(null, null);
                         }
                     }

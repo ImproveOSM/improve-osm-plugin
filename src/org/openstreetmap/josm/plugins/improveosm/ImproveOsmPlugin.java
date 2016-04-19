@@ -461,7 +461,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             boolean result = filter.getStatus() == item.getStatus();
             result = result && (filter.getTypes() == null || filter.getTypes().contains(item.getType()));
             result = result && (filter.getCount() == null || filter.getCount() <= item.getNumberOfTrips());
-            return result;
+            return !result;
         }
     }
 
@@ -484,7 +484,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             boolean result = filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel());
             result = result && filter.getStatus().equals(item.getStatus());
-            return result;
+            return !result;
         }
     }
 
@@ -507,7 +507,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             boolean result = (filter.getConfidenceLevels() == null
                     || filter.getConfidenceLevels().contains(item.getConfidenceLevel()));
             result = result && filter.getStatus().equals(item.getStatus());
-            return result;
+            return !result;
         }
     }
 
