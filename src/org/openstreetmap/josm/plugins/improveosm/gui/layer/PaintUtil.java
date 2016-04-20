@@ -127,9 +127,11 @@ final class PaintUtil {
         graphics.fill(path);
 
         // draw points belonging to the tile
-        final Color pointColor = pointColor(tile);
-        for (final LatLon latLon : tile.getPoints()) {
-            drawCircle(graphics, mapView.getPoint(latLon), pointColor, POINT_POS_RADIUS);
+        if (tile.getPoints() != null && tile.getPoints().size() > 1) {
+            final Color pointColor = pointColor(tile);
+            for (final LatLon latLon : tile.getPoints()) {
+                drawCircle(graphics, mapView.getPoint(latLon), pointColor, POINT_POS_RADIUS);
+            }
         }
     }
 
@@ -296,12 +298,12 @@ final class PaintUtil {
         g2D.drawImage(icon.getImage(), p.x - (icon.getIconWidth() / 2), p.y - (icon.getIconHeight() / 2),
                 new ImageObserver() {
 
-            @Override
-            public boolean imageUpdate(final Image img, final int infoflags, final int x, final int y,
-                    final int width, final int height) {
-                return false;
-            }
-        });
+                    @Override
+                    public boolean imageUpdate(final Image img, final int infoflags, final int x, final int y,
+                            final int width, final int height) {
+                        return false;
+                    }
+                });
     }
 
 
