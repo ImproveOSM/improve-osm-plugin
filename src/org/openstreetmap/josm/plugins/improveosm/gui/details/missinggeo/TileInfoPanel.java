@@ -102,12 +102,13 @@ public class TileInfoPanel extends BasicPanel<Tile> {
         if (points != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblPointCount(), getFontBold(),
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final String numberOfPoints = "" + points.size();
-            final int widthVal = getFontMetricsPlain().stringWidth(numberOfPoints);
-            add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
-            incrementPnlY();
+            final String numberOfPoints =
+                    points.size() > 1 ? "" + points.size() : GuiConfig.getInstance().getLblNotAvailable();
+                    final int widthVal = getFontMetricsPlain().stringWidth(numberOfPoints);
+                    add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(),
+                            new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+                    setPnlWidth(widthLbl + widthVal);
+                    incrementPnlY();
         }
     }
 
@@ -115,11 +116,13 @@ public class TileInfoPanel extends BasicPanel<Tile> {
         if (numberOfTrips != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblTripCount(), getFontBold(),
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
-            add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-            setPnlWidth(widthLbl + widthVal);
-            incrementPnlY();
+            final String numberOfTripsTxt =
+                    numberOfTrips > -1 ? numberOfTrips.toString() : GuiConfig.getInstance().getLblNotAvailable();
+                    final int widthVal = getFontMetricsPlain().stringWidth(numberOfTripsTxt);
+                    add(GuiBuilder.buildLabel(numberOfTripsTxt, getFontPlain(),
+                            new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+                    setPnlWidth(widthLbl + widthVal);
+                    incrementPnlY();
         }
     }
 }

@@ -66,6 +66,7 @@ public final class GuiConfig extends BaseConfig {
     private final String lblCopy;
     private final String lblStatus;
     private final String lblConfidence;
+    private final String lblNotAvailable;
 
     /* feedback panel title */
     private final String pnlFeedbackTitle;
@@ -118,6 +119,7 @@ public final class GuiConfig extends BaseConfig {
         lblCopy = readProperty("copy.lbl");
         lblStatus = readProperty("status.lbl");
         lblConfidence = readProperty("confidence.lbl");
+        lblNotAvailable = readProperty("na.lbl");
 
         pnlFeedbackTitle = readProperty("feedback.title");
         pnlFeedbackTxt = readProperty("feedback.txt");
@@ -240,6 +242,10 @@ public final class GuiConfig extends BaseConfig {
 
     public String getLblConfidence() {
         return lblConfidence;
+    }
+
+    public String getLblNotAvailable() {
+        return lblNotAvailable;
     }
 
     public String getPnlFeedbackTitle() {
