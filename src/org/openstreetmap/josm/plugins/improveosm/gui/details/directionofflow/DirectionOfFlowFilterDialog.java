@@ -35,7 +35,7 @@ public class DirectionOfFlowFilterDialog extends BasicFilterDialog {
     private static final long serialVersionUID = 6838800795969608589L;
 
     /* dialog minimal size */
-    private static final Dimension DIM = new Dimension(500, 150);
+    private static final Dimension DIM = new Dimension(550, 150);
 
 
     public DirectionOfFlowFilterDialog() {
