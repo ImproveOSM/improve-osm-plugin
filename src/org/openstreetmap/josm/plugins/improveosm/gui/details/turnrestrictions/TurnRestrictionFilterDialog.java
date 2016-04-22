@@ -35,7 +35,7 @@ public class TurnRestrictionFilterDialog extends BasicFilterDialog {
     private static final long serialVersionUID = -1004737094751848643L;
 
     /* dialog minimal size */
-    private static final Dimension DIM = new Dimension(480, 150);
+    private static final Dimension DIM = new Dimension(550, 150);
 
 
     public TurnRestrictionFilterDialog() {
