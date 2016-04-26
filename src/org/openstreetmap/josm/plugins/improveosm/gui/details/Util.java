@@ -48,13 +48,16 @@ final class Util {
                 }
             }
             if (improveOsmLayer == null) {
-                // no items is selected
+                // 1st visible layer
                 for (final AbstractLayer layer : layers) {
                     if (layer.isVisible()) {
                         improveOsmLayer = layer;
                         break;
                     }
                 }
+
+                // 1st layer that is available
+                improveOsmLayer = improveOsmLayer == null ? layers.get(0) : improveOsmLayer;
             }
 
         }
