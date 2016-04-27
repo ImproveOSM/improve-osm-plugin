@@ -31,7 +31,7 @@
 			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
 			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}" />
 		</path>
-		<javac srcdir="src" debug="true" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="classpath">
+		<javac srcdir="src" debug="false" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="classpath">
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
@@ -97,7 +97,7 @@
 				<attribute name="Plugin-Mainversion" value="9759" />
 				<attribute name="Plugin-Version" value="${build-label}" />
 				<attribute name="Plugin-Early" value="true" />
-				<attribute name="7636_Plugin-Url" value="31;http://developer.skobbler.com/public/improveosm/1.0/ImproveOsm.jar"/>
+				<attribute name="7636_Plugin-Url" value="39;http://developer.skobbler.com/public/improveosm/1.0/ImproveOsm.jar"/>
 				<attribute name="9759_Plugin-Url" value="${build-label};http://developer.skobbler.com/public/improveosm/2.0/ImproveOsm.jar"/>
 			</manifest>
 		</jar>
