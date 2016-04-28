@@ -28,7 +28,7 @@
 
 	<target name="compile" depends="init" >
 		<path id="classpath">
-			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
+			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-old.jar" />
 			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}" />
 		</path>
 		<javac srcdir="src" debug="false" destdir="${plugin.build.dir}" includeantruntime="true" excludes="**/package-info.java" classpathref="classpath">
