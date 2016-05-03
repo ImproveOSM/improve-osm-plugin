@@ -69,9 +69,11 @@ final class Constants {
     static final int POINT_POS_RADIUS = 5;
 
     /* constants used for drawing TurnRestriction segments */
-    static final Color TURN_SEGMENT_COLOR = new Color(255, 0, 0);
+    static final Color TURN_SEGMENT_FROM_COLOR = new Color(0, 255, 0);
+    static final Color TURN_SEGMENT_TO_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final double TURN_ARROW_LENGTH = 11;
+    static final Color COMPLEX_TURN_COLOR = new Color(255, 0, 0);
     static final int COMPLEX_TURN_RADIUS = 20;
     static final int COMPLEX_TURN_SEL_RADIUS = 30;
     static final float COMPLEX_TURN_FONT_SIZE = 11F;

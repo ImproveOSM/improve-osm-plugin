@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARROW_ANGLE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ARROW_LENGTH;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.BOTH_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_FONT_SIZE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMPLEX_TURN_SEL_RADIUS;
@@ -40,9 +41,10 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SOLVED_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_ARROW_LENGTH;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_FONT_SIZE;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_FROM_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_STROKE;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_TO_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.WATER_COLOR;
 import java.awt.Color;
 import java.awt.Composite;
@@ -199,7 +201,7 @@ final class PaintUtil {
             // draw complex turn restriction
 
             final int radius = selected ? COMPLEX_TURN_SEL_RADIUS : COMPLEX_TURN_RADIUS;
-            drawCircle(graphics, point, TURN_SEGMENT_COLOR, radius);
+            drawCircle(graphics, point, COMPLEX_TURN_COLOR, radius);
             drawTurnRestrictionCount(graphics, mapView, turnRestriction.getTurnRestrictions().size(), point);
         } else {
             // draw simple turn restriction
@@ -234,10 +236,11 @@ final class PaintUtil {
             graphics.setStroke(TURN_SEGMENT_STROKE);
 
             // draw segments
-            for (final TurnSegment turnSegment : turnRestriction.getSegments()) {
-                graphics.setColor(TURN_SEGMENT_COLOR);
-                graphics.draw(buildPath(mapView, turnSegment.getPoints()));
-                final Pair<LatLon, LatLon> pair = tipTailPoints(turnSegment.getPoints());
+            for (int i = 0; i < turnRestriction.getSegments().size(); i++) {
+                final Color color = i == 0 ? TURN_SEGMENT_FROM_COLOR : TURN_SEGMENT_TO_COLOR;
+                graphics.setColor(color);
+                graphics.draw(buildPath(mapView, turnRestriction.getSegments().get(i).getPoints()));
+                final Pair<LatLon, LatLon> pair = tipTailPoints(turnRestriction.getSegments().get(i).getPoints());
                 drawArrow(graphics, mapView, pair.a, pair.b, TURN_ARROW_LENGTH);
             }
 
@@ -298,12 +301,12 @@ final class PaintUtil {
         g2D.drawImage(icon.getImage(), p.x - (icon.getIconWidth() / 2), p.y - (icon.getIconHeight() / 2),
                 new ImageObserver() {
 
-                    @Override
-                    public boolean imageUpdate(final Image img, final int infoflags, final int x, final int y,
-                            final int width, final int height) {
-                        return false;
-                    }
-                });
+            @Override
+            public boolean imageUpdate(final Image img, final int infoflags, final int x, final int y,
+                    final int width, final int height) {
+                return false;
+            }
+        });
     }
 
 
