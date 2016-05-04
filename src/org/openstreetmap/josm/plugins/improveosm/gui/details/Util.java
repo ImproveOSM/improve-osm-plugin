@@ -47,7 +47,7 @@ final class Util {
                     break;
                 }
             }
-            if (improveOsmLayer == null) {
+            if (improveOsmLayer == null && !layers.isEmpty()) {
                 // 1st visible layer
                 for (final AbstractLayer layer : layers) {
                     if (layer.isVisible()) {
