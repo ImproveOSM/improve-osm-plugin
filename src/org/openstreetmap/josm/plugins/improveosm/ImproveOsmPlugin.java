@@ -161,11 +161,11 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (missingGeometryLayer == null && directionOfFlowLayer == null && turnRestrictionLayer == null) {
             // remove listeners
             PreferenceManager.getInstance().saveErrorSuppressFlag(false);
-            MapView.removeLayerChangeListener(ImproveOsmPlugin.this);
-            NavigatableComponent.removeZoomChangeListener(ImproveOsmPlugin.this);
-            Main.pref.removePreferenceChangeListener(ImproveOsmPlugin.this);
+            MapView.removeLayerChangeListener(this);
+            NavigatableComponent.removeZoomChangeListener(this);
+            Main.pref.removePreferenceChangeListener(this);
             if (Main.map != null) {
-                Main.map.mapView.removeMouseListener(ImproveOsmPlugin.this);
+                Main.map.mapView.removeMouseListener(this);
             }
             detailsDialog.updateUI(null, null);
             listenersRegistered = false;
