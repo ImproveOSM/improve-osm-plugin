@@ -120,21 +120,28 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         synchronized (this) {
             pnlBtn.enablePanelActions(item);
             final Layer activeLayer = Util.getImproveOsmLayer();
-            final Component cmpInfoView = cmpInfo.getViewport().getView();
-            if (activeLayer instanceof MissingGeometryLayer) {
-                pnlTileInfo.updateData((Tile) item);
-                if (!(cmpInfoView instanceof TileInfoPanel)) {
-                    cmpInfo.setViewportView(pnlTileInfo);
-                }
-            } else if (activeLayer instanceof DirectionOfFlowLayer) {
-                pnlRoadSegmentInfo.updateData((RoadSegment) item);
-                if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
-                    cmpInfo.setViewportView(pnlRoadSegmentInfo);
-                }
-            } else if (activeLayer instanceof TurnRestrictionLayer) {
-                pnlTurnRestrictionInfo.updateData((TurnRestriction) item);
-                if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
-                    cmpInfo.setViewportView(pnlTurnRestrictionInfo);
+            if (activeLayer == null) {
+                // special case, all layers were removed and details panel's needs to be cleared
+                pnlTileInfo.updateData(null);
+                pnlRoadSegmentInfo.updateData(null);
+                pnlTurnRestrictionInfo.updateData(null);
+            } else {
+                final Component cmpInfoView = cmpInfo.getViewport().getView();
+                if (activeLayer instanceof MissingGeometryLayer) {
+                    pnlTileInfo.updateData((Tile) item);
+                    if (!(cmpInfoView instanceof TileInfoPanel)) {
+                        cmpInfo.setViewportView(pnlTileInfo);
+                    }
+                } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                    pnlRoadSegmentInfo.updateData((RoadSegment) item);
+                    if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
+                        cmpInfo.setViewportView(pnlRoadSegmentInfo);
+                    }
+                } else if (activeLayer instanceof TurnRestrictionLayer) {
+                    pnlTurnRestrictionInfo.updateData((TurnRestriction) item);
+                    if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
+                        cmpInfo.setViewportView(pnlTurnRestrictionInfo);
+                    }
                 }
             }
             cmpInfo.revalidate();
