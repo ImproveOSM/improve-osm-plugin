@@ -38,8 +38,8 @@ final class Constants {
     /* composite constants */
     static final Composite NORMAL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
     static final Composite CLUSTER_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.80F);
-    static final Composite TILE_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.40F);
-    static final Composite TILE_SEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75F);
+    static final Composite TILE_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50F);
+    static final Composite TILE_SEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85F);
 
     /* constant used for drawing clusters */
     static final double CLUSTER_DEF_RADIUS = 50;
@@ -57,16 +57,13 @@ final class Constants {
     static final double SEL_ARROW_LENGTH = 17;
 
     /* constants used for drawing MissingGeometry tiles */
-    static final Stroke TILE_LINE_STROKE = new BasicStroke(4F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    static final Stroke TILE_LINE_STROKE = new BasicStroke(2F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final Color TILE_OPEN_COLOR = new Color(70, 130, 180);
     static final Color TILE_SOLVED_COLOR = new Color(60, 179, 113);
     static final Color TILE_INVALID_COLOR = new Color(255, 99, 71);
     static final Color ROAD_COLOR = new Color(180, 82, 205);
-    static final Color PARKING_COLOR = new Color(238, 238, 0);
-
-    static final Color BOTH_COLOR = new Color(255, 165, 0);
-    static final Color POINT_COLOR = new Color(30, 30, 30);
-
+    static final Color PARKING_COLOR = new Color(255, 255, 0);
+    static final Color BOTH_COLOR = new Color(30, 30, 30);
     static final Color WATER_COLOR = new Color(0, 0, 238);
     static final Color PATH_COLOR = new Color(160, 82, 45);
     static final int POINT_POS_RADIUS = 5;
