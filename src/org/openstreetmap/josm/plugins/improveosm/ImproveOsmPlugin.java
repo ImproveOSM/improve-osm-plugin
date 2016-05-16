@@ -166,10 +166,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.pref.removePreferenceChangeListener(this);
             if (Main.map != null) {
                 Main.map.mapView.removeMouseListener(this);
+                detailsDialog.updateUI(null, null);
+                listenersRegistered = false;
+                detailsDialog.hideDialog();
             }
-            detailsDialog.updateUI(null, null);
-            listenersRegistered = false;
-            detailsDialog.hideDialog();
         }
 
     }
