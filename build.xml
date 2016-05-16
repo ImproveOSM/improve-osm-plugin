@@ -102,7 +102,7 @@
 				<attribute name="Plugin-Early" value="true" />
 				<attribute if:set="isJosmTested" name="Plugin-Mainversion" value="9759" />
 				<attribute unless:set="isJosmTested" name="Plugin-Mainversion" value="1" />
-				<attribute if:set="isJosmTested" name="7636_Plugin-Url" value="39;http://developer.skobbler.com/public/improveosm/1.0/ImproveOsm.jar" />
+				<attribute if:set="isJosmTested" name="7636_Plugin-Url" value="${build-label};http://developer.skobbler.com/public/improveosm/1.0/ImproveOsm.jar" />
 				<attribute if:set="isJosmTested" name="9759_Plugin-Url" value="${build-label};http://developer.skobbler.com/public/improveosm/2.0/ImproveOsm.jar" />
 			</manifest>
 		</jar>
