@@ -35,7 +35,6 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_SEL_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.SEL_ARROW_LENGTH;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_BORDER_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_INVALID_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_OPEN_COLOR;
@@ -66,7 +65,6 @@ import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
-import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnSegment;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
@@ -120,27 +118,21 @@ final class PaintUtil {
      * @param selected specifies if the tile is selected or not
      */
     static void drawTile(final Graphics2D graphics, final MapView mapView, final Tile tile, final boolean selected) {
+        // draw tile
         final Color tileColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
                 : (tile.getStatus() == Status.SOLVED ? TILE_SOLVED_COLOR : TILE_INVALID_COLOR);
-        final Color typeColor = colorForTileType(tile.getType());
-
-        // draw border
-        graphics.setStroke(TILE_BORDER_STROKE);
-        graphics.setComposite(NORMAL_COMPOSITE);
-        graphics.setColor(typeColor);
+        graphics.setColor(tileColor);
         final GeneralPath path = buildPath(mapView, tile);
         graphics.draw(path);
-
-        // draw tile background
         final Composite composite = selected ? TILE_SEL_COMPOSITE : TILE_COMPOSITE;
         graphics.setComposite(composite);
-        graphics.setColor(tileColor);
         graphics.fill(path);
 
         // draw points belonging to the tile
         if (tile.getPoints() != null && tile.getPoints().size() > 1) {
+            final Color pointColor = pointColor(tile);
             for (final LatLon latLon : tile.getPoints()) {
-                drawCircle(graphics, mapView.getPoint(latLon), typeColor, POINT_POS_RADIUS);
+                drawCircle(graphics, mapView.getPoint(latLon), pointColor, POINT_POS_RADIUS);
             }
         }
     }
@@ -158,9 +150,9 @@ final class PaintUtil {
         return path;
     }
 
-    private static Color colorForTileType(final TileType type) {
+    private static Color pointColor(final Tile tile) {
         Color color;
-        switch (type) {
+        switch (tile.getType()) {
             case ROAD:
                 color = ROAD_COLOR;
                 break;
@@ -257,6 +249,7 @@ final class PaintUtil {
             drawText(graphics, mapView, firstSegment.getPoints(), "" + firstSegment.getNumberOfTrips());
             final TurnSegment lastSegment = turnRestriction.getSegments().get(turnRestriction.getSegments().size() - 1);
             drawText(graphics, mapView, lastSegment.getPoints(), "" + turnRestriction.getNumberOfPasses());
+
         }
     }
 
