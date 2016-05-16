@@ -19,7 +19,9 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.CLUS
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.CLUSTER_DEF_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORMAL_COMPOSITE;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -52,6 +54,8 @@ abstract class PaintHandler<T> {
     void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds, final DataSet<T> dataSet,
             final List<T> selectedItems) {
         final int zoom = Util.zoom(bounds);
+        final Stroke originalStroke = graphics.getStroke();
+        final Composite originalComposite = graphics.getComposite();
         if (zoom <= Config.getInstance().getMaxClusterZoom()) {
             if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
                 drawClusters(graphics, mapView, dataSet.getClusters(), zoom, getClusterColor());
@@ -61,6 +65,8 @@ abstract class PaintHandler<T> {
                 drawItems(graphics, mapView, dataSet.getItems(), selectedItems);
             }
         }
+        graphics.setStroke(originalStroke);
+        graphics.setComposite(originalComposite);
     }
 
 

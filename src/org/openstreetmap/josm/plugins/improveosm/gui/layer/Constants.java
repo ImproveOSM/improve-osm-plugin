@@ -57,7 +57,7 @@ final class Constants {
     static final double SEL_ARROW_LENGTH = 17;
 
     /* constants used for drawing MissingGeometry tiles */
-    static final Stroke TILE_LINE_STROKE = new BasicStroke(2F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    static final Stroke TILE_BORDER_STROKE = new BasicStroke(4F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final Color TILE_OPEN_COLOR = new Color(70, 130, 180);
     static final Color TILE_SOLVED_COLOR = new Color(60, 179, 113);
     static final Color TILE_INVALID_COLOR = new Color(255, 99, 71);
