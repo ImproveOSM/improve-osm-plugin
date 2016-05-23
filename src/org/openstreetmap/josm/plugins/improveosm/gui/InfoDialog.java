@@ -60,7 +60,7 @@ public class InfoDialog {
      *
      * @param zoom the current zoom level
      */
-    public synchronized void displayDialog(final int zoom) {
+    public synchronized void displayDirectionOfFlowEditTip(final int zoom) {
         if (!isDisplayed) {
             final int maxZoom = Config.getInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
