@@ -198,7 +198,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             }
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
                 if (Main.map.mapView.getActiveLayer() == directionOfFlowLayer) {
-                    new InfoDialog().displayDialog(Util.zoom(Main.map.mapView.getRealBounds()));
+                    new InfoDialog().displayDirectionOfFlowEditTip(Util.zoom(Main.map.mapView.getRealBounds()));
                 }
                 Main.worker.execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
             }

@@ -60,7 +60,7 @@ public class InfoDialog {
      *
      * @param zoom the current zoom level
      */
-    public synchronized void displayDialog(final int zoom) {
+    public synchronized void displayDirectionOfFlowEditTip(final int zoom) {
         if (!isDisplayed) {
             final int maxZoom = Config.getInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
@@ -70,7 +70,7 @@ public class InfoDialog {
                                 Main.parent.getBackground()),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
-                final boolean flag = val == JOptionPane.YES_OPTION;
+                final boolean flag = val == JOptionPane.NO_OPTION;
                 PreferenceManager.getInstance().saveDirectionOfFlowTipSuppressFlag(flag);
                 isDisplayed = false;
             }
