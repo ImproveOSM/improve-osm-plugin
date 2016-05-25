@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
 
@@ -65,22 +64,22 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
     public Object getValueAt(final int rowIndex, final int columnIndex) {
         Object value = null;
         if (rowIndex > -1 && rowIndex < data.size()) {
-            final TurnRestriction turnRestricion = data.get(rowIndex);
+            final TurnRestriction turnRestriction = data.get(rowIndex);
             switch (columnIndex) {
                 case IDX_TYPE:
-                    value = Formatter.formatTurnType(turnRestricion.getTurnType());
+                    value = turnRestriction.getTurnType();
                     break;
                 case IDX_FIRST_SEG_TRIPS:
-                    value = turnRestricion.getSegments().get(0).getNumberOfTrips();
+                    value = turnRestriction.getSegments().get(0).getNumberOfTrips();
                     break;
                 case IDX_LAST_SEG_TRIPS:
-                    value = turnRestricion.getNumberOfPasses();
+                    value = turnRestriction.getNumberOfPasses();
                     break;
                 case IDX_CONFIDENCE:
-                    value = turnRestricion.getConfidenceLevel();
+                    value = turnRestriction.getConfidenceLevel();
                     break;
                 case IDX_STATUS:
-                    value = turnRestricion.getStatus();
+                    value = turnRestriction.getStatus();
                     break;
                 default:
                     value = rowIndex;

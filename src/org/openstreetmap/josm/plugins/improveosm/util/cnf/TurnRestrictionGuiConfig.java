@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import java.util.List;
 
+
 /**
  * Holds turn restriction of related texts.
  *
@@ -48,7 +49,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     private final String lblC2;
     private final String lblTurn;
 
-
     private TurnRestrictionGuiConfig() {
         super(CONFIG_FILE);
 
@@ -67,7 +67,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
         lblTurn = readProperty("turn.lbl");
-
     }
 
     public static TurnRestrictionGuiConfig getInstance() {
@@ -125,4 +124,5 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     public String getLblTurn() {
         return lblTurn;
     }
+
 }

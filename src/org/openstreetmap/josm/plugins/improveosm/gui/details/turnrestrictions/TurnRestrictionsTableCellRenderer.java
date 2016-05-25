@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
 
 
 /**
@@ -47,10 +48,14 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
             } else if (value instanceof TurnConfidenceLevel) {
                 txt = ((TurnConfidenceLevel) value).shortDisplayName();
             } else {
-                txt = value.toString();
+                if (column == 0) {
+                    setIcon(TurnRestrictionIconTypeFactory.getInstance().getIcon(value.toString()));
+                    txt = Formatter.formatTurnType(value.toString());
+                } else {
+                    txt = value.toString();
+                }
             }
             setText(txt);
-
         }
         return this;
     }

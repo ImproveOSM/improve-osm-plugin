@@ -28,6 +28,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
@@ -266,6 +267,31 @@ public final class GuiBuilder {
         lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
         lbl.setForeground(textColor);
         lbl.setVisible(visible);
+        return lbl;
+    }
+
+    /**
+     * Builds a new {@code JLabel} with the given arguments.
+     *
+     * @param text the text which will be shown on the label
+     * @param font the font of the label's text
+     * @param icon the image which will follow the text
+     * @param bounds the dimension and location of the label
+     * @return a {@code JLabel} object
+     */
+    public static JLabel buildLabelWithImage(final String text, final Font font, final Rectangle bounds,
+            final ImageIcon icon) {
+        final JLabel lbl = new JLabel(text, icon, SwingConstants.CENTER);
+        lbl.setVerticalTextPosition(JLabel.CENTER);
+        lbl.setHorizontalTextPosition(JLabel.RIGHT);
+
+        if (font != null) {
+            lbl.setFont(font);
+        }
+
+        if (bounds != null) {
+            lbl.setBounds(bounds);
+        }
         return lbl;
     }
 
