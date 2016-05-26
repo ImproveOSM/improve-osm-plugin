@@ -22,6 +22,7 @@ import java.util.TimeZone;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import org.openstreetmap.josm.tools.Pair;
 
 
 /**
@@ -114,5 +115,16 @@ public final class Formatter {
      */
     public static String formatLatLon(final LatLon latLon) {
         return latLon == null ? "" : latLon.getY() + "," + latLon.getX();
+    }
+
+    /**
+     * Formats the given Pair object in 'first segment trips number/last segment trips number' format.
+     *
+     * @param value a {@code Pair} object representing the number of the first segment trips and the number of the last
+     * segment trips
+     * @return a formatted string
+     */
+    public static String formatFirstLastTripsNumber(final Pair<Integer, Integer> value) {
+        return value.a + "/" + value.b;
     }
 }

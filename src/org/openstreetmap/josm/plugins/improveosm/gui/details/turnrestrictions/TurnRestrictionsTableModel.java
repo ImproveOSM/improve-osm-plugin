@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
+import org.openstreetmap.josm.tools.Pair;
 
 
 /**
@@ -34,9 +35,8 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
 
     private static final int IDX_TYPE = 0;
     private static final int IDX_FIRST_SEG_TRIPS = 1;
-    private static final int IDX_LAST_SEG_TRIPS = 2;
-    private static final int IDX_CONFIDENCE = 3;
-    private static final int IDX_STATUS = 4;
+    private static final int IDX_CONFIDENCE = 2;
+    private static final int IDX_STATUS = 3;
 
     private List<TurnRestriction> data;
 
@@ -71,9 +71,8 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
                     break;
                 case IDX_FIRST_SEG_TRIPS:
                     value = turnRestriction.getSegments().get(0).getNumberOfTrips();
-                    break;
-                case IDX_LAST_SEG_TRIPS:
-                    value = turnRestriction.getNumberOfPasses();
+                    value = new Pair<Integer, Integer>(turnRestriction.getSegments().get(0).getNumberOfTrips(),
+                            turnRestriction.getNumberOfPasses());
                     break;
                 case IDX_CONFIDENCE:
                     value = turnRestriction.getConfidenceLevel();
