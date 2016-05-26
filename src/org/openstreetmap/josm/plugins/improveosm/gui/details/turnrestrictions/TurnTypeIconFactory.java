@@ -28,14 +28,14 @@ import org.openstreetmap.josm.tools.ImageProvider;
  * @author ioanao
  * @version $Revision$
  */
-public class TurnRestrictionIconTypeFactory {
+class TurnTypeIconFactory {
 
     /* the icons extension */
     private static final String EXT = ".png";
 
-    private static final TurnRestrictionIconTypeFactory UNIQUE_INSTANCE = new TurnRestrictionIconTypeFactory();
+    private static final TurnTypeIconFactory UNIQUE_INSTANCE = new TurnTypeIconFactory();
 
-    public static TurnRestrictionIconTypeFactory getInstance() {
+    static TurnTypeIconFactory getInstance() {
         return UNIQUE_INSTANCE;
     }
 
@@ -43,7 +43,7 @@ public class TurnRestrictionIconTypeFactory {
 
     private final Map<String, ImageIcon> map = new LinkedHashMap<String, ImageIcon>();
 
-    private TurnRestrictionIconTypeFactory() {}
+    private TurnTypeIconFactory() {}
 
     /**
      * Returns the icon corresponding to the given type. The method returns a default icon, if no icon corresponds to
@@ -52,7 +52,7 @@ public class TurnRestrictionIconTypeFactory {
      * @param type specifies the turn restriction type
      * @return an {@code ImageIcon} object
      */
-    public ImageIcon getIcon(final String type) {
+    ImageIcon getIcon(final String type) {
         ImageIcon icon = map.get(type);
         if (icon == null) {
             final IconConfig iconCnf = IconConfig.getInstance();

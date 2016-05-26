@@ -138,7 +138,7 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
         if (type != null) {
             add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblType(), getFontBold(),
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final ImageIcon icon = TurnRestrictionIconTypeFactory.getInstance().getIcon(type);
+            final ImageIcon icon = TurnTypeIconFactory.getInstance().getIcon(type);
             final int widthVal = getFontMetricsPlain().stringWidth(type.toString()) + icon.getIconWidth();
             add(GuiBuilder.buildLabelWithImage(Formatter.formatTurnType(type), getFontPlain(),
                     new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT), icon));

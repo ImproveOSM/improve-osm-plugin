@@ -53,7 +53,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
                 txt = Formatter.formatFirstLastTripsNumber((Pair<Integer, Integer>) value);
             } else {
                 if (column == 0) {
-                    setIcon(TurnRestrictionIconTypeFactory.getInstance().getIcon(value.toString()));
+                    setIcon(TurnTypeIconFactory.getInstance().getIcon(value.toString()));
                     txt = Formatter.formatTurnType(value.toString());
                 } else {
                     txt = value.toString();
