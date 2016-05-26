@@ -281,7 +281,7 @@ public final class GuiBuilder {
      */
     public static JLabel buildLabelWithImage(final String text, final Font font, final Rectangle bounds,
             final ImageIcon icon) {
-        final JLabel lbl = new JLabel(text, icon, SwingConstants.CENTER);
+        final JLabel lbl = new JLabel(text, icon, SwingConstants.LEFT);
         lbl.setVerticalTextPosition(JLabel.CENTER);
         lbl.setHorizontalTextPosition(JLabel.RIGHT);
 
