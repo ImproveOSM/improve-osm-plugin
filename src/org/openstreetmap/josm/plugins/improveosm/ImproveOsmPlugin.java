@@ -76,7 +76,7 @@ import org.openstreetmap.josm.tools.Utils;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     private static final String COPY_ACTION = "Copy";
 
@@ -146,15 +146,12 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void layerRemoved(final Layer currentLayer) {
         if (currentLayer instanceof MissingGeometryLayer) {
-            Main.main.removeLayer(missingGeometryLayer);
             missingGeometryLayer.updateSelectedItem(null);
             missingGeometryLayer = null;
         } else if (currentLayer instanceof DirectionOfFlowLayer) {
-            Main.main.removeLayer(directionOfFlowLayer);
             directionOfFlowLayer.updateSelectedItem(null);
             directionOfFlowLayer = null;
         } else if (currentLayer instanceof TurnRestrictionLayer) {
-            Main.main.removeLayer(turnRestrictionLayer);
             turnRestrictionLayer.updateSelectedItem(null);
             turnRestrictionLayer = null;
         }
@@ -171,7 +168,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 detailsDialog.hideDialog();
             }
         }
-
     }
 
 
