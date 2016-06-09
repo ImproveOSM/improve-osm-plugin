@@ -22,6 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
+import org.openstreetmap.josm.tools.Pair;
 
 
 /**
@@ -35,6 +37,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 9111934633585458749L;
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
             final boolean hasFocus, final int row, final int column) {
@@ -46,11 +49,17 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
                 txt = ((Status) value).name().toLowerCase();
             } else if (value instanceof TurnConfidenceLevel) {
                 txt = ((TurnConfidenceLevel) value).shortDisplayName();
+            } else if (value instanceof Pair<?, ?>) {
+                txt = Formatter.formatFirstLastTripsNumber((Pair<Integer, Integer>) value);
             } else {
-                txt = value.toString();
+                if (column == 0) {
+                    setIcon(TurnTypeIconFactory.getInstance().getIcon(value.toString()));
+                    txt = Formatter.formatTurnType(value.toString());
+                } else {
+                    txt = value.toString();
+                }
             }
             setText(txt);
-
         }
         return this;
     }

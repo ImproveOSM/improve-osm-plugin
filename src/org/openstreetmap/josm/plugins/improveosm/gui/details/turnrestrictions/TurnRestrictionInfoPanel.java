@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
@@ -137,9 +138,10 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
         if (type != null) {
             add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblType(), getFontBold(),
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(type.toString());
-            add(GuiBuilder.buildLabel(Formatter.formatTurnType(type), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+            final ImageIcon icon = TurnTypeIconFactory.getInstance().getIcon(type);
+            final int widthVal = getFontMetricsPlain().stringWidth(type.toString()) + icon.getIconWidth();
+            add(GuiBuilder.buildLabelWithImage(Formatter.formatTurnType(type), getFontPlain(),
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT), icon));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
@@ -156,4 +158,5 @@ public final class TurnRestrictionInfoPanel extends BasicPanel<TurnRestriction> 
             incrementPnlY();
         }
     }
+
 }

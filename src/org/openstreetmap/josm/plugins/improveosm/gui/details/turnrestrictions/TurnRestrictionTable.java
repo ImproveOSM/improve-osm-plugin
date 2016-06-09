@@ -39,7 +39,7 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
 
     private static final long serialVersionUID = -2793471615446950298L;
     private static final int COLUMN_SPACE = 2;
-    private static final int COLUMNS = 5;
+    private static final int COLUMNS = 4;
     private static final int TBL_ROW_HEIGHT = 23;
     private TurnRestrictionSelectionObserver observer;
 
