@@ -44,6 +44,14 @@ class FilterPanel extends BasicFilterPanel {
 
     private static final long serialVersionUID = -2111695621098772652L;
 
+    /* type filter backgrounds */
+    private static final Color PARKING = new Color(236, 232, 131);
+    private static final Color BOTH = new Color(243, 203, 131);
+    private static final Color WATER = new Color(86, 127, 248);
+    private static final Color PATH = new Color(205, 172, 151);
+    private static final Color ROAD = new Color(213, 172, 215);
+
+
     /* UI components */
     private JCheckBox cbTypeParking;
     private JCheckBox cbTypeRoad;
@@ -72,10 +80,9 @@ class FilterPanel extends BasicFilterPanel {
     private void addTypesFilter(final EnumSet<TileType> types) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_TYPE);
-        cbTypeParking =
-                GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), getBackground());
-        cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(), TileType.ROAD.name(), getBackground());
-        cbTypeBoth = GuiBuilder.buildCheckBox(TileType.BOTH.displayValue(), TileType.BOTH.name(), getBackground());
+        cbTypeParking = GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), PARKING);
+        cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(), TileType.ROAD.name(), ROAD);
+        cbTypeBoth = GuiBuilder.buildCheckBox(TileType.BOTH.displayValue(), TileType.BOTH.name(), BOTH);
         selectTypes(types);
         add(cbTypeParking, Constraints.RB_PARKING);
         add(cbTypeRoad, Constraints.RB_ROAD);
@@ -85,8 +92,7 @@ class FilterPanel extends BasicFilterPanel {
     private void addIncludeWaterFilter(final boolean includeWater) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_WATER);
-        cbIncludeWater =
-                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
+        cbIncludeWater = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, WATER);
         cbIncludeWater.setSelected(includeWater);
         add(cbIncludeWater, Constraints.RB_WATER);
     }
@@ -94,8 +100,7 @@ class FilterPanel extends BasicFilterPanel {
     private void addIncludePathFilter(final boolean includePath) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_PEDESTRIAN);
-        cbIncludePath =
-                GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, getBackground());
+        cbIncludePath = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, PATH);
         cbIncludePath.setSelected(includePath);
         add(cbIncludePath, Constraints.RB_PATH);
     }

@@ -28,6 +28,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABE
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORMAL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PARKING_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PATH_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_POS_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_COLOR;
@@ -37,6 +38,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.SEL_ARROW_LENGTH;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_INVALID_COLOR;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_LINE_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_OPEN_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SOLVED_COLOR;
@@ -118,21 +120,27 @@ final class PaintUtil {
      * @param selected specifies if the tile is selected or not
      */
     static void drawTile(final Graphics2D graphics, final MapView mapView, final Tile tile, final boolean selected) {
-        // draw tile
-        final Color tileColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
+        final Color borderColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
                 : (tile.getStatus() == Status.SOLVED ? TILE_SOLVED_COLOR : TILE_INVALID_COLOR);
-        graphics.setColor(tileColor);
+        final Color tileColor = tileColor(tile);
+
+        // draw tile border
+        graphics.setComposite(NORMAL_COMPOSITE);
+        graphics.setStroke(TILE_LINE_STROKE);
+        graphics.setColor(borderColor);
         final GeneralPath path = buildPath(mapView, tile);
         graphics.draw(path);
+
+        // fill the tile
         final Composite composite = selected ? TILE_SEL_COMPOSITE : TILE_COMPOSITE;
+        graphics.setColor(tileColor);
         graphics.setComposite(composite);
         graphics.fill(path);
 
         // draw points belonging to the tile
         if (tile.getPoints() != null && tile.getPoints().size() > 1) {
-            final Color pointColor = pointColor(tile);
             for (final LatLon latLon : tile.getPoints()) {
-                drawCircle(graphics, mapView.getPoint(latLon), pointColor, POINT_POS_RADIUS);
+                drawCircle(graphics, mapView.getPoint(latLon), POINT_COLOR, POINT_POS_RADIUS);
             }
         }
     }
@@ -150,7 +158,7 @@ final class PaintUtil {
         return path;
     }
 
-    private static Color pointColor(final Tile tile) {
+    private static Color tileColor(final Tile tile) {
         Color color;
         switch (tile.getType()) {
             case ROAD:
