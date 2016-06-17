@@ -36,6 +36,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_SEL_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.SEL_ARROW_LENGTH;
+import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.SEL_POINT_POS_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_INVALID_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_LINE_STROKE;
@@ -136,11 +137,11 @@ final class PaintUtil {
         graphics.setColor(tileColor);
         graphics.setComposite(composite);
         graphics.fill(path);
-
+        final int radius = selected ? SEL_POINT_POS_RADIUS : POINT_POS_RADIUS;
         // draw points belonging to the tile
         if (tile.getPoints() != null && tile.getPoints().size() > 1) {
             for (final LatLon latLon : tile.getPoints()) {
-                drawCircle(graphics, mapView.getPoint(latLon), POINT_COLOR, POINT_POS_RADIUS);
+                drawCircle(graphics, mapView.getPoint(latLon), POINT_COLOR, radius);
             }
         }
     }

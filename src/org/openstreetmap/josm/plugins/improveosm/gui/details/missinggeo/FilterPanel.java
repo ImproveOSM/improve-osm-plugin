@@ -47,7 +47,7 @@ class FilterPanel extends BasicFilterPanel {
     /* type filter backgrounds */
     private static final Color PARKING = new Color(236, 232, 131);
     private static final Color BOTH = new Color(243, 203, 131);
-    private static final Color WATER = new Color(86, 127, 248);
+    private static final Color WATER = new Color(0, 154, 205);
     private static final Color PATH = new Color(205, 172, 151);
     private static final Color ROAD = new Color(213, 172, 215);
 

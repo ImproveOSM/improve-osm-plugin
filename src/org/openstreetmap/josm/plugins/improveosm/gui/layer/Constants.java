@@ -39,7 +39,7 @@ final class Constants {
     static final Composite NORMAL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
     static final Composite CLUSTER_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.80F);
     static final Composite TILE_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50F);
-    static final Composite TILE_SEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85F);
+    static final Composite TILE_SEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65F);
 
     /* constant used for drawing clusters */
     static final double CLUSTER_DEF_RADIUS = 50;
@@ -65,9 +65,10 @@ final class Constants {
     static final Color PARKING_COLOR = new Color(238, 238, 0);
     static final Color BOTH_COLOR = new Color(255, 165, 0);
     static final Color POINT_COLOR = new Color(30, 30, 30);
-    static final Color WATER_COLOR = new Color(0, 0, 238);
+    static final Color WATER_COLOR = new Color(0, 154, 205);
     static final Color PATH_COLOR = new Color(160, 82, 45);
-    static final int POINT_POS_RADIUS = 5;
+    static final int POINT_POS_RADIUS = 4;
+    static final int SEL_POINT_POS_RADIUS = 9;
 
     /* constants used for drawing TurnRestriction segments */
     static final Color TURN_SEGMENT_FROM_COLOR = new Color(0, 255, 0);
