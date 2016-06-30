@@ -35,7 +35,7 @@ public class RoadSegment {
     private OnewayConfidenceLevel confidenceLevel;
     private List<LatLon> points;
     private Status status;
-    private RoadType type;
+    private String type;
 
 
     /**
@@ -66,7 +66,7 @@ public class RoadSegment {
      */
     public RoadSegment(final Long wayId, final Long fromNodeId, final Long toNodeId, final Integer numberOfTrips,
             final Double percentOfTrips, final OnewayConfidenceLevel confidenceLevel, final List<LatLon> points,
-            final Status status, final RoadType type) {
+            final Status status, final String type) {
         this(wayId, fromNodeId, toNodeId);
         this.numberOfTrips = numberOfTrips;
         this.percentOfTrips = percentOfTrips;
@@ -109,7 +109,7 @@ public class RoadSegment {
         return status;
     }
 
-    public RoadType getType() {
+    public String getType() {
         return type;
     }
 

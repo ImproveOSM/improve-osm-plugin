@@ -18,7 +18,6 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 import java.awt.Rectangle;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
-import org.openstreetmap.josm.plugins.improveosm.entity.RoadType;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
@@ -82,12 +81,12 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
         }
     }
 
-    private void addRoadType(final RoadType type, final int widthLbl) {
+    private void addRoadType(final String type, final int widthLbl) {
         if (type != null) {
             add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblType(), getFontBold(),
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(type.toString());
-            add(GuiBuilder.buildLabel(type.toString().toLowerCase(), getFontPlain(),
+            final int widthVal = getFontMetricsPlain().stringWidth(type);
+            add(GuiBuilder.buildLabel(type.toLowerCase(), getFontPlain(),
                     new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
