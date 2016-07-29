@@ -28,22 +28,24 @@ import org.openstreetmap.josm.tools.ImageProvider;
  * @author ioanao
  * @version $Revision$
  */
-class TurnTypeIconFactory {
+final class TurnTypeIconFactory {
 
     /* the icons extension */
     private static final String EXT = ".png";
 
     private static final TurnTypeIconFactory UNIQUE_INSTANCE = new TurnTypeIconFactory();
 
-    static TurnTypeIconFactory getInstance() {
-        return UNIQUE_INSTANCE;
-    }
-
     private final ImageIcon defaultIcon = IconConfig.getInstance().getTurnRestrictionIcon();
 
     private final Map<String, ImageIcon> map = new LinkedHashMap<String, ImageIcon>();
 
     private TurnTypeIconFactory() {}
+
+
+    static TurnTypeIconFactory getInstance() {
+        return UNIQUE_INSTANCE;
+    }
+
 
     /**
      * Returns the icon corresponding to the given type. The method returns a default icon, if no icon corresponds to
@@ -65,5 +67,4 @@ class TurnTypeIconFactory {
         }
         return icon;
     }
-
 }

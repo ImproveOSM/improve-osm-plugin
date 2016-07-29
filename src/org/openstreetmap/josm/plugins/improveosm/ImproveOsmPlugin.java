@@ -76,7 +76,7 @@ import org.openstreetmap.josm.tools.Utils;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     private static final String COPY_ACTION = "Copy";
 
@@ -423,7 +423,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             turnRestrictionLayer = new TurnRestrictionLayer();
             Main.main.addLayer(turnRestrictionLayer);
         }
-        detailsDialog.showDialog();
+        if (!detailsDialog.getButton().isSelected()) {
+            detailsDialog.getButton().doClick();
+        }
     }
 
     private <T> void retrieveComments(final ServiceHandler<T> handler, final ImproveOsmLayer<T> layer, final T item) {
