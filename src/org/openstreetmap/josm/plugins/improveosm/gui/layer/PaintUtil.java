@@ -249,37 +249,39 @@ final class PaintUtil {
                 final Color color = i == 0 ? TURN_SEGMENT_FROM_COLOR : TURN_SEGMENT_TO_COLOR;
                 graphics.setColor(color);
                 graphics.draw(buildPath(mapView, turnRestriction.getSegments().get(i).getPoints()));
-                final Pair<LatLon, LatLon> pair = tipTailPoints(turnRestriction.getSegments().get(i).getPoints());
+                final boolean isFromSegment = i == 0;
+                final Pair<LatLon, LatLon> pair =
+                        tipTailPoints(turnRestriction.getSegments().get(i).getPoints(), isFromSegment);
                 drawArrow(graphics, mapView, pair.a, pair.b, TURN_ARROW_LENGTH);
             }
 
             // draw labels
             final TurnSegment firstSegment = turnRestriction.getSegments().get(0);
-            drawText(graphics, mapView, firstSegment.getPoints(), "" + firstSegment.getNumberOfTrips());
+            drawText(graphics, mapView, firstSegment.getPoints(), "" + firstSegment.getNumberOfTrips(), true);
             final TurnSegment lastSegment = turnRestriction.getSegments().get(turnRestriction.getSegments().size() - 1);
-            drawText(graphics, mapView, lastSegment.getPoints(), "" + turnRestriction.getNumberOfPasses());
+            drawText(graphics, mapView, lastSegment.getPoints(), "" + turnRestriction.getNumberOfPasses(), false);
 
         }
     }
 
-    private static Pair<LatLon, LatLon> tipTailPoints(final List<LatLon> points) {
-        LatLon tip;
-        LatLon tail;
+    private static Pair<LatLon, LatLon> tipTailPoints(final List<LatLon> points, final boolean isFromSegment) {
+        final LatLon tip;
+        final LatLon tail;
         if (points.size() > 2) {
-            final int idx = points.size() / 2;
+            final int idx = isFromSegment ? points.size() / 2 : points.size() - 1;
             tip = points.get(idx);
             tail = points.get(idx - 1);
         } else {
             tail = points.get(0);
-            tip = new LatLon((points.get(1).lat() + points.get(0).lat()) / 2,
-                    (points.get(1).lon() + points.get(0).lon()) / 2);
+            tip = isFromSegment ? new LatLon((points.get(1).lat() + points.get(0).lat()) / 2,
+                    (points.get(1).lon() + points.get(0).lon()) / 2) : points.get(1);
         }
         return new Pair<LatLon, LatLon>(tip, tail);
     }
 
     private static void drawText(final Graphics2D graphics, final MapView mapView, final List<LatLon> points,
-            final String txt) {
-        final Pair<LatLon, LatLon> tipTailPoints = tipTailPoints(points);
+            final String txt, final boolean isFromSegment) {
+        final Pair<LatLon, LatLon> tipTailPoints = tipTailPoints(points, isFromSegment);
         final Point labelPoint = mapView.getPoint(tipTailPoints.a);
         final int cmp = Double.compare(tipTailPoints.a.getX(), tipTailPoints.b.getX());
         if (cmp == 0) {
