@@ -92,7 +92,7 @@
 			<zipfileset src="${plugin.lib.dir}/gson-2.4.jar" />
 			<zipfileset src="${plugin.lib.dir}/commons-io-2.4.jar" />
 			<manifest>
-				<attribute name="Author" value="telenav" />
+				<attribute name="Author" value="Telenav" />
 				<attribute name="Plugin-Class" value="org.openstreetmap.josm.plugins.improveosm.ImproveOsmPlugin" />
 				<attribute name="Plugin-Date" value="${TODAY}" />
 				<attribute name="Plugin-Description" value="This plugin is helping you improve the OSM map by pointing at probable missing geometries (roads, parkings, path and water trails), missing traffic flow direction or missing turn restrictions in OSM." />
