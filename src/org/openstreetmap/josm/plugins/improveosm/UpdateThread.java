@@ -55,7 +55,7 @@ abstract class UpdateThread<T> implements Runnable {
                 @Override
                 public void run() {
                     layer.setDataSet(result);
-                    if (result != null && Main.map.mapView.getActiveLayer().equals(layer)) {
+                    if (result != null && Main.getLayerManager().getActiveLayer().equals(layer)) {
                         final T item = layer.lastSelectedItem();
                         if (item == null) {
                             dialog.updateUI(null, null);

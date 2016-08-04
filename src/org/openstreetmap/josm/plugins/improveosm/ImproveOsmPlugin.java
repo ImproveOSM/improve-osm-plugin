@@ -34,11 +34,13 @@ import org.openstreetmap.josm.data.Preferences.PreferenceChangeEvent;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangedListener;
 import org.openstreetmap.josm.gui.IconToggleButton;
 import org.openstreetmap.josm.gui.MapFrame;
-import org.openstreetmap.josm.gui.MapView;
-import org.openstreetmap.josm.gui.MapView.LayerChangeListener;
 import org.openstreetmap.josm.gui.NavigatableComponent;
 import org.openstreetmap.josm.gui.NavigatableComponent.ZoomChangeListener;
 import org.openstreetmap.josm.gui.layer.Layer;
+import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
+import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
+import org.openstreetmap.josm.gui.layer.LayerManager.LayerOrderChangeEvent;
+import org.openstreetmap.josm.gui.layer.LayerManager.LayerRemoveEvent;
 import org.openstreetmap.josm.gui.preferences.PreferenceSetting;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
@@ -124,41 +126,46 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     /* implementation of LayerChangeListener */
 
     @Override
-    public void activeLayerChange(final Layer oldLayer, final Layer newLayer) {
-        if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
-            if (oldLayer instanceof MissingGeometryLayer) {
-                updateSelectedData(missingGeometryLayer, null, null);
-            } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                updateSelectedData(directionOfFlowLayer, null, null);
-            } else if (oldLayer instanceof TurnRestrictionLayer) {
-                updateSelectedData(turnRestrictionLayer, null, null);
-            }
-        }
-    }
-
-    @Override
-    public void layerAdded(final Layer newLayer) {
-        if (newLayer instanceof ImproveOsmLayer) {
+    public void layerAdded(final LayerAddEvent event) {
+        if (event.getAddedLayer() instanceof ImproveOsmLayer) {
             zoomChanged();
         }
     }
 
+
     @Override
-    public void layerRemoved(final Layer currentLayer) {
-        if (currentLayer instanceof MissingGeometryLayer) {
+    public void layerOrderChanged(final LayerOrderChangeEvent event) {
+        final Layer oldLayer =
+                Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
+                final Layer newLayer = Main.getLayerManager().getActiveLayer();
+                if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
+                    if (oldLayer instanceof MissingGeometryLayer) {
+                        updateSelectedData(missingGeometryLayer, null, null);
+                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                        updateSelectedData(directionOfFlowLayer, null, null);
+                    } else if (oldLayer instanceof TurnRestrictionLayer) {
+                        updateSelectedData(turnRestrictionLayer, null, null);
+                    }
+                }
+    }
+
+
+    @Override
+    public void layerRemoving(final LayerRemoveEvent event) {
+        if (event.getRemovedLayer() instanceof MissingGeometryLayer) {
             missingGeometryLayer.updateSelectedItem(null);
             missingGeometryLayer = null;
-        } else if (currentLayer instanceof DirectionOfFlowLayer) {
+        } else if (event.getRemovedLayer() instanceof DirectionOfFlowLayer) {
             directionOfFlowLayer.updateSelectedItem(null);
             directionOfFlowLayer = null;
-        } else if (currentLayer instanceof TurnRestrictionLayer) {
+        } else if (event.getRemovedLayer() instanceof TurnRestrictionLayer) {
             turnRestrictionLayer.updateSelectedItem(null);
             turnRestrictionLayer = null;
         }
         if (missingGeometryLayer == null && directionOfFlowLayer == null && turnRestrictionLayer == null) {
             // remove listeners
             PreferenceManager.getInstance().saveErrorSuppressFlag(false);
-            MapView.removeLayerChangeListener(this);
+            Main.getLayerManager().removeLayerChangeListener(this);
             NavigatableComponent.removeZoomChangeListener(this);
             Main.pref.removePreferenceChangeListener(this);
             if (Main.map != null) {
@@ -169,7 +176,19 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             }
         }
     }
-
+    //
+    // @Override
+    // public void activeLayerChange(final Layer oldLayer, final Layer newLayer) {
+    // if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
+    // if (oldLayer instanceof MissingGeometryLayer) {
+    // updateSelectedData(missingGeometryLayer, null, null);
+    // } else if (oldLayer instanceof DirectionOfFlowLayer) {
+    // updateSelectedData(directionOfFlowLayer, null, null);
+    // } else if (oldLayer instanceof TurnRestrictionLayer) {
+    // updateSelectedData(turnRestrictionLayer, null, null);
+    // }
+    // }
+    // }
 
     /* ZoomChangeListener method */
 
@@ -193,7 +212,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
             }
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
-                if (Main.map.mapView.getActiveLayer() == directionOfFlowLayer) {
+                if (Main.getLayerManager().getActiveLayer() == directionOfFlowLayer) {
                     new InfoDialog().displayDirectionOfFlowEditTip(Util.zoom(Main.map.mapView.getRealBounds()));
                 }
                 Main.worker.execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
@@ -242,13 +261,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         // remove layers
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
         if (!dataLayers.contains(DataLayer.MISSING_GEOMETRY) && missingGeometryLayer != null) {
-            Main.main.removeLayer(missingGeometryLayer);
+            Main.getLayerManager().removeLayer(missingGeometryLayer);
         }
         if (!dataLayers.contains(DataLayer.DIRECTION_OF_FLOW) && directionOfFlowLayer != null) {
-            Main.main.removeLayer(directionOfFlowLayer);
+            Main.getLayerManager().removeLayer(directionOfFlowLayer);
         }
         if (!dataLayers.contains(DataLayer.TURN_RESTRICTION) && turnRestrictionLayer != null) {
-            Main.main.removeLayer(turnRestrictionLayer);
+            Main.getLayerManager().removeLayer(turnRestrictionLayer);
         }
 
         // add layers if necessary
@@ -261,7 +280,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void mouseClicked(final MouseEvent event) {
         if (SwingUtilities.isLeftMouseButton(event)) {
-            final Layer activeLayer = Main.map.mapView.getActiveLayer();
+            final Layer activeLayer = Main.getLayerManager().getActiveLayer();
             final Point point = event.getPoint();
             final boolean multiSelect = event.isShiftDown();
             if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
@@ -356,7 +375,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public synchronized void createComment(final Comment comment) {
-        final List<Layer> layers = Main.map.mapView.getAllLayersAsList();
+        final List<Layer> layers = Main.getLayerManager().getLayers();
         Main.worker.execute(new Runnable() {
 
             @Override
@@ -384,7 +403,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
 
-            if (!Main.map.mapView.getActiveLayer().equals(layer)) {
+            if (!Main.getLayerManager().getActiveLayer().equals(layer)) {
                 updateSelectedData(layer, null, null);
             }
             Main.worker.execute(updateThread);
@@ -402,7 +421,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     private void addLayers() {
         if (!listenersRegistered) {
             NavigatableComponent.addZoomChangeListener(this);
-            MapView.addLayerChangeListener(this);
+            Main.getLayerManager().addLayerChangeListener(this);
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
             Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
@@ -412,16 +431,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
         if (dataLayers.contains(DataLayer.MISSING_GEOMETRY) && missingGeometryLayer == null) {
             missingGeometryLayer = new MissingGeometryLayer();
-            Main.main.addLayer(missingGeometryLayer);
+            Main.getLayerManager().addLayer(missingGeometryLayer);
         }
 
         if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW) && directionOfFlowLayer == null) {
             directionOfFlowLayer = new DirectionOfFlowLayer();
-            Main.main.addLayer(directionOfFlowLayer);
+            Main.getLayerManager().addLayer(directionOfFlowLayer);
         }
         if (dataLayers.contains(DataLayer.TURN_RESTRICTION) && turnRestrictionLayer == null) {
             turnRestrictionLayer = new TurnRestrictionLayer();
-            Main.main.addLayer(turnRestrictionLayer);
+            Main.getLayerManager().addLayer(turnRestrictionLayer);
         }
         if (!detailsDialog.getButton().isSelected()) {
             detailsDialog.getButton().doClick();
@@ -545,7 +564,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         public void actionPerformed(final ActionEvent event) {
             if (event.getActionCommand().equals(COPY_ACTION)) {
-                final Layer activeLayer = Main.map.mapView.getActiveLayer();
+                final Layer activeLayer = Main.getLayerManager().getActiveLayer();
                 String selection = "";
                 if (activeLayer instanceof MissingGeometryLayer) {
                     if (missingGeometryLayer.hasSelectedItems()) {

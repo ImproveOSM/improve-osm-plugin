@@ -169,7 +169,7 @@ public final class PreferenceManager {
      */
     public String loadLastComment() {
         String lastComment = null;
-        final Layer activeLayer = Main.map.mapView.getActiveLayer();
+        final Layer activeLayer = Main.getLayerManager().getActiveLayer();
         if (activeLayer instanceof DirectionOfFlowLayer) {
             lastComment = loadManager.loadDirectionOfFlowLastComment();
         } else if (activeLayer instanceof MissingGeometryLayer) {

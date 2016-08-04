@@ -36,11 +36,11 @@ final class Util {
 
     static Layer getImproveOsmLayer() {
         Layer improveOsmLayer = null;
-        if (Main.map.mapView.getActiveLayer() instanceof AbstractLayer) {
-            improveOsmLayer = Main.map.mapView.getActiveLayer();
+        if (Main.getLayerManager().getActiveLayer() instanceof AbstractLayer) {
+            improveOsmLayer = Main.getLayerManager().getActiveLayer();
         } else {
             // other layer is active
-            final List<AbstractLayer> layers = Main.map.mapView.getLayersOfType(AbstractLayer.class);
+            final List<AbstractLayer> layers = Main.getLayerManager().getLayersOfType(AbstractLayer.class);
             for (final AbstractLayer layer : layers) {
                 if (hasSelectedItems(layer)) {
                     improveOsmLayer = layer;
