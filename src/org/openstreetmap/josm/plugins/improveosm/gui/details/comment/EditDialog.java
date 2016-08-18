@@ -78,7 +78,11 @@ class EditDialog extends GeneralModalDialog {
         lblError = Builder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
         lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
 
-        txtComment = buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true);
+        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true,
+                new JTextArea().getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE_12));
+        txtComment.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+        txtComment.setDocument(new EditDocument());
+
         final JPanel pnlComment = new JPanel(new BorderLayout());
         pnlComment.setBorder(BORDER);
         pnlComment.add(Builder.buildScrollPane(txtComment, Color.white, true), BorderLayout.CENTER);
@@ -96,18 +100,8 @@ class EditDialog extends GeneralModalDialog {
         add(pnlSouth, BorderLayout.SOUTH);
     }
 
-
     public void registerCommentObserver(final CommentObserver observer) {
         ((AddCommentAction) btnOk.getAction()).registerObserver(observer);
-    }
-
-    private JTextArea buildTextArea(final String text, final Color backgroundColor, final boolean editable) {
-        JTextArea txtArea = new JTextArea();
-        txtArea = GuiBuilder.buildTextArea(text, backgroundColor, editable,
-                txtArea.getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE_12));
-        txtArea.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-        txtArea.setDocument(new EditDocument());
-        return txtArea;
     }
 
     private final class EditDocument extends PlainDocument {

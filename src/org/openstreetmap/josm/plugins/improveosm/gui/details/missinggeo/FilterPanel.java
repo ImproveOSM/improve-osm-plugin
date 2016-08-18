@@ -16,10 +16,12 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -79,8 +81,9 @@ class FilterPanel extends BasicFilterPanel {
 
 
     private void addTypesFilter(final EnumSet<TileType> types) {
-        add(Builder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
-                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_TYPE);
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
+                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_TYPE);
         cbTypeParking = Builder.buildCheckBox(TileType.PARKING.displayValue(), TileType.PARKING.name(), PARKING);
         cbTypeRoad = Builder.buildCheckBox(TileType.ROAD.displayValue(), TileType.ROAD.name(), ROAD);
         cbTypeBoth = Builder.buildCheckBox(TileType.BOTH.displayValue(), TileType.BOTH.name(), BOTH);
@@ -91,16 +94,18 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludeWaterFilter(final boolean includeWater) {
-        add(Builder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
-                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_WATER);
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
+                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_WATER);
         cbIncludeWater = Builder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, WATER);
         cbIncludeWater.setSelected(includeWater);
         add(cbIncludeWater, Constraints.RB_WATER);
     }
 
     private void addIncludePathFilter(final boolean includePath) {
-        add(Builder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
-                getFont().deriveFont(Font.BOLD), null), Constraints.LBL_PEDESTRIAN);
+        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
+                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_PEDESTRIAN);
         cbIncludePath = Builder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), null, PATH);
         cbIncludePath.setSelected(includePath);
         add(cbIncludePath, Constraints.RB_PATH);
@@ -113,7 +118,8 @@ class FilterPanel extends BasicFilterPanel {
         } else {
             lblTxt = MissingGeometryGuiConfig.getInstance().getLblPointCount();
         }
-        add(Builder.buildLabel(lblTxt, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_COUNT);
+        add(GuiBuilder.buildLabel(lblTxt, getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT,
+                SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_COUNT);
 
         final String valueStr = value != null ? value.toString() : "";
         txtCount = buildCountTextField(valueStr, Color.white);

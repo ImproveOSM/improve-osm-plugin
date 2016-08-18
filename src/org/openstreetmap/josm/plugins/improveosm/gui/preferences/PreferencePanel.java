@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.util.EnumSet;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
@@ -31,6 +33,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -59,7 +62,8 @@ class PreferencePanel extends JPanel {
         final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
         final Font font = getFont().deriveFont(Font.PLAIN);
 
-        add(Builder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
+        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, ComponentOrientation.LEFT_TO_RIGHT,
+                SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_DATA_LAYER);
 
         cbMissingGeometry = Builder.buildCheckBox(new DataLayersSelectionAction(),
                 MissingGeometryGuiConfig.getInstance().getLayerTxt(), getBackground());

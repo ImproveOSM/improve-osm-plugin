@@ -119,8 +119,8 @@ public final class Builder {
      * @return a {@code JLabel} object
      */
     public static JLabel buildLabel(final String text, final Color textColor, final boolean visible) {
-        final JLabel lbl = buildLabel(text, null, null);
-        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
+        final JLabel lbl = GuiBuilder.buildLabel(text, new JLabel().getFont().deriveFont(Font.BOLD),
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP);
         lbl.setForeground(textColor);
         lbl.setVisible(visible);
         return lbl;
