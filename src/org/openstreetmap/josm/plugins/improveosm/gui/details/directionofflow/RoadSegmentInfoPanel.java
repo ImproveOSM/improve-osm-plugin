@@ -15,15 +15,17 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
+import java.awt.ComponentOrientation;
 import java.awt.Rectangle;
+import javax.swing.SwingConstants;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import com.telenav.josm.common.formatter.EntityFormatter;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -64,17 +66,20 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
             final String lbl = EntityFormatter.formatDouble(percentage, true)
                     + DirectionOfFlowGuiConfig.getInstance().getLblProcent();
             final int widthLbl = getFontMetricsBold().stringWidth(lbl.toString());
-            add(Builder.buildLabel(lbl, getFontBold(), new Rectangle(RECT_X, RECT_Y, widthLbl, LINE_HEIGHT)));
+            add(GuiBuilder.buildLabel(lbl, getFontBold(), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                    SwingConstants.TOP, new Rectangle(RECT_X, RECT_Y, widthLbl, LINE_HEIGHT)));
             incrementPnlY();
         }
     }
 
     private void addTotalTrips(final Integer numberOfTrips, final int widthLbl) {
         if (numberOfTrips != null) {
-            add(Builder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblTrips(), getFontBold(),
+            add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblTrips(), getFontBold(),
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
-            add(Builder.buildLabel(numberOfTrips.toString(), getFontPlain(),
+            add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
@@ -83,10 +88,12 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
 
     private void addRoadType(final String type, final int widthLbl) {
         if (type != null) {
-            add(Builder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblType(), getFontBold(),
+            add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblType(), getFontBold(),
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(type);
-            add(Builder.buildLabel(type.toLowerCase(), getFontPlain(),
+            add(GuiBuilder.buildLabel(type.toLowerCase(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
@@ -95,10 +102,12 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
 
     private void addStatus(final Status status, final int widthLbl) {
         if (status != null) {
-            add(Builder.buildLabel(GuiConfig.getInstance().getLblStatus(), getFontBold(),
+            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblStatus(), getFontBold(),
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(status.name());
-            add(Builder.buildLabel(status.name().toLowerCase(), getFontPlain(),
+            add(GuiBuilder.buildLabel(status.name().toLowerCase(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
@@ -107,10 +116,12 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
 
     private void addConfidence(final OnewayConfidenceLevel confidence, final int widthLbl) {
         if (confidence != null) {
-            add(Builder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFontBold(),
+            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFontBold(),
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(confidence.longDisplayName());
-            add(Builder.buildLabel(confidence.longDisplayName(), getFontPlain(),
+            add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(),
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();

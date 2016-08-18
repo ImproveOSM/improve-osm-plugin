@@ -22,11 +22,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.CancelAction;
 import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.ModalDialog;
 
 
 /**
@@ -35,7 +37,7 @@ import com.telenav.josm.common.gui.GuiBuilder;
  * @author Beata
  * @version $Revision$
  */
-public abstract class BasicFilterDialog extends GeneralModalDialog {
+public abstract class BasicFilterDialog extends ModalDialog {
 
     private static final long serialVersionUID = -9194599030250616025L;
 
@@ -52,6 +54,7 @@ public abstract class BasicFilterDialog extends GeneralModalDialog {
     public BasicFilterDialog(final Dimension dimension) {
         super(GuiConfig.getInstance().getDlgFilterTitle(), IconConfig.getInstance().getFilterIcon().getImage(),
                 dimension);
+        setLocationRelativeTo(Main.map.mapView);
         createComponents();
         setSize(dimension);
     }

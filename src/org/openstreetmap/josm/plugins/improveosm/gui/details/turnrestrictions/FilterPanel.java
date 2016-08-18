@@ -26,7 +26,6 @@ import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 import com.telenav.josm.common.gui.GuiBuilder;
 
@@ -52,10 +51,12 @@ class FilterPanel extends BasicFilterPanel {
         add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_CONFIDENCE);
-        cbbConfidenceC1 = Builder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
-                TurnConfidenceLevel.C1.name(), getBackground());
-        cbbConfidenceC2 = Builder.buildCheckBox(TurnConfidenceLevel.C2.shortDisplayName(),
-                TurnConfidenceLevel.C2.name(), getBackground());
+        cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
+                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TurnConfidenceLevel.C1.name(),
+                getBackground());
+        cbbConfidenceC2 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C2.shortDisplayName(),
+                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TurnConfidenceLevel.C2.name(),
+                getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
         add(cbbConfidenceC2, Constraints.CBB_C2);

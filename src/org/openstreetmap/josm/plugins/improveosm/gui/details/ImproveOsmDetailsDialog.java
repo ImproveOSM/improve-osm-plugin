@@ -30,7 +30,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.CommentsPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.RoadSegmentInfoPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.TileInfoPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionInfoPanel;
@@ -84,8 +83,8 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
-        cmpInfo =
-                Builder.buildScrollPane(GuiConfig.getInstance().getPnlInfoTitle(), buildEmptyPanel(), Color.white, DIM);
+        cmpInfo = GuiBuilder.buildScrollPane(buildEmptyPanel(), GuiConfig.getInstance().getPnlInfoTitle(), Color.white,
+                null, 100, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();

@@ -26,7 +26,6 @@ import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import com.telenav.josm.common.gui.GuiBuilder;
 
@@ -53,12 +52,15 @@ class FilterPanel extends BasicFilterPanel {
         add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_CONFIDENCE);
-        cbbConfidenceC1 = Builder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
-                OnewayConfidenceLevel.C1.name(), getBackground());
-        cbbConfidenceC2 = Builder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
-                OnewayConfidenceLevel.C2.name(), getBackground());
-        cbbConfidenceC3 = Builder.buildCheckBox(OnewayConfidenceLevel.C3.shortDisplayName(),
-                OnewayConfidenceLevel.C3.name(), getBackground());
+        cbbConfidenceC1 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
+                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, OnewayConfidenceLevel.C1.name(),
+                getBackground());
+        cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
+                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, OnewayConfidenceLevel.C2.name(),
+                getBackground());
+        cbbConfidenceC3 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C3.shortDisplayName(),
+                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, OnewayConfidenceLevel.C3.name(),
+                getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
         add(cbbConfidenceC2, Constraints.CBB_C2);
