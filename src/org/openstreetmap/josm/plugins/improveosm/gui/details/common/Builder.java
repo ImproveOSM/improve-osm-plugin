@@ -21,7 +21,6 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -97,16 +96,6 @@ public final class Builder {
             cbbox.setBackground(backgroundColor);
         }
         cbbox.setActionCommand(actionCommand);
-        return cbbox;
-    }
-
-    public static JCheckBox buildCheckBox(final ActionListener actionListener, final String text,
-            final Color backgroundColor) {
-        final JCheckBox cbbox = GuiBuilder.buildCheckBox(text, new JCheckBox().getFont().deriveFont(Font.PLAIN),
-                actionListener, false, false);
-        if (backgroundColor != null) {
-            cbbox.setBackground(backgroundColor);
-        }
         return cbbox;
     }
 
