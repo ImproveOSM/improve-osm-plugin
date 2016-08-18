@@ -24,7 +24,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 
 
@@ -47,13 +47,13 @@ class FilterPanel extends BasicFilterPanel {
     FilterPanel(final OnewayFilter filter) {
         super(filter, DirectionOfFlowGuiConfig.getInstance().getDlgFilterStatusLbl());
 
-        add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
+        add(Builder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_CONFIDENCE);
-        cbbConfidenceC1 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
+        cbbConfidenceC1 = Builder.buildCheckBox(OnewayConfidenceLevel.C1.shortDisplayName(),
                 OnewayConfidenceLevel.C1.name(), getBackground());
-        cbbConfidenceC2 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
+        cbbConfidenceC2 = Builder.buildCheckBox(OnewayConfidenceLevel.C2.shortDisplayName(),
                 OnewayConfidenceLevel.C2.name(), getBackground());
-        cbbConfidenceC3 = GuiBuilder.buildCheckBox(OnewayConfidenceLevel.C3.shortDisplayName(),
+        cbbConfidenceC3 = Builder.buildCheckBox(OnewayConfidenceLevel.C3.shortDisplayName(),
                 OnewayConfidenceLevel.C3.name(), getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);

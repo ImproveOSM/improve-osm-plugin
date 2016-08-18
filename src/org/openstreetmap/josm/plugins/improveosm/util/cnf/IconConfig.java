@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.openstreetmap.josm.tools.ImageProvider;
+import com.telenav.josm.common.cnf.BaseConfig;
 
 
 /**

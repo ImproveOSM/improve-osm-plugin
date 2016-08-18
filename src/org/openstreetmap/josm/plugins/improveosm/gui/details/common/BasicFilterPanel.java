@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -56,14 +58,13 @@ public abstract class BasicFilterPanel extends JPanel {
 
 
     private void addStatusFilter(final String statusLbl, final Status status) {
-        add(GuiBuilder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_STATUS);
-        rbStatusOpen =
-                GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
-        rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),
-                getBackground());
-        rbStatusInvalid = GuiBuilder.buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
-                getBackground());
-        btnGroupStatus = GuiBuilder.buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
+        add(Builder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD), null), Constraints.LBL_STATUS);
+        rbStatusOpen = buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
+        rbStatusSolved =
+                buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(), getBackground());
+        rbStatusInvalid =
+                buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(), getBackground());
+        btnGroupStatus = buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
         selectStatus(status);
         add(rbStatusOpen, Constraints.RB_OPEN);
         add(rbStatusSolved, Constraints.RB_SOLVED);
@@ -111,6 +112,22 @@ public abstract class BasicFilterPanel extends JPanel {
      */
     protected void resetFilters() {
         selectStatus(SearchFilter.DEFAULT.getStatus());
+    }
+
+    private ButtonGroup buildButtonGroup(final JRadioButton... buttons) {
+        final ButtonGroup btnGroup = new ButtonGroup();
+        for (final JRadioButton button : buttons) {
+            btnGroup.add(button);
+        }
+        return btnGroup;
+    }
+
+    private JRadioButton buildRadioButton(final String text, final String actionCommand, final Color backgroundColor) {
+        JRadioButton radioButton = new JRadioButton();
+        radioButton = GuiBuilder.buildRadioButton(text, radioButton.getFont().deriveFont(Font.PLAIN), false);
+        radioButton.setActionCommand(actionCommand);
+        radioButton.setBackground(backgroundColor);
+        return radioButton;
     }
 
 

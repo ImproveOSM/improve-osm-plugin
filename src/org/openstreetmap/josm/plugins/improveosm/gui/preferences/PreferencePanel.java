@@ -24,7 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -59,9 +59,9 @@ class PreferencePanel extends JPanel {
         final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
         final Font font = getFont().deriveFont(Font.PLAIN);
 
-        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
+        add(Builder.buildLabel(GuiConfig.getInstance().getPreferenceLbl(), font, null), Constraints.LBL_DATA_LAYER);
 
-        cbMissingGeometry = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+        cbMissingGeometry = Builder.buildCheckBox(new DataLayersSelectionAction(),
                 MissingGeometryGuiConfig.getInstance().getLayerTxt(), getBackground());
         if (!enabledDataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             cbMissingGeometry.setEnabled(false);
@@ -71,7 +71,7 @@ class PreferencePanel extends JPanel {
         }
         add(cbMissingGeometry, Constraints.CB_MISSING_GEOMETRY);
 
-        cbDirectionOfFlow = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+        cbDirectionOfFlow = Builder.buildCheckBox(new DataLayersSelectionAction(),
                 DirectionOfFlowGuiConfig.getInstance().getLayerTxt(), getBackground());
         if (!enabledDataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
             cbDirectionOfFlow.setEnabled(false);
@@ -81,7 +81,7 @@ class PreferencePanel extends JPanel {
         }
         add(cbDirectionOfFlow, Constraints.CB_DIRECTION_OF_FLOW);
 
-        cbTurnRestriction = GuiBuilder.buildCheckBox(new DataLayersSelectionAction(),
+        cbTurnRestriction = Builder.buildCheckBox(new DataLayersSelectionAction(),
                 TurnRestrictionGuiConfig.getInstance().getLayerTxt(), getBackground());
         if (!enabledDataLayers.contains(DataLayer.TURN_RESTRICTION)) {
             cbTurnRestriction.setEnabled(false);

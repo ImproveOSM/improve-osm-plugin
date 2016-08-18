@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import java.util.EnumSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import com.telenav.josm.common.cnf.BaseConfig;
 
 
 /**
@@ -64,10 +65,10 @@ public final class Config extends BaseConfig {
             commentDisplayLength = MAX_COMMENT_DISPLAY_LENGTH;
         }
 
-        final String enabledDataLayersValue = readProperty("layers.enabled");
-        if (enabledDataLayersValue != null && !enabledDataLayersValue.isEmpty()) {
+        final String[] enabledDataLayersValues = readPropertiesArray("layers.enabled");
+        if (enabledDataLayersValues != null) {
             enabledDataLayers = EnumSet.noneOf(DataLayer.class);
-            for (final String value : enabledDataLayersValue.split(SEPARATOR)) {
+            for (final String value : enabledDataLayersValues) {
                 enabledDataLayers.add(DataLayer.valueOf(value));
             }
         } else {

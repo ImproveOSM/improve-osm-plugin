@@ -20,7 +20,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import org.openstreetmap.josm.data.coor.LatLon;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
@@ -30,6 +29,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.BaseService;
 import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
 import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**
@@ -67,9 +67,9 @@ public class TurnRestrictionService extends BaseService implements Service<TurnR
                         map.put(elem.getPoint(), new TurnRestriction(elem.getPoint(), turnRestrictions));
                     } else {
                         mapElem.getTurnRestrictions()
-                        .add(new TurnRestriction(elem.getId(), elem.getSegments(), elem.getPoint(),
-                                elem.getStatus(), elem.getTurnType(), elem.getConfidenceLevel(),
-                                elem.getNumberOfPasses()));
+                                .add(new TurnRestriction(elem.getId(), elem.getSegments(), elem.getPoint(),
+                                        elem.getStatus(), elem.getTurnType(), elem.getConfidenceLevel(),
+                                        elem.getNumberOfPasses()));
                     }
                 } else {
                     map.put(elem.getPoint(), elem);

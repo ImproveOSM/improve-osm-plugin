@@ -17,11 +17,12 @@ package org.openstreetmap.josm.plugins.improveosm;
 
 import javax.swing.SwingUtilities;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
+import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**
@@ -45,7 +46,12 @@ abstract class UpdateThread<T> implements Runnable {
     @Override
     public void run() {
         if (Main.map != null && Main.map.mapView != null) {
-            final BoundingBox bbox = new BoundingBox(Main.map.mapView);
+            final Bounds bounds =
+                    new Bounds(Main.map.mapView.getLatLon(0, Main.map.mapView.getHeight()),
+                            Main.map.mapView.getLatLon(Main.map.mapView.getWidth(), 0));
+
+            final BoundingBox bbox = new BoundingBox(bounds.getMax().lat(), bounds.getMin().lat(),
+                    bounds.getMax().lon(), bounds.getMin().lon());
             final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
             final DataSet<T> result = searchData(bbox, zoom);
 

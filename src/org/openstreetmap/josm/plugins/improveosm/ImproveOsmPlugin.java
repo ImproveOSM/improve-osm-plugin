@@ -44,7 +44,6 @@ import org.openstreetmap.josm.gui.layer.LayerManager.LayerRemoveEvent;
 import org.openstreetmap.josm.gui.preferences.PreferenceSetting;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
@@ -69,6 +68,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.Keys;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import org.openstreetmap.josm.tools.Utils;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**
@@ -176,19 +176,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             }
         }
     }
-    //
-    // @Override
-    // public void activeLayerChange(final Layer oldLayer, final Layer newLayer) {
-    // if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
-    // if (oldLayer instanceof MissingGeometryLayer) {
-    // updateSelectedData(missingGeometryLayer, null, null);
-    // } else if (oldLayer instanceof DirectionOfFlowLayer) {
-    // updateSelectedData(directionOfFlowLayer, null, null);
-    // } else if (oldLayer instanceof TurnRestrictionLayer) {
-    // updateSelectedData(turnRestrictionLayer, null, null);
-    // }
-    // }
-    // }
+
 
     /* ZoomChangeListener method */
 

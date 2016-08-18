@@ -64,7 +64,6 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MapView;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
@@ -73,6 +72,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnSegment;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Pair;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**

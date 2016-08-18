@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+import com.telenav.josm.common.cnf.BaseConfig;
 
 /**
  * Holds direction of flow logic related texts.

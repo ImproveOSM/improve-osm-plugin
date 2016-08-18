@@ -15,12 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
-import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+import com.telenav.josm.common.gui.BasicInfoPanel;
 
 
 /**
@@ -31,105 +28,25 @@ import org.openstreetmap.josm.Main;
  * @version $Revision$
  * @param <T> the type of the object who's details is displayed in the panel
  */
-public abstract class BasicPanel<T> extends JPanel {
+public abstract class BasicPanel<T> extends BasicInfoPanel<T> {
 
     private static final long serialVersionUID = -1712483793218733712L;
-
-    /** the minimum size of the panel */
-    public static final Dimension PANEL_MIN = new Dimension(0, 10);
-
-    private final Font fontBold;
-    private final Font fontPlain;
 
     /* font metrics */
     private final FontMetrics fontMetricsPlain;
     private final FontMetrics fontMetricsBold;
 
-    /* constants used for computing GUI component dimensions */
-    protected static final int LHEIGHT = 22;
-    protected static final int SPACE_Y = 3;
-    protected static final int RECT_X = 0;
+    /* constant used for computing GUI component dimensions */
     protected static final int RECT_Y = 0;
-    private int pnlY = 0;
-    private int pnlWidth = 0;
 
 
     /**
      * Builds a new {@code InfoPanel} with the given argument.
      */
     public BasicPanel() {
-        setBackground(Color.white);
-        fontBold = getFont().deriveFont(Font.BOLD);
-        fontPlain = getFont().deriveFont(Font.PLAIN);
-        fontMetricsPlain = Main.map.mapView.getGraphics().getFontMetrics(fontPlain);
-        fontMetricsBold = Main.map.mapView.getGraphics().getFontMetrics(fontBold);
-    }
-
-
-    /**
-     * Creates the components of the panel with the information of the given object.
-     *
-     * @param obj an object of type T
-     */
-    protected abstract void createComponents(T obj);
-
-    /**
-     * Returns the maximum width for the given strings.
-     *
-     * @param fm the {@code FontMetrics} used for displaying the given strings
-     * @param strings s list of {@code String}s
-     * @return the maximum width
-     */
-    protected int getMaxWidth(final FontMetrics fm, final String... strings) {
-        int width = 0;
-        for (int i = 0; i < strings.length; i++) {
-            width = Math.max(width, fm.stringWidth(strings[i]) + SPACE_Y);
-        }
-        return width;
-    }
-
-    /**
-     * Updates the panel with the information of the given object.
-     *
-     * @param obj an object of type T
-     */
-    public void updateData(final T obj) {
-        removeAll();
-        if (obj != null) {
-            pnlY = 0;
-            pnlWidth = 0;
-            setLayout(null);
-            createComponents(obj);
-        } else {
-            setPreferredSize(PANEL_MIN);
-        }
-    }
-
-    protected void incrementPnlY() {
-        pnlY = pnlY + LHEIGHT;
-    }
-
-    protected void setPnlY(final int value) {
-        pnlY = value;
-    }
-    protected void setPnlWidth(final int value) {
-        pnlWidth = Math.max(pnlWidth, value);
-    }
-
-    protected int getPnlY() {
-        return pnlY;
-    }
-
-    protected int getPnlWidth() {
-        return pnlWidth;
-    }
-
-    protected Font getFontBold() {
-        return fontBold;
-    }
-
-    protected Font getFontPlain() {
-        return fontPlain;
+        super();
+        fontMetricsPlain = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain());
+        fontMetricsBold = Main.map.mapView.getGraphics().getFontMetrics(getFontBold());
     }
 
     protected FontMetrics getFontMetricsPlain() {

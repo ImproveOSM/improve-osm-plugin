@@ -15,11 +15,11 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 
 
@@ -37,9 +37,9 @@ public class EditPopupMenu extends JPopupMenu {
 
     public EditPopupMenu(final Status status, final String titleEdit, final String titleEditComment,
             final ImageIcon icon) {
-        editMenuItem = GuiBuilder.buildMenuItem(new ChangeStatusAction(status), titleEdit);
+        editMenuItem = buildMenuItem(new ChangeStatusAction(status), titleEdit);
         commentMenuItem =
-                GuiBuilder.buildMenuItem(new DisplayEditDialogAction(status, titleEditComment, icon), titleEditComment);
+                buildMenuItem(new DisplayEditDialogAction(status, titleEditComment, icon), titleEditComment);
         add(editMenuItem);
         add(commentMenuItem);
     }
@@ -50,6 +50,11 @@ public class EditPopupMenu extends JPopupMenu {
         ((DisplayEditDialogAction) commentMenuItem.getAction()).registerCommentObserver(commentObserver);
     }
 
+    private JMenuItem buildMenuItem(final AbstractAction action, final String title) {
+        final JMenuItem menuItem = new JMenuItem(action);
+        menuItem.setText(title);
+        return menuItem;
+    }
 
     private final class ChangeStatusAction extends BasicCommentAction {
 

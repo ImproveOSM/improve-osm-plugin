@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import com.telenav.josm.common.gui.CancelAction;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -33,7 +35,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
  * @author Beata
  * @version $Revision$
  */
-public abstract class BasicFilterDialog extends ModalDialog {
+public abstract class BasicFilterDialog extends GeneralModalDialog {
 
     private static final long serialVersionUID = -9194599030250616025L;
 
@@ -44,7 +46,7 @@ public abstract class BasicFilterDialog extends ModalDialog {
 
     /**
      * Builds a new filter panel.
-     * 
+     *
      * @param dimension the filter dialog's initial size
      */
     public BasicFilterDialog(final Dimension dimension) {

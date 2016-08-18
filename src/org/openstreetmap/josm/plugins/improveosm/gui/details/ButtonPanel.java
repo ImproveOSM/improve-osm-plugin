@@ -33,7 +33,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.DisplayEditDialogAction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.EditPopupMenu;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.DirectionOfFlowFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionFilterDialog;
@@ -44,6 +43,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Utils;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**

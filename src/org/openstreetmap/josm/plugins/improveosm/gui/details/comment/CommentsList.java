@@ -25,7 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.ScrollableToolTip;
+import com.telenav.josm.common.gui.ScrollableToolTip;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 
 

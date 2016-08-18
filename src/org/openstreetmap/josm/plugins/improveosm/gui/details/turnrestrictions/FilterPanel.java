@@ -24,7 +24,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
+import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Builder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 
 
@@ -46,11 +46,11 @@ class FilterPanel extends BasicFilterPanel {
     FilterPanel(final TurnRestrictionFilter filter) {
         super(filter, TurnRestrictionGuiConfig.getInstance().getDlgFilterStatusLbl());
 
-        add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
+        add(Builder.buildLabel(TurnRestrictionGuiConfig.getInstance().getDlgFilterConfidenceLbl(),
                 getFont().deriveFont(Font.BOLD), null), Constraints.LBL_CONFIDENCE);
-        cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
+        cbbConfidenceC1 = Builder.buildCheckBox(TurnConfidenceLevel.C1.shortDisplayName(),
                 TurnConfidenceLevel.C1.name(), getBackground());
-        cbbConfidenceC2 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C2.shortDisplayName(),
+        cbbConfidenceC2 = Builder.buildCheckBox(TurnConfidenceLevel.C2.shortDisplayName(),
                 TurnConfidenceLevel.C2.name(), getBackground());
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);

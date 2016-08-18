@@ -15,13 +15,16 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui;
 
+import java.awt.Color;
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -43,9 +46,8 @@ public class InfoDialog {
                 isDisplayed = true;
                 final String txt = GuiConfig.getInstance().getTxtOldPlugins();
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        GuiBuilder.buildTextPane(txt, Main.parent.getBackground()),
-                        GuiConfig.getInstance().getPluginName(), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                        null, null, null);
+                        buildTextPane(txt, Main.parent.getBackground()), GuiConfig.getInstance().getPluginName(),
+                        JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;
                 PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
                 isDisplayed = false;
@@ -66,7 +68,7 @@ public class InfoDialog {
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 isDisplayed = true;
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        GuiBuilder.buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
+                        buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
                                 Main.parent.getBackground()),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
@@ -75,5 +77,16 @@ public class InfoDialog {
                 isDisplayed = false;
             }
         }
+    }
+
+
+    private JTextPane buildTextPane(final String txt, final Color background) {
+        final JTextPane txtPane = GuiBuilder.buildTextPane(txt, false, "text/html");
+        if (background != null) {
+            txtPane.setBackground(background);
+        }
+        txtPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+        txtPane.setCaretPosition(0);
+        return txtPane;
     }
 }
