@@ -15,9 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.service;
 
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
+import com.telenav.josm.common.argument.BoundingBox;
+import com.telenav.josm.common.http.HttpUtil;
 
 
 /**

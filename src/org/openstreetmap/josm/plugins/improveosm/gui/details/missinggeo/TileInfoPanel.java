@@ -15,18 +15,20 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo;
 
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.List;
+import javax.swing.SwingConstants;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
+import com.telenav.josm.common.formatter.EntityFormatter;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -48,9 +50,8 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     @Override
     public void createComponents(final Tile tile) {
         final MissingGeometryGuiConfig mgGuiCnf = MissingGeometryGuiConfig.getInstance();
-        final int widthLbl = getMaxWidth(getFontMetricsBold(), mgGuiCnf.getLblType(),
-                mgGuiCnf.getLblPointCount(), mgGuiCnf.getLblTripCount(), GuiConfig.getInstance().getLblStatus(),
-                mgGuiCnf.getLblTimestamp());
+        final int widthLbl = getMaxWidth(getFontMetricsBold(), mgGuiCnf.getLblType(), mgGuiCnf.getLblPointCount(),
+                mgGuiCnf.getLblTripCount(), GuiConfig.getInstance().getLblStatus(), mgGuiCnf.getLblTimestamp());
 
         addType(tile.getType(), widthLbl);
         addStatus(tile.getStatus(), widthLbl);
@@ -64,10 +65,12 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     private void addType(final TileType type, final int widthLbl) {
         if (type != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblType(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(type.toString());
-            add(GuiBuilder.buildLabel(type.toString(), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+            add(GuiBuilder.buildLabel(type.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
@@ -76,10 +79,12 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     private void addStatus(final Status status, final int widthLbl) {
         if (status != null) {
             add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblStatus(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = getFontMetricsPlain().stringWidth(status.name());
-            add(GuiBuilder.buildLabel(status.name(), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+            add(GuiBuilder.buildLabel(status.name(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
@@ -88,11 +93,13 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     private void addTimestamp(final Long timestamp, final int widthLbl) {
         if (timestamp != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblTimestamp(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
-            final String timestampStr = Formatter.formatTimestamp(timestamp);
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
+            final String timestampStr = EntityFormatter.formatTimestamp(timestamp);
             final int widthVal = getFontMetricsPlain().stringWidth(timestampStr);
-            add(GuiBuilder.buildLabel(timestampStr, getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
+            add(GuiBuilder.buildLabel(timestampStr, getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
@@ -101,28 +108,32 @@ public class TileInfoPanel extends BasicPanel<Tile> {
     private void addNumberOfPoints(final List<LatLon> points, final int widthLbl) {
         if (points != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblPointCount(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final String numberOfPoints =
                     points.size() > 1 ? "" + points.size() : GuiConfig.getInstance().getLblNotAvailable();
-                    final int widthVal = getFontMetricsPlain().stringWidth(numberOfPoints);
-                    add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(),
-                            new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-                    setPnlWidth(widthLbl + widthVal);
-                    incrementPnlY();
+            final int widthVal = getFontMetricsPlain().stringWidth(numberOfPoints);
+            add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
+            setPnlWidth(widthLbl + widthVal);
+            incrementPnlY();
         }
     }
 
     private void addNumberOfTrips(final Integer numberOfTrips, final int widthLbl) {
         if (numberOfTrips != null) {
             add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getLblTripCount(), getFontBold(),
-                    new Rectangle(RECT_X, getPnlY(), widthLbl, LHEIGHT)));
+                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final String numberOfTripsTxt =
                     numberOfTrips > -1 ? numberOfTrips.toString() : GuiConfig.getInstance().getLblNotAvailable();
-                    final int widthVal = getFontMetricsPlain().stringWidth(numberOfTripsTxt);
-                    add(GuiBuilder.buildLabel(numberOfTripsTxt, getFontPlain(),
-                            new Rectangle(widthLbl, getPnlY(), widthVal, LHEIGHT)));
-                    setPnlWidth(widthLbl + widthVal);
-                    incrementPnlY();
+            final int widthVal = getFontMetricsPlain().stringWidth(numberOfTripsTxt);
+            add(GuiBuilder.buildLabel(numberOfTripsTxt, getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
+            setPnlWidth(widthLbl + widthVal);
+            incrementPnlY();
         }
     }
 }

@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 
 import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
+import com.telenav.josm.common.util.EntityUtil;
 
 
 /**

@@ -17,27 +17,31 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.CancelAction;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.ModalDialog;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import com.telenav.josm.common.gui.CancelAction;
+import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.ModalDialog;
 
 
 /**
@@ -66,6 +70,7 @@ class EditDialog extends ModalDialog {
      */
     EditDialog(final Status status, final String title, final Image icon) {
         super(title, icon, DIM);
+        setLocationRelativeTo(Main.map.mapView);
         this.status = status;
         createComponents();
     }
@@ -73,14 +78,20 @@ class EditDialog extends ModalDialog {
 
     @Override
     public void createComponents() {
-        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, false);
+        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red,
+                new JLabel().getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP, false);
         lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
 
-        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true);
+        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true,
+                new JTextArea().getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE_12));
+        txtComment.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
         txtComment.setDocument(new EditDocument());
+
         final JPanel pnlComment = new JPanel(new BorderLayout());
         pnlComment.setBorder(BORDER);
-        pnlComment.add(GuiBuilder.buildScrollPane(txtComment, Color.white, true), BorderLayout.CENTER);
+        pnlComment.add(GuiBuilder.buildScrollPane(txtComment, null, Color.white, Color.gray, 100, true, null),
+                BorderLayout.CENTER);
         pnlComment.setVerifyInputWhenFocusTarget(true);
         add(pnlComment, BorderLayout.CENTER);
 
@@ -94,7 +105,6 @@ class EditDialog extends ModalDialog {
         pnlSouth.add(pnlBtn, BorderLayout.LINE_END);
         add(pnlSouth, BorderLayout.SOUTH);
     }
-
 
     public void registerCommentObserver(final CommentObserver observer) {
         ((AddCommentAction) btnOk.getAction()).registerObserver(observer);

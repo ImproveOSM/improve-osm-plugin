@@ -15,14 +15,11 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.tools.Pair;
+import com.telenav.josm.common.formatter.EntityFormatter;
 
 
 /**
@@ -33,24 +30,8 @@ import org.openstreetmap.josm.tools.Pair;
  */
 public final class Formatter {
 
-    private static final String DOUBLE_FORMAT = "0.00";
-    private static final String TSTP = "yyyy-MM-dd HH:mm:ss";
-    private static final Long UNIX_TSTP = 1000L;
-
-
     private Formatter() {}
 
-
-    /**
-     * Formats the given double value using "0.00" format.
-     *
-     * @param value a double value
-     * @param round if true the value is rounded
-     * @return a string representation of the value
-     */
-    public static String formatDouble(final Double value, final boolean round) {
-        return value == null ? "" : (round ? "" + Math.round(value) : new DecimalFormat(DOUBLE_FORMAT).format(value));
-    }
 
     /**
      * Formats the given comment using HTML tags.
@@ -61,7 +42,7 @@ public final class Formatter {
     public static String formatComment(final Comment comment) {
         final StringBuilder sb = new StringBuilder("<html><body>");
         sb.append(("<b>"));
-        sb.append(formatTimestamp(comment.getTimestamp()));
+        sb.append(EntityFormatter.formatTimestamp(comment.getTimestamp()));
         sb.append(", ").append(comment.getUsername());
         sb.append("</b><br>");
         final String txt =
@@ -84,17 +65,6 @@ public final class Formatter {
         return sb.toString();
     }
 
-    /**
-     * Formats the given timestamp in 'yyyy-MM-dd HH:mm:ss' format.
-     *
-     * @param timestamp a {@code Long} value
-     * @return a string containing the timestamp
-     */
-    public static String formatTimestamp(final Long timestamp) {
-        final SimpleDateFormat dateTimeFormat = new SimpleDateFormat(TSTP);
-        dateTimeFormat.setTimeZone(TimeZone.getDefault());
-        return timestamp != null ? dateTimeFormat.format(new Date(timestamp * UNIX_TSTP)) : "";
-    }
 
     /**
      * Formats the given string representing a turn type. The method removes all the '_' characters and transforms the

@@ -15,12 +15,12 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.service.missinggeo;
 
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.service.BaseQueryBuilder;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.ServiceConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.http.HttpUtil;
+import com.telenav.josm.common.argument.BoundingBox;
+import com.telenav.josm.common.http.HttpUtil;
 
 
 /**

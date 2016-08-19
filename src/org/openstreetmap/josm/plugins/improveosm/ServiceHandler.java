@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
@@ -33,6 +32,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.directioofflow.Directio
 import org.openstreetmap.josm.plugins.improveosm.service.missinggeo.MissingGeometryService;
 import org.openstreetmap.josm.plugins.improveosm.service.turnrestriction.TurnRestrictionService;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**

@@ -17,7 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.service.directioofflow;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
+import com.telenav.josm.common.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;

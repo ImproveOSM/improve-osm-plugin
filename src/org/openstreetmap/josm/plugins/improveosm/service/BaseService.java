@@ -17,13 +17,13 @@ package org.openstreetmap.josm.plugins.improveosm.service;
 
 import java.net.HttpURLConnection;
 import org.openstreetmap.josm.data.coor.LatLon;
-import org.openstreetmap.josm.plugins.improveosm.service.entity.ResponseStatus;
-import org.openstreetmap.josm.plugins.improveosm.util.http.HttpConnector;
-import org.openstreetmap.josm.plugins.improveosm.util.http.HttpConnectorException;
-import org.openstreetmap.josm.plugins.improveosm.util.http.HttpMethod;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.telenav.josm.common.entity.Status;
+import com.telenav.josm.common.http.ContentType;
+import com.telenav.josm.common.http.HttpConnector;
+import com.telenav.josm.common.http.HttpConnectorException;
 
 
 /**
@@ -60,7 +60,7 @@ public class BaseService {
     public <T> T executeGet(final String url, final Class<T> responseType) throws ServiceException {
         String response = null;
         try {
-            response = new HttpConnector(url, HttpMethod.GET).read();
+            response = new HttpConnector(url).get();
         } catch (final HttpConnectorException e) {
             throw new ServiceException(e);
         }
@@ -80,9 +80,7 @@ public class BaseService {
             throws ServiceException {
         String response = null;
         try {
-            final HttpConnector connector = new HttpConnector(url, HttpMethod.POST);
-            connector.write(content);
-            response = connector.read();
+            response = new HttpConnector(url).post(content, ContentType.JSON);
         } catch (final HttpConnectorException e) {
             throw new ServiceException(e);
         }
@@ -106,7 +104,7 @@ public class BaseService {
      * @param status a {@code ResponseStatus} represents the status of a service response
      * @throws ServiceException containing the status API message
      */
-    public void verifyResponseStatus(final ResponseStatus status) throws ServiceException {
+    public void verifyResponseStatus(final Status status) throws ServiceException {
         if (status != null && status.getHttpCode() != HttpURLConnection.HTTP_OK) {
             throw new ServiceException(status.getApiMessage());
         }

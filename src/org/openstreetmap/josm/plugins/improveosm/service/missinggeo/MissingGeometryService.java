@@ -17,7 +17,6 @@ package org.openstreetmap.josm.plugins.improveosm.service.missinggeo;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
@@ -28,6 +27,7 @@ import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
 import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
 import com.google.gson.GsonBuilder;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**

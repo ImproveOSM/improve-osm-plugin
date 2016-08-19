@@ -30,7 +30,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.CommentsPanel;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.GuiBuilder;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.RoadSegmentInfoPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.TileInfoPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionInfoPanel;
@@ -43,6 +42,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Shortcut;
+import com.telenav.josm.common.gui.GuiBuilder;
 
 
 /**
@@ -83,12 +83,12 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
-        cmpInfo = GuiBuilder.buildScrollPane(GuiConfig.getInstance().getPnlInfoTitle(), GuiBuilder.buildEmptyPanel(),
-                Color.white, DIM);
+        cmpInfo = GuiBuilder.buildScrollPane(buildEmptyPanel(), GuiConfig.getInstance().getPnlInfoTitle(), Color.white,
+                null, 100, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(pnlDetails, pnlBtn);
+        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn);
         add(createLayout(pnlMain, false, null));
     }
 
@@ -162,5 +162,11 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             pnlComments.updateData(comments);
             updateUI(item);
         }
+    }
+
+    private JPanel buildEmptyPanel() {
+        final JPanel pnl = new JPanel();
+        pnl.setBackground(Color.white);
+        return pnl;
     }
 }

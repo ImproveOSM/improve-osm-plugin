@@ -16,10 +16,10 @@
 package org.openstreetmap.josm.plugins.improveosm.service;
 
 import java.util.List;
-import org.openstreetmap.josm.plugins.improveosm.argument.BoundingBox;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
+import com.telenav.josm.common.argument.BoundingBox;
 
 
 /**

@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.service.entity;
 import java.util.List;
 import org.openstreetmap.josm.plugins.improveosm.entity.Cluster;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
+import com.telenav.josm.common.entity.Status;
 
 
 /**
@@ -29,12 +30,12 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 public class BaseResponse {
     // setters are not required,since GSON sets the fields directly using reflection.
 
-    private ResponseStatus status;
+    private Status status;
     private List<Cluster> clusters;
     private List<Comment> comments;
 
 
-    public ResponseStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 

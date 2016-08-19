@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import java.util.List;
+import com.telenav.josm.common.cnf.BaseConfig;
 
 
 /**
@@ -63,7 +64,7 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         lblFirstSegmentTrips = readProperty("details.info.segment.first.lbl");
         lblLastSegmentTrips = readProperty("details.info.segment.last.lbl");
         tblTitle = readProperty("details.info.tbl.title");
-        tblHeader = readProperties("details.info.tbl.header");
+        tblHeader = readPropertiesList("details.info.tbl.header");
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
         lblTurn = readProperty("turn.lbl");

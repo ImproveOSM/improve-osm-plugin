@@ -15,6 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
+import com.telenav.josm.common.cnf.BaseConfig;
+
+
 /**
  * Holds back-end service connection run-time configuration.
  *
