@@ -91,6 +91,7 @@
 		<jar destfile="${plugin.out.dir}/${plugin.name}" basedir="${plugin.build.dir}">
 			<zipfileset src="${plugin.lib.dir}/gson-2.4.jar" />
 			<zipfileset src="${plugin.lib.dir}/commons-io-2.4.jar" />
+			<zipfileset src="${plugin.lib.dir}/josm-common-1.3.jar" />
 			<manifest>
 				<attribute name="Author" value="Telenav" />
 				<attribute name="Plugin-Class" value="org.openstreetmap.josm.plugins.improveosm.ImproveOsmPlugin" />
