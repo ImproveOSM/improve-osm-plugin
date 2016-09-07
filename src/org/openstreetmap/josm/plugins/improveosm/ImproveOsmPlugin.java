@@ -152,14 +152,19 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public void layerRemoving(final LayerRemoveEvent event) {
+        if (event.getRemovedLayer() instanceof ImproveOsmLayer) {
+            final ImproveOsmLayer<?> removedLayer = (ImproveOsmLayer<?>) event.getRemovedLayer();
+            if (removedLayer.hasSelectedItems()) {
+                removedLayer.updateSelectedItem(null);
+                detailsDialog.updateUI(null, null);
+            }
+        }
+
         if (event.getRemovedLayer() instanceof MissingGeometryLayer) {
-            missingGeometryLayer.updateSelectedItem(null);
             missingGeometryLayer = null;
         } else if (event.getRemovedLayer() instanceof DirectionOfFlowLayer) {
-            directionOfFlowLayer.updateSelectedItem(null);
             directionOfFlowLayer = null;
         } else if (event.getRemovedLayer() instanceof TurnRestrictionLayer) {
-            turnRestrictionLayer.updateSelectedItem(null);
             turnRestrictionLayer = null;
         }
         if (missingGeometryLayer == null && directionOfFlowLayer == null && turnRestrictionLayer == null) {
