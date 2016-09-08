@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -42,7 +43,6 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import org.openstreetmap.josm.tools.Utils;
 import com.telenav.josm.common.gui.GuiBuilder;
 
 
@@ -230,7 +230,7 @@ class ButtonPanel extends JPanel {
         public void actionPerformed(final ActionEvent event) {
             final LatLon location = selectedItemCoordinate != null ? selectedItemCoordinate
                     : Main.map.mapView.getRealBounds().getCenter();
-            Utils.copyToClipboard(Formatter.formatLatLon(location));
+            ClipboardUtils.copyString(Formatter.formatLatLon(location));
         }
     }
 }

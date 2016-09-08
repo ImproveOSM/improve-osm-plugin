@@ -36,6 +36,7 @@ import org.openstreetmap.josm.gui.IconToggleButton;
 import org.openstreetmap.josm.gui.MapFrame;
 import org.openstreetmap.josm.gui.NavigatableComponent;
 import org.openstreetmap.josm.gui.NavigatableComponent.ZoomChangeListener;
+import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
@@ -67,7 +68,6 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.Keys;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
-import org.openstreetmap.josm.tools.Utils;
 import com.telenav.josm.common.argument.BoundingBox;
 
 
@@ -572,7 +572,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                         selection = turnRestrictionLayer.getSelectedItems().toString();
                     }
                 }
-                Utils.copyToClipboard(selection);
+                ClipboardUtils.copyString(selection);
             }
         }
     }
