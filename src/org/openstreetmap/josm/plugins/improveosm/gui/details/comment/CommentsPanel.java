@@ -20,8 +20,8 @@ import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JScrollPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
+import com.telenav.josm.common.gui.BasicInfoPanel;
 import com.telenav.josm.common.gui.GuiBuilder;
 
 
@@ -31,7 +31,7 @@ import com.telenav.josm.common.gui.GuiBuilder;
  * @author Beata
  * @version $Revision$
  */
-public class CommentsPanel extends BasicPanel<List<Comment>> {
+public class CommentsPanel extends BasicInfoPanel<List<Comment>> {
 
     private static final long serialVersionUID = -1002962542315503824L;
 

@@ -16,15 +16,17 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow;
 
 import java.awt.ComponentOrientation;
+import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import javax.swing.SwingConstants;
+import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicPanel;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import com.telenav.josm.common.formatter.EntityFormatter;
+import com.telenav.josm.common.gui.BasicInfoPanel;
 import com.telenav.josm.common.gui.GuiBuilder;
 
 
@@ -34,7 +36,7 @@ import com.telenav.josm.common.gui.GuiBuilder;
  * @author Beata
  * @version $Revision$
  */
-public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
+public class RoadSegmentInfoPanel extends BasicInfoPanel<RoadSegment> {
 
     private static final long serialVersionUID = 4836239803613790133L;
 
@@ -51,8 +53,9 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
     public void createComponents(final RoadSegment roadSegment) {
         final DirectionOfFlowGuiConfig dofGuiCnf = DirectionOfFlowGuiConfig.getInstance();
         final GuiConfig guiCnf = GuiConfig.getInstance();
-        final int widthLbl = getMaxWidth(getFontMetricsBold(), dofGuiCnf.getLblTrips(), dofGuiCnf.getLblType(),
-                guiCnf.getLblStatus(), guiCnf.getLblConfidence());
+        final FontMetrics fm = Main.map.mapView.getGraphics().getFontMetrics(getFontBold());
+        final int widthLbl = getMaxWidth(fm, dofGuiCnf.getLblTrips(), dofGuiCnf.getLblType(), guiCnf.getLblStatus(),
+                guiCnf.getLblConfidence());
 
         addPercentage(roadSegment.getPercentOfTrips());
         addTotalTrips(roadSegment.getNumberOfTrips(), widthLbl);
@@ -65,9 +68,10 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
         if (percentage != null) {
             final String lbl = EntityFormatter.formatDouble(percentage, true)
                     + DirectionOfFlowGuiConfig.getInstance().getLblProcent();
-            final int widthLbl = getFontMetricsBold().stringWidth(lbl.toString());
+            final int widthLbl =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl.toString());
             add(GuiBuilder.buildLabel(lbl, getFontBold(), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                    SwingConstants.TOP, new Rectangle(RECT_X, RECT_Y, widthLbl, LINE_HEIGHT)));
+                    SwingConstants.TOP, new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             incrementPnlY();
         }
     }
@@ -77,7 +81,8 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
             add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblTrips(), getFontBold(),
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(numberOfTrips.toString());
+            final int widthVal =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(numberOfTrips.toString());
             add(GuiBuilder.buildLabel(numberOfTrips.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
@@ -91,7 +96,7 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
             add(GuiBuilder.buildLabel(DirectionOfFlowGuiConfig.getInstance().getLblType(), getFontBold(),
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(type);
+            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(type);
             add(GuiBuilder.buildLabel(type.toLowerCase(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
@@ -105,7 +110,8 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
             add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblStatus(), getFontBold(),
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(status.name());
+            final int widthVal =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(status.name());
             add(GuiBuilder.buildLabel(status.name().toLowerCase(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
@@ -119,9 +125,10 @@ public class RoadSegmentInfoPanel extends BasicPanel<RoadSegment> {
             add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFontBold(),
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal = getFontMetricsPlain().stringWidth(confidence.longDisplayName());
-            add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(),
-                    ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain())
+                    .stringWidth(confidence.longDisplayName());
+            add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
