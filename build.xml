@@ -49,7 +49,7 @@
 			<fileset dir="${plugin.lib.dir}" includes="**/*.jar" excludes="josm-tested.jar,josm-latest.jar" />
 			<fileset dir="${plugin.lib.dir}" includes="${JOSM_lib}" />
 		</path>
-		<javadoc destdir="${plugin.apidoc.dir}" source="1.7" classpathref="classpath" windowtitle="MissingGeometry plugin API">
+		<javadoc destdir="${plugin.apidoc.dir}" source="1.8" classpathref="classpath" windowtitle="MissingGeometry plugin API">
 			<link href="http://java.sun.com/javase/7/docs/api/" />
 			<packageset dir="${plugin.src.dir}">
 			</packageset>
