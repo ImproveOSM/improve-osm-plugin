@@ -15,7 +15,6 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 
-import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -62,11 +61,13 @@ public abstract class BasicFilterPanel extends JPanel {
     private void addStatusFilter(final String statusLbl, final Status status) {
         add(GuiBuilder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT,
                 SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_STATUS);
-        rbStatusOpen = buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), getBackground());
-        rbStatusSolved =
-                buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(), getBackground());
-        rbStatusInvalid =
-                buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(), getBackground());
+        rbStatusOpen = GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(),
+                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+        rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),
+                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+        rbStatusInvalid = GuiBuilder.buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
+                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+
         btnGroupStatus = buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
         selectStatus(status);
         add(rbStatusOpen, Constraints.RB_OPEN);
@@ -123,14 +124,6 @@ public abstract class BasicFilterPanel extends JPanel {
             btnGroup.add(button);
         }
         return btnGroup;
-    }
-
-    private JRadioButton buildRadioButton(final String text, final String actionCommand, final Color backgroundColor) {
-        JRadioButton radioButton = new JRadioButton();
-        radioButton = GuiBuilder.buildRadioButton(text, radioButton.getFont().deriveFont(Font.PLAIN), false);
-        radioButton.setActionCommand(actionCommand);
-        radioButton.setBackground(backgroundColor);
-        return radioButton;
     }
 
 

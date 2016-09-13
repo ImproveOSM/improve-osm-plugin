@@ -25,6 +25,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
+import com.telenav.josm.common.formatter.DecFormat;
 import com.telenav.josm.common.formatter.EntityFormatter;
 import com.telenav.josm.common.gui.BasicInfoPanel;
 import com.telenav.josm.common.gui.GuiBuilder;
@@ -66,7 +67,7 @@ public class RoadSegmentInfoPanel extends BasicInfoPanel<RoadSegment> {
 
     private void addPercentage(final Double percentage) {
         if (percentage != null) {
-            final String lbl = EntityFormatter.formatDouble(percentage, true)
+            final String lbl = EntityFormatter.formatDouble(percentage, true, DecFormat.SHORT)
                     + DirectionOfFlowGuiConfig.getInstance().getLblProcent();
             final int widthLbl =
                     Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl.toString());
