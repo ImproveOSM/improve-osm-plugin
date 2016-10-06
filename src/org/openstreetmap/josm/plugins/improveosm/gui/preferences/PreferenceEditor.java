@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
@@ -58,6 +59,15 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
     public boolean ok() {
         final EnumSet<DataLayer> selectedDataLayers = pnlPreference.selectedDataLayers();
         PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
+
+        final LocationPref locationPref = pnlPreference.selectedLocationPrefOption();
+        PreferenceManager.getInstance().saveLocationPrefOption(locationPref);
+
+        if (locationPref.equals(LocationPref.CUSTOM_SITE)) {
+            final String value = pnlPreference.selectedCustomUrl();
+            PreferenceManager.getInstance().saveLocationPrefValue(value);
+        }
+
         return false;
     }
 }

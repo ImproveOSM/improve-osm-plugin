@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.pref.entity;
 
 import org.openstreetmap.josm.data.Preferences.pref;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 
 
 /**
@@ -43,6 +44,10 @@ public class DataLayerEntry {
      */
     public DataLayerEntry(final DataLayer dataLayer) {
         this.name = dataLayer.name();
+    }
+
+    public DataLayerEntry(final LocationPref locationPref) {
+        this.name = locationPref.name();
     }
 
     public String getName() {

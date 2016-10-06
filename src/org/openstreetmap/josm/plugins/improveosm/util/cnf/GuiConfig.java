@@ -62,7 +62,11 @@ public final class GuiConfig extends BaseConfig {
     private final String pnlHistoryTitle;
 
     /* preference panel text */
-    private final String preferenceLbl;
+    private final String layerPreferenceLbl;
+    private final String locationPreferenceLbl;
+    private final String improveOsmPrefLbl;
+    private final String customPrefLbl;
+    private final String copyLocationPrefLbl;
 
     /* commonly used texts */
     private final String lblCopy;
@@ -116,7 +120,11 @@ public final class GuiConfig extends BaseConfig {
 
         pnlInfoTitle = readProperty("details.info.title");
         pnlHistoryTitle = readProperty("details.history.title");
-        preferenceLbl = readProperty("preference.lbl");
+        layerPreferenceLbl = readProperty("layerPreference.lbl");
+        locationPreferenceLbl = readProperty("locationPreference.lbl");
+        improveOsmPrefLbl = readProperty("locationPref.improveOsm.lbl");
+        customPrefLbl = readProperty("locationPref.custom.lbl");
+        copyLocationPrefLbl = readProperty("locationPref.copyLocation.lbl");
 
         lblCopy = readProperty("copy.lbl");
         lblStatus = readProperty("status.lbl");
@@ -230,8 +238,24 @@ public final class GuiConfig extends BaseConfig {
         return pnlHistoryTitle;
     }
 
-    public String getPreferenceLbl() {
-        return preferenceLbl;
+    public String getLayersPreferenceLbl() {
+        return layerPreferenceLbl;
+    }
+
+    public String getLocationPreferenceLbl() {
+        return locationPreferenceLbl;
+    }
+
+    public String getLocationPrefImproveOsm() {
+        return improveOsmPrefLbl;
+    }
+
+    public String getLocationPrefCustom() {
+        return customPrefLbl;
+    }
+
+    public String getLocationPrefCopyLoc() {
+        return copyLocationPrefLbl;
     }
 
     public String getLblCopy() {

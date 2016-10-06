@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
@@ -65,8 +66,15 @@ final class SaveManager {
         Main.pref.putListOfStructs(Keys.DATA_LAYER, entries, DataLayerEntry.class);
     }
 
-    /* DirrectionOfFlow layer related methods */
+    void saveLocationPrefOption(final LocationPref locationPref) {
+        Main.pref.put(Keys.LOCATION_PREF_OPTION, locationPref.name());
+    }
 
+    void saveLocationPrefValue(final String value) {
+        Main.pref.put(Keys.LOCATION_PREF_VALUE, value);
+    }
+
+    /* DirrectionOfFlow layer related methods */
 
     void saveDirectionOfFlowTipSuppressFlag(final boolean flag) {
         Main.pref.put(Keys.DIRECTIONOFFLOW_TIP_SUPPRESS, flag);
@@ -121,9 +129,9 @@ final class SaveManager {
             Main.pref.putListOfStructs(Keys.MISSINGGEO_TYPE, entries, TileTypeEntry.class);
             final String countKey =
                     Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                            ? Keys.MISSINGGEO_TRIP_COUNT : Keys.MISSINGGEO_POINT_COUNT;
-            final String count = filter.getCount() != null ? filter.getCount().toString() : "";
-            Main.pref.put(countKey, count);
+                    ? Keys.MISSINGGEO_TRIP_COUNT : Keys.MISSINGGEO_POINT_COUNT;
+                    final String count = filter.getCount() != null ? filter.getCount().toString() : "";
+                    Main.pref.put(countKey, count);
         }
     }
 
