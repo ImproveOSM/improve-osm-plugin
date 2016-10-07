@@ -24,6 +24,6 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
  */
 public enum LocationPref {
 
-    IMPROVE_OSM, CUSTOM_SITE, COPY_LOCATION
+    OPEN_STREET_VIEW, CUSTOM_SITE, COPY_LOCATION
 
 }

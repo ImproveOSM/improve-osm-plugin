@@ -64,7 +64,7 @@ public final class GuiConfig extends BaseConfig {
     /* preference panel text */
     private final String layerPreferenceLbl;
     private final String locationPreferenceLbl;
-    private final String improveOsmPrefLbl;
+    private final String openStreetMapPrefLbl;
     private final String customPrefLbl;
     private final String copyLocationPrefLbl;
 
@@ -122,7 +122,7 @@ public final class GuiConfig extends BaseConfig {
         pnlHistoryTitle = readProperty("details.history.title");
         layerPreferenceLbl = readProperty("layerPreference.lbl");
         locationPreferenceLbl = readProperty("locationPreference.lbl");
-        improveOsmPrefLbl = readProperty("locationPref.improveOsm.lbl");
+        openStreetMapPrefLbl = readProperty("locationPref.openstreetmap.lbl");
         customPrefLbl = readProperty("locationPref.custom.lbl");
         copyLocationPrefLbl = readProperty("locationPref.copyLocation.lbl");
 
@@ -246,8 +246,8 @@ public final class GuiConfig extends BaseConfig {
         return locationPreferenceLbl;
     }
 
-    public String getLocationPrefImproveOsm() {
-        return improveOsmPrefLbl;
+    public String getLocationPrefOpenStreetMap() {
+        return openStreetMapPrefLbl;
     }
 
     public String getLocationPrefCustom() {

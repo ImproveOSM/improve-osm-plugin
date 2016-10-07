@@ -19,11 +19,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.coor.CoordinateFormat;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
@@ -41,8 +44,11 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import org.openstreetmap.josm.tools.OpenBrowser;
 import com.telenav.josm.common.gui.GuiBuilder;
 
 
@@ -230,7 +236,52 @@ class ButtonPanel extends JPanel {
         public void actionPerformed(final ActionEvent event) {
             final LatLon location = selectedItemCoordinate != null ? selectedItemCoordinate
                     : Main.map.mapView.getRealBounds().getCenter();
-            ClipboardUtils.copyString(Formatter.formatLatLon(location));
+            final int zoom = org.openstreetmap.josm.plugins.improveosm.util.Util.zoom(Main.map.mapView.getRealBounds());
+
+            switch (PreferenceManager.getInstance().loadLocationPrefOption()) {
+                case OPEN_STREET_VIEW:
+                    handleOpenStreetView(location, zoom);
+                    break;
+                case CUSTOM_SITE:
+                    handleCustomSite(location, zoom);
+                    break;
+                case COPY_LOCATION:
+                    ClipboardUtils.copyString(Formatter.formatLatLon(location));
+            }
+        }
+
+        private void handleOpenStreetView(final LatLon position, final int zoom) {
+            final String url = createURL(Config.getInstance().getOpenStreetViewUrl(),
+                    position.latToString(CoordinateFormat.getDefaultFormat()),
+                    position.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+            try {
+                OpenBrowser.displayUrl(new URI(url));
+            } catch (final URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void handleCustomSite(final LatLon position, final int zoom) {
+            final String savedUrl = PreferenceManager.getInstance().loadLocationPrefValue();
+            for (String enabledUrl : Config.getInstance().getEnabledLocationUrls()) {
+                if (enabledUrl.contains(savedUrl)) {
+                    enabledUrl = createURL(enabledUrl, position.latToString(CoordinateFormat.getDefaultFormat()),
+                            position.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+                    try {
+                        OpenBrowser.displayUrl(new URI(enabledUrl));
+                    } catch (final URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        private String createURL(final String url, final String... args) {
+            String finalUrl = url;
+            for (final String arg : args) {
+                finalUrl = finalUrl.replaceFirst("_", arg);
+            }
+            return finalUrl;
         }
     }
 }

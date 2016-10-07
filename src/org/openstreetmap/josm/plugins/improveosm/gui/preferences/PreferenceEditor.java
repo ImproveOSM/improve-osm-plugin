@@ -22,6 +22,7 @@ import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
@@ -70,4 +71,17 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
 
         return false;
     }
+
+    private String verifyUrl(final String url) {
+        final String[] enabledUrls = Config.getInstance().getEnabledLocationUrls();
+        String foundUrl = null;
+        for (final String enabledUrl : enabledUrls) {
+            if (enabledUrl.contains(url)) {
+                foundUrl = enabledUrl;
+                break;
+            }
+        }
+        return foundUrl;
+    }
+
 }

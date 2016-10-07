@@ -96,7 +96,7 @@ class PreferencePanel extends JPanel {
      */
     LocationPref selectedLocationPrefOption() {
         if (rbImproveOsmPage.isSelected()) {
-            return LocationPref.IMPROVE_OSM;
+            return LocationPref.OPEN_STREET_VIEW;
         }
         if (rbCustomPage.isSelected()) {
             return LocationPref.CUSTOM_SITE;
@@ -165,9 +165,9 @@ class PreferencePanel extends JPanel {
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_LOCATION);
 
         final ButtonGroup buttonsGroup = new ButtonGroup();
-        if (enabledLocationPref.contains(LocationPref.IMPROVE_OSM)) {
-            rbImproveOsmPage = buildRadioButton(GuiConfig.getInstance().getLocationPrefImproveOsm(), savedLocationPref,
-                    LocationPref.IMPROVE_OSM);
+        if (enabledLocationPref.contains(LocationPref.OPEN_STREET_VIEW)) {
+            rbImproveOsmPage = buildRadioButton(GuiConfig.getInstance().getLocationPrefOpenStreetMap(),
+                    savedLocationPref, LocationPref.OPEN_STREET_VIEW);
             buttonsGroup.add(rbImproveOsmPage);
             add(rbImproveOsmPage, Constraints.BTN_IMPROVE_OSM);
         }

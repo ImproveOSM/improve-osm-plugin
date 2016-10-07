@@ -45,6 +45,8 @@ public final class Config extends BaseConfig {
 
     private final EnumSet<DataLayer> enabledDataLayers;
     private final EnumSet<LocationPref> enabledLocationPref;
+    private final String[] enabledLocationUrls;
+    private final String openStreetViewUrl;
 
     private Config() {
         super(CONFIG_FILE);
@@ -86,6 +88,9 @@ public final class Config extends BaseConfig {
         } else {
             enabledLocationPref = EnumSet.allOf(LocationPref.class);
         }
+
+        enabledLocationUrls = readPropertiesArray("locationPref.custom.sites");
+        openStreetViewUrl = readProperty("locationPref.openstreetview");
     }
 
 
@@ -115,5 +120,13 @@ public final class Config extends BaseConfig {
 
     public EnumSet<LocationPref> getEnabledLocationPref() {
         return enabledLocationPref;
+    }
+
+    public String[] getEnabledLocationUrls() {
+        return enabledLocationUrls;
+    }
+
+    public String getOpenStreetViewUrl() {
+        return openStreetViewUrl;
     }
 }
