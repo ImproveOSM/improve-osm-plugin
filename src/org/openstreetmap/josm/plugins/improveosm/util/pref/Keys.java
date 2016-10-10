@@ -32,6 +32,7 @@ public final class Keys {
     public static final String DATA_LAYER = "improveosm.data.layer";
     static final String LOCATION_PREF_OPTION = "improveosm.locationPref.option";
     static final String LOCATION_PREF_VALUE = "improveosm.locationPref.value";
+    static final String LOCATION_TIP_SUPPRESS = "improveosm.location.tip.suppress";
 
     /* direction of flow layer related properties */
     static final String DIRECTIONOFFLOW_LAST_COMMENT = "improveosm.directionOfFlow.comment";

@@ -307,4 +307,23 @@ public final class PreferenceManager {
     public void saveTurnRestrictionFilter(final TurnRestrictionFilter filter) {
         saveManager.saveTurnRestrictionFilter(filter);
     }
+
+    /**
+     * Loads the location tip suppress flag. This flag return true if the user had chosen not seeing location button
+     * tips anymore, false otherwise.
+     *
+     * @return a boolean value
+     */
+    public boolean loadLocationTipSuppressFlag() {
+        return loadManager.loadLocationTipSuppressFlag();
+    }
+
+    /**
+     * Save the location tip suppress flag to the preference file.
+     *
+     * @param flag a boolean value representing the value to be saved.
+     */
+    public void saveLocationTipSuppressFlag(final boolean flag) {
+        saveManager.saveLocationTipSuppressFlag(flag);
+    }
 }

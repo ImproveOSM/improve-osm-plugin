@@ -88,6 +88,10 @@ final class LoadManager {
         return Main.pref.get(Keys.LOCATION_PREF_VALUE);
     }
 
+    boolean loadLocationTipSuppressFlag() {
+        return Main.pref.getBoolean(Keys.LOCATION_TIP_SUPPRESS);
+    }
+
     /* DirectionOfFlowLayer related methods */
 
     boolean loadDirectionOfFlowTipSuppressFlag() {

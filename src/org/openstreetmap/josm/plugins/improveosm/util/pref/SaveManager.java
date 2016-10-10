@@ -168,4 +168,8 @@ final class SaveManager {
         Main.pref.put(Keys.TURN_RESTRICTION_FILTERS_CHANGED, "");
         Main.pref.put(Keys.TURN_RESTRICTION_FILTERS_CHANGED, "" + changed);
     }
+
+    void saveLocationTipSuppressFlag(final boolean tag) {
+        Main.pref.put(Keys.LOCATION_TIP_SUPPRESS, tag);
+    }
 }
