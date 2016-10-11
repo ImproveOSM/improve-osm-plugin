@@ -90,6 +90,8 @@ public final class GuiConfig extends BaseConfig {
     /* error texts */
     private final String errorTitle;
     private final String txtFeedbackUrlError;
+    private final String errorSiteTitle;
+    private final String txtSiteError;
 
     /* tips texts */
     private final String titleLocationButtonTip;
@@ -150,6 +152,9 @@ public final class GuiConfig extends BaseConfig {
 
         titleLocationButtonTip = readProperty("location.tips.title");
         messageLocationButtonTip = readProperty("location.tips.message");
+
+        errorSiteTitle = readProperty("locationPref.error.title");
+        txtSiteError = readProperty("locationPref.error.text");
     }
 
 
@@ -328,5 +333,13 @@ public final class GuiConfig extends BaseConfig {
 
     public String getLocationButtonTipMessage() {
         return messageLocationButtonTip;
+    }
+
+    public String getWrongSiteTitle() {
+        return errorSiteTitle;
+    }
+
+    public String getWrongSiteText() {
+        return txtSiteError;
     }
 }

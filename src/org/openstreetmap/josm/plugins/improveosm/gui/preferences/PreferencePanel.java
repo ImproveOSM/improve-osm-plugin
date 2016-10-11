@@ -196,8 +196,6 @@ class PreferencePanel extends JPanel {
             buttonsGroup.add(rbCopyLocation);
             add(rbCopyLocation, Constraints.BTN_COPY_LOC);
         }
-
-
     }
 
     private JRadioButton buildRadioButton(final String label, final LocationPref savedPref, final LocationPref pref) {

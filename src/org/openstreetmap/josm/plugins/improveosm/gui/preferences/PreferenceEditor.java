@@ -17,12 +17,13 @@ package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
 import java.awt.BorderLayout;
 import java.util.EnumSet;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import org.openstreetmap.josm.plugins.improveosm.entity.Site;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
@@ -62,26 +63,21 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
         PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
 
         final LocationPref locationPref = pnlPreference.selectedLocationPrefOption();
-        PreferenceManager.getInstance().saveLocationPrefOption(locationPref);
 
         if (locationPref.equals(LocationPref.CUSTOM_SITE)) {
             final String value = pnlPreference.selectedCustomUrl();
-            PreferenceManager.getInstance().saveLocationPrefValue(value);
-        }
-
-        return false;
-    }
-
-    private String verifyUrl(final String url) {
-        final String[] enabledUrls = Config.getInstance().getEnabledLocationUrls();
-        String foundUrl = null;
-        for (final String enabledUrl : enabledUrls) {
-            if (enabledUrl.contains(url)) {
-                foundUrl = enabledUrl;
-                break;
+            if (Site.getSiteByPrefix(value) != null) {
+                PreferenceManager.getInstance().saveLocationPrefValue(value);
+                PreferenceManager.getInstance().saveLocationPrefOption(locationPref);
+            } else {
+                PreferenceManager.getInstance().saveLocationPrefOption(LocationPref.COPY_LOCATION);
+                JOptionPane.showMessageDialog(pnlPreference, GuiConfig.getInstance().getWrongSiteText(),
+                        GuiConfig.getInstance().getWrongSiteTitle(), JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            PreferenceManager.getInstance().saveLocationPrefOption(locationPref);
         }
-        return foundUrl;
+        return false;
     }
 
 }
