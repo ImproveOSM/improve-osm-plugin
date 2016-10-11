@@ -23,45 +23,40 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
  */
 public enum Site {
 
-    GOOGLE {
+    GOOGLE, MAPILLARY, OPEN_STREET_VIEW;
 
-        @Override
-        public String toString() {
-            return "http://www.mapillary.com/app/?lat=_&lng=_&z=_";
-        }
-    },
-
-    MAPILLARY {
-
-        @Override
-        public String toString() {
-            return "http://www.google.com/maps/@_,_,_z";
-        }
-    },
-
-    OPEN_STREET_VIEW {
-
-        @Override
-        public String toString() {
-            return "http://openstreetview.org/map/@_,_,_z";
-        }
-    };
 
     public static Site getSiteByPrefix(final String url) {
-        for (final Site enabledUrl : Site.values()) {
-            if (enabledUrl.toString().startsWith(url)) {
-                return enabledUrl;
+        for (final Site enabledUrls : Site.values()) {
+            for (final String possibleUrl : enabledUrls.getPossibleValues()) {
+                if (possibleUrl.startsWith(url)) {
+                    return enabledUrls;
+                }
             }
         }
         return null;
     }
 
     public String createURL(final String... args) {
-        String finalUrl = toString();
+        String finalUrl = getPossibleValues()[0];
         for (final String arg : args) {
             finalUrl = finalUrl.replaceFirst("_", arg);
         }
         return finalUrl;
+    }
+
+
+    private String[] getPossibleValues() {
+        switch (this) {
+            case GOOGLE:
+                return new String[] { "https://www.mapillary.com/app/?lat=_&lng=_&z=_",
+                "http://www.mapillary.com/app/?lat=_&lng=_&z=_" };
+            case MAPILLARY:
+                return new String[] { "https://www.google.com/maps/@_,_,_z", "http://www.google.com/maps/@_,_,_z", };
+            default:
+                return new String[] { "https://openstreetview.org/map/@_,_,_z",
+                        "http://openstreetview.org/map/@_,_,_z", };
+        }
     }
 
 }
