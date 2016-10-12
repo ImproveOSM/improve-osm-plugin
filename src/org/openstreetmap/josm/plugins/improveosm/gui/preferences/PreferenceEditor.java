@@ -74,7 +74,8 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
                 PreferenceManager.getInstance().saveLocationPrefOption(locationPref);
             } else {
                 PreferenceManager.getInstance().saveLocationPrefOption(LocationPref.COPY_LOCATION);
-                JOptionPane.showMessageDialog(pnlPreference, GuiConfig.getInstance().getWrongSiteText(),
+                JOptionPane.showMessageDialog(pnlPreference,
+                        "\"" + value + "\"" + GuiConfig.getInstance().getWrongSiteText(),
                         GuiConfig.getInstance().getWrongSiteTitle(), JOptionPane.ERROR_MESSAGE);
             }
         } else {
