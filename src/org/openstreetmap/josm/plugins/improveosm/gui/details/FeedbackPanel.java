@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLEditorKit;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -54,10 +53,7 @@ class FeedbackPanel extends JPanel implements HyperlinkListener {
 
     private void createComponents() {
         final JEditorPane txtEditorPane =
-                GuiBuilder.buildEditorPane(GuiConfig.getInstance().getPnlFeedbackTxt(), this, "text/html", false);
-        txtEditorPane.setEditorKit(new HTMLEditorKit());
-        txtEditorPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-
+                GuiBuilder.buildEditorPane(GuiConfig.getInstance().getPnlFeedbackTxt(), this,  false);
         final JScrollPane cmpTile =
                 GuiBuilder.buildScrollPane(txtEditorPane, null, getBackground(), null, 100, false, DIM);
         add(cmpTile, BorderLayout.CENTER);
