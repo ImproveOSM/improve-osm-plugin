@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import com.telenav.josm.common.cnf.BaseConfig;
 
+
 /**
  * Holds commonly used GUI properties.
  *
@@ -62,7 +63,11 @@ public final class GuiConfig extends BaseConfig {
     private final String pnlHistoryTitle;
 
     /* preference panel text */
-    private final String preferenceLbl;
+    private final String layerPreferenceLbl;
+    private final String locationPreferenceLbl;
+    private final String openStreetMapPrefLbl;
+    private final String customPrefLbl;
+    private final String copyLocationPrefLbl;
 
     /* commonly used texts */
     private final String lblCopy;
@@ -85,6 +90,12 @@ public final class GuiConfig extends BaseConfig {
     /* error texts */
     private final String errorTitle;
     private final String txtFeedbackUrlError;
+    private final String errorSiteTitle;
+    private final String txtSiteError;
+
+    /* tips texts */
+    private final String titleLocationButtonTip;
+    private final String messageLocationButtonTip;
 
 
     private GuiConfig() {
@@ -116,7 +127,11 @@ public final class GuiConfig extends BaseConfig {
 
         pnlInfoTitle = readProperty("details.info.title");
         pnlHistoryTitle = readProperty("details.history.title");
-        preferenceLbl = readProperty("preference.lbl");
+        layerPreferenceLbl = readProperty("layerPreference.lbl");
+        locationPreferenceLbl = readProperty("locationPreference.lbl");
+        openStreetMapPrefLbl = readProperty("locationPref.openstreetmap.lbl");
+        customPrefLbl = readProperty("locationPref.custom.lbl");
+        copyLocationPrefLbl = readProperty("locationPref.copyLocation.lbl");
 
         lblCopy = readProperty("copy.lbl");
         lblStatus = readProperty("status.lbl");
@@ -134,6 +149,12 @@ public final class GuiConfig extends BaseConfig {
         txtDataLayerSettings = readProperty("warning.datalayer.settings");
         errorTitle = readProperty("error.title");
         txtFeedbackUrlError = readProperty("error.feedback");
+
+        titleLocationButtonTip = readProperty("location.tips.title");
+        messageLocationButtonTip = readProperty("location.tips.message");
+
+        errorSiteTitle = readProperty("locationPref.error.title");
+        txtSiteError = readProperty("locationPref.error.text");
     }
 
 
@@ -230,8 +251,24 @@ public final class GuiConfig extends BaseConfig {
         return pnlHistoryTitle;
     }
 
-    public String getPreferenceLbl() {
-        return preferenceLbl;
+    public String getLayersPreferenceLbl() {
+        return layerPreferenceLbl;
+    }
+
+    public String getLocationPreferenceLbl() {
+        return locationPreferenceLbl;
+    }
+
+    public String getLocationPrefOpenStreetMap() {
+        return openStreetMapPrefLbl;
+    }
+
+    public String getLocationPrefCustom() {
+        return customPrefLbl;
+    }
+
+    public String getLocationPrefCopyLoc() {
+        return copyLocationPrefLbl;
     }
 
     public String getLblCopy() {
@@ -288,5 +325,21 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtFeedbackUrlError() {
         return txtFeedbackUrlError;
+    }
+
+    public String getLocationButtonTipTitle() {
+        return titleLocationButtonTip;
+    }
+
+    public String getLocationButtonTipMessage() {
+        return messageLocationButtonTip;
+    }
+
+    public String getWrongSiteTitle() {
+        return errorSiteTitle;
+    }
+
+    public String getWrongSiteText() {
+        return txtSiteError;
     }
 }

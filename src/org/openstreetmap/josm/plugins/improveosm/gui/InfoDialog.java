@@ -34,23 +34,24 @@ import com.telenav.josm.common.gui.GuiBuilder;
  */
 public class InfoDialog {
 
-    private static boolean isDisplayed = false;
+    private static boolean dofTipIsDisplayed = false;
+    private static boolean locationTipIsDisplayed = false;
 
     /**
      * Displays a warning message to the user.
      */
     public synchronized void displayOldPluginsDialog() {
-        if (!isDisplayed) {
+        if (!dofTipIsDisplayed) {
             final boolean oldPluginsInstalled = PreferenceManager.getInstance().loadOldPluginsFlag();
             if (oldPluginsInstalled && !PreferenceManager.getInstance().loadOldPluginsWarningSuppressFlag()) {
-                isDisplayed = true;
+                dofTipIsDisplayed = true;
                 final String txt = GuiConfig.getInstance().getTxtOldPlugins();
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
                         buildTextPane(txt, Main.parent.getBackground()), GuiConfig.getInstance().getPluginName(),
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;
                 PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
-                isDisplayed = false;
+                dofTipIsDisplayed = false;
             }
         }
     }
@@ -63,10 +64,10 @@ public class InfoDialog {
      * @param zoom the current zoom level
      */
     public synchronized void displayDirectionOfFlowEditTip(final int zoom) {
-        if (!isDisplayed) {
+        if (!dofTipIsDisplayed) {
             final int maxZoom = Config.getInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
-                isDisplayed = true;
+                dofTipIsDisplayed = true;
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
                         buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
                                 Main.parent.getBackground()),
@@ -74,7 +75,28 @@ public class InfoDialog {
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.NO_OPTION;
                 PreferenceManager.getInstance().saveDirectionOfFlowTipSuppressFlag(flag);
-                isDisplayed = false;
+                dofTipIsDisplayed = false;
+            }
+        }
+    }
+
+    /**
+     * Displays location tips for the user.If the user suppressed the notification the editing tips will be displayed
+     * only when JOSM is reinstalled.
+     *
+     */
+    public synchronized void displayLocationButtonTip() {
+        if (!locationTipIsDisplayed) {
+            if (!PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
+                locationTipIsDisplayed = true;
+                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+                        buildTextPane(GuiConfig.getInstance().getLocationButtonTipMessage(),
+                                Main.parent.getBackground()),
+                        GuiConfig.getInstance().getLocationButtonTipTitle(), JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE, null, null, null);
+                final boolean flag = val == JOptionPane.YES_OPTION;
+                PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
+                locationTipIsDisplayed = false;
             }
         }
     }

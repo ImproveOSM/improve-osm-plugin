@@ -213,6 +213,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             if (turnRestrictionLayer != null && turnRestrictionLayer.isVisible()) {
                 Main.worker.execute(new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer));
             }
+
+            new InfoDialog().displayLocationButtonTip();
             new InfoDialog().displayOldPluginsDialog();
         }
     }

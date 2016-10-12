@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import java.util.EnumSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import com.telenav.josm.common.cnf.BaseConfig;
 
 
@@ -43,6 +44,12 @@ public final class Config extends BaseConfig {
     private final String feedbackUrl;
 
     private final EnumSet<DataLayer> enabledDataLayers;
+    private final EnumSet<LocationPref> enabledLocationPref;
+
+    private final String[] locationUrlPatterns;
+    private final String[] locationUrlVariablePart;
+    private final String locationUrlOpenStreetView;
+
 
     private Config() {
         super(CONFIG_FILE);
@@ -74,6 +81,20 @@ public final class Config extends BaseConfig {
         } else {
             enabledDataLayers = EnumSet.allOf(DataLayer.class);
         }
+
+        final String[] enabledLocationSettingsValues = readPropertiesArray("locationPref.enabled");
+        if (enabledLocationSettingsValues != null) {
+            enabledLocationPref = EnumSet.noneOf(LocationPref.class);
+            for (final String value : enabledLocationSettingsValues) {
+                enabledLocationPref.add(LocationPref.valueOf(value));
+            }
+        } else {
+            enabledLocationPref = EnumSet.allOf(LocationPref.class);
+        }
+
+        locationUrlPatterns = readPropertiesArray("locationPref.patterns");
+        locationUrlVariablePart = readPropertiesArray("locationPref.url.variablePart");
+        locationUrlOpenStreetView = readProperty("locationPref.url.openstreetview");
     }
 
 
@@ -99,5 +120,21 @@ public final class Config extends BaseConfig {
 
     public EnumSet<DataLayer> getEnabledDataLayers() {
         return enabledDataLayers;
+    }
+
+    public EnumSet<LocationPref> getEnabledLocationPref() {
+        return enabledLocationPref;
+    }
+
+    public String[] getLocationPrefUrlPatterns() {
+        return locationUrlPatterns;
+    }
+
+    public String[] getLocationPrefUrlVariablePart() {
+        return locationUrlVariablePart;
+    }
+
+    public String getLocationPrefOpenStreetView() {
+        return locationUrlOpenStreetView;
     }
 }

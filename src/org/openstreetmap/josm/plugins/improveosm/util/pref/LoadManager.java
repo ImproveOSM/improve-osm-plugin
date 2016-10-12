@@ -23,6 +23,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
@@ -76,6 +77,19 @@ final class LoadManager {
             }
         }
         return dataLayers == null || dataLayers.isEmpty() ? enabledLayers : dataLayers;
+    }
+
+    LocationPref loadLocationPrefOption() {
+        final String location = Main.pref.get(Keys.LOCATION_PREF_OPTION);
+        return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : null;
+    }
+
+    String loadLocationPrefValue() {
+        return Main.pref.get(Keys.LOCATION_PREF_VALUE);
+    }
+
+    boolean loadLocationTipSuppressFlag() {
+        return Main.pref.getBoolean(Keys.LOCATION_TIP_SUPPRESS);
     }
 
     /* DirectionOfFlowLayer related methods */

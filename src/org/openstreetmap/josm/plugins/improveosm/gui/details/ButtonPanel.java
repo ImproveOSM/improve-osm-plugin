@@ -19,11 +19,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.coor.CoordinateFormat;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
@@ -41,8 +44,11 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import org.openstreetmap.josm.tools.OpenBrowser;
 import com.telenav.josm.common.gui.GuiBuilder;
 
 
@@ -95,7 +101,7 @@ class ButtonPanel extends JPanel {
                 new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
                         guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
                 iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
-        btnLocation = GuiBuilder.buildButton(new CopyLocationAction(), iconConfig.getLocationIcon(),
+        btnLocation = GuiBuilder.buildButton(new HandleLocationAction(), iconConfig.getLocationIcon(),
                 guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
         add(btnComment);
@@ -219,10 +225,9 @@ class ButtonPanel extends JPanel {
     }
 
     /*
-     * Copies the currently selected element's coordinate/first coordinate or the center coordinates if no element is
-     * selected.
+     * Handle the corresponding location button behavior.
      */
-    private final class CopyLocationAction extends AbstractAction {
+    private final class HandleLocationAction extends AbstractAction {
 
         private static final long serialVersionUID = -7481740371748226905L;
 
@@ -230,7 +235,50 @@ class ButtonPanel extends JPanel {
         public void actionPerformed(final ActionEvent event) {
             final LatLon location = selectedItemCoordinate != null ? selectedItemCoordinate
                     : Main.map.mapView.getRealBounds().getCenter();
-            ClipboardUtils.copyString(Formatter.formatLatLon(location));
+            final int zoom = org.openstreetmap.josm.plugins.improveosm.util.Util.zoom(Main.map.mapView.getRealBounds());
+
+            switch (PreferenceManager.getInstance().loadLocationPrefOption()) {
+                case OPEN_STREET_VIEW:
+                    openUrl(Config.getInstance().getLocationPrefOpenStreetView(),
+                            location.latToString(CoordinateFormat.getDefaultFormat()),
+                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+                    break;
+                case CUSTOM_SITE:
+                    openUrl(generateCustomURL(PreferenceManager.getInstance().loadLocationPrefValue()),
+                            location.latToString(CoordinateFormat.getDefaultFormat()),
+                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+                    break;
+                case COPY_LOCATION:
+                    ClipboardUtils.copyString(Formatter.formatLatLon(location));
+            }
         }
+
+        private String generateCustomURL(final String url) {
+            String finalUrl = null;
+            final String[] patterns = Config.getInstance().getLocationPrefUrlPatterns();
+            for (int i = 0; i < patterns.length; i++) {
+                if (url.contains(patterns[i])) {
+                    finalUrl = url + Config.getInstance().getLocationPrefUrlVariablePart()[i];
+                    break;
+                }
+            }
+            return finalUrl;
+        }
+
+        private void openUrl(final String url, final String... args) {
+            String finalUrl = url;
+            for (final String arg : args) {
+                finalUrl = finalUrl.replaceFirst("_", arg);
+            }
+            if (finalUrl != null) {
+                try {
+                    OpenBrowser.displayUrl(new URI(finalUrl));
+                } catch (final URISyntaxException e) {
+                    // should not arrive here
+                }
+            }
+        }
+
+
     }
 }

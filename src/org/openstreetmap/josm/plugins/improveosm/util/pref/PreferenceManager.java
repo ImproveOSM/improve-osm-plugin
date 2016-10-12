@@ -22,6 +22,7 @@ import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
@@ -127,12 +128,48 @@ public final class PreferenceManager {
     }
 
     /**
+     * Loads the selected location preference settings.
+     *
+     * @return a set of {@code LocationPref}
+     */
+    public LocationPref loadLocationPrefOption() {
+        return loadManager.loadLocationPrefOption();
+    }
+
+    /**
+     * Loads the saved url.
+     *
+     * @return a {@code String} representing the saved url.
+     */
+    public String loadLocationPrefValue() {
+        return loadManager.loadLocationPrefValue();
+    }
+
+    /**
      * Saves the selected data layers to the preference file.
      *
      * @param dataLayers a set of {@code DataLayer}s
      */
     public void saveDataLayers(final EnumSet<DataLayer> dataLayers) {
         saveManager.saveDataLayers(dataLayers);
+    }
+
+    /**
+     * Saves the selected location button functionality to the preference file.
+     *
+     * @param pref a {@code LocationPref}
+     */
+    public void saveLocationPrefOption(final LocationPref pref) {
+        saveManager.saveLocationPrefOption(pref);
+    }
+
+    /**
+     * Saves the selected url for the location button functionality to the preference file.
+     *
+     * @param value a {@code String} representing the url.
+     */
+    public void saveLocationPrefValue(final String value) {
+        saveManager.saveLocationPrefValue(value);
     }
 
     /**
@@ -269,5 +306,24 @@ public final class PreferenceManager {
      */
     public void saveTurnRestrictionFilter(final TurnRestrictionFilter filter) {
         saveManager.saveTurnRestrictionFilter(filter);
+    }
+
+    /**
+     * Loads the location tip suppress flag. This flag return true if the user had chosen not seeing location button
+     * tips anymore, false otherwise.
+     *
+     * @return a boolean value
+     */
+    public boolean loadLocationTipSuppressFlag() {
+        return loadManager.loadLocationTipSuppressFlag();
+    }
+
+    /**
+     * Save the location tip suppress flag to the preference file.
+     *
+     * @param flag a boolean value representing the value to be saved.
+     */
+    public void saveLocationTipSuppressFlag(final boolean flag) {
+        saveManager.saveLocationTipSuppressFlag(flag);
     }
 }
