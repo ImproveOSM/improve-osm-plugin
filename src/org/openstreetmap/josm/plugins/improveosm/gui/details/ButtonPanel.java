@@ -31,7 +31,6 @@ import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
-import org.openstreetmap.josm.plugins.improveosm.entity.Site;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
@@ -45,6 +44,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
@@ -239,33 +239,46 @@ class ButtonPanel extends JPanel {
 
             switch (PreferenceManager.getInstance().loadLocationPrefOption()) {
                 case OPEN_STREET_VIEW:
-                    openURL(Site.OPEN_STREET_VIEW, location, zoom);
+                    openUrl(Config.getInstance().getLocationPrefOpenStreetView(),
+                            location.latToString(CoordinateFormat.getDefaultFormat()),
+                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
                     break;
                 case CUSTOM_SITE:
-                    handleCustomSite(location, zoom);
+                    openUrl(generateCustomURL(PreferenceManager.getInstance().loadLocationPrefValue()),
+                            location.latToString(CoordinateFormat.getDefaultFormat()),
+                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
                     break;
                 case COPY_LOCATION:
                     ClipboardUtils.copyString(Formatter.formatLatLon(location));
             }
         }
 
-        private void handleCustomSite(final LatLon position, final int zoom) {
-            final String savedUrl = PreferenceManager.getInstance().loadLocationPrefValue();
-            final Site url = Site.getSiteByPrefix(savedUrl);
-            if (url != null) {
-                openURL(url, position, zoom);
-                return;
+        private String generateCustomURL(final String url) {
+            String finalUrl = null;
+            final String[] patterns = Config.getInstance().getLocationPrefUrlPatterns();
+            for (int i = 0; i < patterns.length; i++) {
+                if (url.contains(patterns[i])) {
+                    finalUrl = url + Config.getInstance().getLocationPrefUrlVariablePart()[i];
+                    break;
+                }
+            }
+            return finalUrl;
+        }
+
+        private void openUrl(final String url, final String... args) {
+            String finalUrl = url;
+            for (final String arg : args) {
+                finalUrl = finalUrl.replaceFirst("_", arg);
+            }
+            if (finalUrl != null) {
+                try {
+                    OpenBrowser.displayUrl(new URI(finalUrl));
+                } catch (final URISyntaxException e) {
+                    // should not arrive here
+                }
             }
         }
 
-        private void openURL(final Site emptyUrl, final LatLon position, final int zoom) {
-            final String url = emptyUrl.createURL(position.latToString(CoordinateFormat.getDefaultFormat()),
-                    position.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
-            try {
-                OpenBrowser.displayUrl(new URI(url));
-            } catch (final URISyntaxException e) {
-                // should not arrive here
-            }
-        }
+
     }
 }

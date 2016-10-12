@@ -46,6 +46,11 @@ public final class Config extends BaseConfig {
     private final EnumSet<DataLayer> enabledDataLayers;
     private final EnumSet<LocationPref> enabledLocationPref;
 
+    private final String[] locationUrlPatterns;
+    private final String[] locationUrlVariablePart;
+    private final String locationUrlOpenStreetView;
+
+
     private Config() {
         super(CONFIG_FILE);
         feedbackUrl = readProperty("feedback.url");
@@ -86,6 +91,10 @@ public final class Config extends BaseConfig {
         } else {
             enabledLocationPref = EnumSet.allOf(LocationPref.class);
         }
+
+        locationUrlPatterns = readPropertiesArray("locationPref.patterns");
+        locationUrlVariablePart = readPropertiesArray("locationPref.url.variablePart");
+        locationUrlOpenStreetView = readProperty("locationPref.url.openstreetview");
     }
 
 
@@ -115,5 +124,17 @@ public final class Config extends BaseConfig {
 
     public EnumSet<LocationPref> getEnabledLocationPref() {
         return enabledLocationPref;
+    }
+
+    public String[] getLocationPrefUrlPatterns() {
+        return locationUrlPatterns;
+    }
+
+    public String[] getLocationPrefUrlVariablePart() {
+        return locationUrlVariablePart;
+    }
+
+    public String getLocationPrefOpenStreetView() {
+        return locationUrlOpenStreetView;
     }
 }
