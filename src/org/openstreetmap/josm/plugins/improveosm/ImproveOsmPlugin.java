@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -420,7 +421,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.pref.addPreferenceChangeListener(this);
             Main.map.mapView.addMouseListener(this);
             Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false), JComponent.WHEN_FOCUSED);
+                    KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
         }
         final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
