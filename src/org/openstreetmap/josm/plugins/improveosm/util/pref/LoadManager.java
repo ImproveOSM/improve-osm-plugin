@@ -70,9 +70,9 @@ final class LoadManager {
         if (entries != null && !entries.isEmpty()) {
             dataLayers = EnumSet.noneOf(DataLayer.class);
             for (final DataLayerEntry entry : entries) {
-                final DataLayer layer = DataLayer.valueOf(entry.getName());
+                final DataLayer layer = DataLayer.getDataLayer(entry.getName());
                 if (enabledLayers.contains(layer)) {
-                    dataLayers.add(DataLayer.valueOf(entry.getName()));
+                    dataLayers.add(DataLayer.getDataLayer(entry.getName()));
                 }
             }
         }
@@ -139,10 +139,10 @@ final class LoadManager {
 
         String valueStr = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
-                valueStr = valueStr.trim();
-                final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
-                return status == null && types == null ? MissingGeometryFilter.DEFAULT
-                        : new MissingGeometryFilter(status, types, count);
+        valueStr = valueStr.trim();
+        final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
+        return status == null && types == null ? MissingGeometryFilter.DEFAULT
+                : new MissingGeometryFilter(status, types, count);
     }
 
     /* TurnRestrictionLayer related methods */

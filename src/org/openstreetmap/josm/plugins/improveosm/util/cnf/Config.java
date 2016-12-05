@@ -43,7 +43,7 @@ public final class Config extends BaseConfig {
     private int commentDisplayLength;
     private final String feedbackUrl;
 
-    private final EnumSet<DataLayer> enabledDataLayers;
+    private  EnumSet<DataLayer> enabledDataLayers;
     private final EnumSet<LocationPref> enabledLocationPref;
 
     private final String[] locationUrlPatterns;
@@ -76,7 +76,13 @@ public final class Config extends BaseConfig {
         if (enabledDataLayersValues != null) {
             enabledDataLayers = EnumSet.noneOf(DataLayer.class);
             for (final String value : enabledDataLayersValues) {
-                enabledDataLayers.add(DataLayer.valueOf(value));
+                DataLayer dataLayer = DataLayer.getDataLayer(value);
+                if (dataLayer != null) {
+                    enabledDataLayers.add(dataLayer);
+                }
+            }
+            if (enabledDataLayers.isEmpty()) {
+                enabledDataLayers = EnumSet.allOf(DataLayer.class);
             }
         } else {
             enabledDataLayers = EnumSet.allOf(DataLayer.class);
