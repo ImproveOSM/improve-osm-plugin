@@ -48,7 +48,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
             if (value instanceof Status) {
                 txt = ((Status) value).name().toLowerCase();
             } else if (value instanceof TurnConfidenceLevel) {
-                txt = ((TurnConfidenceLevel) value).shortDisplayName();
+                txt = ((TurnConfidenceLevel) value).toString();
             } else if (value instanceof Pair<?, ?>) {
                 txt = Formatter.formatFirstLastTripsNumber((Pair<Integer, Integer>) value);
             } else {

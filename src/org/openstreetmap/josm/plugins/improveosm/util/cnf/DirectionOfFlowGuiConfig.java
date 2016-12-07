@@ -35,10 +35,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     /* button tooltips */
     private final String btnLocationTlt;
 
-    /* filter dialog texts */
-    private final String dlgFilterStatusLbl;
-    private final String dlgFilterConfidenceLbl;
-
     /* info panel texts */
     private final String lblTrips;
     private final String lblType;
@@ -48,7 +44,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     private final String lblC1;
     private final String lblC2;
     private final String lblC3;
-    private final String lblOneway;
 
     /* tip info texts */
     private final String dlgTipTitle;
@@ -62,15 +57,12 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
         btnLocationTlt = readProperty("btn.location.tlt");
-        dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
-        dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
         lblTrips = readProperty("details.info.trips.lbl");
         lblType = readProperty("details.info.type.lbl");
         lblProcent = readProperty("details.info.procent.lbl");
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
         lblC3 = readProperty("c3.lbl");
-        lblOneway = readProperty("oneway.lbl");
         dlgTipTitle = readProperty("dialog.tip.title");
         dlgTipTxt = readProperty("dialog.tip.text");
     }
@@ -97,14 +89,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
         return btnLocationTlt;
     }
 
-    public String getDlgFilterStatusLbl() {
-        return dlgFilterStatusLbl;
-    }
-
-    public String getDlgFilterConfidenceLbl() {
-        return dlgFilterConfidenceLbl;
-    }
-
     public String getLblTrips() {
         return lblTrips;
     }
@@ -127,10 +111,6 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
 
     public String getLblC3() {
         return lblC3;
-    }
-
-    public String getLblOneway() {
-        return lblOneway;
     }
 
     public String getDlgTipTitle() {

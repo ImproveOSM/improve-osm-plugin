@@ -34,10 +34,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     private final String layerTxt;
     private final String layerTlt;
 
-    /* filter dialog texts */
-    private final String dlgFilterStatusLbl;
-    private final String dlgFilterConfidenceLbl;
-
     /* info panel texts */
     private final String lblType;
     private final String lblFirstSegmentTrips;
@@ -48,7 +44,7 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     /* commonly used labels */
     private final String lblC1;
     private final String lblC2;
-    private final String lblTurn;
+    
 
     private TurnRestrictionGuiConfig() {
         super(CONFIG_FILE);
@@ -57,8 +53,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         layerName = readProperty("plugin.name");
         layerTxt = readProperty("plugin.txt");
         layerTlt = readProperty("plugin.tlt");
-        dlgFilterStatusLbl = readProperty("dialog.filter.status.lbl");
-        dlgFilterConfidenceLbl = readProperty("dialog.filter.confidence.lbl");
 
         lblType = readProperty("details.info.type.lbl");
         lblFirstSegmentTrips = readProperty("details.info.segment.first.lbl");
@@ -67,7 +61,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
         tblHeader = readPropertiesList("details.info.tbl.header");
         lblC1 = readProperty("c1.lbl");
         lblC2 = readProperty("c2.lbl");
-        lblTurn = readProperty("turn.lbl");
     }
 
     public static TurnRestrictionGuiConfig getInstance() {
@@ -84,14 +77,6 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
 
     public String getLayerTlt() {
         return layerTlt;
-    }
-
-    public String getDlgFilterStatusLbl() {
-        return dlgFilterStatusLbl;
-    }
-
-    public String getDlgFilterConfidenceLbl() {
-        return dlgFilterConfidenceLbl;
     }
 
     public String getLblType() {
@@ -121,9 +106,4 @@ public final class TurnRestrictionGuiConfig extends BaseConfig {
     public String getLblC2() {
         return lblC2;
     }
-
-    public String getLblTurn() {
-        return lblTurn;
-    }
-
 }
