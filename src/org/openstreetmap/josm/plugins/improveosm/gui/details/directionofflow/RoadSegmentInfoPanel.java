@@ -127,8 +127,8 @@ public class RoadSegmentInfoPanel extends BasicInfoPanel<RoadSegment> {
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain())
-                    .stringWidth(confidence.longDisplayName());
-            add(GuiBuilder.buildLabel(confidence.longDisplayName(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+                    .stringWidth(confidence.toString());
+            add(GuiBuilder.buildLabel(confidence.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);

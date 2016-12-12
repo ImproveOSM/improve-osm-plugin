@@ -39,22 +39,4 @@ public enum TurnConfidenceLevel {
             return TurnRestrictionGuiConfig.getInstance().getLblC2();
         }
     };
-
-    /**
-     * Returns the short display name.
-     *
-     * @return a string
-     */
-    public String shortDisplayName() {
-        return toString();
-    }
-
-    /**
-     * Returns the long display name.
-     *
-     * @return a string
-     */
-    public String longDisplayName() {
-        return toString().trim() + " " + TurnRestrictionGuiConfig.getInstance().getLblTurn();
-    }
 }
