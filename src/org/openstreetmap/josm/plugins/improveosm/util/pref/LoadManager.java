@@ -81,7 +81,7 @@ final class LoadManager {
 
     LocationPref loadLocationPrefOption() {
         final String location = Main.pref.get(Keys.LOCATION_PREF_OPTION);
-        return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : null;
+        return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : LocationPref.COPY_LOCATION;
     }
 
     String loadLocationPrefValue() {
@@ -139,10 +139,10 @@ final class LoadManager {
 
         String valueStr = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? Main.pref.get(Keys.MISSINGGEO_TRIP_COUNT) : Main.pref.get(Keys.MISSINGGEO_POINT_COUNT);
-        valueStr = valueStr.trim();
-        final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
-        return status == null && types == null ? MissingGeometryFilter.DEFAULT
-                : new MissingGeometryFilter(status, types, count);
+                valueStr = valueStr.trim();
+                final Integer count = (valueStr != null && !valueStr.isEmpty()) ? Integer.valueOf(valueStr) : null;
+                return status == null && types == null ? MissingGeometryFilter.DEFAULT
+                        : new MissingGeometryFilter(status, types, count);
     }
 
     /* TurnRestrictionLayer related methods */
