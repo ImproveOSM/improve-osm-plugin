@@ -81,7 +81,7 @@ final class LoadManager {
 
     LocationPref loadLocationPrefOption() {
         final String location = Main.pref.get(Keys.LOCATION_PREF_OPTION);
-        return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : null;
+        return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : LocationPref.COPY_LOCATION;
     }
 
     String loadLocationPrefValue() {
