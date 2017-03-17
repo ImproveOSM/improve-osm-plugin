@@ -58,7 +58,7 @@ public class TurnRestrictionFilter extends SearchFilter {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime + super.hashCode();
+        result = prime * result + super.hashCode();
         result = prime * result + EntityUtil.hashCode(confidenceLevels);
         return result;
     }

@@ -117,7 +117,7 @@ public class TileInfoPanel extends BasicInfoPanel<Tile> {
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final String numberOfPoints =
-                    points.size() > 1 ? "" + points.size() : GuiConfig.getInstance().getLblNotAvailable();
+                    points.size() > 1 ? Integer.toString(points.size()) : GuiConfig.getInstance().getLblNotAvailable();
             final int widthVal =
                     Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(numberOfPoints);
             add(GuiBuilder.buildLabel(numberOfPoints, getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,

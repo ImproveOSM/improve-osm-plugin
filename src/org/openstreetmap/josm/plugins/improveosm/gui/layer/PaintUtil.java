@@ -234,7 +234,7 @@ final class PaintUtil {
         graphics.setColor(Color.white);
         graphics.setFont(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
         final FontMetrics fm = mapView.getFontMetrics(mapView.getFont().deriveFont(Font.BOLD, COMPLEX_TURN_FONT_SIZE));
-        final String text = "" + count;
+        final String text = Integer.toString(count);
         graphics.drawString(text, point.x - fm.stringWidth(text) / 2, point.y - fm.getHeight() / 2 + fm.getAscent());
     }
 

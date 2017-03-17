@@ -102,7 +102,7 @@ final class SaveManager {
             Main.pref.put(DOF_STATUS, status);
 
             // confidence levels
-            final List<OnewayConfidenceLevelEntry> entries = new ArrayList<OnewayConfidenceLevelEntry>();
+            final List<OnewayConfidenceLevelEntry> entries = new ArrayList<>();
             if (filter.getConfidenceLevels() != null) {
                 for (final OnewayConfidenceLevel confidence : filter.getConfidenceLevels()) {
                     entries.add(new OnewayConfidenceLevelEntry(confidence));
@@ -114,7 +114,7 @@ final class SaveManager {
 
     void saveDirectionOfFlowFiltersChangedFlag(final boolean changed) {
         Main.pref.put(DOF_FILTERS_CHANGED, "");
-        Main.pref.put(DOF_FILTERS_CHANGED, "" + changed);
+        Main.pref.put(DOF_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
 
@@ -131,7 +131,7 @@ final class SaveManager {
             Main.pref.put(MG_STATUS, status);
 
             // type
-            final List<TileTypeEntry> entries = new ArrayList<TileTypeEntry>();
+            final List<TileTypeEntry> entries = new ArrayList<>();
             if (filter.getTypes() != null) {
                 for (final TileType type : filter.getTypes()) {
                     entries.add(new TileTypeEntry(type));
@@ -140,15 +140,15 @@ final class SaveManager {
             Main.pref.putListOfStructs(MG_TYPE, entries, TileTypeEntry.class);
             final String countKey =
                     Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                    ? MG_TRIP_COUNT : MG_POINT_COUNT;
-                    final String count = filter.getCount() != null ? filter.getCount().toString() : "";
-                    Main.pref.put(countKey, count);
+                            ? MG_TRIP_COUNT : MG_POINT_COUNT;
+            final String count = filter.getCount() != null ? filter.getCount().toString() : "";
+            Main.pref.put(countKey, count);
         }
     }
 
     void saveMissingGeometryFiltersChangedFlag(final boolean changed) {
         Main.pref.put(MG_FILTERS_CHANGED, "");
-        Main.pref.put(MG_FILTERS_CHANGED, "" + changed);
+        Main.pref.put(MG_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
 
@@ -165,7 +165,7 @@ final class SaveManager {
             Main.pref.put(TR_STATUS, status);
 
             // confidence levels
-            final List<TurnConfidenceLevelEntry> entries = new ArrayList<TurnConfidenceLevelEntry>();
+            final List<TurnConfidenceLevelEntry> entries = new ArrayList<>();
             if (filter.getConfidenceLevels() != null) {
                 for (final TurnConfidenceLevel confidence : filter.getConfidenceLevels()) {
                     entries.add(new TurnConfidenceLevelEntry(confidence));
@@ -177,7 +177,7 @@ final class SaveManager {
 
     void saveTurnRestrictionFiltersChangedFlag(final boolean changed) {
         Main.pref.put(TR_FILTERS_CHANGED, "");
-        Main.pref.put(TR_FILTERS_CHANGED, "" + changed);
+        Main.pref.put(TR_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
     void saveLocationTipSuppressFlag(final boolean tag) {

@@ -115,7 +115,7 @@ public abstract class BasicFilterPanel extends JPanel {
      * Resets the filters to it's default value.
      */
     protected void resetFilters() {
-        selectStatus(SearchFilter.DEFAULT.getStatus());
+        selectStatus(SearchFilter.DEFAULT_SEARCH_FILTER.getStatus());
     }
 
     private ButtonGroup buildButtonGroup(final JRadioButton... buttons) {
