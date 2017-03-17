@@ -169,4 +169,20 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnl.setBackground(Color.white);
         return pnl;
     }
+
+    // @Override
+    // public void showDialog() {
+    // System.out.println("called show dialog");
+    // super.showDialog();
+    // PreferenceManager.getInstance().savePanelOpenedFlag(true);
+    // }
+    //
+    // @Override
+    // public void hideDialog() {
+    // System.out.println("called hide dialog");
+    // super.hideDialog();
+    // PreferenceManager.getInstance().savePanelOpenedFlag(false);
+    // }
+
+
 }

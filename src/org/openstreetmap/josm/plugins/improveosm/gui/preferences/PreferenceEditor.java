@@ -19,12 +19,10 @@ import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.EnumSet;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.gui.preferences.DefaultTabPreferenceSetting;
 import org.openstreetmap.josm.gui.preferences.PreferenceTabbedPane;
-import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -62,9 +60,6 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
 
     @Override
     public boolean ok() {
-        final EnumSet<DataLayer> selectedDataLayers = pnlPreference.selectedDataLayers();
-        PreferenceManager.getInstance().saveDataLayers(selectedDataLayers);
-
         final LocationPref locationPref = pnlPreference.selectedLocationPrefOption();
 
         if (locationPref.equals(LocationPref.CUSTOM_SITE)) {

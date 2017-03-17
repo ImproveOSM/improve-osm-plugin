@@ -46,7 +46,7 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
 
     @Override
     public Icon getIcon() {
-        return IconConfig.getInstance().getDirectionOfFlowlayerIcon();
+        return IconConfig.getInstance().getDirectionOfFlowLayerIcon();
     }
 
     @Override

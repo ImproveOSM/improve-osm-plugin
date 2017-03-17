@@ -19,23 +19,15 @@ import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.EnumSet;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import com.telenav.josm.common.gui.GuiBuilder;
 
@@ -52,11 +44,6 @@ class PreferencePanel extends JPanel {
 
     private static final int URL_DIM = 20;
 
-    /* layer preference UI components */
-    private JCheckBox cbMissingGeometry;
-    private JCheckBox cbDirectionOfFlow;
-    private JCheckBox cbTurnRestriction;
-
     /* location preference UI components */
     private JRadioButton rbImproveOsmPage;
     private JRadioButton rbCustomPage;
@@ -67,26 +54,6 @@ class PreferencePanel extends JPanel {
     PreferencePanel() {
         super(new GridBagLayout());
         createComponents();
-    }
-
-
-    /**
-     * Returns the selected data layers.
-     *
-     * @return a set of {@code DataLayer}s
-     */
-    EnumSet<DataLayer> selectedDataLayers() {
-        final EnumSet<DataLayer> result = EnumSet.noneOf(DataLayer.class);
-        if (cbMissingGeometry.isSelected()) {
-            result.add(DataLayer.MISSING_GEOMETRY);
-        }
-        if (cbDirectionOfFlow.isSelected()) {
-            result.add(DataLayer.DIRECTION_OF_FLOW);
-        }
-        if (cbTurnRestriction.isSelected()) {
-            result.add(DataLayer.TURN_RESTRICTION);
-        }
-        return result;
     }
 
     /**
@@ -109,52 +76,7 @@ class PreferencePanel extends JPanel {
     }
 
     private void createComponents() {
-        createLayerPreferenceComponents();
         createLocationPreferenceComponents();
-    }
-
-    private void createLayerPreferenceComponents() {
-        final EnumSet<DataLayer> dataLayers = PreferenceManager.getInstance().loadDataLayers();
-        final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
-        final Font font = getFont().deriveFont(Font.PLAIN);
-
-        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLayersPreferenceLbl(), font,
-                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP),
-                Constraints.LBL_DATA_LAYER);
-
-        cbMissingGeometry = buildCheckBox(MissingGeometryGuiConfig.getInstance().getLayerTxt());
-        if (!enabledDataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
-            cbMissingGeometry.setEnabled(false);
-        }
-        if (dataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
-            cbMissingGeometry.setSelected(true);
-        }
-        add(cbMissingGeometry, Constraints.CB_MISSING_GEOMETRY);
-
-        cbDirectionOfFlow = buildCheckBox(DirectionOfFlowGuiConfig.getInstance().getLayerTxt());
-        if (!enabledDataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
-            cbDirectionOfFlow.setEnabled(false);
-        }
-        if (dataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
-            cbDirectionOfFlow.setSelected(true);
-        }
-        add(cbDirectionOfFlow, Constraints.CB_DIRECTION_OF_FLOW);
-
-        cbTurnRestriction = buildCheckBox(TurnRestrictionGuiConfig.getInstance().getLayerTxt());
-        if (!enabledDataLayers.contains(DataLayer.TURN_RESTRICTION)) {
-            cbTurnRestriction.setEnabled(false);
-        }
-        if (dataLayers.contains(DataLayer.TURN_RESTRICTION)) {
-            cbTurnRestriction.setSelected(true);
-        }
-        add(cbTurnRestriction, Constraints.CB_TURN_RESTRICTION);
-    }
-
-    private JCheckBox buildCheckBox(final String text) {
-        final JCheckBox cbbox = GuiBuilder.buildCheckBox(text, new JCheckBox().getFont().deriveFont(Font.PLAIN),
-                new DataLayersSelectionAction(), false, false);
-        cbbox.setBackground(getBackground());
-        return cbbox;
     }
 
     private void createLocationPreferenceComponents() {
@@ -204,28 +126,5 @@ class PreferencePanel extends JPanel {
             rbuttom.setSelected(true);
         }
         return rbuttom;
-    }
-
-
-    private final class DataLayersSelectionAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(final ActionEvent event) {
-            final JCheckBox source = (JCheckBox) event.getSource();
-            if (!source.isSelected() && !cbMissingGeometry.isSelected() && !cbDirectionOfFlow.isSelected()
-                    && !cbTurnRestriction.isSelected()) {
-                JOptionPane.showMessageDialog(PreferencePanel.this, GuiConfig.getInstance().getTxtDataLayerSettings());
-                final EnumSet<DataLayer> enabledDataLayers = Config.getInstance().getEnabledDataLayers();
-                if (enabledDataLayers.contains(DataLayer.MISSING_GEOMETRY)) {
-                    cbMissingGeometry.setSelected(true);
-                }
-                if (enabledDataLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
-                    cbDirectionOfFlow.setSelected(true);
-                }
-                if (enabledDataLayers.contains(DataLayer.TURN_RESTRICTION)) {
-                    cbTurnRestriction.setSelected(true);
-                }
-            }
-        }
     }
 }

@@ -40,9 +40,13 @@ public final class IconConfig extends BaseConfig {
     private final String dialogShortcutName;
 
     /* data layer icons */
-    private final Icon directionOfFlowlayerIcon;
+    private final Icon directionOfFlowLayerIcon;
     private final Icon missingGeometryLayerIcon;
     private final Icon turnRestrictonLayerIcon;
+
+    private final String directionOfFlowLayerIconName;
+    private final String missingGeometryLayerIconName;
+    private final String turnRestrictonLayerIconName;
 
     /* button panel icons */
     private final ImageIcon filterIcon;
@@ -63,9 +67,13 @@ public final class IconConfig extends BaseConfig {
 
         pluginIconName = readProperty("plugin.icon");
         dialogShortcutName = readProperty("dialog.shortcut");
-        directionOfFlowlayerIcon = ImageProvider.get(readProperty("directionOfFlow.layer.icon"));
-        missingGeometryLayerIcon = ImageProvider.get(readProperty("missingGeo.layer.icon"));
-        turnRestrictonLayerIcon = ImageProvider.get(readProperty("turnRestriction.layer.icon"));
+        directionOfFlowLayerIconName = readProperty("directionOfFlow.layer.icon");
+        missingGeometryLayerIconName = readProperty("missingGeo.layer.icon");
+        turnRestrictonLayerIconName = readProperty("turnRestriction.layer.icon");
+
+        directionOfFlowLayerIcon = ImageProvider.get(directionOfFlowLayerIconName);
+        missingGeometryLayerIcon = ImageProvider.get(missingGeometryLayerIconName);
+        turnRestrictonLayerIcon = ImageProvider.get(turnRestrictonLayerIconName);
 
         filterIcon = ImageProvider.get(readProperty("filter.icon"));
         commentIcon = ImageProvider.get(readProperty("comment.icon"));
@@ -93,8 +101,20 @@ public final class IconConfig extends BaseConfig {
         return dialogShortcutName;
     }
 
-    public Icon getDirectionOfFlowlayerIcon() {
-        return directionOfFlowlayerIcon;
+    public String getDirectionOfFlowLayerIconName() {
+        return directionOfFlowLayerIconName;
+    }
+
+    public String getMissingGeometryLayerIconName() {
+        return missingGeometryLayerIconName;
+    }
+
+    public String getTurnRestrictonLayerIconName() {
+        return turnRestrictonLayerIconName;
+    }
+
+    public Icon getDirectionOfFlowLayerIcon() {
+        return directionOfFlowLayerIcon;
     }
 
     public Icon getMissingGeometryLayerIcon() {
