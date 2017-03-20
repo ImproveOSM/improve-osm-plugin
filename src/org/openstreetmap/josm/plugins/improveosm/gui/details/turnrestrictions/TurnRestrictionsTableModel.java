@@ -70,7 +70,6 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
                     value = turnRestriction.getTurnType();
                     break;
                 case IDX_FIRST_SEG_TRIPS:
-                    value = turnRestriction.getSegments().get(0).getNumberOfTrips();
                     value = new Pair<Integer, Integer>(turnRestriction.getSegments().get(0).getNumberOfTrips(),
                             turnRestriction.getNumberOfPasses());
                     break;

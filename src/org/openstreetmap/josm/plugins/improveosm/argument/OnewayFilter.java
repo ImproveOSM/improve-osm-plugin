@@ -33,7 +33,7 @@ public class OnewayFilter extends SearchFilter {
 
     /** default search filter */
     public static final OnewayFilter DEFAULT =
-            new OnewayFilter(SearchFilter.DEFAULT.getStatus(), EnumSet.of(OnewayConfidenceLevel.C1));
+            new OnewayFilter(SearchFilter.DEFAULT_SEARCH_FILTER.getStatus(), EnumSet.of(OnewayConfidenceLevel.C1));
 
 
     /**
@@ -55,8 +55,7 @@ public class OnewayFilter extends SearchFilter {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime + super.hashCode();
+        int result = prime + super.hashCode();
         result = prime * result + EntityUtil.hashCode(confidenceLevels);
         return result;
     }

@@ -76,7 +76,7 @@ public final class ClusterConfig extends BaseConfig {
      * @return a list of radiuses
      */
     public List<Double> getRadiusList(final int zoom) {
-        List<Double> list = null;
+        List<Double> list;
         if (map.containsKey(zoom)) {
             list = map.get(zoom);
         } else {

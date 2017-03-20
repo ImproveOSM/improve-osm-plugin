@@ -16,8 +16,11 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import org.openstreetmap.josm.data.osm.visitor.BoundingXYVisitor;
 import org.openstreetmap.josm.gui.dialogs.LayerListDialog;
 import org.openstreetmap.josm.gui.dialogs.LayerListPopup;
@@ -35,8 +38,14 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
  */
 public abstract class AbstractLayer extends Layer {
 
+    private static final String DELETE_ACTION = "delete";
+
     public AbstractLayer(final String layerName) {
         super(layerName);
+
+        LayerListDialog.getInstance().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), DELETE_ACTION);
+        LayerListDialog.getInstance().getActionMap().put(DELETE_ACTION, getDeleteAction());
     }
 
 
@@ -49,9 +58,8 @@ public abstract class AbstractLayer extends Layer {
     public Action[] getMenuEntries() {
         final LayerListDialog layerListDialog = LayerListDialog.getInstance();
         return new Action[] { layerListDialog.createActivateLayerAction(this),
-                layerListDialog.createShowHideLayerAction(), layerListDialog.createDeleteLayerAction(),
-                SeparatorLayerAction.INSTANCE, getFilterAction(), SeparatorLayerAction.INSTANCE,
-                new LayerListPopup.InfoAction(this) };
+                layerListDialog.createShowHideLayerAction(), getDeleteAction(), SeparatorLayerAction.INSTANCE,
+                getFilterAction(), SeparatorLayerAction.INSTANCE, new LayerListPopup.InfoAction(this) };
     }
 
     private Action getFilterAction() {
@@ -66,6 +74,8 @@ public abstract class AbstractLayer extends Layer {
             }
         };
     }
+
+    abstract AbstractAction getDeleteAction();
 
     abstract BasicFilterDialog getFilterDialog();
 

@@ -44,7 +44,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         setFont(Main.map.getFont().deriveFont(Font.PLAIN));
         if (value != null) {
-            String txt = "";
+            String txt;
             if (value instanceof Status) {
                 txt = ((Status) value).name().toLowerCase();
             } else if (value instanceof TurnConfidenceLevel) {

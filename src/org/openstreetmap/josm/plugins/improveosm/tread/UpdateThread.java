@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm;
+package org.openstreetmap.josm.plugins.improveosm.tread;
 
 import javax.swing.SwingUtilities;
 import org.openstreetmap.josm.Main;
@@ -32,13 +32,13 @@ import com.telenav.josm.common.argument.BoundingBox;
  * @author Beata
  * @version $Revision$
  */
-abstract class UpdateThread<T> implements Runnable {
+public abstract class UpdateThread<T> implements Runnable {
 
     private final ImproveOsmDetailsDialog dialog;
     private final ImproveOsmLayer<T> layer;
 
 
-    UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
+    public UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
         this.dialog = dialog;
         this.layer = layer;
     }
@@ -46,9 +46,8 @@ abstract class UpdateThread<T> implements Runnable {
     @Override
     public void run() {
         if (Main.map != null && Main.map.mapView != null) {
-            final Bounds bounds =
-                    new Bounds(Main.map.mapView.getLatLon(0, Main.map.mapView.getHeight()),
-                            Main.map.mapView.getLatLon(Main.map.mapView.getWidth(), 0));
+            final Bounds bounds = new Bounds(Main.map.mapView.getLatLon(0, Main.map.mapView.getHeight()),
+                    Main.map.mapView.getLatLon(Main.map.mapView.getWidth(), 0));
 
             final BoundingBox bbox = new BoundingBox(bounds.getMax().lat(), bounds.getMin().lat(),
                     bounds.getMax().lon(), bounds.getMin().lon());
@@ -56,24 +55,24 @@ abstract class UpdateThread<T> implements Runnable {
             final DataSet<T> result = searchData(bbox, zoom);
 
             // update UI
-            SwingUtilities.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    layer.setDataSet(result);
-                    if (result != null && Main.getLayerManager().getActiveLayer().equals(layer)) {
-                        final T item = layer.lastSelectedItem();
-                        if (item == null) {
-                            dialog.updateUI(null, null);
-                        } else if (shouldClearSelection(item)) {
-                            layer.updateSelectedItem(null);
-                            dialog.updateUI(null, null);
-                        }
-                    }
-                    Main.map.repaint();
-                }
-            });
+            updateUI(result);
         }
+    }
+
+    private void updateUI(final DataSet<T> result) {
+        SwingUtilities.invokeLater(() -> {
+            layer.setDataSet(result);
+            if (result != null && Main.getLayerManager().getActiveLayer().equals(layer)) {
+                final T item = layer.lastSelectedItem();
+                if (item == null) {
+                    dialog.updateUI(null, null);
+                } else if (shouldClearSelection(item)) {
+                    layer.updateSelectedItem(null);
+                    dialog.updateUI(null, null);
+                }
+            }
+            Main.map.repaint();
+        });
     }
 
     abstract boolean shouldClearSelection(T item);

@@ -27,7 +27,7 @@ import com.telenav.josm.common.util.EntityUtil;
  */
 public class SearchFilter {
 
-    public static final SearchFilter DEFAULT = new SearchFilter(Status.OPEN);
+    public static final SearchFilter DEFAULT_SEARCH_FILTER = new SearchFilter(Status.OPEN);
     private final Status status;
 
 

@@ -15,13 +15,18 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.pref;
 
-import java.util.EnumSet;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.DOF_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.DOF_LAYER_OPENED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_LAYER_OPENED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PANEL_ICON_VISIBILITY;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_OPENED;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
-import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
@@ -119,15 +124,6 @@ public final class PreferenceManager {
     }
 
     /**
-     * Loads the selected data layers.
-     *
-     * @return a set of {@code DataLayer}
-     */
-    public EnumSet<DataLayer> loadDataLayers() {
-        return loadManager.loadDataLayers();
-    }
-
-    /**
      * Loads the selected location preference settings.
      *
      * @return a set of {@code LocationPref}
@@ -143,15 +139,6 @@ public final class PreferenceManager {
      */
     public String loadLocationPrefValue() {
         return loadManager.loadLocationPrefValue();
-    }
-
-    /**
-     * Saves the selected data layers to the preference file.
-     *
-     * @param dataLayers a set of {@code DataLayer}s
-     */
-    public void saveDataLayers(final EnumSet<DataLayer> dataLayers) {
-        saveManager.saveDataLayers(dataLayers);
     }
 
     /**
@@ -325,5 +312,57 @@ public final class PreferenceManager {
      */
     public void saveLocationTipSuppressFlag(final boolean flag) {
         saveManager.saveLocationTipSuppressFlag(flag);
+    }
+
+    public void saveMissingGeometryLayerOpenedFlag(final boolean layerOpened) {
+        saveManager.saveMissingGeometryLayerOpenedFlag(layerOpened);
+    }
+
+    public boolean loadMissingGeometryLayerOpenedFlag() {
+        return loadManager.loadMissingGeometryLayerOpenedFlag();
+    }
+
+    public void saveDirectionOfFlowLayerOpenedFlag(final boolean layerOpened) {
+        saveManager.saveDirectionOfFlowLayerOpenedFlag(layerOpened);
+    }
+
+    public boolean loadDirectionOfFlowLayerOpenedFlag() {
+        return loadManager.loadDirectionOfFlowLayerOpenedFlag();
+    }
+
+    public void saveTurnRestrictionLayerOpenedFlag(final boolean layerOpened) {
+        saveManager.saveTurnRestrictionLayerOpenedFlag(layerOpened);
+    }
+
+    public boolean loadTurnRestrictionLayerOpenedFlag() {
+        return loadManager.loadTurnRestrictionLayerOpenedFlag();
+    }
+
+    public void savePanelOpenedFlag(final String value) {
+        final Boolean panelOpened = Boolean.parseBoolean(value);
+        saveManager.savePanelOpenedFlag(panelOpened);
+    }
+
+    public boolean loadPanelOpenedFlag() {
+        return loadManager.loadPanelOpenedFlag();
+    }
+
+    public boolean missingGeometryDataPreferencesChanged(final String key, final String newValue) {
+        return (MG_LAYER_OPENED.equals(key) || MG_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean directionOfFlowDataPreferencesChanged(final String key, final String newValue) {
+        return (DOF_LAYER_OPENED.equals(key) || DOF_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean turnRestrictionDataPreferencesChanged(final String key, final String newValue) {
+        return (TR_LAYER_OPENED.equals(key) || TR_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean isPanelIconVisibilityKey(final String key) {
+        return PANEL_ICON_VISIBILITY.equals(key);
     }
 }

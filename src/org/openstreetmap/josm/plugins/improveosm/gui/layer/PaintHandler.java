@@ -23,6 +23,7 @@ import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.openstreetmap.josm.data.Bounds;
@@ -110,9 +111,9 @@ abstract class PaintHandler<T> {
     private Double clusterRadius(final SortedMap<Integer, Double> map, final Integer value) {
         Double radius = null;
         if (map.size() > 1) {
-            for (final Integer key : map.keySet()) {
-                if (value <= key) {
-                    radius = map.get(key);
+            for (final Entry<Integer, Double> entry : map.entrySet()) {
+                if (value <= entry.getKey()) {
+                    radius = entry.getValue();
                     break;
                 }
             }

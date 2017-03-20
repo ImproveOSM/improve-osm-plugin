@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.entity;
 
 import org.openstreetmap.josm.data.coor.LatLon;
+import com.telenav.josm.common.util.EntityUtil;
 
 
 /**
@@ -53,5 +54,29 @@ public class Cluster implements Comparable<Cluster> {
 
     public Integer getSize() {
         return size;
+    }
+
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + EntityUtil.hashCode(point);
+        result = prime * result + EntityUtil.hashCode(size == null);
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+        boolean result = false;
+        if (this == obj) {
+            result = true;
+        } else if (obj instanceof Cluster) {
+            final Cluster other = (Cluster) obj;
+            result = EntityUtil.bothNullOrEqual(point, other.getPoint());
+            result = result && EntityUtil.bothNullOrEqual(size, other.getSize());
+        }
+        return result;
     }
 }

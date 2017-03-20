@@ -34,7 +34,7 @@ public class MissingGeometryFilter extends SearchFilter {
 
     /** default search filter to be applied */
     public static final MissingGeometryFilter DEFAULT =
-            new MissingGeometryFilter(SearchFilter.DEFAULT.getStatus(), EnumSet.of(TileType.ROAD), null);
+            new MissingGeometryFilter(SearchFilter.DEFAULT_SEARCH_FILTER.getStatus(), EnumSet.of(TileType.ROAD), null);
 
 
     /**

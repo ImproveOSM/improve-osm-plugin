@@ -69,8 +69,7 @@ public class RoadSegmentInfoPanel extends BasicInfoPanel<RoadSegment> {
         if (percentage != null) {
             final String lbl = EntityFormatter.formatDouble(percentage, true, DecFormat.SHORT)
                     + DirectionOfFlowGuiConfig.getInstance().getLblProcent();
-            final int widthLbl =
-                    Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl.toString());
+            final int widthLbl = Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl);
             add(GuiBuilder.buildLabel(lbl, getFontBold(), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                     SwingConstants.TOP, new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             incrementPnlY();
@@ -126,8 +125,8 @@ public class RoadSegmentInfoPanel extends BasicInfoPanel<RoadSegment> {
             add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFontBold(),
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain())
-                    .stringWidth(confidence.toString());
+            final int widthVal =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(confidence.toString());
             add(GuiBuilder.buildLabel(confidence.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));

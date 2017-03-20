@@ -16,7 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.service.turnrestriction;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.openstreetmap.josm.data.coor.LatLon;
@@ -50,7 +50,7 @@ public class TurnRestrictionService extends BaseService implements Service<TurnR
     }
 
     private Map<LatLon, TurnRestriction> buildTurnRestrictionMap(final List<TurnRestriction> entities) {
-        final Map<LatLon, TurnRestriction> map = new Hashtable<>();
+        final Map<LatLon, TurnRestriction> map = new HashMap<>();
         if (entities != null) {
             for (final TurnRestriction elem : entities) {
                 if (map.containsKey(elem.getPoint())) {
@@ -67,9 +67,9 @@ public class TurnRestrictionService extends BaseService implements Service<TurnR
                         map.put(elem.getPoint(), new TurnRestriction(elem.getPoint(), turnRestrictions));
                     } else {
                         mapElem.getTurnRestrictions()
-                                .add(new TurnRestriction(elem.getId(), elem.getSegments(), elem.getPoint(),
-                                        elem.getStatus(), elem.getTurnType(), elem.getConfidenceLevel(),
-                                        elem.getNumberOfPasses()));
+                        .add(new TurnRestriction(elem.getId(), elem.getSegments(), elem.getPoint(),
+                                elem.getStatus(), elem.getTurnType(), elem.getConfidenceLevel(),
+                                elem.getNumberOfPasses()));
                     }
                 } else {
                     map.put(elem.getPoint(), elem);

@@ -33,8 +33,6 @@ import java.util.Map;
  */
 final class Constants {
 
-    private Constants() {}
-
     /* composite constants */
     static final Composite NORMAL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
     static final Composite CLUSTER_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.80F);
@@ -95,4 +93,7 @@ final class Constants {
         map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         return map;
     }
+
+
+    private Constants() {}
 }
