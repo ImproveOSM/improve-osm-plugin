@@ -15,6 +15,13 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.pref;
 
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.DOF_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.DOF_LAYER_OPENED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_LAYER_OPENED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PANEL_ICON_VISIBILITY;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_FILTERS_CHANGED;
+import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_OPENED;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
@@ -324,7 +331,7 @@ public final class PreferenceManager {
     }
 
     public void saveTurnRestrictionLayerOpenedFlag(final boolean layerOpened) {
-        saveManager.saveTurnRestrictionFiltersChangedFlag(layerOpened);
+        saveManager.saveTurnRestrictionLayerOpenedFlag(layerOpened);
     }
 
     public boolean loadTurnRestrictionLayerOpenedFlag() {
@@ -338,5 +345,24 @@ public final class PreferenceManager {
 
     public boolean loadPanelOpenedFlag() {
         return loadManager.loadPanelOpenedFlag();
+    }
+
+    public boolean missingGeometryDataPreferencesChanged(final String key, final String newValue) {
+        return (MG_LAYER_OPENED.equals(key) || MG_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean directionOfFlowDataPreferencesChanged(final String key, final String newValue) {
+        return (DOF_LAYER_OPENED.equals(key) || DOF_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean turnRestrictionDataPreferencesChanged(final String key, final String newValue) {
+        return (TR_LAYER_OPENED.equals(key) || TR_FILTERS_CHANGED.equals(key))
+                && Boolean.TRUE.toString().equals(newValue);
+    }
+
+    public boolean isPanelIconVisibilityKey(final String key) {
+        return PANEL_ICON_VISIBILITY.equals(key);
     }
 }

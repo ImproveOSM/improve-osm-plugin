@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
@@ -29,6 +30,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.Tu
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
@@ -97,6 +99,22 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
         @Override
         Color getClusterColor() {
             return TURNRESTRICTION_CLUSTER_COLOR;
+        }
+    }
+
+    @Override
+    AbstractAction getDeleteAction() {
+        return new TurnRestrictionLayerAction();
+    }
+
+
+    private static class TurnRestrictionLayerAction extends ImproveOsmDeleteLayerAction {
+
+        private static final long serialVersionUID = -6587863325888182227L;
+
+        @Override
+        void saveLayerClosedState() {
+            PreferenceManager.getInstance().saveTurnRestrictionLayerOpenedFlag(false);
         }
     }
 }

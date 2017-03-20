@@ -89,11 +89,12 @@ public class InfoDialog {
         if (!locationTipIsDisplayed) {
             if (!PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
                 locationTipIsDisplayed = true;
-                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        buildTextPane(GuiConfig.getInstance().getLocationButtonTipMessage(),
-                                Main.parent.getBackground()),
-                        GuiConfig.getInstance().getLocationButtonTipTitle(), JOptionPane.YES_NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE, null, null, null);
+                final int val =
+                        JOptionPane.showOptionDialog(Main.map.mapView,
+                                buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(),
+                                        Main.parent.getBackground()),
+                                GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
+                                JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.YES_OPTION;
                 PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
                 locationTipIsDisplayed = false;

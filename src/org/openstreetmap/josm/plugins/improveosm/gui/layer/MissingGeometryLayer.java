@@ -19,6 +19,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.MISS
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
@@ -27,6 +28,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingG
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
@@ -79,6 +81,22 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
         @Override
         Color getClusterColor() {
             return MISSINGGEO_CLUSTER_COLOR;
+        }
+    }
+
+    @Override
+    AbstractAction getDeleteAction() {
+        return new DeleteMissingGeometryLayerAction();
+    }
+
+
+    private static class DeleteMissingGeometryLayerAction extends ImproveOsmDeleteLayerAction {
+
+        private static final long serialVersionUID = -6587863325888182227L;
+
+        @Override
+        void saveLayerClosedState() {
+            PreferenceManager.getInstance().saveMissingGeometryLayerOpenedFlag(false);
         }
     }
 }

@@ -48,6 +48,8 @@ public final class IconConfig extends BaseConfig {
     private final String missingGeometryLayerIconName;
     private final String turnRestrictonLayerIconName;
 
+    private final String deleteIconName;
+
     /* button panel icons */
     private final ImageIcon filterIcon;
     private final ImageIcon commentIcon;
@@ -70,6 +72,7 @@ public final class IconConfig extends BaseConfig {
         directionOfFlowLayerIconName = readProperty("directionOfFlow.layer.icon");
         missingGeometryLayerIconName = readProperty("missingGeo.layer.icon");
         turnRestrictonLayerIconName = readProperty("turnRestriction.layer.icon");
+        deleteIconName = readProperty("delete.icon");
 
         directionOfFlowLayerIcon = ImageProvider.get(directionOfFlowLayerIconName);
         missingGeometryLayerIcon = ImageProvider.get(missingGeometryLayerIconName);
@@ -111,6 +114,10 @@ public final class IconConfig extends BaseConfig {
 
     public String getTurnRestrictonLayerIconName() {
         return turnRestrictonLayerIconName;
+    }
+
+    public String getDeleteIconName() {
+        return deleteIconName;
     }
 
     public Icon getDirectionOfFlowLayerIcon() {

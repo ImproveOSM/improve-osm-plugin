@@ -110,7 +110,7 @@ class PreferencePanel extends JPanel {
         }
 
         if (enabledLocationPref.contains(LocationPref.COPY_LOCATION)) {
-            rbCopyLocation = buildRadioButton(GuiConfig.getInstance().getLocationPrefCopyLoc(), savedLocationPref,
+            rbCopyLocation = buildRadioButton(GuiConfig.getInstance().getCopyLocationPrefLbl(), savedLocationPref,
                     LocationPref.COPY_LOCATION);
             if (savedLocationPref == null) {
                 rbCopyLocation.setSelected(true);

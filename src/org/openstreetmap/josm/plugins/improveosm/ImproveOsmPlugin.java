@@ -69,10 +69,10 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
-import org.openstreetmap.josm.plugins.improveosm.util.pref.Keys;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import org.openstreetmap.josm.tools.ImageProvider;
 import com.telenav.josm.common.argument.BoundingBox;
@@ -85,9 +85,7 @@ import com.telenav.josm.common.argument.BoundingBox;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
-
-    private static final String COPY_ACTION = "Copy";
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -126,36 +124,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     public void mapFrameInitialized(final MapFrame oldMapFrame, final MapFrame newMapFrame) {
         if (Main.map != null && !GraphicsEnvironment.isHeadless()) {
             // create details dialog
-            detailsDialog = new ImproveOsmDetailsDialog();
-            detailsDialog.registerCommentObserver(this);
-            detailsDialog.registerTurnRestrictionSelectionObserver(this);
-            newMapFrame.addToggleDialog(detailsDialog);
-
-            // enable dialog
-            if (PreferenceManager.getInstance().loadPanelOpenedFlag()) {
-                detailsDialog.showDialog();
-            } else {
-                detailsDialog.hideDialog();
-            }
-
+            initializeDetailsDialog(newMapFrame);
             initializeLayerMenuItems();
-
-            // add layers
-            if (PreferenceManager.getInstance().loadMissingGeometryLayerOpenedFlag()) {
-                missingGeometryLayer = new MissingGeometryLayer();
-                Main.getLayerManager().addLayer(missingGeometryLayer);
-            }
-            if (PreferenceManager.getInstance().loadDirectionOfFlowLayerOpenedFlag()) {
-                directionOfFlowLayer = new DirectionOfFlowLayer();
-                Main.getLayerManager().addLayer(directionOfFlowLayer);
-            }
-            if (PreferenceManager.getInstance().loadTurnRestrictionLayerOpenedFlag()) {
-                turnRestrictionLayer = new TurnRestrictionLayer();
-                Main.getLayerManager().addLayer(turnRestrictionLayer);
-            }
-            if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
-                registerListeners();
-            }
+            initializeLayers();
         }
         if (oldMapFrame != null && newMapFrame == null) {
             missingGeometryLayerMenuItem.setEnabled(false);
@@ -164,6 +135,38 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         }
     }
 
+    private void initializeDetailsDialog(final MapFrame newMapFrame) {
+        // create details dialog
+        detailsDialog = new ImproveOsmDetailsDialog();
+        detailsDialog.registerCommentObserver(this);
+        detailsDialog.registerTurnRestrictionSelectionObserver(this);
+        newMapFrame.addToggleDialog(detailsDialog);
+
+        // enable dialog
+        if (PreferenceManager.getInstance().loadPanelOpenedFlag()) {
+            detailsDialog.showDialog();
+        } else {
+            detailsDialog.hideDialog();
+        }
+    }
+
+    private void initializeLayers() {
+        if (PreferenceManager.getInstance().loadMissingGeometryLayerOpenedFlag()) {
+            missingGeometryLayer = new MissingGeometryLayer();
+            Main.getLayerManager().addLayer(missingGeometryLayer);
+        }
+        if (PreferenceManager.getInstance().loadDirectionOfFlowLayerOpenedFlag()) {
+            directionOfFlowLayer = new DirectionOfFlowLayer();
+            Main.getLayerManager().addLayer(directionOfFlowLayer);
+        }
+        if (PreferenceManager.getInstance().loadTurnRestrictionLayerOpenedFlag()) {
+            turnRestrictionLayer = new TurnRestrictionLayer();
+            Main.getLayerManager().addLayer(turnRestrictionLayer);
+        }
+        if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
+            registerListeners();
+        }
+    }
 
     private void registerListeners() {
         if (!listenersRegistered) {
@@ -171,7 +174,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
             Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
-            Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
+            Main.map.mapView.registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
@@ -218,29 +221,27 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             } else if (event.getAddedLayer() instanceof DirectionOfFlowLayer) {
                 PreferenceManager.getInstance().saveDirectionOfFlowLayerOpenedFlag(true);
             } else if (event.getAddedLayer() instanceof TurnRestrictionLayer) {
-                PreferenceManager.getInstance().saveTurnRestrictionFiltersChangedFlag(true);
+                PreferenceManager.getInstance().saveTurnRestrictionLayerOpenedFlag(true);
             }
             zoomChanged();
         }
     }
 
-
     @Override
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
         final Layer oldLayer =
                 Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
-                final Layer newLayer = Main.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
-                    if (oldLayer instanceof MissingGeometryLayer) {
-                        updateSelectedData(missingGeometryLayer, null, null);
-                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                        updateSelectedData(directionOfFlowLayer, null, null);
-                    } else if (oldLayer instanceof TurnRestrictionLayer) {
-                        updateSelectedData(turnRestrictionLayer, null, null);
-                    }
-                }
+        final Layer newLayer = Main.getLayerManager().getActiveLayer();
+        if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null, null);
+            }
+        }
     }
-
 
     @Override
     public void layerRemoving(final LayerRemoveEvent event) {
@@ -269,11 +270,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 Main.map.mapView.removeMouseListener(this);
                 detailsDialog.updateUI(null, null);
                 listenersRegistered = false;
-                detailsDialog.hideDialog();
             }
         }
     }
-
 
     /* ZoomChangeListener method */
 
@@ -317,22 +316,17 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void preferenceChanged(final PreferenceChangeEvent event) {
         if (event != null && (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue()))) {
-            switch (event.getKey()) {
-                case Keys.MG_FILTERS_CHANGED:
-                    Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
-                    break;
-                case Keys.DOF_FILTERS_CHANGED:
-                    Main.worker.execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
-                    break;
-                case Keys.TR_FILTERS_CHANGED:
-                    Main.worker.execute(new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer));
-                    break;
-                case Keys.PANEL_ICON_VISIBILITY:
-                    PreferenceManager.getInstance().savePanelOpenedFlag(event.getNewValue().toString());
-                    break;
-                default:
-                    // ignore it
-                    break;
+            if (PreferenceManager.getInstance().missingGeometryDataPreferencesChanged(event.getKey(),
+                    event.getNewValue().getValue().toString())) {
+                Main.worker.execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
+            } else if (PreferenceManager.getInstance().directionOfFlowDataPreferencesChanged(event.getKey(),
+                    event.getNewValue().getValue().toString())) {
+                Main.worker.execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
+            } else if (PreferenceManager.getInstance().turnRestrictionDataPreferencesChanged(event.getKey(),
+                    event.getNewValue().getValue().toString())) {
+                Main.worker.execute(new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer));
+            } else if (PreferenceManager.getInstance().isPanelIconVisibilityKey(event.getKey())) {
+                PreferenceManager.getInstance().savePanelOpenedFlag(event.getNewValue().toString());
             }
         }
     }
@@ -439,20 +433,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public synchronized void createComment(final Comment comment) {
         final List<Layer> layers = Main.getLayerManager().getLayers();
-        Main.worker.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                if (layers.contains(missingGeometryLayer) && missingGeometryLayer.hasSelectedItems()) {
-                    createComment(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer,
-                            new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer), comment);
-                } else if (layers.contains(directionOfFlowLayer) && directionOfFlowLayer.hasSelectedItems()) {
-                    createComment(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer,
-                            new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer), comment);
-                } else if (layers.contains(turnRestrictionLayer) && turnRestrictionLayer.hasSelectedItems()) {
-                    createComment(ServiceHandler.getTurnRestrictionHandler(), turnRestrictionLayer,
-                            new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer), comment);
-                }
+        Main.worker.execute(() -> {
+            if (layers.contains(missingGeometryLayer) && missingGeometryLayer.hasSelectedItems()) {
+                createComment(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer,
+                        new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer), comment);
+            } else if (layers.contains(directionOfFlowLayer) && directionOfFlowLayer.hasSelectedItems()) {
+                createComment(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer,
+                        new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer), comment);
+            } else if (layers.contains(turnRestrictionLayer) && turnRestrictionLayer.hasSelectedItems()) {
+                createComment(ServiceHandler.getTurnRestrictionHandler(), turnRestrictionLayer,
+                        new TurnRestrictionUpdateThread(detailsDialog, turnRestrictionLayer), comment);
             }
         });
     }
@@ -488,14 +478,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     }
 
     private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item, final List<Comment> comments) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                detailsDialog.updateUI(item, comments);
-                layer.updateSelectedItem(item);
-                Main.map.repaint();
-            }
+        SwingUtilities.invokeLater(() -> {
+            detailsDialog.updateUI(item, comments);
+            layer.updateSelectedItem(item);
+            Main.map.repaint();
         });
     }
 
@@ -575,7 +561,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            if (event.getActionCommand().equals(COPY_ACTION)) {
+            if (event.getActionCommand().equals(GuiConfig.getInstance().getLblCopy())) {
                 final Layer activeLayer = Main.getLayerManager().getActiveLayer();
                 String selection = "";
                 if (activeLayer instanceof MissingGeometryLayer) {
@@ -611,22 +597,15 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         @Override
         public void actionPerformed(final ActionEvent event) {
             if (!listenersRegistered) {
-                NavigatableComponent.addZoomChangeListener(ImproveOsmPlugin.this);
-                Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
-                Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
-                Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
-                Main.map.mapView.registerKeyboardAction(new CopyAction(), COPY_ACTION,
-                        KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
-                        JComponent.WHEN_FOCUSED);
-                listenersRegistered = true;
+                registerListeners();
             }
             switch (dataLayer) {
                 case MISSING_GEOMETRY:
                     if (missingGeometryLayer == null) {
                         // add layer
-                        PreferenceManager.getInstance().saveMissingGeometryLayerOpenedFlag(true);
                         missingGeometryLayer = new MissingGeometryLayer();
                         Main.getLayerManager().addLayer(missingGeometryLayer);
+                        PreferenceManager.getInstance().saveMissingGeometryLayerOpenedFlag(true);
                     }
                     break;
                 case DIRECTION_OF_FLOW:
@@ -641,11 +620,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     if (turnRestrictionLayer == null) {
                         turnRestrictionLayer = new TurnRestrictionLayer();
                         Main.getLayerManager().addLayer(turnRestrictionLayer);
-                        PreferenceManager.getInstance().saveTurnRestrictionFiltersChangedFlag(true);
+                        PreferenceManager.getInstance().saveTurnRestrictionLayerOpenedFlag(true);
                     }
                     break;
             }
         }
-
     }
 }

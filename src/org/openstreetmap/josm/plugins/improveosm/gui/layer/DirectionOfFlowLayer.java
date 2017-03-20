@@ -19,6 +19,7 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.DIRE
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -27,6 +28,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.Dir
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 
 
 /**
@@ -79,6 +81,22 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
         @Override
         Color getClusterColor() {
             return DIRECTIONOFFLOW_CLUSTER_COLOR;
+        }
+    }
+
+    @Override
+    AbstractAction getDeleteAction() {
+        return new DeleteDirectionOfFlowLayerAction();
+    }
+
+
+    private static class DeleteDirectionOfFlowLayerAction extends ImproveOsmDeleteLayerAction {
+
+        private static final long serialVersionUID = -6587863325888182227L;
+
+        @Override
+        void saveLayerClosedState() {
+            PreferenceManager.getInstance().saveDirectionOfFlowLayerOpenedFlag(false);
         }
     }
 }

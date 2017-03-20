@@ -24,6 +24,7 @@ import com.telenav.josm.common.cnf.BaseConfig;
  * @author Beata
  * @version $Revision$
  */
+// TODO : refactor this class, some of the fields does not follows coding conventions
 public final class GuiConfig extends BaseConfig {
 
     private static final String CONFIG_FILE = "improveosm_gui.properties";
@@ -94,9 +95,11 @@ public final class GuiConfig extends BaseConfig {
     private final String txtSiteError;
 
     /* tips texts */
-    private final String titleLocationButtonTip;
-    private final String messageLocationButtonTip;
+    private final String locationBtnTipLbl;
+    private final String locationBtnTipTxt;
 
+    private final String deleteMenuItemLbl;
+    private final String deleteMenuItemTlt;
 
     private GuiConfig() {
         super(CONFIG_FILE);
@@ -150,11 +153,14 @@ public final class GuiConfig extends BaseConfig {
         errorTitle = readProperty("error.title");
         txtFeedbackUrlError = readProperty("error.feedback");
 
-        titleLocationButtonTip = readProperty("location.tips.title");
-        messageLocationButtonTip = readProperty("location.tips.message");
+        locationBtnTipLbl = readProperty("location.tips.title");
+        locationBtnTipTxt = readProperty("location.tips.message");
 
         errorSiteTitle = readProperty("locationPref.error.title");
         txtSiteError = readProperty("locationPref.error.text");
+
+        deleteMenuItemLbl = readProperty("");
+        deleteMenuItemTlt = readProperty("");
     }
 
 
@@ -267,7 +273,7 @@ public final class GuiConfig extends BaseConfig {
         return customPrefLbl;
     }
 
-    public String getLocationPrefCopyLoc() {
+    public String getCopyLocationPrefLbl() {
         return copyLocationPrefLbl;
     }
 
@@ -327,12 +333,12 @@ public final class GuiConfig extends BaseConfig {
         return txtFeedbackUrlError;
     }
 
-    public String getLocationButtonTipTitle() {
-        return titleLocationButtonTip;
+    public String getLocationBtnTipLbl() {
+        return locationBtnTipLbl;
     }
 
-    public String getLocationButtonTipMessage() {
-        return messageLocationButtonTip;
+    public String getLocationBtnTipTxt() {
+        return locationBtnTipTxt;
     }
 
     public String getWrongSiteTitle() {
@@ -340,6 +346,34 @@ public final class GuiConfig extends BaseConfig {
     }
 
     public String getWrongSiteText() {
+        return txtSiteError;
+    }
+
+    public String getDeleteMenuItemLbl() {
+        return deleteMenuItemLbl;
+    }
+
+    public String getDeleteMenuItemTlt() {
+        return deleteMenuItemTlt;
+    }
+
+    public String getLayerPreferenceLbl() {
+        return layerPreferenceLbl;
+    }
+
+    public String getOpenStreetMapPrefLbl() {
+        return openStreetMapPrefLbl;
+    }
+
+    public String getCustomPrefLbl() {
+        return customPrefLbl;
+    }
+
+    public String getErrorSiteTitle() {
+        return errorSiteTitle;
+    }
+
+    public String getTxtSiteError() {
         return txtSiteError;
     }
 }
