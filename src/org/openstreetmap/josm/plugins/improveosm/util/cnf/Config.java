@@ -38,12 +38,12 @@ public final class Config extends BaseConfig {
     private static final int MAX_COMMENT_DISPLAY_LENGTH = 150;
 
 
-    private int maxClusterZoom;
-    private int commentMaxLength;
-    private int commentDisplayLength;
+    private final int maxClusterZoom;
+    private final int commentMaxLength;
+    private final int commentDisplayLength;
     private final String feedbackUrl;
 
-    private  EnumSet<DataLayer> enabledDataLayers;
+    private final EnumSet<DataLayer> enabledDataLayers;
     private final EnumSet<LocationPref> enabledLocationPref;
 
     private final String[] locationUrlPatterns;
@@ -54,55 +54,50 @@ public final class Config extends BaseConfig {
     private Config() {
         super(CONFIG_FILE);
         feedbackUrl = readProperty("feedback.url");
-
-        try {
-            maxClusterZoom = Integer.parseInt(readProperty("zoom.cluster.max"));
-        } catch (final NumberFormatException e) {
-            maxClusterZoom = MAX_CLUSTER_ZOOM;
-        }
-        try {
-            commentMaxLength = Integer.parseInt(readProperty("comment.max.length"));
-        } catch (final NumberFormatException e) {
-            commentMaxLength = MAX_COMMENT_LENGTH;
-        }
-
-        try {
-            commentDisplayLength = Integer.parseInt(readProperty("comment.display.max.length"));
-        } catch (final NumberFormatException e) {
-            commentDisplayLength = MAX_COMMENT_DISPLAY_LENGTH;
-        }
-
-        final String[] enabledDataLayersValues = readPropertiesArray("layers.enabled");
-        if (enabledDataLayersValues != null) {
-            enabledDataLayers = EnumSet.noneOf(DataLayer.class);
-            for (final String value : enabledDataLayersValues) {
-                DataLayer dataLayer = DataLayer.getDataLayer(value);
-                if (dataLayer != null) {
-                    enabledDataLayers.add(dataLayer);
-                }
-            }
-            if (enabledDataLayers.isEmpty()) {
-                enabledDataLayers = EnumSet.allOf(DataLayer.class);
-            }
-        } else {
-            enabledDataLayers = EnumSet.allOf(DataLayer.class);
-        }
-
-        final String[] enabledLocationSettingsValues = readPropertiesArray("locationPref.enabled");
-        if (enabledLocationSettingsValues != null) {
-            enabledLocationPref = EnumSet.noneOf(LocationPref.class);
-            for (final String value : enabledLocationSettingsValues) {
-                enabledLocationPref.add(LocationPref.valueOf(value));
-            }
-        } else {
-            enabledLocationPref = EnumSet.allOf(LocationPref.class);
-        }
-
+        maxClusterZoom = readIntegerProperty(readProperty("zoom.cluster.max"), MAX_CLUSTER_ZOOM);
+        commentMaxLength = readIntegerProperty(readProperty("comment.max.length"), MAX_COMMENT_LENGTH);
+        commentDisplayLength =
+                readIntegerProperty(readProperty("comment.display.max.length"), MAX_COMMENT_DISPLAY_LENGTH);
+        enabledDataLayers = loadEnabledDataLayers();
+        enabledLocationPref = loadEnabledLocationPref();
         locationUrlPatterns = readPropertiesArray("locationPref.patterns");
         locationUrlVariablePart = readPropertiesArray("locationPref.url.variablePart");
         locationUrlOpenStreetView = readProperty("locationPref.url.openstreetview");
     }
 
+    private EnumSet<DataLayer> loadEnabledDataLayers() {
+        EnumSet<DataLayer> result;
+        final String[] enabledDataLayersValues = readPropertiesArray("layers.enabled");
+        if (enabledDataLayersValues != null) {
+            result = EnumSet.noneOf(DataLayer.class);
+            for (final String value : enabledDataLayersValues) {
+                final DataLayer dataLayer = DataLayer.getDataLayer(value);
+                if (dataLayer != null) {
+                    result.add(dataLayer);
+                }
+            }
+            if (result.isEmpty()) {
+                result = EnumSet.allOf(DataLayer.class);
+            }
+        } else {
+            result = EnumSet.allOf(DataLayer.class);
+        }
+        return result;
+    }
+
+    private EnumSet<LocationPref> loadEnabledLocationPref() {
+        EnumSet<LocationPref> result;
+        final String[] enabledLocationSettingsValues = readPropertiesArray("locationPref.enabled");
+        if (enabledLocationSettingsValues != null) {
+            result = EnumSet.noneOf(LocationPref.class);
+            for (final String value : enabledLocationSettingsValues) {
+                result.add(LocationPref.valueOf(value));
+            }
+        } else {
+            result = EnumSet.allOf(LocationPref.class);
+        }
+        return result;
+    }
 
     public static Config getInstance() {
         return INSTANCE;

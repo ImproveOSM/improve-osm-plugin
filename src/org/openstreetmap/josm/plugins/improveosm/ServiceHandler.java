@@ -42,7 +42,7 @@ import com.telenav.josm.common.argument.BoundingBox;
  * @author Beata
  * @version $Revision$
  */
-final class ServiceHandler<T> {
+public final class ServiceHandler<T> {
 
     private static final ServiceHandler<Tile> MISSING_GEOMETRY_HANDLER =
             new ServiceHandler<>(DataLayer.MISSING_GEOMETRY);
@@ -71,19 +71,19 @@ final class ServiceHandler<T> {
     }
 
 
-    static ServiceHandler<Tile> getMissingGeometryHandler() {
+    public static ServiceHandler<Tile> getMissingGeometryHandler() {
         return MISSING_GEOMETRY_HANDLER;
     }
 
-    static ServiceHandler<RoadSegment> getDirectionOfFlowHandler() {
+    public static ServiceHandler<RoadSegment> getDirectionOfFlowHandler() {
         return DIRECTION_OF_FLOW_HANDLER;
     }
 
-    static ServiceHandler<TurnRestriction> getTurnRestrictionHandler() {
+    public static ServiceHandler<TurnRestriction> getTurnRestrictionHandler() {
         return TURN_RESTRICTION_HANDLER;
     }
 
-    DataSet<T> search(final BoundingBox bbox, final SearchFilter filter, final int zoom) {
+    public DataSet<T> search(final BoundingBox bbox, final SearchFilter filter, final int zoom) {
         DataSet<T> result = new DataSet<>();
         try {
             result = service.search(bbox, filter, zoom);
@@ -93,7 +93,7 @@ final class ServiceHandler<T> {
         return result;
     }
 
-    List<Comment> retrieveComments(final T entity) {
+    public List<Comment> retrieveComments(final T entity) {
         List<Comment> comments = new ArrayList<>();
         try {
             comments = service.retrieveComments(entity);
@@ -103,7 +103,7 @@ final class ServiceHandler<T> {
         return comments;
     }
 
-    void comment(final Comment comment, final List<T> entities) {
+    public void comment(final Comment comment, final List<T> entities) {
         try {
             service.comment(comment, entities);
         } catch (final ServiceException e) {

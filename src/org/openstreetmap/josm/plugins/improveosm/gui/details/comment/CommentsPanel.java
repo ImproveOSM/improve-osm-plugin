@@ -36,7 +36,6 @@ public class CommentsPanel extends BasicInfoPanel<List<Comment>> {
     private static final long serialVersionUID = -1002962542315503824L;
 
     private static final Dimension DIM = new Dimension(150, 100);
-    private CommentsList commentsList;
 
 
     public CommentsPanel() {
@@ -47,7 +46,7 @@ public class CommentsPanel extends BasicInfoPanel<List<Comment>> {
     @Override
     public void createComponents(final List<Comment> comments) {
         setLayout(new BorderLayout());
-        commentsList = new CommentsList(comments.toArray(new Comment[0]));
+        final CommentsList commentsList = new CommentsList(comments.toArray(new Comment[0]));
         final JScrollPane cmp = GuiBuilder.buildScrollPane(commentsList, GuiConfig.getInstance().getPnlHistoryTitle(),
                 getBackground(), null, 100, false, DIM);
         add(cmp, BorderLayout.CENTER);

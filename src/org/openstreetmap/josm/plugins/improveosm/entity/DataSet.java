@@ -48,11 +48,11 @@ public class DataSet<T> {
      * @param items a list if {@code T} items
      */
     public DataSet(final List<Cluster> clusters, final List<T> items) {
-        this.clusters = clusters == null ? new ArrayList<Cluster>() : clusters;
+        this.clusters = clusters == null ? new ArrayList<>() : clusters;
         if (!this.clusters.isEmpty()) {
             Collections.sort(this.clusters);
         }
-        this.items = items == null ? new ArrayList<T>() : items;
+        this.items = items == null ? new ArrayList<>() : items;
     }
 
 

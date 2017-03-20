@@ -159,8 +159,8 @@ public final class GuiConfig extends BaseConfig {
         errorSiteTitle = readProperty("locationPref.error.title");
         txtSiteError = readProperty("locationPref.error.text");
 
-        deleteMenuItemLbl = readProperty("");
-        deleteMenuItemTlt = readProperty("");
+        deleteMenuItemLbl = readProperty("layer.menu.delete.lbl");
+        deleteMenuItemTlt = readProperty("layer.menu.delete.tlt");
     }
 
 

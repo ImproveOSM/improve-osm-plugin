@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.openstreetmap.josm.plugins.improveosm;
+package org.openstreetmap.josm.plugins.improveosm.tread;
 
 import javax.swing.SwingUtilities;
 import org.openstreetmap.josm.Main;
@@ -32,13 +32,13 @@ import com.telenav.josm.common.argument.BoundingBox;
  * @author Beata
  * @version $Revision$
  */
-abstract class UpdateThread<T> implements Runnable {
+public abstract class UpdateThread<T> implements Runnable {
 
     private final ImproveOsmDetailsDialog dialog;
     private final ImproveOsmLayer<T> layer;
 
 
-    UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
+    public UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
         this.dialog = dialog;
         this.layer = layer;
     }
