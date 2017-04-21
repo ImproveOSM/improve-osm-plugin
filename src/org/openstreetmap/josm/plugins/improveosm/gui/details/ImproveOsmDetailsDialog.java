@@ -61,6 +61,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
     private static final int DLG_HEIGHT = 50;
+    private static final int SCROLL_BAR_UNIT = 100;
 
     /* dialog components */
     private final JScrollPane cmpInfo;
@@ -84,7 +85,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
         cmpInfo = GuiBuilder.buildScrollPane(GuiBuilder.buildEmptyPanel(Color.WHITE),
-                GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, 100, false, DIM);
+                GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();

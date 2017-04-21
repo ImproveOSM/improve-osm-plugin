@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
 import java.util.EnumSet;
+import java.util.Set;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
 import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import com.telenav.josm.common.cnf.BaseConfig;
@@ -119,11 +120,11 @@ public final class Config extends BaseConfig {
         return feedbackUrl;
     }
 
-    public EnumSet<DataLayer> getEnabledDataLayers() {
+    public Set<DataLayer> getEnabledDataLayers() {
         return enabledDataLayers;
     }
 
-    public EnumSet<LocationPref> getEnabledLocationPref() {
+    public Set<LocationPref> getEnabledLocationPref() {
         return enabledLocationPref;
     }
 

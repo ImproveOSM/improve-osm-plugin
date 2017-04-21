@@ -72,7 +72,7 @@ public class Cluster implements Comparable<Cluster> {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof Cluster) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final Cluster other = (Cluster) obj;
             result = EntityUtil.bothNullOrEqual(point, other.getPoint());
             result = result && EntityUtil.bothNullOrEqual(size, other.getSize());

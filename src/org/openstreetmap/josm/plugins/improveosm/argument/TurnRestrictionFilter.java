@@ -16,6 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
+import java.util.Set;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import com.telenav.josm.common.entity.EntityUtil;
@@ -29,7 +30,7 @@ import com.telenav.josm.common.entity.EntityUtil;
  */
 public class TurnRestrictionFilter extends SearchFilter {
 
-    private final EnumSet<TurnConfidenceLevel> confidenceLevels;
+    private final Set<TurnConfidenceLevel> confidenceLevels;
 
     /** default filter to be applied if no filter is set/user reset's the filter */
     public static final TurnRestrictionFilter DEFAULT =
@@ -44,13 +45,13 @@ public class TurnRestrictionFilter extends SearchFilter {
      * @param confidenceLevels defines the turn restriction confidence levels. Only turn restrictions/clusters that has
      * the specified confidence level are displayed.
      */
-    public TurnRestrictionFilter(final Status status, final EnumSet<TurnConfidenceLevel> confidenceLevels) {
+    public TurnRestrictionFilter(final Status status, final Set<TurnConfidenceLevel> confidenceLevels) {
         super(status);
         this.confidenceLevels = confidenceLevels;
     }
 
 
-    public EnumSet<TurnConfidenceLevel> getConfidenceLevels() {
+    public Set<TurnConfidenceLevel> getConfidenceLevels() {
         return confidenceLevels;
     }
 
@@ -68,7 +69,7 @@ public class TurnRestrictionFilter extends SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof TurnRestrictionFilter) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final TurnRestrictionFilter other = (TurnRestrictionFilter) obj;
             result = super.equals(obj);
             result = result && EntityUtil.bothNullOrEqual(confidenceLevels, other.getConfidenceLevels());

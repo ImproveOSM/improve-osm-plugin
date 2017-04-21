@@ -19,7 +19,7 @@ import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.util.EnumSet;
+import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -81,7 +81,7 @@ class PreferencePanel extends JPanel {
 
     private void createLocationPreferenceComponents() {
         final LocationPref savedLocationPref = PreferenceManager.getInstance().loadLocationPrefOption();
-        final EnumSet<LocationPref> enabledLocationPref = Config.getInstance().getEnabledLocationPref();
+        final Set<LocationPref> enabledLocationPref = Config.getInstance().getEnabledLocationPref();
 
         add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLocationPreferenceLbl(), Font.PLAIN,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_LOCATION);
@@ -89,7 +89,7 @@ class PreferencePanel extends JPanel {
         final ButtonGroup buttonsGroup = new ButtonGroup();
         if (enabledLocationPref.contains(LocationPref.OPEN_STREET_VIEW)) {
             final boolean isSelected =
-                    (savedLocationPref != null) && (savedLocationPref.equals(LocationPref.OPEN_STREET_VIEW));
+                    savedLocationPref != null && savedLocationPref.equals(LocationPref.OPEN_STREET_VIEW);
             rbImproveOsmPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefOpenStreetMap(),
                     Font.PLAIN, getBackground(), isSelected);
             buttonsGroup.add(rbImproveOsmPage);
@@ -97,40 +97,23 @@ class PreferencePanel extends JPanel {
         }
 
         if (enabledLocationPref.contains(LocationPref.CUSTOM_SITE)) {
-            final boolean isSelected =
-                    (savedLocationPref != null) && (savedLocationPref.equals(LocationPref.CUSTOM_SITE));
+            final boolean isSelected = savedLocationPref != null && savedLocationPref.equals(LocationPref.CUSTOM_SITE);
             rbCustomPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefCustom(), Font.PLAIN,
                     getBackground(), isSelected);
-
             buttonsGroup.add(rbCustomPage);
-            if ((savedLocationPref != null) && (savedLocationPref.equals(LocationPref.CUSTOM_SITE))) {
-                txtCustomUrl = GuiBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
-                        Font.BOLD, getBackground(), URL_DIM);
-            } else {
-                txtCustomUrl = GuiBuilder.buildTextField(null, Font.BOLD, getBackground(), URL_DIM);
-            }
-
-            final JPanel customPagePanel =
-                    GuiBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl);
-            add(customPagePanel, Constraints.BTN_CUSTOM);
+            txtCustomUrl = GuiBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
+                    Font.PLAIN, getBackground(), URL_DIM);
+            add(GuiBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl),
+                    Constraints.BTN_CUSTOM);
         }
 
         if (enabledLocationPref.contains(LocationPref.COPY_LOCATION)) {
-            rbCopyLocation = buildRadioButton(GuiConfig.getInstance().getCopyLocationPrefLbl(), savedLocationPref,
-                    LocationPref.COPY_LOCATION);
-            if (savedLocationPref == null) {
-                rbCopyLocation.setSelected(true);
-            }
+            final boolean isSelected = savedLocationPref == null;
+            rbCopyLocation = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getCopyLocationPrefLbl(), Font.PLAIN,
+                    getBackground(), isSelected);
+
             buttonsGroup.add(rbCopyLocation);
             add(rbCopyLocation, Constraints.BTN_COPY_LOC);
         }
-    }
-
-    private JRadioButton buildRadioButton(final String label, final LocationPref savedPref, final LocationPref pref) {
-        final JRadioButton rbuttom = new JRadioButton(label);
-        if ((savedPref != null) && (savedPref.equals(pref))) {
-            rbuttom.setSelected(true);
-        }
-        return rbuttom;
     }
 }

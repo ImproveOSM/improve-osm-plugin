@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.EnumSet;
+import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
@@ -87,7 +88,7 @@ class FilterPanel extends BasicFilterPanel {
         selectConfidence(OnewayFilter.DEFAULT.getConfidenceLevels());
     }
 
-    private void selectConfidence(final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
+    private void selectConfidence(final Set<OnewayConfidenceLevel> confidenceLevels) {
         if (confidenceLevels != null) {
             boolean selected = confidenceLevels.contains(OnewayConfidenceLevel.C1);
             cbbConfidenceC1.setSelected(selected);

@@ -126,7 +126,7 @@ public class TurnRestriction {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof TurnRestriction) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final TurnRestriction other = (TurnRestriction) obj;
             if (id != null && other.getId() != null) {
                 result = id.equals(other.getId());

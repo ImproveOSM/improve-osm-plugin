@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -155,7 +155,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     }
 
     private void initializeLayers() {
-        final EnumSet<DataLayer> enabledDayaLayers = Config.getInstance().getEnabledDataLayers();
+        final Set<DataLayer> enabledDayaLayers = Config.getInstance().getEnabledDataLayers();
         if (PreferenceManager.getInstance().loadMissingGeometryLayerOpenedFlag()
                 && enabledDayaLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             missingGeometryLayer = new MissingGeometryLayer();
@@ -190,7 +190,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     }
 
     private void initializeLayerMenuItems() {
-        final EnumSet<DataLayer> enabledDayaLayers = Config.getInstance().getEnabledDataLayers();
+        final Set<DataLayer> enabledDayaLayers = Config.getInstance().getEnabledDataLayers();
         if (enabledDayaLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             if (missingGeometryLayerMenuItem == null) {
                 missingGeometryLayerMenuItem = MainMenu.add(Main.main.menu.imageryMenu,

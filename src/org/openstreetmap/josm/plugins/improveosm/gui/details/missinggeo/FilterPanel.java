@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.util.EnumSet;
+import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -79,7 +80,7 @@ class FilterPanel extends BasicFilterPanel {
     }
 
 
-    private void addTypesFilter(final EnumSet<TileType> types) {
+    private void addTypesFilter(final Set<TileType> types) {
         add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(), Font.BOLD,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_TYPE);
         cbTypeParking = GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), Font.PLAIN, PARKING, false);
@@ -112,13 +113,13 @@ class FilterPanel extends BasicFilterPanel {
     private void addCountFilter(final Integer value) {
         final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
-                : MissingGeometryGuiConfig.getInstance().getLblPointCount();
-        add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP), Constraints.LBL_COUNT);
-        final String valueStr = value != null ? value.toString() : "";
-        txtCount = GuiBuilder.buildTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(), Font.PLAIN,
-                Color.white, true, true);
-        add(txtCount, Constraints.TXT_COUNT);
+                        : MissingGeometryGuiConfig.getInstance().getLblPointCount();
+                add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                        SwingConstants.TOP), Constraints.LBL_COUNT);
+                final String valueStr = value != null ? value.toString() : "";
+                txtCount = GuiBuilder.buildTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(), Font.PLAIN,
+                        Color.white, true, true);
+                add(txtCount, Constraints.TXT_COUNT);
     }
 
     /**
@@ -132,8 +133,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-        txtCount.setText(txt);
-        txtCount.setBackground(Color.white);
+                txtCount.setText(txt);
+                txtCount.setBackground(Color.white);
     }
 
     /**
@@ -174,7 +175,7 @@ class FilterPanel extends BasicFilterPanel {
         return types;
     }
 
-    private void selectTypes(final EnumSet<TileType> types) {
+    private void selectTypes(final Set<TileType> types) {
         if (types != null && !types.isEmpty()) {
             boolean selected = types.contains(TileType.ROAD);
             cbTypeRoad.setSelected(selected);

@@ -27,10 +27,10 @@ import java.util.List;
 public enum DataLayer {
 
     MISSING_GEOMETRY, DIRECTION_OF_FLOW, TURN_RESTRICTION;
-    
-    
-    public static DataLayer getDataLayer(String value) {
-        List<DataLayer> values = Arrays.asList(DataLayer.values());
+
+
+    public static DataLayer getDataLayer(final String value) {
+        final List<DataLayer> values = Arrays.asList(DataLayer.values());
         return values.stream().filter(m->m.toString().equals(value)).findAny().orElse(null);
     }
 }

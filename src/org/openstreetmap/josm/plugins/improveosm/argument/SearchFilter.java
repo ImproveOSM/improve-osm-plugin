@@ -53,7 +53,7 @@ public class SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof SearchFilter) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final SearchFilter other = (SearchFilter) obj;
             result = EntityUtil.bothNullOrEqual(status, other.getStatus());
 

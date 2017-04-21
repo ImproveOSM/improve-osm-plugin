@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.EnumSet;
+import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
@@ -81,7 +82,7 @@ class FilterPanel extends BasicFilterPanel {
         selectConfidence(TurnRestrictionFilter.DEFAULT.getConfidenceLevels());
     }
 
-    private void selectConfidence(final EnumSet<TurnConfidenceLevel> confidenceLevels) {
+    private void selectConfidence(final Set<TurnConfidenceLevel> confidenceLevels) {
         if (confidenceLevels != null) {
             boolean selected = confidenceLevels.contains(TurnConfidenceLevel.C1);
             cbbConfidenceC1.setSelected(selected);
