@@ -23,7 +23,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -78,31 +77,21 @@ class EditDialog extends ModalDialog {
 
     @Override
     public void createComponents() {
-        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red,
-                new JLabel().getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP, false);
-        lblError.setFont(lblError.getFont().deriveFont(Font.BOLD));
+        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP, false);
+        txtComment = GuiBuilder.buildTextArea(new EditDocument(), PreferenceManager.getInstance().loadLastComment(),
+                Color.white, Font.PLAIN, GuiBuilder.FONT_SIZE_12, true);
 
-        txtComment = GuiBuilder.buildTextArea(PreferenceManager.getInstance().loadLastComment(), Color.white, true,
-                new JTextArea().getFont().deriveFont(Font.PLAIN, GuiBuilder.FONT_SIZE_12));
-        txtComment.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-        txtComment.setDocument(new EditDocument());
-
-        final JPanel pnlComment = new JPanel(new BorderLayout());
-        pnlComment.setBorder(BORDER);
-        pnlComment.add(GuiBuilder.buildScrollPane(txtComment, null, Color.white, Color.gray, 100, true, null),
-                BorderLayout.CENTER);
+        final JPanel pnlComment = GuiBuilder.buildBorderLayoutPanel(null,
+                GuiBuilder.buildScrollPane(txtComment, null, Color.white, Color.gray, 100, true, null), null, BORDER);
         pnlComment.setVerifyInputWhenFocusTarget(true);
         add(pnlComment, BorderLayout.CENTER);
 
-        final JPanel pnlBtn = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-        btnOk = GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
-        pnlBtn.add(btnOk);
-        pnlBtn.add(GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
 
-        final JPanel pnlSouth = new JPanel(new BorderLayout());
-        pnlSouth.add(lblError, BorderLayout.LINE_START);
-        pnlSouth.add(pnlBtn, BorderLayout.LINE_END);
+        btnOk = GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
+        final JPanel pnlBtn = GuiBuilder.buildFlowLayoutPanel(FlowLayout.TRAILING, btnOk,
+                GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
+        final JPanel pnlSouth = GuiBuilder.buildBorderLayoutPanel(lblError, pnlBtn);
         add(pnlSouth, BorderLayout.SOUTH);
     }
 

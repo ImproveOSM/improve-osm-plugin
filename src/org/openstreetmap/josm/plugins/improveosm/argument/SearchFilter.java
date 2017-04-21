@@ -16,7 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**

@@ -24,7 +24,6 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.openstreetmap.josm.Main;
@@ -53,7 +52,6 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
 
 
     public TurnRestrictionInfoPanel() {
-        super();
         tblTurnRestrictions = new TurnRestrictionTable();
     }
 
@@ -81,7 +79,7 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
             }
             final TurnRestrictionGuiConfig trGuiCnf = TurnRestrictionGuiConfig.getInstance();
             final GuiConfig guiCnf = GuiConfig.getInstance();
-            final FontMetrics fm = Main.map.mapView.getGraphics().getFontMetrics(getFontBold());
+            final FontMetrics fm = Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.BOLD));
             final int widthLbl =
                     getMaxWidth(fm, guiCnf.getLblStatus(), trGuiCnf.getLblType(), guiCnf.getLblConfidence());
             addFirstSegmentTrips(turnRestriction.getSegments().get(0).getNumberOfTrips());
@@ -98,9 +96,8 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
     }
 
     private void addTurnRestrictionsTable(final List<TurnRestriction> turnRestrictions) {
-        add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getTblTitle(), Color.black,
-                new JLabel().getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP, true), BorderLayout.NORTH);
+        add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getTblTitle(), Color.black, Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP, true), BorderLayout.NORTH);
 
         tblTurnRestrictions.updateData(turnRestrictions);
         tblTurnRestrictions.setPreferredScrollableViewportSize(tblTurnRestrictions.getPreferredSize());
@@ -115,8 +112,9 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
     private void addFirstSegmentTrips(final Integer trips) {
         if (trips != null) {
             final String lbl = trips + " " + TurnRestrictionGuiConfig.getInstance().getLblFirstSegmentTrips();
-            final int widthLbl = Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl);
-            add(GuiBuilder.buildLabel(lbl, getFontBold(), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+            final int widthLbl =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.BOLD)).stringWidth(lbl);
+            add(GuiBuilder.buildLabel(lbl, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                     SwingConstants.TOP, new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             incrementPnlY();
         }
@@ -125,8 +123,9 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
     private void addLastSegmentTrips(final Integer trips) {
         if (trips != null) {
             final String lbl = trips + " " + TurnRestrictionGuiConfig.getInstance().getLblLastSegmentTrips();
-            final int widthLbl = Main.map.mapView.getGraphics().getFontMetrics(getFontBold()).stringWidth(lbl);
-            add(GuiBuilder.buildLabel(lbl, getFontBold(), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+            final int widthLbl =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.BOLD)).stringWidth(lbl);
+            add(GuiBuilder.buildLabel(lbl, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                     SwingConstants.TOP, new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             incrementPnlY();
         }
@@ -134,12 +133,12 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
 
     private void addStatus(final Status status, final int widthLbl) {
         if (status != null) {
-            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblStatus(), getFontBold(),
+            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblStatus(), Font.BOLD,
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal =
-                    Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(status.name());
-            add(GuiBuilder.buildLabel(status.name().toLowerCase(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.PLAIN))
+                    .stringWidth(status.name());
+            add(GuiBuilder.buildLabel(status.name().toLowerCase(), Font.PLAIN, ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
@@ -149,38 +148,28 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
 
     private void addTurnType(final String type, final int widthLbl) {
         if (type != null) {
-            add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblType(), getFontBold(),
+            add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getLblType(), Font.BOLD,
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
             final ImageIcon icon = TurnTypeIconFactory.getInstance().getIcon(type);
-            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(type)
+            final int widthVal =
+                    Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.PLAIN)).stringWidth(type)
                     + icon.getIconWidth();
-            add(buildLabelWithImage(Formatter.formatTurnType(type), getFontPlain(),
-                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT), icon));
+            add(GuiBuilder.buildLabel(Formatter.formatTurnType(type), icon, Font.PLAIN,
+                    new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
     }
 
-    private JLabel buildLabelWithImage(final String text, final Font font, final Rectangle bounds,
-            final ImageIcon icon) {
-        final JLabel lbl = GuiBuilder.buildLabel(text, font, JLabel.RIGHT, JLabel.CENTER);
-        lbl.setIcon(icon);
-        lbl.setHorizontalAlignment(SwingConstants.LEFT);
-        if (bounds != null) {
-            lbl.setBounds(bounds);
-        }
-        return lbl;
-    }
-
     private void addTurnConfidence(final TurnConfidenceLevel confidence, final int widthLbl) {
         if (confidence != null) {
-            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFontBold(),
+            add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), Font.BOLD,
                     ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(RECT_X, getPnlY(), widthLbl, LINE_HEIGHT)));
-            final int widthVal =
-                    Main.map.mapView.getGraphics().getFontMetrics(getFontPlain()).stringWidth(confidence.toString());
-            add(GuiBuilder.buildLabel(confidence.toString(), getFontPlain(), ComponentOrientation.LEFT_TO_RIGHT,
+            final int widthVal = Main.map.mapView.getGraphics().getFontMetrics(getFont().deriveFont(Font.PLAIN))
+                    .stringWidth(confidence.toString());
+            add(GuiBuilder.buildLabel(confidence.toString(), Font.PLAIN, ComponentOrientation.LEFT_TO_RIGHT,
                     SwingConstants.LEFT, SwingConstants.TOP,
                     new Rectangle(widthLbl, getPnlY(), widthVal, LINE_HEIGHT)));
             setPnlWidth(widthLbl + widthVal);

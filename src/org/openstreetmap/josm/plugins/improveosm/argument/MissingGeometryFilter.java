@@ -18,7 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.argument;
 import java.util.EnumSet;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**

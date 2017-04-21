@@ -83,29 +83,35 @@ class PreferencePanel extends JPanel {
         final LocationPref savedLocationPref = PreferenceManager.getInstance().loadLocationPrefOption();
         final EnumSet<LocationPref> enabledLocationPref = Config.getInstance().getEnabledLocationPref();
 
-        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLocationPreferenceLbl(), getFont().deriveFont(Font.PLAIN),
+        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLocationPreferenceLbl(), Font.PLAIN,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_LOCATION);
 
         final ButtonGroup buttonsGroup = new ButtonGroup();
         if (enabledLocationPref.contains(LocationPref.OPEN_STREET_VIEW)) {
-            rbImproveOsmPage = buildRadioButton(GuiConfig.getInstance().getLocationPrefOpenStreetMap(),
-                    savedLocationPref, LocationPref.OPEN_STREET_VIEW);
+            final boolean isSelected =
+                    (savedLocationPref != null) && (savedLocationPref.equals(LocationPref.OPEN_STREET_VIEW));
+            rbImproveOsmPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefOpenStreetMap(),
+                    Font.PLAIN, getBackground(), isSelected);
             buttonsGroup.add(rbImproveOsmPage);
             add(rbImproveOsmPage, Constraints.BTN_IMPROVE_OSM);
         }
 
         if (enabledLocationPref.contains(LocationPref.CUSTOM_SITE)) {
-            final JPanel customPagePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            rbCustomPage = buildRadioButton(GuiConfig.getInstance().getLocationPrefCustom(), savedLocationPref,
-                    LocationPref.CUSTOM_SITE);
-            customPagePanel.add(rbCustomPage);
+            final boolean isSelected =
+                    (savedLocationPref != null) && (savedLocationPref.equals(LocationPref.CUSTOM_SITE));
+            rbCustomPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefCustom(), Font.PLAIN,
+                    getBackground(), isSelected);
+
             buttonsGroup.add(rbCustomPage);
             if ((savedLocationPref != null) && (savedLocationPref.equals(LocationPref.CUSTOM_SITE))) {
-                txtCustomUrl = new JTextField(PreferenceManager.getInstance().loadLocationPrefValue(), URL_DIM);
+                txtCustomUrl = GuiBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
+                        Font.BOLD, getBackground(), URL_DIM);
             } else {
-                txtCustomUrl = new JTextField(null, URL_DIM);
+                txtCustomUrl = GuiBuilder.buildTextField(null, Font.BOLD, getBackground(), URL_DIM);
             }
-            customPagePanel.add(txtCustomUrl);
+
+            final JPanel customPagePanel =
+                    GuiBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl);
             add(customPagePanel, Constraints.BTN_CUSTOM);
         }
 

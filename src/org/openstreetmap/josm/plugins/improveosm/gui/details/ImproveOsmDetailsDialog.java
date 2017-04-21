@@ -83,12 +83,12 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
-        cmpInfo = GuiBuilder.buildScrollPane(buildEmptyPanel(), GuiConfig.getInstance().getPnlInfoTitle(), Color.white,
-                null, 100, false, DIM);
+        cmpInfo = GuiBuilder.buildScrollPane(GuiBuilder.buildEmptyPanel(Color.WHITE),
+                GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, 100, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn);
+        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
         add(createLayout(pnlMain, false, null));
     }
 
@@ -163,26 +163,4 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             updateUI(item);
         }
     }
-
-    private JPanel buildEmptyPanel() {
-        final JPanel pnl = new JPanel();
-        pnl.setBackground(Color.white);
-        return pnl;
-    }
-
-    // @Override
-    // public void showDialog() {
-    // System.out.println("called show dialog");
-    // super.showDialog();
-    // PreferenceManager.getInstance().savePanelOpenedFlag(true);
-    // }
-    //
-    // @Override
-    // public void hideDialog() {
-    // System.out.println("called hide dialog");
-    // super.hideDialog();
-    // PreferenceManager.getInstance().savePanelOpenedFlag(false);
-    // }
-
-
 }

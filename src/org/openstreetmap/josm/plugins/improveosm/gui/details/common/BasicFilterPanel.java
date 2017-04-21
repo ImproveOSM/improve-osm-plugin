@@ -40,10 +40,10 @@ public abstract class BasicFilterPanel extends JPanel {
     private static final long serialVersionUID = 1285306291492729387L;
 
     /* UI components */
-    private JRadioButton rbStatusOpen;
-    private JRadioButton rbStatusSolved;
-    private JRadioButton rbStatusInvalid;
-    private ButtonGroup btnGroupStatus;
+    private final JRadioButton rbStatusOpen;
+    private final JRadioButton rbStatusSolved;
+    private final JRadioButton rbStatusInvalid;
+    private final ButtonGroup btnGroupStatus;
 
 
     /**
@@ -54,26 +54,23 @@ public abstract class BasicFilterPanel extends JPanel {
      */
     public BasicFilterPanel(final SearchFilter filter, final String statusLbl) {
         super(new GridBagLayout());
-        addStatusFilter(statusLbl, filter.getStatus());
-    }
 
-
-    private void addStatusFilter(final String statusLbl, final Status status) {
-        add(GuiBuilder.buildLabel(statusLbl, getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT,
-                SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_STATUS);
-        rbStatusOpen = GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(),
-                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+        add(GuiBuilder.buildLabel(statusLbl, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_STATUS);
+        rbStatusOpen = GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), Font.PLAIN,
+                getBackground(), false);
         rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),
-                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+                Font.PLAIN, getBackground(), false);
         rbStatusInvalid = GuiBuilder.buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
-                getFont().deriveFont(Font.PLAIN), getBackground(), false);
+                Font.PLAIN, getBackground(), false);
 
-        btnGroupStatus = buildButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
-        selectStatus(status);
+        btnGroupStatus = GuiBuilder.buildRadioButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
+        selectStatus(filter.getStatus());
         add(rbStatusOpen, Constraints.RB_OPEN);
         add(rbStatusSolved, Constraints.RB_SOLVED);
         add(rbStatusInvalid, Constraints.RB_INVALID);
     }
+
 
     /**
      * Selects the status filter UI element corresponding to the given status.
@@ -118,19 +115,13 @@ public abstract class BasicFilterPanel extends JPanel {
         selectStatus(SearchFilter.DEFAULT_SEARCH_FILTER.getStatus());
     }
 
-    private ButtonGroup buildButtonGroup(final JRadioButton... buttons) {
-        final ButtonGroup btnGroup = new ButtonGroup();
-        for (final JRadioButton button : buttons) {
-            btnGroup.add(button);
-        }
-        return btnGroup;
-    }
-
-
-    /* Holds UI constraints */
+    /**
+     * Holds UI constraints
+     *
+     * @author beataj
+     * @version $Revision$
+     */
     private static final class Constraints {
-
-        private Constraints() {}
 
         private static final GridBagConstraints LBL_STATUS = new GridBagConstraints(0, 0, 1, 1, 1, 1,
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(7, 5, 3, 5), 0, 0);
@@ -140,5 +131,7 @@ public abstract class BasicFilterPanel extends JPanel {
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
         private static final GridBagConstraints RB_INVALID = new GridBagConstraints(3, 0, 1, 1, 1, 0,
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
+
+        private Constraints() {}
     }
 }

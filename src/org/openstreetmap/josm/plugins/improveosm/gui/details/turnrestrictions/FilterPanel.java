@@ -48,15 +48,13 @@ class FilterPanel extends BasicFilterPanel {
     FilterPanel(final TurnRestrictionFilter filter) {
         super(filter, GuiConfig.getInstance().getLblStatus());
 
-        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), getFont().deriveFont(Font.BOLD),
+        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLblConfidence(), Font.BOLD,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP),
                 Constraints.LBL_CONFIDENCE);
-        cbbConfidenceC1 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.toString(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TurnConfidenceLevel.C1.name(),
-                getBackground());
-        cbbConfidenceC2 = GuiBuilder.buildCheckBox(TurnConfidenceLevel.C2.toString(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TurnConfidenceLevel.C2.name(),
-                getBackground());
+        cbbConfidenceC1 =
+                GuiBuilder.buildCheckBox(TurnConfidenceLevel.C1.toString(), Font.PLAIN, getBackground(), false);
+        cbbConfidenceC2 =
+                GuiBuilder.buildCheckBox(TurnConfidenceLevel.C2.toString(), Font.PLAIN, getBackground(), false);
         selectConfidence(filter.getConfidenceLevels());
         add(cbbConfidenceC1, Constraints.CBB_C1);
         add(cbbConfidenceC2, Constraints.CBB_C2);
@@ -97,7 +95,6 @@ class FilterPanel extends BasicFilterPanel {
 
     private static final class Constraints {
 
-        private Constraints() {}
 
         private static final GridBagConstraints LBL_CONFIDENCE = new GridBagConstraints(0, 1, 1, 1, 1, 1,
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 3, 5), 0, 0);
@@ -105,5 +102,7 @@ class FilterPanel extends BasicFilterPanel {
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
         private static final GridBagConstraints CBB_C2 = new GridBagConstraints(2, 1, 1, 1, 1, 0,
                 GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 3, 3, 5), 0, 0);
+
+        private Constraints() {}
     }
 }
