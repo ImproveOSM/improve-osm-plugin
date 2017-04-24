@@ -39,7 +39,7 @@ public abstract class UpdateThread<T> implements Runnable {
     private final ImproveOsmLayer<T> layer;
 
 
-    public UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
+    UpdateThread(final ImproveOsmDetailsDialog dialog, final ImproveOsmLayer<T> layer) {
         this.dialog = dialog;
         this.layer = layer;
     }

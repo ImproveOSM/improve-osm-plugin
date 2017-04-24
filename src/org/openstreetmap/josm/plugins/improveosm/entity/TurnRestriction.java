@@ -113,11 +113,7 @@ public class TurnRestriction {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        if (id != null) {
-            result = prime * result + id.hashCode();
-        } else {
-            result = prime * result + EntityUtil.hashCode(point);
-        }
+        result = id != null ? prime * result + id.hashCode() : prime * result + EntityUtil.hashCode(point);
         return result;
     }
 

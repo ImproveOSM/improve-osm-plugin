@@ -68,12 +68,10 @@ class ButtonPanel extends JPanel {
     private static final Dimension DIM = new Dimension(200, 23);
 
     /* panel components */
-    private final JButton btnFilter;
     private final JButton btnComment;
     private final JButton btnSolve;
     private final JButton btnReopen;
     private final JButton btnInvalid;
-    private final JButton btnLocation;
 
     private CommentObserver commentObserver;
     private LatLon selectedItemCoordinate;
@@ -84,7 +82,7 @@ class ButtonPanel extends JPanel {
 
         final GuiConfig guiConfig = GuiConfig.getInstance();
         final IconConfig iconConfig = IconConfig.getInstance();
-        btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
+        final JButton btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
                 guiConfig.getBtnFilterTlt(), true);
         btnComment = GuiBuilder.buildButton(
                 new DisplayEditDialogAction(null, guiConfig.getDlgCommentTitle(), iconConfig.getCommentIcon()),
@@ -101,7 +99,7 @@ class ButtonPanel extends JPanel {
                 new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
                         guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
                 iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
-        btnLocation = GuiBuilder.buildButton(new HandleLocationAction(), iconConfig.getLocationIcon(),
+        final JButton btnLocation = GuiBuilder.buildButton(new HandleLocationAction(), iconConfig.getLocationIcon(),
                 guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
         add(btnComment);
@@ -278,7 +276,5 @@ class ButtonPanel extends JPanel {
                 }
             }
         }
-
-
     }
 }

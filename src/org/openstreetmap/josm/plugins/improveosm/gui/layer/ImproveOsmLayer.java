@@ -47,7 +47,7 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
      * @param layerName the name of the layer
      * @param paintHandler the handler responsible of drawing the layer elements
      */
-    public ImproveOsmLayer(final String layerName, final PaintHandler<T> paintHandler) {
+    ImproveOsmLayer(final String layerName, final PaintHandler<T> paintHandler) {
         super(layerName);
         this.paintHandler = paintHandler;
         this.selectedItems = new ArrayList<>();

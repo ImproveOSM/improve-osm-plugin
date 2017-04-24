@@ -44,23 +44,24 @@ final class PaintUtil {
      * @return the arrow length
      */
     static double arrowLength(final MapView mapView, final double initialLength) {
-        double arrowLength = initialLength;
+        double arrowLength;
         final int zoom = Util.zoom(mapView.getRealBounds());
         switch (zoom) {
             case ZOOM_15:
-                arrowLength = arrowLength * ZOOM_15_MULTIPLY;
+                arrowLength = initialLength * ZOOM_15_MULTIPLY;
                 break;
             case ZOOM_16:
-                arrowLength = arrowLength * ZOOM_16_MULTIPLY;
+                arrowLength = initialLength * ZOOM_16_MULTIPLY;
                 break;
             case ZOOM_17:
-                arrowLength = arrowLength * ZOOM_17_MULTIPLY;
+                arrowLength = initialLength * ZOOM_17_MULTIPLY;
                 break;
             case ZOOM_18:
-                arrowLength = arrowLength * ZOOM_18_MULTIPLY;
+                arrowLength = initialLength * ZOOM_18_MULTIPLY;
                 break;
             default:
                 // no change
+                arrowLength = initialLength;
                 break;
         }
         return arrowLength;

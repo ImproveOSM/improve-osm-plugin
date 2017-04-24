@@ -113,13 +113,13 @@ class FilterPanel extends BasicFilterPanel {
     private void addCountFilter(final Integer value) {
         final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
-                        : MissingGeometryGuiConfig.getInstance().getLblPointCount();
-                add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                        SwingConstants.TOP), Constraints.LBL_COUNT);
-                final String valueStr = value != null ? value.toString() : "";
-                txtCount = GuiBuilder.buildTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(), Font.PLAIN,
-                        Color.white, true, true);
-                add(txtCount, Constraints.TXT_COUNT);
+                : MissingGeometryGuiConfig.getInstance().getLblPointCount();
+        add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_COUNT);
+        final String valueStr = value != null ? value.toString() : "";
+        txtCount = GuiBuilder.buildTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(), Font.PLAIN,
+                Color.white, true, true);
+        add(txtCount, Constraints.TXT_COUNT);
     }
 
     /**
@@ -133,8 +133,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-                txtCount.setText(txt);
-                txtCount.setBackground(Color.white);
+        txtCount.setText(txt);
+        txtCount.setBackground(Color.white);
     }
 
     /**

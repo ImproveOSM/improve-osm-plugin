@@ -65,7 +65,7 @@ final class MissingGeometryHanlder extends PaintHandler<Tile> {
         }
     }
 
-    private final Color tileColor(final Tile tile) {
+    private Color tileColor(final Tile tile) {
         Color color;
         switch (tile.getType()) {
             case ROAD:

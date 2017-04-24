@@ -50,7 +50,7 @@ public final class DirectionOfFlowGuiConfig extends BaseConfig {
     private final String dlgTipTxt;
 
 
-    DirectionOfFlowGuiConfig() {
+    private DirectionOfFlowGuiConfig() {
         super(CONFIG_FILE);
 
         layerName = readProperty("plugin.name");

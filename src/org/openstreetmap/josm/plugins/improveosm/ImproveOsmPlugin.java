@@ -247,7 +247,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         final Layer oldLayer =
                 Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
                 final Layer newLayer = Main.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer != null && newLayer instanceof AbstractLayer) {
+        if (oldLayer != null && newLayer instanceof AbstractLayer) {
                     if (oldLayer instanceof MissingGeometryLayer) {
                         updateSelectedData(missingGeometryLayer, null, null);
                     } else if (oldLayer instanceof DirectionOfFlowLayer) {
@@ -526,7 +526,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     }
 
 
-    private class LayerActivator extends JosmAction {
+    private final class LayerActivator extends JosmAction {
 
         private static final long serialVersionUID = 383609516179512054L;
         private final DataLayer dataLayer;

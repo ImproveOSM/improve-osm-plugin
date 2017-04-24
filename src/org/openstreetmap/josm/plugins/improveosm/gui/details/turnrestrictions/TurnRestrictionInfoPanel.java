@@ -60,10 +60,8 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
     @Override
     public void updateData(final TurnRestriction turnRestriction) {
         if (turnRestriction == null) {
-            if (tblTurnRestrictions != null) {
-                tblTurnRestrictions.updateData(null);
-            }
-            super.updateData(turnRestriction);
+            tblTurnRestrictions.updateData(null);
+            super.updateData(null);
         } else if (!tblTurnRestrictions.contains(turnRestriction)) {
             super.updateData(turnRestriction);
         }
