@@ -15,7 +15,6 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.cnf;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +53,7 @@ public final class ClusterConfig extends BaseConfig {
             if (keyStr.startsWith("zoom_")) {
                 final String mapKeyStr = keyStr.replace("zoom_", "");
                 final int mapKey = Integer.parseInt(mapKeyStr);
-                final List<Double> list = readDoubleProperties(keyStr);
+                final List<Double> list = readDoublePropertiesList(keyStr);
                 map.put(mapKey, list);
             }
         }
@@ -84,20 +83,4 @@ public final class ClusterConfig extends BaseConfig {
         }
         return list;
     }
-
-    /**
-     * Reads a list of properties associated with the given key.
-     *
-     * @param key a {@code String}
-     * @return a list of double values extracted from the properties file
-     */
-    List<Double> readDoubleProperties(final String key) {
-        final String[] properties = readPropertiesArray(key);
-        final List<Double> valueList = new ArrayList<>();
-        for (final String value : properties) {
-            valueList.add(Double.parseDouble(value));
-        }
-        return valueList;
-    }
-
 }

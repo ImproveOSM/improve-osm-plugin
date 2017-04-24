@@ -37,7 +37,7 @@ final class TurnTypeIconFactory {
 
     private final ImageIcon defaultIcon = IconConfig.getInstance().getTurnRestrictionIcon();
 
-    private final Map<String, ImageIcon> map = new LinkedHashMap<String, ImageIcon>();
+    private final Map<String, ImageIcon> map = new LinkedHashMap<>();
 
     private TurnTypeIconFactory() {}
 

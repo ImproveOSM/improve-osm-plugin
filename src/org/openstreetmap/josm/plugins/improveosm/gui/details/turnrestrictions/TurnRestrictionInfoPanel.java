@@ -48,6 +48,7 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
 
     private static final long serialVersionUID = -5437372726391531598L;
     private static final int GAP = 10;
+    private static final int TABLE_WIDTH_SPACE = 2;
     private final TurnRestrictionTable tblTurnRestrictions;
 
 
@@ -106,7 +107,7 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
         pnlTable.add(tblTurnRestrictions, BorderLayout.CENTER);
         add(pnlTable, BorderLayout.CENTER);
         setPnlY(LINE_HEIGHT + pnlTable.getHeight());
-        setPnlWidth(pnlTable.getPreferredSize().width + 2 * SPACE_Y);
+        setPnlWidth(pnlTable.getPreferredSize().width + TABLE_WIDTH_SPACE * SPACE_Y);
     }
 
     private void addFirstSegmentTrips(final Integer trips) {

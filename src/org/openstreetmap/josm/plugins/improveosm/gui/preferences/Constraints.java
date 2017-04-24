@@ -27,10 +27,6 @@ import java.awt.Insets;
  */
 final class Constraints {
 
-    private Constraints() {}
-
-
-    // location preference related constraints
     static final GridBagConstraints LBL_LOCATION = new GridBagConstraints(0, 0, 1, 1, 1, 1,
             GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(50, 0, 3, 0), 0, 0);
 
@@ -43,4 +39,6 @@ final class Constraints {
     static final GridBagConstraints BTN_COPY_LOC = new GridBagConstraints(0, 3, 1, 1, 1, 1,
             GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
 
+
+    private Constraints() {}
 }

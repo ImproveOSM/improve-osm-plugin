@@ -15,13 +15,9 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.MISSINGGEO_CLUSTER_COLOR;
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.MissingGeometryFilterDialog;
@@ -67,22 +63,6 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
         return new MissingGeometryFilterDialog();
     }
 
-    /*
-     * Draws the layer's data items to the map.
-     */
-    private static class MissingGeometryHanlder extends PaintHandler<Tile> {
-
-        @Override
-        void drawItem(final Graphics2D graphics, final MapView mapView, final Tile item,
-                final boolean selected) {
-            PaintUtil.drawTile(graphics, mapView, item, selected);
-        }
-
-        @Override
-        Color getClusterColor() {
-            return MISSINGGEO_CLUSTER_COLOR;
-        }
-    }
 
     @Override
     AbstractAction getDeleteAction() {

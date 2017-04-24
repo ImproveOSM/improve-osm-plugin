@@ -33,6 +33,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.ClusterConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
+import com.telenav.josm.common.gui.PaintManager;
 
 
 /**
@@ -83,7 +84,8 @@ abstract class PaintHandler<T> {
         graphics.setComposite(CLUSTER_COMPOSITE);
         for (final Cluster cluster : clusters) {
             final Integer radius = clusterRadius(clusterRadiusMap, cluster.getSize()).intValue();
-            PaintUtil.drawCircle(graphics, mapView.getPoint(cluster.getPoint()), color, radius);
+            PaintManager.drawCircle(graphics, mapView.getPoint(cluster.getPoint()), color,
+                    radius);
         }
         graphics.setComposite(NORMAL_COMPOSITE);
     }

@@ -321,7 +321,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             }
 
             new InfoDialog().displayLocationButtonTip();
-            new InfoDialog().displayOldPluginsDialog();
         }
     }
 

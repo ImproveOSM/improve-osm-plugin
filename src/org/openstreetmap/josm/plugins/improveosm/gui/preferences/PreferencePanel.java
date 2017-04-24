@@ -48,7 +48,6 @@ class PreferencePanel extends JPanel {
     private JRadioButton rbImproveOsmPage;
     private JRadioButton rbCustomPage;
     private JTextField txtCustomUrl;
-    private JRadioButton rbCopyLocation;
 
 
     PreferencePanel() {
@@ -56,30 +55,8 @@ class PreferencePanel extends JPanel {
         createComponents();
     }
 
-    /**
-     * Returns the selected location button settings.
-     *
-     * @return a {@code LocationPref}s
-     */
-    LocationPref selectedLocationPrefOption() {
-        if (rbImproveOsmPage.isSelected()) {
-            return LocationPref.OPEN_STREET_VIEW;
-        }
-        if (rbCustomPage.isSelected()) {
-            return LocationPref.CUSTOM_SITE;
-        }
-        return LocationPref.COPY_LOCATION;
-    }
-
-    String selectedCustomUrl() {
-        return txtCustomUrl.getText();
-    }
 
     private void createComponents() {
-        createLocationPreferenceComponents();
-    }
-
-    private void createLocationPreferenceComponents() {
         final LocationPref savedLocationPref = PreferenceManager.getInstance().loadLocationPrefOption();
         final Set<LocationPref> enabledLocationPref = Config.getInstance().getEnabledLocationPref();
 
@@ -109,11 +86,31 @@ class PreferencePanel extends JPanel {
 
         if (enabledLocationPref.contains(LocationPref.COPY_LOCATION)) {
             final boolean isSelected = savedLocationPref == null;
-            rbCopyLocation = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getCopyLocationPrefLbl(), Font.PLAIN,
-                    getBackground(), isSelected);
+            final JRadioButton rbCopyLocation = GuiBuilder.buildRadioButton(
+                    GuiConfig.getInstance().getCopyLocationPrefLbl(), Font.PLAIN, getBackground(), isSelected);
 
             buttonsGroup.add(rbCopyLocation);
             add(rbCopyLocation, Constraints.BTN_COPY_LOC);
         }
+    }
+
+    /**
+     * Returns the selected location button settings.
+     *
+     * @return a {@code LocationPref}s
+     */
+    LocationPref selectedLocationPref() {
+        LocationPref locationPref = LocationPref.COPY_LOCATION;
+        if (rbImproveOsmPage.isSelected()) {
+            locationPref = LocationPref.OPEN_STREET_VIEW;
+        }
+        if (rbCustomPage.isSelected()) {
+            locationPref = LocationPref.CUSTOM_SITE;
+        }
+        return locationPref;
+    }
+
+    String selectedCustomUrl() {
+        return txtCustomUrl.getText();
     }
 }

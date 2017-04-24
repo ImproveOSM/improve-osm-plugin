@@ -39,8 +39,8 @@ public final class TurnRestrictionUpdateThread extends UpdateThread<TurnRestrict
     @Override
     boolean shouldClearSelection(final TurnRestriction item) {
         final TurnRestrictionFilter filter = PreferenceManager.getInstance().loadTurnRestrictionFilter();
-        boolean result = (filter.getConfidenceLevels() == null
-                || filter.getConfidenceLevels().contains(item.getConfidenceLevel()));
+        boolean result = filter.getConfidenceLevels() == null
+                || filter.getConfidenceLevels().contains(item.getConfidenceLevel());
         result = result && filter.getStatus().equals(item.getStatus());
         return !result;
     }

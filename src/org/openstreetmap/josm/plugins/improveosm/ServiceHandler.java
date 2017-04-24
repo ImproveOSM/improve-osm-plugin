@@ -41,6 +41,7 @@ import com.telenav.josm.common.argument.BoundingBox;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T>
  */
 public final class ServiceHandler<T> {
 

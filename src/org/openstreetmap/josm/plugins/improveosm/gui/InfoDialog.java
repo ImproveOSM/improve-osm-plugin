@@ -37,24 +37,6 @@ public class InfoDialog {
     private static boolean dofTipIsDisplayed = false;
     private static boolean locationTipIsDisplayed = false;
 
-    /**
-     * Displays a warning message to the user.
-     */
-    public synchronized void displayOldPluginsDialog() {
-        if (!dofTipIsDisplayed) {
-            final boolean oldPluginsInstalled = PreferenceManager.getInstance().loadOldPluginsFlag();
-            if (oldPluginsInstalled && !PreferenceManager.getInstance().loadOldPluginsWarningSuppressFlag()) {
-                dofTipIsDisplayed = true;
-                final String txt = GuiConfig.getInstance().getTxtOldPlugins();
-                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        buildTextPane(txt, Main.parent.getBackground()), GuiConfig.getInstance().getPluginName(),
-                        JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
-                final boolean flag = val == JOptionPane.YES_OPTION;
-                PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
-                dofTipIsDisplayed = false;
-            }
-        }
-    }
 
     /**
      * Displays editing tips for the user. The dialog window is displayed when the plugin enters from cluster view to
@@ -86,19 +68,15 @@ public class InfoDialog {
      *
      */
     public synchronized void displayLocationButtonTip() {
-        if (!locationTipIsDisplayed) {
-            if (!PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
-                locationTipIsDisplayed = true;
-                final int val =
-                        JOptionPane.showOptionDialog(Main.map.mapView,
-                                buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(),
-                                        Main.parent.getBackground()),
-                                GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
-                                JOptionPane.PLAIN_MESSAGE, null, null, null);
-                final boolean flag = val == JOptionPane.YES_OPTION;
-                PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
-                locationTipIsDisplayed = false;
-            }
+        if (!locationTipIsDisplayed && !PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
+            locationTipIsDisplayed = true;
+            final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+                    buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(), Main.parent.getBackground()),
+                    GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, null, null);
+            final boolean flag = val == JOptionPane.YES_OPTION;
+            PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
+            locationTipIsDisplayed = false;
         }
     }
 

@@ -43,7 +43,6 @@ public abstract class BasicFilterDialog extends ModalDialog {
 
     /* UI components */
     private BasicFilterPanel pnlFilter;
-    private JPanel pnlButton;
 
 
     /**
@@ -67,7 +66,7 @@ public abstract class BasicFilterDialog extends ModalDialog {
         final JButton btnOk = GuiBuilder.buildButton(getOkAction(), GuiConfig.getInstance().getBtnOkLbl());
         final JButton btnCancel =
                 GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl());
-        pnlButton = GuiBuilder.buildFlowLayoutPanel(FlowLayout.RIGHT, btnReset, btnOk, btnCancel);
+        final JPanel pnlButton = GuiBuilder.buildFlowLayoutPanel(FlowLayout.RIGHT, btnReset, btnOk, btnCancel);
         add(pnlFilter, BorderLayout.CENTER);
         add(pnlButton, BorderLayout.SOUTH);
     }

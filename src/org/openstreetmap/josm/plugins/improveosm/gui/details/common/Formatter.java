@@ -18,7 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.common;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
-import org.openstreetmap.josm.tools.Pair;
+import com.telenav.josm.common.entity.Pair;
 import com.telenav.josm.common.formatter.EntityFormatter;
 
 
@@ -41,7 +41,7 @@ public final class Formatter {
      */
     public static String formatComment(final Comment comment) {
         final StringBuilder sb = new StringBuilder("<html><body>");
-        sb.append(("<b>"));
+        sb.append("<b>");
         sb.append(EntityFormatter.formatTimestamp(comment.getTimestamp()));
         sb.append(", ").append(comment.getUsername());
         sb.append("</b><br>");
@@ -95,6 +95,6 @@ public final class Formatter {
      * @return a formatted string
      */
     public static String formatFirstLastTripsNumber(final Pair<Integer, Integer> value) {
-        return value.a + "/" + value.b;
+        return value.getFirst() + "/" + value.getSecond();
     }
 }

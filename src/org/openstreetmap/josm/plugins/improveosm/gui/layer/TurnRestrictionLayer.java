@@ -15,15 +15,11 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURNRESTRICTION_CLUSTER_COLOR;
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions.TurnRestrictionFilterDialog;
@@ -83,23 +79,6 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     @Override
     BasicFilterDialog getFilterDialog() {
         return new TurnRestrictionFilterDialog();
-    }
-
-    /*
-     * Draws the layer's data items to the map.
-     */
-    private static class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
-
-        @Override
-        void drawItem(final Graphics2D graphics, final MapView mapView, final TurnRestriction item,
-                final boolean selected) {
-            PaintUtil.drawTunRestriction(graphics, mapView, item, selected);
-        }
-
-        @Override
-        Color getClusterColor() {
-            return TURNRESTRICTION_CLUSTER_COLOR;
-        }
     }
 
     @Override

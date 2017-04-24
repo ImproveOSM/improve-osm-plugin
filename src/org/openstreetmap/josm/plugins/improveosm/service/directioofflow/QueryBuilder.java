@@ -62,11 +62,11 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     private final class Parameter {
 
-        private Parameter() {}
-
         private static final String CONFIDENCE_LEVEL = "confidenceLevel";
         private static final String WAY_ID = "wayId";
         private static final String FROM_NODE_ID = "fromNodeId";
         private static final String TO_NODE_ID = "toNodeId";
+
+        private Parameter() {}
     }
 }

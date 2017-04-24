@@ -59,9 +59,10 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     private final class Parameter {
 
-        private Parameter() {}
-
         private static final String CONFIDENCE_LEVEL = "confidenceLevel";
         private static final String TARGET_ID = "targetId";
+
+        private Parameter() {}
+
     }
 }

@@ -28,16 +28,13 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_LAYER_
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_POINT_COUNT;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_STATUS;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_TRIP_COUNT;
-import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.OLD_PLUGINS_WARNING_SUPPRESS;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.OSM_USERNAME;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PANEL_OPENED;
-import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PLUGINS;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.SUPPRESS_ERROR;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_CONFIDENCE_LEVEL;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAST_COMMENT;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_OPENED;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import org.openstreetmap.josm.Main;
@@ -74,14 +71,6 @@ final class LoadManager {
         return Main.pref.getBoolean(SUPPRESS_ERROR);
     }
 
-    boolean loadOldPluginsFlag() {
-        final Collection<String> plugins = Main.pref.getCollection(PLUGINS);
-        return plugins.contains("missingRoads") || plugins.contains("trafficFlowDirection");
-    }
-
-    boolean loadOldPluginsWarningSuppressFlag() {
-        return Main.pref.getBoolean(OLD_PLUGINS_WARNING_SUPPRESS);
-    }
 
     LocationPref loadLocationPrefOption() {
         final String location = Main.pref.get(LOCATION_PREF_OPTION);
