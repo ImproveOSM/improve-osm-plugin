@@ -78,7 +78,8 @@ class EditDialog extends ModalDialog {
     @Override
     public void createComponents() {
         lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, Font.BOLD,
-                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP, false);
+                GuiBuilder.FONT_SIZE_12, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
+                false);
         txtComment = GuiBuilder.buildTextArea(new EditDocument(), PreferenceManager.getInstance().loadLastComment(),
                 Color.white, Font.PLAIN, GuiBuilder.FONT_SIZE_12, true);
 
@@ -91,7 +92,7 @@ class EditDialog extends ModalDialog {
         btnOk = GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
         final JPanel pnlBtn = GuiBuilder.buildFlowLayoutPanel(FlowLayout.TRAILING, btnOk,
                 GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
-        final JPanel pnlSouth = GuiBuilder.buildBorderLayoutPanel(lblError, pnlBtn);
+        final JPanel pnlSouth = GuiBuilder.buildBorderLayoutPanel(lblError, pnlBtn, null);
         add(pnlSouth, BorderLayout.SOUTH);
     }
 

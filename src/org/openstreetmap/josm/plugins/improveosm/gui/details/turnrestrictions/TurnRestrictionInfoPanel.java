@@ -16,7 +16,6 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details.turnrestrictions;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -90,13 +89,9 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
         setPreferredSize(new Dimension(getPnlWidth() + SPACE_Y, getPnlY()));
     }
 
-    public void registerSelectionObserver(final TurnRestrictionSelectionObserver observer) {
-        tblTurnRestrictions.addObserver(observer);
-    }
-
     private void addTurnRestrictionsTable(final List<TurnRestriction> turnRestrictions) {
-        add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getTblTitle(), Color.black, Font.BOLD,
-                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP, true), BorderLayout.NORTH);
+        add(GuiBuilder.buildLabel(TurnRestrictionGuiConfig.getInstance().getTblTitle(), Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), BorderLayout.NORTH);
 
         tblTurnRestrictions.updateData(turnRestrictions);
         tblTurnRestrictions.setPreferredScrollableViewportSize(tblTurnRestrictions.getPreferredSize());
@@ -174,5 +169,9 @@ public final class TurnRestrictionInfoPanel extends BasicInfoPanel<TurnRestricti
             setPnlWidth(widthLbl + widthVal);
             incrementPnlY();
         }
+    }
+
+    public void registerSelectionObserver(final TurnRestrictionSelectionObserver observer) {
+        tblTurnRestrictions.addObserver(observer);
     }
 }

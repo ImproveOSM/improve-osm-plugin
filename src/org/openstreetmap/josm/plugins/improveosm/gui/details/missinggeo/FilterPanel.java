@@ -117,8 +117,8 @@ class FilterPanel extends BasicFilterPanel {
         add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_COUNT);
         final String valueStr = value != null ? value.toString() : "";
-        txtCount = GuiBuilder.buildTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(), Font.PLAIN,
-                Color.white, true, true);
+        txtCount = GuiBuilder.buildIntegerTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(),
+                Font.PLAIN, Color.white, true, true);
         add(txtCount, Constraints.TXT_COUNT);
     }
 
