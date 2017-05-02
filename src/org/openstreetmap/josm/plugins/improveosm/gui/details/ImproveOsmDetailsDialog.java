@@ -42,7 +42,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Shortcut;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
 /**
@@ -84,12 +84,12 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
-        cmpInfo = GuiBuilder.buildScrollPane(GuiBuilder.buildEmptyPanel(Color.WHITE),
+        cmpInfo = ContainerBuilder.buildScrollPane(ContainerBuilder.buildEmptyPanel(Color.WHITE),
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
-        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
         add(createLayout(pnlMain, false, null));
     }
 

@@ -39,8 +39,11 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import com.telenav.josm.common.gui.CancelAction;
-import com.telenav.josm.common.gui.GuiBuilder;
 import com.telenav.josm.common.gui.ModalDialog;
+import com.telenav.josm.common.gui.builder.ButtonBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
+import com.telenav.josm.common.gui.builder.LabelBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -77,22 +80,22 @@ class EditDialog extends ModalDialog {
 
     @Override
     public void createComponents() {
-        lblError = GuiBuilder.buildLabel(GuiConfig.getInstance().getTxtInvalidComment(), Color.red, Font.BOLD,
-                GuiBuilder.FONT_SIZE_12, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP,
-                false);
-        txtComment = GuiBuilder.buildTextArea(new EditDocument(), PreferenceManager.getInstance().loadLastComment(),
-                Color.white, Font.PLAIN, GuiBuilder.FONT_SIZE_12, true);
+        lblError = LabelBuilder.build(GuiConfig.getInstance().getTxtInvalidComment(), Font.BOLD, Color.red,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP, false);
+        txtComment = TextComponentBuilder.buildTextArea(new EditDocument(),
+                PreferenceManager.getInstance().loadLastComment(), Color.white, Font.PLAIN, true);
 
-        final JPanel pnlComment = GuiBuilder.buildBorderLayoutPanel(null,
-                GuiBuilder.buildScrollPane(txtComment, null, Color.white, Color.gray, 100, true, null), null, BORDER);
+        final JPanel pnlComment = ContainerBuilder.buildBorderLayoutPanel(null,
+                ContainerBuilder.buildScrollPane(txtComment, null, Color.white, Color.gray, 100, true, null), null,
+                BORDER);
         pnlComment.setVerifyInputWhenFocusTarget(true);
         add(pnlComment, BorderLayout.CENTER);
 
 
-        btnOk = GuiBuilder.buildButton(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
-        final JPanel pnlBtn = GuiBuilder.buildFlowLayoutPanel(FlowLayout.TRAILING, btnOk,
-                GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
-        final JPanel pnlSouth = GuiBuilder.buildBorderLayoutPanel(lblError, pnlBtn, null);
+        btnOk = ButtonBuilder.build(new AddCommentAction(status), GuiConfig.getInstance().getBtnOkLbl());
+        final JPanel pnlBtn = ContainerBuilder.buildFlowLayoutPanel(FlowLayout.TRAILING, btnOk,
+                ButtonBuilder.build(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl()));
+        final JPanel pnlSouth = ContainerBuilder.buildBorderLayoutPanel(lblError, pnlBtn, null);
         add(pnlSouth, BorderLayout.SOUTH);
     }
 

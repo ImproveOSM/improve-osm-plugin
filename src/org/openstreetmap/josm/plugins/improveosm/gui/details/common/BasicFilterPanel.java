@@ -26,7 +26,8 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ButtonBuilder;
+import com.telenav.josm.common.gui.builder.LabelBuilder;
 
 
 /**
@@ -55,16 +56,16 @@ public abstract class BasicFilterPanel extends JPanel {
     public BasicFilterPanel(final SearchFilter filter, final String statusLbl) {
         super(new GridBagLayout());
 
-        add(GuiBuilder.buildLabel(statusLbl, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+        add(LabelBuilder.build(statusLbl, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_STATUS);
-        rbStatusOpen = GuiBuilder.buildRadioButton(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), Font.PLAIN,
+        rbStatusOpen = ButtonBuilder.build(Status.OPEN.name().toLowerCase(), Status.OPEN.toString(), Font.PLAIN,
                 getBackground(), false);
-        rbStatusSolved = GuiBuilder.buildRadioButton(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(),
-                Font.PLAIN, getBackground(), false);
-        rbStatusInvalid = GuiBuilder.buildRadioButton(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
+        rbStatusSolved = ButtonBuilder.build(Status.SOLVED.name().toLowerCase(), Status.SOLVED.toString(), Font.PLAIN,
+                getBackground(), false);
+        rbStatusInvalid = ButtonBuilder.build(Status.INVALID.name().toLowerCase(), Status.INVALID.toString(),
                 Font.PLAIN, getBackground(), false);
 
-        btnGroupStatus = GuiBuilder.buildRadioButtonGroup(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
+        btnGroupStatus = ButtonBuilder.build(rbStatusOpen, rbStatusSolved, rbStatusInvalid);
         selectStatus(filter.getStatus());
         add(rbStatusOpen, Constraints.RB_OPEN);
         add(rbStatusSolved, Constraints.RB_SOLVED);

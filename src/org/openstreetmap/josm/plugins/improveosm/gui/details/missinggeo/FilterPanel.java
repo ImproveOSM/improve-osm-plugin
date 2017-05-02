@@ -32,7 +32,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.CheckBoxBuilder;
+import com.telenav.josm.common.gui.builder.LabelBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -81,11 +83,11 @@ class FilterPanel extends BasicFilterPanel {
 
 
     private void addTypesFilter(final Set<TileType> types) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(), Font.BOLD,
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(), Font.BOLD,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_TYPE);
-        cbTypeParking = GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(), Font.PLAIN, PARKING, false);
-        cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(), Font.PLAIN, ROAD, false);
-        cbTypeBoth = GuiBuilder.buildCheckBox(TileType.BOTH.displayValue(), Font.PLAIN, BOTH, false);
+        cbTypeParking = CheckBoxBuilder.build(TileType.PARKING.displayValue(), Font.PLAIN, PARKING, false);
+        cbTypeRoad = CheckBoxBuilder.build(TileType.ROAD.displayValue(), Font.PLAIN, ROAD, false);
+        cbTypeBoth = CheckBoxBuilder.build(TileType.BOTH.displayValue(), Font.PLAIN, BOTH, false);
         selectTypes(types);
         add(cbTypeParking, Constraints.RB_PARKING);
         add(cbTypeRoad, Constraints.RB_ROAD);
@@ -93,19 +95,19 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludeWaterFilter(final boolean includeWater) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(), Font.BOLD,
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(), Font.BOLD,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_WATER);
-        cbIncludeWater = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN,
+        cbIncludeWater = CheckBoxBuilder.build(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN,
                 WATER, includeWater);
         add(cbIncludeWater, Constraints.RB_WATER);
     }
 
     private void addIncludePathFilter(final boolean includePath) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(), Font.BOLD,
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(), Font.BOLD,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP),
                 Constraints.LBL_PEDESTRIAN);
-        cbIncludePath = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN,
-                PATH, includePath);
+        cbIncludePath = CheckBoxBuilder.build(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN, PATH,
+                includePath);
         cbIncludePath.setSelected(includePath);
         add(cbIncludePath, Constraints.RB_PATH);
     }
@@ -114,10 +116,10 @@ class FilterPanel extends BasicFilterPanel {
         final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
                 : MissingGeometryGuiConfig.getInstance().getLblPointCount();
-        add(GuiBuilder.buildLabel(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+        add(LabelBuilder.build(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_COUNT);
         final String valueStr = value != null ? value.toString() : "";
-        txtCount = GuiBuilder.buildIntegerTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(),
+        txtCount = TextComponentBuilder.buildIntegerTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(),
                 Font.PLAIN, Color.white, true, true);
         add(txtCount, Constraints.TXT_COUNT);
     }

@@ -27,8 +27,9 @@ import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.CancelAction;
-import com.telenav.josm.common.gui.GuiBuilder;
 import com.telenav.josm.common.gui.ModalDialog;
+import com.telenav.josm.common.gui.builder.ButtonBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
 /**
@@ -62,11 +63,11 @@ public abstract class BasicFilterDialog extends ModalDialog {
     @Override
     public void createComponents() {
         pnlFilter = createFilterPanel();
-        final JButton btnReset = GuiBuilder.buildButton(new ResetAction(), GuiConfig.getInstance().getBtnResetLbl());
-        final JButton btnOk = GuiBuilder.buildButton(getOkAction(), GuiConfig.getInstance().getBtnOkLbl());
+        final JButton btnReset = ButtonBuilder.build(new ResetAction(), GuiConfig.getInstance().getBtnResetLbl());
+        final JButton btnOk = ButtonBuilder.build(getOkAction(), GuiConfig.getInstance().getBtnOkLbl());
         final JButton btnCancel =
-                GuiBuilder.buildButton(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl());
-        final JPanel pnlButton = GuiBuilder.buildFlowLayoutPanel(FlowLayout.RIGHT, btnReset, btnOk, btnCancel);
+                ButtonBuilder.build(new CancelAction(this), GuiConfig.getInstance().getBtnCancelLbl());
+        final JPanel pnlButton = ContainerBuilder.buildFlowLayoutPanel(FlowLayout.RIGHT, btnReset, btnOk, btnCancel);
         add(pnlFilter, BorderLayout.CENTER);
         add(pnlButton, BorderLayout.SOUTH);
     }

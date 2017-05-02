@@ -29,7 +29,8 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.tools.OpenBrowser;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -53,9 +54,9 @@ class FeedbackPanel extends JPanel implements HyperlinkListener {
 
     private void createComponents() {
         final JEditorPane txtEditorPane =
-                GuiBuilder.buildEditorPane(GuiConfig.getInstance().getPnlFeedbackTxt(), this,  false);
+                TextComponentBuilder.buildEditorPane(GuiConfig.getInstance().getPnlFeedbackTxt(), this, false);
         final JScrollPane cmpTile =
-                GuiBuilder.buildScrollPane(txtEditorPane, null, getBackground(), null, 100, false, DIM);
+                ContainerBuilder.buildScrollPane(txtEditorPane, null, getBackground(), null, 100, false, DIM);
         add(cmpTile, BorderLayout.CENTER);
     }
 
@@ -71,5 +72,4 @@ class FeedbackPanel extends JPanel implements HyperlinkListener {
             }
         }
     }
-
 }

@@ -29,7 +29,10 @@ import org.openstreetmap.josm.plugins.improveosm.entity.LocationPref;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ButtonBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
+import com.telenav.josm.common.gui.builder.LabelBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -60,35 +63,34 @@ class PreferencePanel extends JPanel {
         final LocationPref savedLocationPref = PreferenceManager.getInstance().loadLocationPrefOption();
         final Set<LocationPref> enabledLocationPref = Config.getInstance().getEnabledLocationPref();
 
-        add(GuiBuilder.buildLabel(GuiConfig.getInstance().getLocationPreferenceLbl(), Font.PLAIN,
+        add(LabelBuilder.build(GuiConfig.getInstance().getLocationPreferenceLbl(), Font.PLAIN,
                 ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_LOCATION);
 
         final ButtonGroup buttonsGroup = new ButtonGroup();
         if (enabledLocationPref.contains(LocationPref.OPEN_STREET_VIEW)) {
             final boolean isSelected =
                     savedLocationPref != null && savedLocationPref.equals(LocationPref.OPEN_STREET_VIEW);
-            rbImproveOsmPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefOpenStreetMap(),
-                    Font.PLAIN, getBackground(), isSelected);
+            rbImproveOsmPage = ButtonBuilder.build(GuiConfig.getInstance().getLocationPrefOpenStreetMap(), Font.PLAIN,
+                    getBackground(), isSelected);
             buttonsGroup.add(rbImproveOsmPage);
             add(rbImproveOsmPage, Constraints.BTN_IMPROVE_OSM);
         }
 
         if (enabledLocationPref.contains(LocationPref.CUSTOM_SITE)) {
             final boolean isSelected = savedLocationPref != null && savedLocationPref.equals(LocationPref.CUSTOM_SITE);
-            rbCustomPage = GuiBuilder.buildRadioButton(GuiConfig.getInstance().getLocationPrefCustom(), Font.PLAIN,
+            rbCustomPage = ButtonBuilder.build(GuiConfig.getInstance().getLocationPrefCustom(), Font.PLAIN,
                     getBackground(), isSelected);
             buttonsGroup.add(rbCustomPage);
-            txtCustomUrl = GuiBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
+            txtCustomUrl = TextComponentBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
                     Font.PLAIN, getBackground(), URL_DIM);
-            add(GuiBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl),
+            add(ContainerBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl),
                     Constraints.BTN_CUSTOM);
         }
 
         if (enabledLocationPref.contains(LocationPref.COPY_LOCATION)) {
             final boolean isSelected = savedLocationPref == null;
-            final JRadioButton rbCopyLocation = GuiBuilder.buildRadioButton(
-                    GuiConfig.getInstance().getCopyLocationPrefLbl(), Font.PLAIN, getBackground(), isSelected);
-
+            final JRadioButton rbCopyLocation = ButtonBuilder.build(GuiConfig.getInstance().getCopyLocationPrefLbl(),
+                    Font.PLAIN, getBackground(), isSelected);
             buttonsGroup.add(rbCopyLocation);
             add(rbCopyLocation, Constraints.BTN_COPY_LOC);
         }
