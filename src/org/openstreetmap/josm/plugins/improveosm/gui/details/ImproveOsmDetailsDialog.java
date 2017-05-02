@@ -90,6 +90,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        setPreferredSize(DIM);
         add(createLayout(pnlMain, false, null));
     }
 

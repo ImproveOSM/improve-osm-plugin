@@ -27,16 +27,19 @@ import java.awt.Insets;
  */
 final class Constraints {
 
-    static final GridBagConstraints LBL_LOCATION = new GridBagConstraints(0, 0, 1, 1, 1, 1,
-            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(50, 0, 3, 0), 0, 0);
+    static final GridBagConstraints LBL_LOCATION = new GridBagConstraints(0, 0, 4, 1, 1, 1,
+            GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 0, 3, 0), 0, 0);
 
-    static final GridBagConstraints BTN_IMPROVE_OSM = new GridBagConstraints(0, 1, 1, 1, 1, 1,
+    static final GridBagConstraints BTN_IMPROVE_OSM = new GridBagConstraints(0, 1, 1, 1, 0, 0,
             GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
 
-    static final GridBagConstraints BTN_CUSTOM = new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.LINE_START,
+    static final GridBagConstraints BTN_CUSTOM = new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.LINE_START,
             GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
 
-    static final GridBagConstraints BTN_COPY_LOC = new GridBagConstraints(0, 3, 1, 1, 1, 1,
+    static final GridBagConstraints TXT_CUSTOM = new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.CENTER,
+            GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
+
+    static final GridBagConstraints BTN_COPY_LOC = new GridBagConstraints(0, 3, 1, 1, 0, 0,
             GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL, new Insets(2, 5, 3, 0), 0, 0);
 
 

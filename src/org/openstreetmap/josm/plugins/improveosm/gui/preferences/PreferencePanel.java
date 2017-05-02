@@ -15,8 +15,8 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.preferences;
 
+import java.awt.Color;
 import java.awt.ComponentOrientation;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.util.Set;
@@ -30,7 +30,6 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import com.telenav.josm.common.gui.builder.ButtonBuilder;
-import com.telenav.josm.common.gui.builder.ContainerBuilder;
 import com.telenav.josm.common.gui.builder.LabelBuilder;
 import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
@@ -81,10 +80,10 @@ class PreferencePanel extends JPanel {
             rbCustomPage = ButtonBuilder.build(GuiConfig.getInstance().getLocationPrefCustom(), Font.PLAIN,
                     getBackground(), isSelected);
             buttonsGroup.add(rbCustomPage);
+            add(rbCustomPage, Constraints.BTN_CUSTOM);
             txtCustomUrl = TextComponentBuilder.buildTextField(PreferenceManager.getInstance().loadLocationPrefValue(),
-                    Font.PLAIN, getBackground(), URL_DIM);
-            add(ContainerBuilder.buildFlowLayoutPanel(FlowLayout.LEADING, rbCustomPage, txtCustomUrl),
-                    Constraints.BTN_CUSTOM);
+                    Font.PLAIN, Color.white, URL_DIM);
+            add(txtCustomUrl, Constraints.TXT_CUSTOM);
         }
 
         if (enabledLocationPref.contains(LocationPref.COPY_LOCATION)) {
