@@ -55,7 +55,7 @@ final class DirectionOfFlowPaintHandler extends PaintHandler<RoadSegment> {
         final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry =
                 getArrowGeometry(mapView, segment.getPoints(), arrowLength);
         final List<Point> geometry = PaintUtil.toPoints(mapView, segment.getPoints());
-        PaintManager.drawSegment(graphics, geometry, arrowGeometry, stroke, color);
+        PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, stroke);
     }
 
     private Pair<Pair<Point, Point>, Pair<Point, Point>> getArrowGeometry(final MapView mapView,

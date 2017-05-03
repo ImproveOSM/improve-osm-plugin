@@ -15,7 +15,6 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.COMP
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_BACKGROUND_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.LABEL_DIST;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_SEGMENT_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURNRESTRICTION_CLUSTER_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_ARROW_LENGTH;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TURN_SEGMENT_FONT_SIZE;
@@ -91,7 +90,7 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
                         arrowGeometry(mapView, turnRestriction.getSegments().get(i).getPoints(), -arrowLength);
                 final List<Point> geometry =
                         PaintUtil.toPoints(mapView, turnRestriction.getSegments().get(i).getPoints());
-                PaintManager.drawSegment(graphics, geometry, arrowGeometry, TURN_SEGMENT_STROKE, color);
+                PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, TURN_SEGMENT_STROKE);
             }
 
             // draw labels
@@ -99,12 +98,12 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
             Point labelPoint = labelPoint(mapView, firstSegment.getPoints(), true);
             final Font font = mapView.getFont().deriveFont(Font.BOLD, TURN_SEGMENT_FONT_SIZE);
             PaintManager.drawText(graphics, Integer.toString(firstSegment.getNumberOfTrips()), labelPoint, font,
-                    LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE, ROAD_SEGMENT_STROKE);
+                    LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE);
 
             final TurnSegment lastSegment = turnRestriction.getSegments().get(turnRestriction.getSegments().size() - 1);
             labelPoint = labelPoint(mapView, lastSegment.getPoints(), true);
             PaintManager.drawText(graphics, Integer.toString(turnRestriction.getNumberOfPasses()), labelPoint, font,
-                    LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE, ROAD_SEGMENT_STROKE);
+                    LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE);
         }
     }
 
@@ -126,17 +125,17 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
         final Point labelPoint =
                 isFromSegment ? mapView.getPoint(points.get(0)) : mapView.getPoint(points.get(points.size() - 1));
-        final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
-                mapView.getPoint(points.get(points.size() - 1)).getX());
-        if (cmp == 0) {
-            labelPoint.x += LABEL_DIST;
-        } else if (cmp < 0) {
-            labelPoint.x -= LABEL_DIST;
-            labelPoint.y -= LABEL_DIST;
-        } else {
-            labelPoint.x += LABEL_DIST;
-            labelPoint.y += LABEL_DIST;
-        }
-        return labelPoint;
+                final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
+                        mapView.getPoint(points.get(points.size() - 1)).getX());
+                if (cmp == 0) {
+                    labelPoint.x += LABEL_DIST;
+                } else if (cmp < 0) {
+                    labelPoint.x -= LABEL_DIST;
+                    labelPoint.y -= LABEL_DIST;
+                } else {
+                    labelPoint.x += LABEL_DIST;
+                    labelPoint.y += LABEL_DIST;
+                }
+                return labelPoint;
     }
 }
