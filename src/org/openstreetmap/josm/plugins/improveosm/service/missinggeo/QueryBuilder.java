@@ -70,12 +70,12 @@ final class QueryBuilder extends BaseQueryBuilder {
 
     private final class Params {
 
-        private Params() {}
-
         private static final String TYPE = "type";
         private static final String NO_TRIPS = "numberOfTrips";
         private static final String NO_POINTS = "numberOfPoints";
         private static final String TILE_X = "tileX";
         private static final String TILE_Y = "tileY";
+
+        private Params() {}
     }
 }

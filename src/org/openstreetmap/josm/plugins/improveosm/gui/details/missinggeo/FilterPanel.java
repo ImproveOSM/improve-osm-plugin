@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.util.EnumSet;
+import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -31,7 +32,9 @@ import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.CheckBoxBuilder;
+import com.telenav.josm.common.gui.builder.LabelBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -79,16 +82,12 @@ class FilterPanel extends BasicFilterPanel {
     }
 
 
-    private void addTypesFilter(final EnumSet<TileType> types) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(),
-                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP), Constraints.LBL_TYPE);
-        cbTypeParking = GuiBuilder.buildCheckBox(TileType.PARKING.displayValue(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TileType.PARKING.name(), PARKING);
-        cbTypeRoad = GuiBuilder.buildCheckBox(TileType.ROAD.displayValue(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TileType.ROAD.name(), ROAD);
-        cbTypeBoth = GuiBuilder.buildCheckBox(TileType.BOTH.displayValue(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, TileType.BOTH.name(), BOTH);
+    private void addTypesFilter(final Set<TileType> types) {
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblType(), Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_TYPE);
+        cbTypeParking = CheckBoxBuilder.build(TileType.PARKING.displayValue(), Font.PLAIN, PARKING, false);
+        cbTypeRoad = CheckBoxBuilder.build(TileType.ROAD.displayValue(), Font.PLAIN, ROAD, false);
+        cbTypeBoth = CheckBoxBuilder.build(TileType.BOTH.displayValue(), Font.PLAIN, BOTH, false);
         selectTypes(types);
         add(cbTypeParking, Constraints.RB_PARKING);
         add(cbTypeRoad, Constraints.RB_ROAD);
@@ -96,48 +95,33 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addIncludeWaterFilter(final boolean includeWater) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(),
-                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP), Constraints.LBL_WATER);
-        cbIncludeWater = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, null, WATER);
-        cbIncludeWater.setSelected(includeWater);
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblWater(), Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_WATER);
+        cbIncludeWater = CheckBoxBuilder.build(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN,
+                WATER, includeWater);
         add(cbIncludeWater, Constraints.RB_WATER);
     }
 
     private void addIncludePathFilter(final boolean includePath) {
-        add(GuiBuilder.buildLabel(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(),
-                getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP), Constraints.LBL_PEDESTRIAN);
-        cbIncludePath = GuiBuilder.buildCheckBox(MissingGeometryGuiConfig.getInstance().getLblDisplay(),
-                new JCheckBox().getFont().deriveFont(Font.PLAIN), null, false, false, null, PATH);
+        add(LabelBuilder.build(MissingGeometryGuiConfig.getInstance().getDlgFilterLblPedestrian(), Font.BOLD,
+                ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT, SwingConstants.TOP),
+                Constraints.LBL_PEDESTRIAN);
+        cbIncludePath = CheckBoxBuilder.build(MissingGeometryGuiConfig.getInstance().getLblDisplay(), Font.PLAIN, PATH,
+                includePath);
         cbIncludePath.setSelected(includePath);
         add(cbIncludePath, Constraints.RB_PATH);
     }
 
     private void addCountFilter(final Integer value) {
-        final String lblTxt;
-        if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
-            lblTxt = MissingGeometryGuiConfig.getInstance().getLblTripCount();
-        } else {
-            lblTxt = MissingGeometryGuiConfig.getInstance().getLblPointCount();
-        }
-        add(GuiBuilder.buildLabel(lblTxt, getFont().deriveFont(Font.BOLD), ComponentOrientation.LEFT_TO_RIGHT,
-                SwingConstants.LEFT, SwingConstants.TOP), Constraints.LBL_COUNT);
-
+        final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
+                : MissingGeometryGuiConfig.getInstance().getLblPointCount();
+        add(LabelBuilder.build(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                SwingConstants.TOP), Constraints.LBL_COUNT);
         final String valueStr = value != null ? value.toString() : "";
-        txtCount = buildCountTextField(valueStr, Color.white);
+        txtCount = TextComponentBuilder.buildIntegerTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(),
+                Font.PLAIN, Color.white, true, true);
         add(txtCount, Constraints.TXT_COUNT);
-    }
-
-    private JTextField buildCountTextField(final String txt, final Color bgColor) {
-        final JTextField txtField =
-                GuiBuilder.buildTextField(txt, new JTextField().getFont().deriveFont(Font.PLAIN), bgColor);
-        txtField.setDragEnabled(true);
-        txtField.setEditable(true);
-        txtField.setInputVerifier(
-                new PositiveIntegerVerifier(txtField, GuiConfig.getInstance().getTxtInvalidInteger()));
-        return txtField;
     }
 
     /**
@@ -151,8 +135,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-                txtCount.setText(txt);
-                txtCount.setBackground(Color.white);
+        txtCount.setText(txt);
+        txtCount.setBackground(Color.white);
     }
 
     /**
@@ -193,7 +177,7 @@ class FilterPanel extends BasicFilterPanel {
         return types;
     }
 
-    private void selectTypes(final EnumSet<TileType> types) {
+    private void selectTypes(final Set<TileType> types) {
         if (types != null && !types.isEmpty()) {
             boolean selected = types.contains(TileType.ROAD);
             cbTypeRoad.setSelected(selected);

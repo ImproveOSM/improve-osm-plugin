@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import com.telenav.josm.common.gui.BasicInfoPanel;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
 /**
@@ -47,8 +47,8 @@ public class CommentsPanel extends BasicInfoPanel<List<Comment>> {
     public void createComponents(final List<Comment> comments) {
         setLayout(new BorderLayout());
         final CommentsList commentsList = new CommentsList(comments.toArray(new Comment[0]));
-        final JScrollPane cmp = GuiBuilder.buildScrollPane(commentsList, GuiConfig.getInstance().getPnlHistoryTitle(),
-                getBackground(), null, 100, false, DIM);
+        final JScrollPane cmp =
+                ContainerBuilder.buildScrollPane(commentsList, GuiConfig.getInstance().getPnlHistoryTitle(), 100, DIM);
         add(cmp, BorderLayout.CENTER);
     }
 }

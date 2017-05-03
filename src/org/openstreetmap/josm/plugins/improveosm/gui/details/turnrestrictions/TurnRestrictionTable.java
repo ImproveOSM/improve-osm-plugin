@@ -38,10 +38,11 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObservable {
 
     private static final long serialVersionUID = -2793471615446950298L;
-    private static final int COLUMN_SPACE = 2;
+    private static final int COLUMN_SPACE = 4;
     private static final int COLUMNS = 4;
     private static final int TBL_ROW_HEIGHT = 23;
     private TurnRestrictionSelectionObserver observer;
+
 
     TurnRestrictionTable() {
         super(new TurnRestrictionsTableModel(null));
@@ -52,7 +53,6 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
         getTableHeader().setReorderingAllowed(false);
         getTableHeader().setResizingAllowed(false);
 
-        // setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setRowHeight(TBL_ROW_HEIGHT);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -116,14 +116,13 @@ class TurnRestrictionTable extends JTable implements TurnRestrictionSelectionObs
                 width = Math.max(width, currentWidth);
             }
 
-            width += 2 * COLUMN_SPACE;
+            width += COLUMN_SPACE;
 
             col.setPreferredWidth(width);
             col.setWidth(width);
             col.setMinWidth(width);
         }
     }
-
 
     /**
      * Checks if the turn restrictions table contains or not the given turn restriction.

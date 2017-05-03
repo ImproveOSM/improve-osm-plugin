@@ -38,10 +38,12 @@ public final class Util {
 
     private static final double POZ_DIST = 15.0;
     private static final double SEG_DIST = 4.0;
+    private static final int ZOOM1_SCALE = 78206;
     private static final int DEGREE_180 = 180;
     private static final int DEGREE_360 = 360;
     private static final int MIN_ZOOM = 0;
-    private static final int MAX_ZOOM = 18;
+    private static final int MAX_ZOOM = 22;
+    private static final int MAX_TILE_ZOOM = 18;
     private static final int TILE_SIZE = 1024;
 
 
@@ -55,8 +57,8 @@ public final class Util {
      * @return an integer
      */
     public static int zoom(final Bounds bounds) {
-        return ((int) Math.min(MAX_ZOOM, Math.max(MIN_ZOOM,
-                Math.round(Math.floor(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(2))))));
+        return Main.map.mapView.getScale() >= ZOOM1_SCALE ? 1 : (int) Math.min(MAX_ZOOM,
+                Math.max(MIN_ZOOM, Math.round(Math.floor(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(2)))));
     }
 
     /**
@@ -75,12 +77,12 @@ public final class Util {
     }
 
     private static double tile2lat(final int y) {
-        final double n = Math.PI - (2.0 * Math.PI * y) / Math.pow(2.0, MAX_ZOOM);
+        final double n = Math.PI - (2.0 * Math.PI * y) / Math.pow(2.0, MAX_TILE_ZOOM);
         return Math.toDegrees(Math.atan(Math.sinh(n)));
     }
 
     private static double tile2lon(final int x) {
-        return x / Math.pow(2.0, MAX_ZOOM) * DEGREE_360 - DEGREE_180;
+        return x / Math.pow(2.0, MAX_TILE_ZOOM) * DEGREE_360 - DEGREE_180;
     }
 
     /**
@@ -163,9 +165,9 @@ public final class Util {
     }
 
     private static int getTileX(final double lon) {
-        int tileX = (int) Math.floor((lon + DEGREE_180) / DEGREE_360 * (1 << MAX_ZOOM));
-        if (tileX >= (1 << MAX_ZOOM)) {
-            tileX = ((1 << MAX_ZOOM) - 1);
+        int tileX = (int) Math.floor((lon + DEGREE_180) / DEGREE_360 * (1 << MAX_TILE_ZOOM));
+        if (tileX >= (1 << MAX_TILE_ZOOM)) {
+            tileX = (1 << MAX_TILE_ZOOM) - 1;
         }
         return tileX;
     }
@@ -173,9 +175,9 @@ public final class Util {
     private static Integer getTileY(final double lat) {
         int tileY = (int) Math
                 .floor((1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2
-                        * (1 << MAX_ZOOM));
-        if (tileY >= (1 << MAX_ZOOM)) {
-            tileY = ((1 << MAX_ZOOM) - 1);
+                        * (1 << MAX_TILE_ZOOM));
+        if (tileY >= (1 << MAX_TILE_ZOOM)) {
+            tileY = (1 << MAX_TILE_ZOOM) - 1;
         }
         return tileY;
     }

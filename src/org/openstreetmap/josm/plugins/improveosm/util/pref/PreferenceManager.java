@@ -96,34 +96,6 @@ public final class PreferenceManager {
     }
 
     /**
-     * Loads the 'old plugin' flag. This flag is used to check whether the user has also installed the
-     * MissingRoads/TrafficFlow direction plugins.
-     *
-     * @return a boolean value
-     */
-    public boolean loadOldPluginsFlag() {
-        return loadManager.loadOldPluginsFlag();
-    }
-
-    /**
-     * Loads the 'old plugin warning suppress' flag.
-     *
-     * @return a boolean value
-     */
-    public boolean loadOldPluginsWarningSuppressFlag() {
-        return loadManager.loadOldPluginsWarningSuppressFlag();
-    }
-
-    /**
-     * Saves the 'old plugin warning suppress' flag.
-     *
-     * @param flag a boolean value.
-     */
-    public void saveOldPluginsWarningSuppressFlag(final boolean flag) {
-        saveManager.saveOldPluginsWarningSuppressFlag(flag);
-    }
-
-    /**
      * Loads the selected location preference settings.
      *
      * @return a set of {@code LocationPref}

@@ -23,7 +23,7 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
-import org.openstreetmap.josm.tools.Pair;
+import com.telenav.josm.common.entity.Pair;
 
 
 /**
@@ -48,7 +48,7 @@ class TurnRestrictionsTableCellRenderer extends DefaultTableCellRenderer {
             if (value instanceof Status) {
                 txt = ((Status) value).name().toLowerCase();
             } else if (value instanceof TurnConfidenceLevel) {
-                txt = ((TurnConfidenceLevel) value).toString();
+                txt = value.toString();
             } else if (value instanceof Pair<?, ?>) {
                 txt = Formatter.formatFirstLastTripsNumber((Pair<Integer, Integer>) value);
             } else {

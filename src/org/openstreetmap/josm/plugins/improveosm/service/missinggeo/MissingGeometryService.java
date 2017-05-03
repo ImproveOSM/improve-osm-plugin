@@ -26,7 +26,6 @@ import org.openstreetmap.josm.plugins.improveosm.service.BaseService;
 import org.openstreetmap.josm.plugins.improveosm.service.Service;
 import org.openstreetmap.josm.plugins.improveosm.service.ServiceException;
 import org.openstreetmap.josm.plugins.improveosm.service.entity.CommentRequest;
-import com.google.gson.GsonBuilder;
 import com.telenav.josm.common.argument.BoundingBox;
 
 
@@ -37,12 +36,6 @@ import com.telenav.josm.common.argument.BoundingBox;
  * @version $Revision$
  */
 public class MissingGeometryService extends BaseService implements Service<Tile> {
-
-    @Override
-    public GsonBuilder createGsonBuilder() {
-        final GsonBuilder builder = super.createGsonBuilder();
-        return builder;
-    }
 
     @Override
     public DataSet<Tile> search(final BoundingBox bbox, final SearchFilter filter, final int zoom)
@@ -68,7 +61,7 @@ public class MissingGeometryService extends BaseService implements Service<Tile>
         for (final Tile tile : entities) {
             targetIds.add(new Tile(tile.getX(), tile.getY()));
         }
-        final CommentRequest<Tile> requestBody = new CommentRequest<>(comment, entities);
+        final CommentRequest<Tile> requestBody = new CommentRequest<>(comment, targetIds);
         final String content = buildRequest(requestBody, CommentRequest.class);
         final Response root = executePost(url, content, Response.class);
         verifyResponseStatus(root.getStatus());

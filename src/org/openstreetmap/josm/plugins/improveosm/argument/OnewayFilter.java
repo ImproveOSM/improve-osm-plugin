@@ -16,9 +16,10 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
+import java.util.Set;
 import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -29,7 +30,7 @@ import com.telenav.josm.common.util.EntityUtil;
  */
 public class OnewayFilter extends SearchFilter {
 
-    private final EnumSet<OnewayConfidenceLevel> confidenceLevels;
+    private final Set<OnewayConfidenceLevel> confidenceLevels;
 
     /** default search filter */
     public static final OnewayFilter DEFAULT =
@@ -42,13 +43,13 @@ public class OnewayFilter extends SearchFilter {
      * @param status the road segment/cluster status
      * @param confidenceLevels the list of confidence levels
      */
-    public OnewayFilter(final Status status, final EnumSet<OnewayConfidenceLevel> confidenceLevels) {
+    public OnewayFilter(final Status status, final Set<OnewayConfidenceLevel> confidenceLevels) {
         super(status);
         this.confidenceLevels = confidenceLevels;
     }
 
 
-    public EnumSet<OnewayConfidenceLevel> getConfidenceLevels() {
+    public Set<OnewayConfidenceLevel> getConfidenceLevels() {
         return confidenceLevels;
     }
 
@@ -65,7 +66,7 @@ public class OnewayFilter extends SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof OnewayFilter) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final OnewayFilter other = (OnewayFilter) obj;
             result = super.equals(obj) && EntityUtil.bothNullOrEqual(confidenceLevels, other.getConfidenceLevels());
         }

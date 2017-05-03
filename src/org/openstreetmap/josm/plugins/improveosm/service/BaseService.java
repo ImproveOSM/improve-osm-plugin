@@ -43,7 +43,7 @@ public class BaseService {
      *
      * @return a {@code GsonBuilder} object
      */
-    public GsonBuilder createGsonBuilder() {
+    private GsonBuilder createGsonBuilder() {
         final GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(LatLon.class, new LatLonDeserializer());
         return builder;
@@ -58,7 +58,7 @@ public class BaseService {
      * @throws ServiceException if the operation fail
      */
     public <T> T executeGet(final String url, final Class<T> responseType) throws ServiceException {
-        String response = null;
+        String response;
         try {
             response = new HttpConnector(url).get();
         } catch (final HttpConnectorException e) {
@@ -78,7 +78,7 @@ public class BaseService {
      */
     public <T> T executePost(final String url, final String content, final Class<T> responseType)
             throws ServiceException {
-        String response = null;
+        String response;
         try {
             response = new HttpConnector(url).post(content, ContentType.JSON);
         } catch (final HttpConnectorException e) {

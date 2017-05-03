@@ -41,6 +41,7 @@ import com.telenav.josm.common.argument.BoundingBox;
  *
  * @author Beata
  * @version $Revision$
+ * @param <T>
  */
 public final class ServiceHandler<T> {
 
@@ -51,7 +52,7 @@ public final class ServiceHandler<T> {
     private static final ServiceHandler<TurnRestriction> TURN_RESTRICTION_HANDLER =
             new ServiceHandler<>(DataLayer.TURN_RESTRICTION);
 
-    private Service<T> service;
+    private final Service<T> service;
 
 
     @SuppressWarnings("unchecked")

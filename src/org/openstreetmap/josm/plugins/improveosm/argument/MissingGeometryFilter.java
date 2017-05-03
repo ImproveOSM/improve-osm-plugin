@@ -16,9 +16,10 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import java.util.EnumSet;
+import java.util.Set;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -29,7 +30,7 @@ import com.telenav.josm.common.util.EntityUtil;
  */
 public class MissingGeometryFilter extends SearchFilter {
 
-    private final EnumSet<TileType> types;
+    private final Set<TileType> types;
     private final Integer count;
 
     /** default search filter to be applied */
@@ -45,14 +46,14 @@ public class MissingGeometryFilter extends SearchFilter {
      * @param count defines the number of points/trips. Only clusters/tiles that has at least the given number of
      * points/trips are displayed.
      */
-    public MissingGeometryFilter(final Status status, final EnumSet<TileType> types, final Integer count) {
+    public MissingGeometryFilter(final Status status, final Set<TileType> types, final Integer count) {
         super(status);
         this.types = types;
         this.count = count;
     }
 
 
-    public EnumSet<TileType> getTypes() {
+    public Set<TileType> getTypes() {
         return types;
     }
 
@@ -74,7 +75,7 @@ public class MissingGeometryFilter extends SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof MissingGeometryFilter) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final MissingGeometryFilter other = (MissingGeometryFilter) obj;
             result = super.equals(other);
             result = result && EntityUtil.bothNullOrEqual(count, other.getCount());

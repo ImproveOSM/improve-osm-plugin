@@ -17,7 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 
 import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -113,11 +113,7 @@ public class TurnRestriction {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        if (id != null) {
-            result = prime * result + id.hashCode();
-        } else {
-            result = prime * result + EntityUtil.hashCode(point);
-        }
+        result = id != null ? prime * result + id.hashCode() : prime * result + EntityUtil.hashCode(point);
         return result;
     }
 
@@ -126,7 +122,7 @@ public class TurnRestriction {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof TurnRestriction) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final TurnRestriction other = (TurnRestriction) obj;
             if (id != null && other.getId() != null) {
                 result = id.equals(other.getId());

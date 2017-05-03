@@ -17,7 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 
 import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -112,7 +112,7 @@ public class Tile {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof Tile) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final Tile other = (Tile) obj;
             result = EntityUtil.bothNullOrEqual(x, other.getX());
             result = result && EntityUtil.bothNullOrEqual(y, other.getY());

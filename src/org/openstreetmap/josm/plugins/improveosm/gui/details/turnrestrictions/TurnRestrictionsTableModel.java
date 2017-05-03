@@ -20,7 +20,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
-import org.openstreetmap.josm.tools.Pair;
+import com.telenav.josm.common.entity.Pair;
 
 
 /**
@@ -70,7 +70,7 @@ class TurnRestrictionsTableModel extends AbstractTableModel {
                     value = turnRestriction.getTurnType();
                     break;
                 case IDX_FIRST_SEG_TRIPS:
-                    value = new Pair<Integer, Integer>(turnRestriction.getSegments().get(0).getNumberOfTrips(),
+                    value = new Pair<>(turnRestriction.getSegments().get(0).getNumberOfTrips(),
                             turnRestriction.getNumberOfPasses());
                     break;
                 case IDX_CONFIDENCE:

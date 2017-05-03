@@ -49,7 +49,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import org.openstreetmap.josm.tools.OpenBrowser;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ButtonBuilder;
 
 
 /**
@@ -68,12 +68,10 @@ class ButtonPanel extends JPanel {
     private static final Dimension DIM = new Dimension(200, 23);
 
     /* panel components */
-    private final JButton btnFilter;
     private final JButton btnComment;
     private final JButton btnSolve;
     private final JButton btnReopen;
     private final JButton btnInvalid;
-    private final JButton btnLocation;
 
     private CommentObserver commentObserver;
     private LatLon selectedItemCoordinate;
@@ -84,24 +82,24 @@ class ButtonPanel extends JPanel {
 
         final GuiConfig guiConfig = GuiConfig.getInstance();
         final IconConfig iconConfig = IconConfig.getInstance();
-        btnFilter = GuiBuilder.buildButton(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
+        final JButton btnFilter = ButtonBuilder.build(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
                 guiConfig.getBtnFilterTlt(), true);
-        btnComment = GuiBuilder.buildButton(
+        btnComment = ButtonBuilder.build(
                 new DisplayEditDialogAction(null, guiConfig.getDlgCommentTitle(), iconConfig.getCommentIcon()),
                 iconConfig.getCommentIcon(), guiConfig.getBtnCommentTlt(), false);
-        btnSolve = GuiBuilder.buildButton(
+        btnSolve = ButtonBuilder.build(
                 new DisplayEditPopupMenu(Status.SOLVED, guiConfig.getDlgSolveTitle(),
                         guiConfig.getMenuSolveCommentTitle(), iconConfig.getSolveIcon()),
                 iconConfig.getSolveIcon(), guiConfig.getBtnSolveTlt(), false);
-        btnReopen = GuiBuilder.buildButton(
+        btnReopen = ButtonBuilder.build(
                 new DisplayEditPopupMenu(Status.OPEN, guiConfig.getDlgReopenTitle(),
                         guiConfig.getMenuReopenCommentTitle(), iconConfig.getReopenIcon()),
                 iconConfig.getReopenIcon(), guiConfig.getBtnReopenTlt(), false);
-        btnInvalid = GuiBuilder.buildButton(
+        btnInvalid = ButtonBuilder.build(
                 new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
                         guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
                 iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
-        btnLocation = GuiBuilder.buildButton(new HandleLocationAction(), iconConfig.getLocationIcon(),
+        final JButton btnLocation = ButtonBuilder.build(new HandleLocationAction(), iconConfig.getLocationIcon(),
                 guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
         add(btnComment);
@@ -278,7 +276,5 @@ class ButtonPanel extends JPanel {
                 }
             }
         }
-
-
     }
 }

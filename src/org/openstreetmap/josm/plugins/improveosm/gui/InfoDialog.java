@@ -15,16 +15,13 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui;
 
-import java.awt.Color;
-import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -36,25 +33,8 @@ public class InfoDialog {
 
     private static boolean dofTipIsDisplayed = false;
     private static boolean locationTipIsDisplayed = false;
+    private static final String CONTENT_TYPE = "text/html";
 
-    /**
-     * Displays a warning message to the user.
-     */
-    public synchronized void displayOldPluginsDialog() {
-        if (!dofTipIsDisplayed) {
-            final boolean oldPluginsInstalled = PreferenceManager.getInstance().loadOldPluginsFlag();
-            if (oldPluginsInstalled && !PreferenceManager.getInstance().loadOldPluginsWarningSuppressFlag()) {
-                dofTipIsDisplayed = true;
-                final String txt = GuiConfig.getInstance().getTxtOldPlugins();
-                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        buildTextPane(txt, Main.parent.getBackground()), GuiConfig.getInstance().getPluginName(),
-                        JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
-                final boolean flag = val == JOptionPane.YES_OPTION;
-                PreferenceManager.getInstance().saveOldPluginsWarningSuppressFlag(flag);
-                dofTipIsDisplayed = false;
-            }
-        }
-    }
 
     /**
      * Displays editing tips for the user. The dialog window is displayed when the plugin enters from cluster view to
@@ -69,8 +49,8 @@ public class InfoDialog {
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 dofTipIsDisplayed = true;
                 final int val = JOptionPane.showOptionDialog(Main.map.mapView,
-                        buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
-                                Main.parent.getBackground()),
+                        TextComponentBuilder.buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
+                                CONTENT_TYPE, Main.parent.getBackground(), false),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.NO_OPTION;
@@ -86,30 +66,16 @@ public class InfoDialog {
      *
      */
     public synchronized void displayLocationButtonTip() {
-        if (!locationTipIsDisplayed) {
-            if (!PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
-                locationTipIsDisplayed = true;
-                final int val =
-                        JOptionPane.showOptionDialog(Main.map.mapView,
-                                buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(),
-                                        Main.parent.getBackground()),
-                                GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
-                                JOptionPane.PLAIN_MESSAGE, null, null, null);
-                final boolean flag = val == JOptionPane.YES_OPTION;
-                PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
-                locationTipIsDisplayed = false;
-            }
+        if (!locationTipIsDisplayed && !PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
+            locationTipIsDisplayed = true;
+            final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+                    TextComponentBuilder.buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(), CONTENT_TYPE,
+                            Main.parent.getBackground(), false),
+                    GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, null, null);
+            final boolean flag = val == JOptionPane.YES_OPTION;
+            PreferenceManager.getInstance().saveLocationTipSuppressFlag(flag);
+            locationTipIsDisplayed = false;
         }
-    }
-
-
-    private JTextPane buildTextPane(final String txt, final Color background) {
-        final JTextPane txtPane = GuiBuilder.buildTextPane(txt, false, "text/html");
-        if (background != null) {
-            txtPane.setBackground(background);
-        }
-        txtPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-        txtPane.setCaretPosition(0);
-        return txtPane;
     }
 }

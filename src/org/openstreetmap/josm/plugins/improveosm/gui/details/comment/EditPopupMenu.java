@@ -60,7 +60,7 @@ public class EditPopupMenu extends JPopupMenu {
 
         private static final long serialVersionUID = -2668866604147089526L;
 
-        public ChangeStatusAction(final Status status) {
+        private ChangeStatusAction(final Status status) {
             super(status);
         }
 

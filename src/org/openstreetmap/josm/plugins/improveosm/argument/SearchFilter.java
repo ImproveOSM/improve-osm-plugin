@@ -16,7 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.argument;
 
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -53,7 +53,7 @@ public class SearchFilter {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof SearchFilter) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final SearchFilter other = (SearchFilter) obj;
             result = EntityUtil.bothNullOrEqual(status, other.getStatus());
 

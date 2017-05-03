@@ -54,7 +54,6 @@ final class Keys {
     static final String TR_CONFIDENCE_LEVEL = "improveosm.turnRestriction.filter.confidence";
     static final String TR_FILTERS_CHANGED = "improveosm.turnRestriction.filter.changed";
 
-    static final String OLD_PLUGINS_WARNING_SUPPRESS = "improveosm.oldPlugins.warning.suppress";
     static final String PLUGINS = "plugins";
 
     static final String MG_LAYER_OPENED = "improveosm.missingGeometry.layerOpened";

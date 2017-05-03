@@ -31,7 +31,6 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_POINT_
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_STATUS;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_TRIP_COUNT;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_TYPE;
-import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.OLD_PLUGINS_WARNING_SUPPRESS;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.OSM_USERNAME;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PANEL_OPENED;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.SUPPRESS_ERROR;
@@ -72,10 +71,6 @@ final class SaveManager {
 
     void saveErrorSuppressFlag(final boolean flag) {
         Main.pref.put(SUPPRESS_ERROR, flag);
-    }
-
-    void saveOldPluginsWarningSuppressFlag(final boolean flag) {
-        Main.pref.put(OLD_PLUGINS_WARNING_SUPPRESS, flag);
     }
 
     void saveLocationPrefOption(final LocationPref locationPref) {

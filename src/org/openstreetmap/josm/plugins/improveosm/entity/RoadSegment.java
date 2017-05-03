@@ -17,7 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.entity;
 
 import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
-import com.telenav.josm.common.util.EntityUtil;
+import com.telenav.josm.common.entity.EntityUtil;
 
 
 /**
@@ -129,7 +129,7 @@ public class RoadSegment {
         boolean result = false;
         if (this == obj) {
             result = true;
-        } else if (obj instanceof RoadSegment) {
+        } else if (obj != null && obj.getClass() == this.getClass()) {
             final RoadSegment other = (RoadSegment) obj;
             result = EntityUtil.bothNullOrEqual(wayId, other.getWayId());
             result = result && EntityUtil.bothNullOrEqual(fromNodeId, other.getFromNodeId());

@@ -51,8 +51,8 @@ final class Constants {
     static final Stroke ROAD_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final Stroke ROAD_SEGMENT_SEL_STROKE = new BasicStroke(10F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final double ARROW_ANGLE = Math.toRadians(40);
-    static final double ARROW_LENGTH = 10;
-    static final double SEL_ARROW_LENGTH = 17;
+    static final double ARROW_LENGTH = 2;
+    static final double SEL_ARROW_LENGTH = 3;
 
     /* constants used for drawing MissingGeometry tiles */
     static final Stroke TILE_LINE_STROKE = new BasicStroke(4F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -72,7 +72,7 @@ final class Constants {
     static final Color TURN_SEGMENT_FROM_COLOR = new Color(0, 255, 0);
     static final Color TURN_SEGMENT_TO_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-    static final double TURN_ARROW_LENGTH = 11;
+    static final double TURN_ARROW_LENGTH = 2.5;
     static final Color COMPLEX_TURN_COLOR = new Color(255, 0, 0);
     static final int COMPLEX_TURN_RADIUS = 20;
     static final int COMPLEX_TURN_SEL_RADIUS = 30;
@@ -86,14 +86,14 @@ final class Constants {
 
     static final Map<RenderingHints.Key, Object> RENDERING_MAP = createRenderingMap();
 
+    private Constants() {}
+
+
     private static Map<RenderingHints.Key, Object> createRenderingMap() {
-        final Map<RenderingHints.Key, Object> map = new HashMap<RenderingHints.Key, Object>();
+        final Map<RenderingHints.Key, Object> map = new HashMap<>();
         map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         return map;
     }
-
-
-    private Constants() {}
 }

@@ -60,7 +60,7 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
 
     @Override
     public boolean ok() {
-        final LocationPref locationPref = pnlPreference.selectedLocationPrefOption();
+        final LocationPref locationPref = pnlPreference.selectedLocationPref();
 
         if (locationPref.equals(LocationPref.CUSTOM_SITE)) {
             final String value = pnlPreference.selectedCustomUrl();
@@ -79,7 +79,7 @@ public class PreferenceEditor extends DefaultTabPreferenceSetting {
         return false;
     }
 
-    public boolean verifyURL(final String url) {
+    private boolean verifyURL(final String url) {
         final String[] patterns = Config.getInstance().getLocationPrefUrlPatterns();
         for (final String pattern : patterns) {
             if (url.contains(pattern)) {

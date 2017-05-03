@@ -42,7 +42,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import org.openstreetmap.josm.tools.Shortcut;
-import com.telenav.josm.common.gui.GuiBuilder;
+import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
 /**
@@ -55,12 +55,13 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
 
     private static final long serialVersionUID = 614130882392599446L;
 
-    private static Shortcut shortcut = Shortcut.registerShortcut(GuiConfig.getInstance().getPluginName(),
+    private static final Shortcut SHORTCUT = Shortcut.registerShortcut(GuiConfig.getInstance().getPluginName(),
             GuiConfig.getInstance().getPluginName(), KeyEvent.VK_F3, Shortcut.NONE);
 
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
     private static final int DLG_HEIGHT = 50;
+    private static final int SCROLL_BAR_UNIT = 100;
 
     /* dialog components */
     private final JScrollPane cmpInfo;
@@ -76,19 +77,20 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
      */
     public ImproveOsmDetailsDialog() {
         super(GuiConfig.getInstance().getDialogTitle(), IconConfig.getInstance().getDialogShortcutName(),
-                GuiConfig.getInstance().getPluginName(), shortcut, DLG_HEIGHT, true, PreferenceEditor.class);
+                GuiConfig.getInstance().getPluginName(), SHORTCUT, DLG_HEIGHT, true, PreferenceEditor.class);
 
         /* build components */
         pnlTileInfo = new TileInfoPanel();
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
 
-        cmpInfo = GuiBuilder.buildScrollPane(buildEmptyPanel(), GuiConfig.getInstance().getPnlInfoTitle(), Color.white,
-                null, 100, false, DIM);
+        cmpInfo = ContainerBuilder.buildScrollPane(ContainerBuilder.buildEmptyPanel(Color.WHITE),
+                GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
-        final JTabbedPane pnlDetails = GuiBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = GuiBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn);
+        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        setPreferredSize(DIM);
         add(createLayout(pnlMain, false, null));
     }
 
@@ -111,12 +113,21 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     }
 
     /**
-     * Updates the UI with the properties of the given object
+     * Updates the UI with the given object's properties and comment list.
      *
      * @param item the selected item
      * @param <T> the selected object
+     * @param comments a list of {@code Comment}s
      */
-    public <T> void updateUI(final T item) {
+    public <T> void updateUI(final T item, final List<Comment> comments) {
+        synchronized (this) {
+            pnlBtn.enablePanelActions(item);
+            pnlComments.updateData(comments);
+            updateUI(item);
+        }
+    }
+
+    private <T> void updateUI(final T item) {
         synchronized (this) {
             pnlBtn.enablePanelActions(item);
             final Layer activeLayer = Util.getImproveOsmLayer();
@@ -148,41 +159,4 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             repaint();
         }
     }
-
-    /**
-     * Updates the UI with the given object's properties and comment list.
-     *
-     * @param item the selected item
-     * @param <T> the selected object
-     * @param comments a list of {@code Comment}s
-     */
-    public <T> void updateUI(final T item, final List<Comment> comments) {
-        synchronized (this) {
-            pnlBtn.enablePanelActions(item);
-            pnlComments.updateData(comments);
-            updateUI(item);
-        }
-    }
-
-    private JPanel buildEmptyPanel() {
-        final JPanel pnl = new JPanel();
-        pnl.setBackground(Color.white);
-        return pnl;
-    }
-
-    // @Override
-    // public void showDialog() {
-    // System.out.println("called show dialog");
-    // super.showDialog();
-    // PreferenceManager.getInstance().savePanelOpenedFlag(true);
-    // }
-    //
-    // @Override
-    // public void hideDialog() {
-    // System.out.println("called hide dialog");
-    // super.hideDialog();
-    // PreferenceManager.getInstance().savePanelOpenedFlag(false);
-    // }
-
-
 }

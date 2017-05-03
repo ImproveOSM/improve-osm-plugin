@@ -28,7 +28,7 @@ abstract class ImproveOsmDeleteLayerAction extends AbstractAction {
     private static final long serialVersionUID = 1569467764140753112L;
     private final DeleteLayerAction deleteAction = LayerListDialog.getInstance().createDeleteLayerAction();
 
-    public ImproveOsmDeleteLayerAction() {
+    ImproveOsmDeleteLayerAction() {
         super(GuiConfig.getInstance().getDeleteMenuItemLbl());
         new ImageProvider(IconConfig.getInstance().getDeleteIconName()).getResource().attachImageIcon(this, true);
         putValue(SHORT_DESCRIPTION, tr(GuiConfig.getInstance().getDeleteMenuItemTlt()));

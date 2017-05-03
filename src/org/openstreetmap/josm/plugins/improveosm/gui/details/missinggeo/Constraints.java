@@ -27,8 +27,6 @@ import java.awt.Insets;
  */
 final class Constraints {
 
-    private Constraints() {}
-
     static final GridBagConstraints LBL_STATUS = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.PAGE_START,
             GridBagConstraints.HORIZONTAL, new Insets(7, 5, 3, 5), 0, 0);
     static final GridBagConstraints RB_OPEN = new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.PAGE_START,
@@ -57,4 +55,8 @@ final class Constraints {
             GridBagConstraints.HORIZONTAL, new Insets(3, 5, 3, 5), 0, 0);
     static final GridBagConstraints TXT_COUNT = new GridBagConstraints(1, 4, 1, 1, 1, 0, GridBagConstraints.CENTER,
             GridBagConstraints.HORIZONTAL, new Insets(3, 5, 3, 5), 0, 0);
+
+
+    private Constraints() {}
+
 }
