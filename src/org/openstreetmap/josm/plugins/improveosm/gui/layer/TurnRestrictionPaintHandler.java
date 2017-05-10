@@ -32,10 +32,8 @@ import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnSegment;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import com.telenav.josm.common.entity.Coordinate;
 import com.telenav.josm.common.entity.Pair;
 import com.telenav.josm.common.gui.PaintManager;
-import com.telenav.josm.common.util.GeometryUtil;
 
 
 /**
@@ -86,10 +84,11 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
             for (int i = 0; i < turnRestriction.getSegments().size(); i++) {
                 final Color color = i == 0 ? TURN_SEGMENT_FROM_COLOR : TURN_SEGMENT_TO_COLOR;
                 final double arrowLength = PaintUtil.arrowLength(mapView, TURN_ARROW_LENGTH);
-                final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry =
-                        arrowGeometry(mapView, turnRestriction.getSegments().get(i).getPoints(), -arrowLength);
                 final List<Point> geometry =
                         PaintUtil.toPoints(mapView, turnRestriction.getSegments().get(i).getPoints());
+                final boolean isFromSegment = i == 0;
+                final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry = PaintUtil.arrowGeometry(mapView,
+                        turnRestriction.getSegments().get(i).getPoints(), isFromSegment, arrowLength);
                 PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, TURN_SEGMENT_STROKE);
             }
 
@@ -108,34 +107,20 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
     }
 
 
-    private static Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry(final MapView mapView,
-            final List<LatLon> points, final double length) {
-        final LatLon midPoint = points.size() > 2 ? points.get(points.size() / 2) : new LatLon(
-                (points.get(1).lat() + points.get(0).lat()) / 2, (points.get(1).lon() + points.get(0).lon()) / 2);
-        final double bearing = Math.toDegrees(points.get(points.size() - 1).bearing(midPoint));
-        final Pair<Coordinate, Coordinate> arrowEndCoordinates =
-                GeometryUtil.arrowEndPoints(new Coordinate(midPoint.lat(), midPoint.lon()), bearing, -length);
-        final Pair<Point, Point> arrowLine1 = new Pair<>(mapView.getPoint(midPoint), mapView.getPoint(
-                new LatLon(arrowEndCoordinates.getFirst().getLat(), arrowEndCoordinates.getFirst().getLon())));
-        final Pair<Point, Point> arrowLine2 = new Pair<>(mapView.getPoint(midPoint), mapView.getPoint(
-                new LatLon(arrowEndCoordinates.getSecond().getLat(), arrowEndCoordinates.getSecond().getLon())));
-        return new Pair<>(arrowLine1, arrowLine2);
-    }
-
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
         final Point labelPoint =
                 isFromSegment ? mapView.getPoint(points.get(0)) : mapView.getPoint(points.get(points.size() - 1));
-                final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
-                        mapView.getPoint(points.get(points.size() - 1)).getX());
-                if (cmp == 0) {
-                    labelPoint.x += LABEL_DIST;
-                } else if (cmp < 0) {
-                    labelPoint.x -= LABEL_DIST;
-                    labelPoint.y -= LABEL_DIST;
-                } else {
-                    labelPoint.x += LABEL_DIST;
-                    labelPoint.y += LABEL_DIST;
-                }
-                return labelPoint;
+        final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
+                mapView.getPoint(points.get(points.size() - 1)).getX());
+        if (cmp == 0) {
+            labelPoint.x += LABEL_DIST;
+        } else if (cmp < 0) {
+            labelPoint.x -= LABEL_DIST;
+            labelPoint.y -= LABEL_DIST;
+        } else {
+            labelPoint.x += LABEL_DIST;
+            labelPoint.y += LABEL_DIST;
+        }
+        return labelPoint;
     }
 }
