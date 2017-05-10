@@ -14,6 +14,9 @@ import java.util.List;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
+import com.telenav.josm.common.entity.Coordinate;
+import com.telenav.josm.common.entity.Pair;
+import com.telenav.josm.common.util.GeometryUtil;
 
 
 /**
@@ -31,7 +34,7 @@ final class PaintUtil {
     private static final int ZOOM_15_MULTIPLY = 8;
     private static final int ZOOM_16_MULTIPLY = 6;
     private static final int ZOOM_17_MULTIPLY = 4;
-    private static final int ZOOM_18_MULTIPLY = 2;
+    private static final double ZOOM_18_MULTIPLY = 2;
 
 
     private PaintUtil() {}
@@ -81,4 +84,28 @@ final class PaintUtil {
         }
         return points;
     }
+
+    static Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry(final MapView mapView, final List<LatLon> points,
+            final boolean isFromSegment, final double length) {
+        LatLon arrowPoint;
+        double bearing;
+        if (isFromSegment) {
+            arrowPoint = points.size() > 2 ? points.get(points.size() / 2) : new LatLon(
+                    (points.get(1).lat() + points.get(0).lat()) / 2, (points.get(1).lon() + points.get(0).lon()) / 2);
+            bearing = Math.toDegrees(points.get(points.size() - 1).bearing(arrowPoint));
+        } else {
+            arrowPoint = points.get(points.size() - 1);
+            bearing = Math.toDegrees(points.get(points.size() - 1).bearing(points.get(points.size() - 2)));
+        }
+
+
+        final Pair<Coordinate, Coordinate> arrowEndCoordinates =
+                GeometryUtil.arrowEndPoints(new Coordinate(arrowPoint.lat(), arrowPoint.lon()), bearing, length);
+        final Pair<Point, Point> arrowLine1 = new Pair<>(mapView.getPoint(arrowPoint), mapView.getPoint(
+                new LatLon(arrowEndCoordinates.getFirst().getLat(), arrowEndCoordinates.getFirst().getLon())));
+        final Pair<Point, Point> arrowLine2 = new Pair<>(mapView.getPoint(arrowPoint), mapView.getPoint(
+                new LatLon(arrowEndCoordinates.getSecond().getLat(), arrowEndCoordinates.getSecond().getLon())));
+        return new Pair<>(arrowLine1, arrowLine2);
+    }
+
 }

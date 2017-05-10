@@ -51,8 +51,8 @@ final class Constants {
     static final Stroke ROAD_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final Stroke ROAD_SEGMENT_SEL_STROKE = new BasicStroke(10F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final double ARROW_ANGLE = Math.toRadians(40);
-    static final double ARROW_LENGTH = 2;
-    static final double SEL_ARROW_LENGTH = 3;
+    static final double ARROW_LENGTH = 1;
+    static final double SEL_ARROW_LENGTH = 2;
 
     /* constants used for drawing MissingGeometry tiles */
     static final Stroke TILE_LINE_STROKE = new BasicStroke(4F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -72,7 +72,7 @@ final class Constants {
     static final Color TURN_SEGMENT_FROM_COLOR = new Color(0, 255, 0);
     static final Color TURN_SEGMENT_TO_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-    static final double TURN_ARROW_LENGTH = 2.5;
+    static final double TURN_ARROW_LENGTH = 1;
     static final Color COMPLEX_TURN_COLOR = new Color(255, 0, 0);
     static final int COMPLEX_TURN_RADIUS = 20;
     static final int COMPLEX_TURN_SEL_RADIUS = 30;
