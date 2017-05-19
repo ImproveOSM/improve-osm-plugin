@@ -30,7 +30,6 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.BasicFilterPanel;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConfig;
 import com.telenav.josm.common.gui.builder.CheckBoxBuilder;
 import com.telenav.josm.common.gui.builder.LabelBuilder;
@@ -115,13 +114,11 @@ class FilterPanel extends BasicFilterPanel {
     private void addCountFilter(final Integer value) {
         final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
                 ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
-                : MissingGeometryGuiConfig.getInstance().getLblPointCount();
-        add(LabelBuilder.build(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
-                SwingConstants.TOP), Constraints.LBL_COUNT);
-        final String valueStr = value != null ? value.toString() : "";
-        txtCount = TextComponentBuilder.buildIntegerTextField(valueStr, GuiConfig.getInstance().getTxtInvalidInteger(),
-                Font.PLAIN, Color.white, true, true);
-        add(txtCount, Constraints.TXT_COUNT);
+                        : MissingGeometryGuiConfig.getInstance().getLblPointCount();
+                add(LabelBuilder.build(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
+                        SwingConstants.TOP), Constraints.LBL_COUNT);
+                txtCount = TextComponentBuilder.buildIntegerTextField(value, 0, null, Font.PLAIN, Color.WHITE, true);
+                add(txtCount, Constraints.TXT_COUNT);
     }
 
     /**
@@ -135,8 +132,8 @@ class FilterPanel extends BasicFilterPanel {
         cbIncludePath.setSelected(false);
         final String txt = MissingGeometryFilter.DEFAULT.getCount() != null
                 ? MissingGeometryFilter.DEFAULT.getCount().toString() : "";
-        txtCount.setText(txt);
-        txtCount.setBackground(Color.white);
+                txtCount.setText(txt);
+                txtCount.setBackground(Color.white);
     }
 
     /**
@@ -147,13 +144,11 @@ class FilterPanel extends BasicFilterPanel {
     @Override
     public MissingGeometryFilter selectedFilters() {
         MissingGeometryFilter filter = null;
-        if (txtCount.getInputVerifier().verify(txtCount)) {
-            final Status status = super.selectedFilters().getStatus();
-            final String countStr = txtCount.getText().trim();
-            final Integer count = countStr.isEmpty() ? null : Integer.parseInt(countStr);
-            final EnumSet<TileType> types = selectedTypes();
-            filter = new MissingGeometryFilter(status, types, count);
-        }
+        final Status status = super.selectedFilters().getStatus();
+        final String countStr = txtCount.getText().trim();
+        final Integer count = countStr.isEmpty() ? null : Integer.parseInt(countStr);
+        final EnumSet<TileType> types = selectedTypes();
+        filter = new MissingGeometryFilter(status, types, count);
         return filter;
     }
 
