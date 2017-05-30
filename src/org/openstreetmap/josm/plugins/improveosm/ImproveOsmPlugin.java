@@ -247,7 +247,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         final Layer oldLayer =
                 Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
                 final Layer newLayer = Main.getLayerManager().getActiveLayer();
-        if (oldLayer != null && newLayer instanceof AbstractLayer) {
+                if (oldLayer != null && newLayer instanceof AbstractLayer) {
                     if (oldLayer instanceof MissingGeometryLayer) {
                         updateSelectedData(missingGeometryLayer, null, null);
                     } else if (oldLayer instanceof DirectionOfFlowLayer) {
@@ -495,7 +495,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         SwingUtilities.invokeLater(() -> {
             detailsDialog.updateUI(item, comments);
             layer.updateSelectedItem(item);
-            Main.map.repaint();
+            layer.invalidate();
+            Main.map.mapView.repaint();
         });
     }
 

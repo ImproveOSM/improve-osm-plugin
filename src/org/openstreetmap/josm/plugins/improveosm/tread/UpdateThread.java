@@ -72,7 +72,8 @@ public abstract class UpdateThread<T> implements Runnable {
                     dialog.updateUI(null, null);
                 }
             }
-            Main.map.repaint();
+            layer.invalidate();
+            Main.map.mapView.repaint();
         });
     }
 
