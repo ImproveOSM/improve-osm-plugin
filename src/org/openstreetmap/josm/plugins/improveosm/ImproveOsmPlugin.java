@@ -373,7 +373,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         final T item = layer.nearbyItem(point, multiSelect);
         if (item != null) {
             if (!item.equals(layer.lastSelectedItem())) {
-                retrieveComments(handler, layer, item);
+                updateSelectedData(layer, item, handler.retrieveComments(item));
             }
         } else {
             // clear selection
@@ -477,19 +477,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         } else {
             if (items.equals(layer.getSelectedItems())) {
                 final T item = items.get(items.size() - 1);
-                retrieveComments(handler, layer, item);
+                updateSelectedData(layer, item, handler.retrieveComments(item));
             }
         }
     }
 
 
     /* commonly used private methods and classes */
-
-
-    private <T> void retrieveComments(final ServiceHandler<T> handler, final ImproveOsmLayer<T> layer, final T item) {
-        final List<Comment> comments = handler.retrieveComments(item);
-        updateSelectedData(layer, item, comments);
-    }
 
     private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item, final List<Comment> comments) {
         SwingUtilities.invokeLater(() -> {
