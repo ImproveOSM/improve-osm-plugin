@@ -21,6 +21,8 @@ import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORM
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.List;
 import java.util.Map.Entry;
@@ -69,6 +71,34 @@ abstract class PaintHandler<T> {
         }
         graphics.setComposite(originalComposite);
         graphics.setStroke(originalStroke);
+    }
+
+    void drawItemsSelector(final Graphics2D graphics, final MapView mapView, final Point oldNorthEast,
+            final Point oldNorthWest, final Point northEast,
+            final Point northWest) {
+        // final Graphics graf = graphics.create(oldNorthEast.x, oldNorthEast.y, oldNorthWest.x - oldNorthEast.x,
+        // oldNorthWest.y - oldNorthEast.y);
+
+        mapView.paintImmediately(new Rectangle(oldNorthEast.x, oldNorthEast.y, oldNorthWest.x - oldNorthEast.x,
+                oldNorthWest.y - oldNorthEast.y));
+        // graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN, 0.0f));
+        // then:
+        // final Rectangle rect = new Rectangle(oldNorthEast.x, oldNorthEast.y, oldNorthWest.x - oldNorthEast.x,
+        // oldNorthWest.y - oldNorthEast.y);
+        // or whatever the size of your screen or rectangle you want to blank to transparent is. then
+        // graphics.fill(rect);// now your rectangle has been cleared
+        //after that you have to reset the composite by doing this:
+
+        // graphics.setComposite(AlphaComposite.SrcOver);
+
+        graphics.setColor(Color.WHITE);
+        //graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.0F));
+        graphics.drawRect(northEast.x, northEast.y, northWest.x - northEast.x, northWest.y - northEast.y);
+
+        // graphics.setColor(new Color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue(), 1f));
+        // graphics.drawRect(northEast.x, northEast.y, northWest.x - northEast.x, northWest.y - northEast.y);
+        // PaintManager.drawRectangle(graphics, northEast, northWest, TILE_COMPOSITE, SELECTION_RECT_COMPOSITE,
+        // SELECTION_RECT_LINE_STROKE, Color.WHITE, null);
     }
 
     /**

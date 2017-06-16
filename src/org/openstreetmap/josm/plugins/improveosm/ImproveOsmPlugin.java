@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm;
 
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -23,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 import java.util.Set;
 import javax.swing.AbstractAction;
@@ -84,7 +86,7 @@ import com.telenav.josm.common.thread.ThreadPool;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -102,6 +104,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     private JMenuItem missingGeometryLayerMenuItem;
     private JMenuItem directionOfFlowLayerMenuItem;
     private JMenuItem turnRestrictionLayerLayerMenuItem;
+
+    /* bounding box coordinates for multiple selection */
+    private Point startDrag;
+    private Point endDrag;
 
 
     /**
@@ -182,6 +188,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
             Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
+            Main.map.mapView.addMouseMotionListener(new PluginMouseMotionListener());
             Main.map.mapView.registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
@@ -413,12 +420,28 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public void mousePressed(final MouseEvent event) {
-        // no logic for this action
+        if (SwingUtilities.isLeftMouseButton(event)
+                && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
+            startDrag = new Point(event.getX(), event.getY());
+            endDrag = startDrag;
+            /*
+             * if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) { if
+             * (activeLayer instanceof MissingGeometryLayer) { // select tiles } else if (activeLayer instanceof
+             * DirectionOfFlowLayer) { // select road segments } else if (activeLayer instanceof TurnRestrictionLayer) {
+             * } }
+             */
+        }
     }
 
     @Override
     public void mouseReleased(final MouseEvent event) {
-        // no logic for this action
+        if (SwingUtilities.isLeftMouseButton(event)
+                && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
+            startDrag = null;
+            endDrag = null;
+            ((ImproveOsmLayer<?>) (Main.getLayerManager().getActiveLayer())).invalidate();
+            Main.map.mapView.repaint();
+        }
     }
 
     @Override
@@ -561,6 +584,25 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                         PreferenceManager.getInstance().saveTurnRestrictionLayerOpenedFlag(true);
                     }
                     break;
+            }
+        }
+    }
+
+
+    private final class PluginMouseMotionListener extends MouseMotionAdapter {
+
+        @Override
+        public void mouseDragged(final MouseEvent event) {
+            if (SwingUtilities.isLeftMouseButton(event)
+                    && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
+                Main.map.mapView.getGraphics().setClip(startDrag.x, startDrag.y, endDrag.x - startDrag.y,
+                        endDrag.y - startDrag.y);
+                // Main.map.mapView.invalidate();
+                // Main.map.mapView.repaint();
+                ((ImproveOsmLayer<?>) Main.getLayerManager().getActiveLayer()).drawItemsSelector(
+                        (Graphics2D) (Main.map.mapView.getGraphics()), Main.map.mapView, startDrag, endDrag, startDrag,
+                        new Point(event.getX(), event.getY()));
+                endDrag = new Point(event.getX(), event.getY());
             }
         }
     }

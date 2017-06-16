@@ -56,11 +56,18 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
     @Override
     public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
+        System.out
+                .println(graphics.getClip().getBounds().getWidth() + " " + graphics.getClip().getBounds().getHeight());
         mapView.setDoubleBuffered(true);
         graphics.setRenderingHints(RENDERING_MAP);
         if (dataSet != null) {
             paintHandler.drawDataSet(graphics, mapView, bounds, dataSet, selectedItems);
         }
+    }
+
+    public void drawItemsSelector(final Graphics2D graphics, final MapView mapView, final Point oldNorthEast,
+            final Point oldNorthWest, final Point northEast, final Point northWest) {
+        paintHandler.drawItemsSelector(graphics, mapView, oldNorthEast, oldNorthWest, northEast, northWest);
     }
 
     /**
