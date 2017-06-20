@@ -86,10 +86,15 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
                 final double arrowLength = PaintUtil.arrowLength(mapView, TURN_ARROW_LENGTH);
                 final List<Point> geometry =
                         PaintUtil.toPoints(mapView, turnRestriction.getSegments().get(i).getPoints());
-                final boolean isFromSegment = i == 0;
-                final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry = PaintUtil.arrowGeometry(mapView,
-                        turnRestriction.getSegments().get(i).getPoints(), isFromSegment, arrowLength);
-                PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, TURN_SEGMENT_STROKE);
+                if (i == 0 || i == turnRestriction.getSegments().size() - 1) {
+                    final boolean isFromSegment = i == 0;
+
+                    final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry = PaintUtil.arrowGeometry(mapView,
+                            turnRestriction.getSegments().get(i).getPoints(), isFromSegment, arrowLength);
+                    PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, TURN_SEGMENT_STROKE);
+                } else {
+                    PaintManager.drawSegment(graphics, geometry, color, TURN_SEGMENT_STROKE);
+                }
             }
 
             // draw labels
@@ -110,17 +115,17 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
         final Point labelPoint =
                 isFromSegment ? mapView.getPoint(points.get(0)) : mapView.getPoint(points.get(points.size() - 1));
-        final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
-                mapView.getPoint(points.get(points.size() - 1)).getX());
-        if (cmp == 0) {
-            labelPoint.x += LABEL_DIST;
-        } else if (cmp < 0) {
-            labelPoint.x -= LABEL_DIST;
-            labelPoint.y -= LABEL_DIST;
-        } else {
-            labelPoint.x += LABEL_DIST;
-            labelPoint.y += LABEL_DIST;
-        }
-        return labelPoint;
+                final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
+                        mapView.getPoint(points.get(points.size() - 1)).getX());
+                if (cmp == 0) {
+                    labelPoint.x += LABEL_DIST;
+                } else if (cmp < 0) {
+                    labelPoint.x -= LABEL_DIST;
+                    labelPoint.y -= LABEL_DIST;
+                } else {
+                    labelPoint.x += LABEL_DIST;
+                    labelPoint.y += LABEL_DIST;
+                }
+                return labelPoint;
     }
 }
