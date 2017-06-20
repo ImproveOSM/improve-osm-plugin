@@ -90,17 +90,15 @@ final class PaintUtil {
         LatLon arrowPoint;
         double bearing;
         if (isFromSegment) {
-            arrowPoint = points.size() > 2 ? points.get(points.size() / 2) : new LatLon(
-                    (points.get(1).lat() + points.get(0).lat()) / 2, (points.get(1).lon() + points.get(0).lon()) / 2);
+            arrowPoint = arrowPoint(points);
             bearing = Math.toDegrees(points.get(points.size() - 1).bearing(arrowPoint));
         } else {
             arrowPoint = points.get(points.size() - 1);
             bearing = Math.toDegrees(points.get(points.size() - 1).bearing(points.get(points.size() - 2)));
         }
 
-
         final Pair<Coordinate, Coordinate> arrowEndCoordinates =
-                GeometryUtil.arrowEndPoints(new Coordinate(arrowPoint.lat(), arrowPoint.lon()), bearing, length);
+                GeometryUtil.arrowEndPoints(new Coordinate(arrowPoint.getY(), arrowPoint.getX()), bearing, length);
         final Pair<Point, Point> arrowLine1 = new Pair<>(mapView.getPoint(arrowPoint), mapView.getPoint(
                 new LatLon(arrowEndCoordinates.getFirst().getLat(), arrowEndCoordinates.getFirst().getLon())));
         final Pair<Point, Point> arrowLine2 = new Pair<>(mapView.getPoint(arrowPoint), mapView.getPoint(
@@ -108,4 +106,21 @@ final class PaintUtil {
         return new Pair<>(arrowLine1, arrowLine2);
     }
 
+    private static LatLon arrowPoint(final List<LatLon> points) {
+        final double segmentMidLength = points.get(0).greatCircleDistance(points.get(points.size() - 1)) / 2;
+        double length = 0;
+        int idx = 0;
+        for (int i = 0; i < points.size() - 1; i++) {
+            final double distance = points.get(0).greatCircleDistance(points.get(i + 1));
+            if (distance >= segmentMidLength) {
+                idx = i;
+                break;
+            }
+            length += points.get(i).greatCircleDistance(points.get(i + 1));
+        }
+        final double bearing = Math.toDegrees(points.get(idx).bearing(points.get(idx + 1)));
+        final Coordinate coord = GeometryUtil.extrapolate(new Coordinate(points.get(idx).lat(), points.get(idx).lon()),
+                bearing, (segmentMidLength - length));
+        return new LatLon(coord.getLat(), coord.getLon());
+    }
 }
