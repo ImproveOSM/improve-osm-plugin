@@ -33,6 +33,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.util.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
@@ -71,7 +72,7 @@ class EditDialog extends ModalDialog {
      * @param icon the icon of the dialog
      */
     EditDialog(final Status status, final String title, final Image icon) {
-        super(title, icon, DIM);
+        super(title, icon, GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         setLocationRelativeTo(Main.map.mapView);
         this.status = status;
         createComponents();

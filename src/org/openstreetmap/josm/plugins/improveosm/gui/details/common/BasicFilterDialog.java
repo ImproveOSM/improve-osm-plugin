@@ -23,6 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.util.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -56,7 +57,7 @@ public abstract class BasicFilterDialog extends ModalDialog {
                 dimension);
         setLocationRelativeTo(Main.map.mapView);
         createComponents();
-        setSize(dimension);
+        setSize(GuiSizesHelper.getDimensionDpiAdjusted(dimension));
     }
 
 
