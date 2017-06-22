@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.openstreetmap.josm.data.coor.LatLon;
@@ -81,16 +82,17 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
         graphics.setFont(mapView.getFont().deriveFont(Font.BOLD));
         if (turnRestriction.getSegments() != null) {
             // draw segments
-            for (int i = 0; i < turnRestriction.getSegments().size(); i++) {
+            final List<TurnSegment> turnSegments = orderTurnSegments(turnRestriction);
+            for (int i = 0; i < turnSegments.size(); i++) {
                 final Color color = i == 0 ? TURN_SEGMENT_FROM_COLOR : TURN_SEGMENT_TO_COLOR;
                 final double arrowLength = PaintUtil.arrowLength(mapView, TURN_ARROW_LENGTH);
                 final List<Point> geometry =
-                        PaintUtil.toPoints(mapView, turnRestriction.getSegments().get(i).getPoints());
-                if (i == 0 || i == turnRestriction.getSegments().size() - 1) {
+                        PaintUtil.toPoints(mapView, turnSegments.get(i).getPoints());
+                if (i == 0 || i == turnSegments.size() - 1) {
                     final boolean isFromSegment = i == 0;
 
                     final Pair<Pair<Point, Point>, Pair<Point, Point>> arrowGeometry = PaintUtil.arrowGeometry(mapView,
-                            turnRestriction.getSegments().get(i).getPoints(), isFromSegment, arrowLength);
+                            turnSegments.get(i).getPoints(), isFromSegment, arrowLength);
                     PaintManager.drawDirectedSegment(graphics, geometry, arrowGeometry, color, TURN_SEGMENT_STROKE);
                 } else {
                     PaintManager.drawSegment(graphics, geometry, color, TURN_SEGMENT_STROKE);
@@ -111,6 +113,36 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
         }
     }
 
+    private static List<TurnSegment> orderTurnSegments(final TurnRestriction turnRestriction) {
+        final List<TurnSegment> result = new ArrayList<>();
+        for (int i = 0; i < turnRestriction.getSegments().size(); i++) {
+            final TurnSegment segment = turnRestriction.getSegments().get(i);
+            if (segment.getPoints().get(segment.getPoints().size() - 1).equals(turnRestriction.getPoint())) {
+                // from segment
+                result.add(0, segment);
+            } else if (segment.getPoints().get(0).equals(turnRestriction.getPoint())) {
+                // first to segment
+                result.add(1, segment);
+            } else {
+                final int index = getIndex(result, segment);
+                result.add(index, segment);
+            }
+        }
+
+        return result;
+    }
+
+    private static int getIndex(final List<TurnSegment> turnSegments, final TurnSegment turnSegment) {
+        int index = 0;
+        for (int i = 0; i < turnSegments.size(); i++) {
+            if (turnSegment.getPoints().get(0)
+                    .equals(turnSegments.get(i).getPoints().get(turnSegments.get(i).getPoints().size() - 1))) {
+                index = i;
+                break;
+            }
+        }
+        return index + 1;
+    }
 
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
         final Point labelPoint =
