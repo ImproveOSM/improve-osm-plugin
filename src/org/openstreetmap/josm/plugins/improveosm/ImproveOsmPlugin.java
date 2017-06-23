@@ -25,6 +25,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Set;
 import javax.swing.AbstractAction;
@@ -35,13 +36,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
+import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangeEvent;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangedListener;
+import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.gui.MapFrame;
+import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.gui.NavigatableComponent;
 import org.openstreetmap.josm.gui.NavigatableComponent.ZoomChangeListener;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
+import org.openstreetmap.josm.gui.layer.AbstractMapViewPaintable;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
@@ -92,6 +97,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     private MissingGeometryLayer missingGeometryLayer;
     private DirectionOfFlowLayer directionOfFlowLayer;
     private TurnRestrictionLayer turnRestrictionLayer;
+    private TemporarySelectionLayer itemSelectionLayer;
 
     /* toggle dialog associated with this plugin */
     private ImproveOsmDetailsDialog detailsDialog;
@@ -180,6 +186,8 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
             registerListeners();
         }
+
+        itemSelectionLayer = new TemporarySelectionLayer();
     }
 
     private void registerListeners() {
@@ -424,23 +432,31 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                 && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
             startDrag = new Point(event.getX(), event.getY());
             endDrag = startDrag;
-            /*
-             * if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) { if
-             * (activeLayer instanceof MissingGeometryLayer) { // select tiles } else if (activeLayer instanceof
-             * DirectionOfFlowLayer) { // select road segments } else if (activeLayer instanceof TurnRestrictionLayer) {
-             * } }
-             */
+            Main.map.mapView.addTemporaryLayer(itemSelectionLayer);
         }
     }
 
     @Override
     public void mouseReleased(final MouseEvent event) {
-        if (SwingUtilities.isLeftMouseButton(event)
-                && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
-            startDrag = null;
-            endDrag = null;
-            ((ImproveOsmLayer<?>) (Main.getLayerManager().getActiveLayer())).invalidate();
-            Main.map.mapView.repaint();
+        final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+        if (SwingUtilities.isLeftMouseButton(event) && activeLayer instanceof ImproveOsmLayer) {
+            Main.map.mapView.removeTemporaryLayer(itemSelectionLayer);
+
+            if (!startDrag.equals(endDrag)) {
+                detailsDialog.updateUI(null, null);
+                final LatLon startDragCoord = Util.pointToLatLon(startDrag);
+                final LatLon endDragCoord = Util.pointToLatLon(endDrag);
+                final ImproveOsmLayer<?> improveOsmLayer = ((ImproveOsmLayer<?>) activeLayer);
+                SwingUtilities.invokeLater(() -> {
+                    improveOsmLayer.updateSelectedItems(
+                            new Rectangle2D.Double(Math.min(startDragCoord.getX(), endDragCoord.getX()),
+                                    Math.min(startDragCoord.getY(), endDragCoord.getY()),
+                                    Math.abs(startDragCoord.getX() - endDragCoord.getX()),
+                                    Math.abs(startDragCoord.getY() - endDragCoord.getY())));
+                    improveOsmLayer.invalidate();
+                    Main.map.mapView.repaint();
+                });
+            }
         }
     }
 
@@ -595,15 +611,24 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         public void mouseDragged(final MouseEvent event) {
             if (SwingUtilities.isLeftMouseButton(event)
                     && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
-                Main.map.mapView.getGraphics().setClip(startDrag.x, startDrag.y, endDrag.x - startDrag.y,
-                        endDrag.y - startDrag.y);
-                // Main.map.mapView.invalidate();
-                // Main.map.mapView.repaint();
-                ((ImproveOsmLayer<?>) Main.getLayerManager().getActiveLayer()).drawItemsSelector(
-                        (Graphics2D) (Main.map.mapView.getGraphics()), Main.map.mapView, startDrag, endDrag, startDrag,
-                        new Point(event.getX(), event.getY()));
                 endDrag = new Point(event.getX(), event.getY());
+                ImproveOsmPlugin.this.itemSelectionLayer.invalidate();
             }
+        }
+    }
+
+
+    /**
+     * Defines a temporary layer used for selecting multiple items from the map view. The layer life cycle is determined
+     * by the mouse pressed/released actions.
+     */
+    private final class TemporarySelectionLayer extends AbstractMapViewPaintable {
+
+        @Override
+        public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
+            graphics.draw(new Rectangle2D.Double(
+                    Math.min(startDrag.getX(), endDrag.getX()), Math.min(startDrag.getY(), endDrag.getY()),
+                    Math.abs(startDrag.getX() - endDrag.getX()), Math.abs(startDrag.getY() - endDrag.getY())));
         }
     }
 }

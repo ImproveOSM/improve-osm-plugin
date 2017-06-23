@@ -16,6 +16,9 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -55,6 +58,13 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
     @Override
     RoadSegment nearbyItem(final Point point) {
         return Util.nearbyRoadSegment(getDataSet().getItems(), point);
+    }
+
+    @Override
+    List<RoadSegment> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox) {
+        return getDataSet().getItems().stream()
+                .filter(roadSegment -> Util.roadSegementIsInsideBoundingBox(roadSegment, boundingBox))
+                .collect(Collectors.toList());
     }
 
     @Override

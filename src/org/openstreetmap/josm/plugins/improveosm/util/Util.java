@@ -16,7 +16,9 @@
 package org.openstreetmap.josm.plugins.improveosm.util;
 
 import java.awt.Point;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.Bounds;
@@ -131,6 +133,18 @@ public final class Util {
         return nearestPoint.distance(point);
     }
 
+    public static boolean roadSegementIsInsideBoundingBox(final RoadSegment roadSegment,
+            final Rectangle2D boundingBox) {
+        for (int i = 0; i < roadSegment.getPoints().size() - 1; i = i + 2) {
+            if (boundingBox.intersectsLine(
+                    new Line2D.Double(roadSegment.getPoints().get(i).getX(), roadSegment.getPoints().get(i).getY(),
+                            roadSegment.getPoints().get(i + 1).getX(), roadSegment.getPoints().get(i + 1).getY()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Returns the tile corresponding to the given point.
      *
@@ -154,7 +168,7 @@ public final class Util {
         return result;
     }
 
-    private static LatLon pointToLatLon(final Point point) {
+    public static LatLon pointToLatLon(final Point point) {
         final int width = Main.map.mapView.getWidth();
         final int height = Main.map.mapView.getHeight();
         final EastNorth center = Main.map.mapView.getCenter();
@@ -182,6 +196,15 @@ public final class Util {
         return tileY;
     }
 
+    public static boolean tileIntersectsBoundingBox(final Tile tile, final Rectangle2D boundingBox) {
+        final double north = tile2lat(tile.getY());
+        final double south = tile2lat(tile.getY() + 1);
+        final double west = tile2lon(tile.getX());
+        final double east = tile2lon(tile.getX() + 1);
+        return boundingBox.intersects(Math.min(west, east), Math.min(north, south), Math.abs(east - west),
+                Math.abs(south - north));
+    }
+
     /**
      * Returns the turn restriction corresponding to the given point.
      *
@@ -203,6 +226,12 @@ public final class Util {
             }
         }
         return result;
+    }
+
+    public static boolean turnRestrictionIsInsideBoundingBox(final TurnRestriction turnRestriction,
+            final Rectangle2D boundingBox) {
+        return boundingBox
+                .contains(new Point2D.Double(turnRestriction.getPoint().getX(), turnRestriction.getPoint().getY()));
     }
 
     private static double distance(final Point2D fromPoint, final LatLon toLatLon) {

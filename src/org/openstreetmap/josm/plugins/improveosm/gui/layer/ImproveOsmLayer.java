@@ -18,6 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.RENDERING_MAP;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -56,18 +57,11 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
 
     @Override
     public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
-        System.out
-                .println(graphics.getClip().getBounds().getWidth() + " " + graphics.getClip().getBounds().getHeight());
         mapView.setDoubleBuffered(true);
         graphics.setRenderingHints(RENDERING_MAP);
         if (dataSet != null) {
             paintHandler.drawDataSet(graphics, mapView, bounds, dataSet, selectedItems);
         }
-    }
-
-    public void drawItemsSelector(final Graphics2D graphics, final MapView mapView, final Point oldNorthEast,
-            final Point oldNorthWest, final Point northEast, final Point northWest) {
-        paintHandler.drawItemsSelector(graphics, mapView, oldNorthEast, oldNorthWest, northEast, northWest);
     }
 
     /**
@@ -97,6 +91,10 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
             }
         }
         this.selectedItems = newList;
+    }
+
+    public void updateSelectedItems(final Rectangle2D boundingBox) {
+        selectedItems = getItemsInsideTheBoundingBox(boundingBox);
     }
 
     /**
@@ -140,6 +138,8 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
      * @return a {@code T}
      */
     abstract T nearbyItem(final Point point);
+
+    abstract List<T> getItemsInsideTheBoundingBox(Rectangle2D boundingBox);
 
     /**
      * Returns the last selected item. If no item is selected the method return null.

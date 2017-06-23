@@ -16,6 +16,9 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
@@ -39,7 +42,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
      * Builds a new MissingGeometry layer.
      */
     public MissingGeometryLayer() {
-        super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
+        super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryPaintHandler());
     }
 
 
@@ -56,6 +59,13 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
     @Override
     Tile nearbyItem(final Point point) {
         return Util.nearbyTile(getDataSet().getItems(), point);
+    }
+
+    @Override
+    List<Tile> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox) {
+        return getDataSet().getItems().stream()
+                .filter(tile -> Util.tileIntersectsBoundingBox(tile, boundingBox))
+                .collect(Collectors.toList());
     }
 
     @Override
