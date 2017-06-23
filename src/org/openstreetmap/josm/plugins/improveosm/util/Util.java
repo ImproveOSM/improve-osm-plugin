@@ -197,12 +197,15 @@ public final class Util {
     }
 
     public static boolean tileIntersectsBoundingBox(final Tile tile, final Rectangle2D boundingBox) {
-        final double north = tile2lat(tile.getY());
-        final double south = tile2lat(tile.getY() + 1);
-        final double west = tile2lon(tile.getX());
-        final double east = tile2lon(tile.getX() + 1);
-        return boundingBox.intersects(Math.min(west, east), Math.min(north, south), Math.abs(east - west),
-                Math.abs(south - north));
+        return boundingBox.intersects(buildRectangleFromCoordinates(tile2lon(tile.getX()), tile2lat(tile.getY()),
+                tile2lon(tile.getX() + 1), tile2lat(tile.getY() + 1)));
+    }
+
+    public static Rectangle2D buildRectangleFromCoordinates(final double coord1X, final double coord1Y,
+            final double coord2X,
+            final double coord2Y) {
+        return new Rectangle2D.Double(Math.min(coord1X, coord2X), Math.min(coord1Y, coord2Y), Math.abs(coord1X - coord2X),
+                Math.abs(coord1Y - coord2Y));
     }
 
     /**

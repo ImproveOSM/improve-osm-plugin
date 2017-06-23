@@ -261,16 +261,16 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
         final Layer oldLayer =
                 Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
-                final Layer newLayer = Main.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer instanceof AbstractLayer) {
-                    if (oldLayer instanceof MissingGeometryLayer) {
-                        updateSelectedData(missingGeometryLayer, null, null);
-                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                        updateSelectedData(directionOfFlowLayer, null, null);
-                    } else if (oldLayer instanceof TurnRestrictionLayer) {
-                        updateSelectedData(turnRestrictionLayer, null, null);
-                    }
-                }
+        final Layer newLayer = Main.getLayerManager().getActiveLayer();
+        if (oldLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null, null);
+            }
+        }
     }
 
     @Override
@@ -448,11 +448,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
                 final ImproveOsmLayer<?> improveOsmLayer = ((ImproveOsmLayer<?>) activeLayer);
                 SwingUtilities.invokeLater(() -> {
-                    improveOsmLayer.updateSelectedItems(
-                            new Rectangle2D.Double(Math.min(startDragCoord.getX(), endDragCoord.getX()),
-                                    Math.min(startDragCoord.getY(), endDragCoord.getY()),
-                                    Math.abs(startDragCoord.getX() - endDragCoord.getX()),
-                                    Math.abs(startDragCoord.getY() - endDragCoord.getY())));
+                    final Rectangle2D boundingBox = Util.buildRectangleFromCoordinates(startDragCoord.getX(),
+                            startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
+                    improveOsmLayer.updateSelectedItems(boundingBox);
                     improveOsmLayer.invalidate();
                     Main.map.mapView.repaint();
                 });
@@ -626,9 +624,8 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         @Override
         public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
-            graphics.draw(new Rectangle2D.Double(
-                    Math.min(startDrag.getX(), endDrag.getX()), Math.min(startDrag.getY(), endDrag.getY()),
-                    Math.abs(startDrag.getX() - endDrag.getX()), Math.abs(startDrag.getY() - endDrag.getY())));
+            graphics.draw(Util.buildRectangleFromCoordinates(startDrag.getX(), startDrag.getY(), endDrag.getX(),
+                    endDrag.getY()));
         }
     }
 }
