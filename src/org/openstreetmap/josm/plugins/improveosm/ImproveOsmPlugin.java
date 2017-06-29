@@ -57,6 +57,9 @@ import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
+import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.InfoDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
@@ -264,11 +267,14 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         final Layer newLayer = Main.getLayerManager().getActiveLayer();
         if (oldLayer != null && newLayer instanceof AbstractLayer) {
             if (oldLayer instanceof MissingGeometryLayer) {
-                updateSelectedData(missingGeometryLayer, null, null);
+                updateLayerWithTheSelectedItem(missingGeometryLayer, null);
+                detailsDialog.updateUI(null, null, null, null, missingGeometryLayer.getSelectedItems().size());
             } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                updateSelectedData(directionOfFlowLayer, null, null);
+                updateLayerWithTheSelectedItem(directionOfFlowLayer, null);
+                detailsDialog.updateUI(null, null, null, null, directionOfFlowLayer.getSelectedItems().size());
             } else if (oldLayer instanceof TurnRestrictionLayer) {
-                updateSelectedData(turnRestrictionLayer, null, null);
+                updateLayerWithTheSelectedItem(turnRestrictionLayer, null);
+                detailsDialog.updateUI(null, null, null, null, turnRestrictionLayer.getSelectedItems().size());
             }
         }
     }
@@ -279,7 +285,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             final ImproveOsmLayer<?> removedLayer = (ImproveOsmLayer<?>) event.getRemovedLayer();
             if (removedLayer.hasSelectedItems()) {
                 removedLayer.updateSelectedItem(null);
-                detailsDialog.updateUI(null, null);
+                detailsDialog.updateUI(null, null, null, null, removedLayer.getSelectedItems().size());
             }
         }
 
@@ -298,7 +304,6 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             Main.pref.removePreferenceChangeListener(this);
             if (Main.map != null) {
                 Main.map.mapView.removeMouseListener(this);
-                detailsDialog.updateUI(null, null);
                 listenersRegistered = false;
             }
         }
@@ -388,11 +393,16 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         final T item = layer.nearbyItem(point, multiSelect);
         if (item != null) {
             if (!item.equals(layer.lastSelectedItem())) {
-                updateSelectedData(layer, item, handler.retrieveComments(item));
+                updateLayerWithTheSelectedItem(layer, item);
+                final List<Comment> comments =
+                        layer.getSelectedItems().size() == 1 ? handler.retrieveComments(item) : null;
+                detailsDialog.updateUI(item, comments, getItemLocation(item), getItemStatus(item),
+                        layer.getSelectedItems().size());
             }
         } else {
             // clear selection
-            updateSelectedData(layer, null, null);
+            updateLayerWithTheSelectedItem(layer, null);
+            detailsDialog.updateUI(null, null, null, null, layer.getSelectedItems().size());
         }
     }
 
@@ -419,17 +429,21 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                     && !turnRestriction.equals(turnRestrictionLayer.lastSelectedItem())) {
                 comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
             }
-            updateSelectedData(turnRestrictionLayer, turnRestriction, comments);
+            updateLayerWithTheSelectedItem(turnRestrictionLayer, turnRestriction);
+            detailsDialog.updateUI(turnRestriction, comments, getItemLocation(turnRestriction),
+                    getItemStatus(turnRestriction), turnRestrictionLayer.getSelectedItems().size());
         } else if (!multiSelect) {
             // clear selection
-            updateSelectedData(turnRestrictionLayer, null, null);
+            updateLayerWithTheSelectedItem(turnRestrictionLayer, null);
+            detailsDialog.updateUI(null, null, null, null, turnRestrictionLayer.getSelectedItems().size());
         }
     }
 
     @Override
     public void mousePressed(final MouseEvent event) {
         if (SwingUtilities.isLeftMouseButton(event)
-                && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
+                && Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
             startDrag = new Point(event.getX(), event.getY());
             endDrag = startDrag;
             Main.map.mapView.addTemporaryLayer(itemSelectionLayer);
@@ -439,20 +453,25 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     @Override
     public void mouseReleased(final MouseEvent event) {
         final Layer activeLayer = Main.getLayerManager().getActiveLayer();
-        if (SwingUtilities.isLeftMouseButton(event) && activeLayer instanceof ImproveOsmLayer) {
+        if (SwingUtilities.isLeftMouseButton(event) && activeLayer instanceof MissingGeometryLayer) {
             Main.map.mapView.removeTemporaryLayer(itemSelectionLayer);
-
             if (!startDrag.equals(endDrag)) {
-                detailsDialog.updateUI(null, null);
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
-                final ImproveOsmLayer<?> improveOsmLayer = ((ImproveOsmLayer<?>) activeLayer);
+                final MissingGeometryLayer layer = ((MissingGeometryLayer) activeLayer);
                 SwingUtilities.invokeLater(() -> {
                     final Rectangle2D boundingBox = Util.buildRectangleFromCoordinates(startDragCoord.getX(),
                             startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
-                    improveOsmLayer.updateSelectedItems(boundingBox);
-                    improveOsmLayer.invalidate();
+                    layer.updateSelectedItems(boundingBox, event.isShiftDown());
+                    layer.invalidate();
                     Main.map.mapView.repaint();
+                    final Tile tile = layer.lastSelectedItem();
+                    final List<Comment> comments = layer.getSelectedItems().size() == 1
+                            ? ServiceHandler.getMissingGeometryHandler().retrieveComments(tile) : null;
+                    final LatLon location = layer.getSelectedItems().size() >= 1
+                            ? new LatLon(boundingBox.getCenterX(), boundingBox.getCenterY()) : null;
+                    detailsDialog.updateUI(tile, comments, location, getItemStatus(tile),
+                            layer.getSelectedItems().size());
                 });
             }
         }
@@ -475,7 +494,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     public void selectSimpleTurnRestriction(final TurnRestriction turnRestriction) {
         final List<Comment> comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
         turnRestrictionLayer.updateSelectedItem(null);
-        updateSelectedData(turnRestrictionLayer, turnRestriction, comments);
+        updateLayerWithTheSelectedItem(turnRestrictionLayer, turnRestriction);
+        detailsDialog.updateUI(turnRestriction, comments, getItemLocation(turnRestriction),
+                getItemStatus(turnRestriction), turnRestrictionLayer.getSelectedItems().size());
     }
 
 
@@ -506,15 +527,18 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
-
             if (!Main.getLayerManager().getActiveLayer().equals(layer)) {
-                updateSelectedData(layer, null, null);
+                layer.updateSelectedItem(null);
+                detailsDialog.updateUI(null, null, null, null, layer.getSelectedItems().size());
             }
             ThreadPool.getInstance().execute(updateThread);
         } else {
-            if (items.equals(layer.getSelectedItems())) {
+            if (items.equals(layer.getSelectedItems())) {  // ?
                 final T item = items.get(items.size() - 1);
-                updateSelectedData(layer, item, handler.retrieveComments(item));
+                if (layer.getSelectedItems().size() == 1) {
+                    detailsDialog.updateUI(item, handler.retrieveComments(item), getItemLocation(item),
+                            getItemStatus(item), layer.getSelectedItems().size());
+                }
             }
         }
     }
@@ -522,13 +546,46 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
     /* commonly used private methods and classes */
 
-    private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item, final List<Comment> comments) {
-        SwingUtilities.invokeLater(() -> {
-            detailsDialog.updateUI(item, comments);
-            layer.updateSelectedItem(item);
-            layer.invalidate();
-            Main.map.mapView.repaint();
-        });
+    private <T> Status getItemStatus(final T item) {
+        Status status = null;
+        if (item instanceof Tile) {
+            final Tile tile = (Tile) item;
+            status = tile.getStatus();
+        } else if (item instanceof RoadSegment) {
+            final RoadSegment roadSegment = (RoadSegment) item;
+            status = roadSegment.getStatus();
+        } else if (item instanceof TurnRestriction) {
+            final TurnRestriction turnRestriction = (TurnRestriction) item;
+            status = turnRestriction.getStatus();
+        }
+        return status;
+    }
+
+    private <T> LatLon getItemLocation(final T item) {
+        LatLon coordinate = null;
+        if (item instanceof Tile) {
+            final Tile tile = (Tile) item;
+            coordinate = tile.getPoints().get(0);
+        } else if (item instanceof RoadSegment) {
+            final RoadSegment roadSegment = (RoadSegment) item;
+            coordinate = roadSegment.getPoints().get(0);
+        } else if (item instanceof TurnRestriction) {
+            final TurnRestriction turnRestriction = (TurnRestriction) item;
+            coordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
+                    : (turnRestriction.getTurnRestrictions() != null
+                            ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
+        }
+        return coordinate;
+    }
+
+    private <T> void updateLayerWithTheSelectedItem(final ImproveOsmLayer<T> layer, final T item) {
+        layer.updateSelectedItem(item);
+        layer.invalidate();
+        Main.map.mapView.repaint();
+    }
+
+    private <T> void updateDialog() {
+
     }
 
 
@@ -608,7 +665,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         @Override
         public void mouseDragged(final MouseEvent event) {
             if (SwingUtilities.isLeftMouseButton(event)
-                    && Main.getLayerManager().getActiveLayer() instanceof ImproveOsmLayer) {
+                    && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
                 endDrag = new Point(event.getX(), event.getY());
                 ImproveOsmPlugin.this.itemSelectionLayer.invalidate();
             }

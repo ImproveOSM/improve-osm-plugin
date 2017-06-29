@@ -59,6 +59,7 @@ public final class GuiConfig extends BaseConfig {
 
     /* info panel title */
     private final String pnlInfoTitle;
+    private final String txtNumberOfSelectedItems;
 
     /* history panel title */
     private final String pnlHistoryTitle;
@@ -128,6 +129,7 @@ public final class GuiConfig extends BaseConfig {
         menuInvalidCommentTitle = readProperty("edit.menu.invalid.comment.title");
 
         pnlInfoTitle = readProperty("details.info.title");
+        txtNumberOfSelectedItems = readProperty("details.info.numberOfSelectedItems");
         pnlHistoryTitle = readProperty("details.history.title");
         layerPreferenceLbl = readProperty("layerPreference.lbl");
         locationPreferenceLbl = readProperty("locationPreference.lbl");
@@ -369,5 +371,9 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtSiteError() {
         return txtSiteError;
+    }
+
+    public String getTxtNumberOfSelectedItems() {
+        return txtNumberOfSelectedItems;
     }
 }

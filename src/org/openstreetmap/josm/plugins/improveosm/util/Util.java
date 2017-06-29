@@ -202,10 +202,9 @@ public final class Util {
     }
 
     public static Rectangle2D buildRectangleFromCoordinates(final double coord1X, final double coord1Y,
-            final double coord2X,
-            final double coord2Y) {
-        return new Rectangle2D.Double(Math.min(coord1X, coord2X), Math.min(coord1Y, coord2Y), Math.abs(coord1X - coord2X),
-                Math.abs(coord1Y - coord2Y));
+            final double coord2X, final double coord2Y) {
+        return new Rectangle2D.Double(Math.min(coord1X, coord2X), Math.min(coord1Y, coord2Y),
+                Math.abs(coord1X - coord2X), Math.abs(coord1Y - coord2Y));
     }
 
     /**

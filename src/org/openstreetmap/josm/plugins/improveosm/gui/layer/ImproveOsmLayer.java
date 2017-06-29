@@ -22,6 +22,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
@@ -93,8 +94,14 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
         this.selectedItems = newList;
     }
 
-    public void updateSelectedItems(final Rectangle2D boundingBox) {
-        selectedItems = getItemsInsideTheBoundingBox(boundingBox);
+    public void updateSelectedItems(final Rectangle2D boundingBox, final boolean multiSelected) {
+        if (!multiSelected) {
+            selectedItems = getItemsInsideTheBoundingBox(boundingBox);
+        } else {
+            selectedItems.addAll(getItemsInsideTheBoundingBox(boundingBox).stream()
+                    .filter(item -> !selectedItems.contains(item))
+                    .collect(Collectors.toList()));
+        }
     }
 
     /**
