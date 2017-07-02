@@ -267,14 +267,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         final Layer newLayer = Main.getLayerManager().getActiveLayer();
         if (oldLayer != null && newLayer instanceof AbstractLayer) {
             if (oldLayer instanceof MissingGeometryLayer) {
-                updateLayerWithTheSelectedItem(missingGeometryLayer, null);
-                updateDialog(null, null);
+                updateSelectedData(missingGeometryLayer, null);
             } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                updateLayerWithTheSelectedItem(directionOfFlowLayer, null);
-                updateDialog(null, null);
+                updateSelectedData(directionOfFlowLayer, null);
             } else if (oldLayer instanceof TurnRestrictionLayer) {
-                updateLayerWithTheSelectedItem(turnRestrictionLayer, null);
-                updateDialog(null, null);
+                updateSelectedData(turnRestrictionLayer, null);
             }
         }
     }
@@ -393,13 +390,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         final T item = layer.nearbyItem(point, multiSelect);
         if (item != null) {
             if (!item.equals(layer.lastSelectedItem())) {
-                updateLayerWithTheSelectedItem(layer, item);
-                updateDialog(item, getItemLocation(item));
+                updateSelectedData(layer, item);
             }
         } else {
             // clear selection
-            updateLayerWithTheSelectedItem(layer, null);
-            updateDialog(null, null);
+            updateSelectedData(layer, null);
         }
     }
 
@@ -421,12 +416,10 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             }
         }
         if (shouldSelect) {
-            updateLayerWithTheSelectedItem(turnRestrictionLayer, turnRestriction);
-            updateDialog(turnRestriction, getItemLocation(turnRestriction));
+            updateSelectedData(turnRestrictionLayer, turnRestriction);
         } else if (!multiSelect) {
             // clear selection
-            updateLayerWithTheSelectedItem(turnRestrictionLayer, null);
-            updateDialog(null, null);
+            updateSelectedData(turnRestrictionLayer, null);
         }
     }
 
@@ -484,8 +477,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     @Override
     public void selectSimpleTurnRestriction(final TurnRestriction turnRestriction) {
         turnRestrictionLayer.updateSelectedItem(null);
-        updateLayerWithTheSelectedItem(turnRestrictionLayer, turnRestriction);
-        updateDialog(turnRestriction, getItemLocation(turnRestriction));
+        updateSelectedData(turnRestrictionLayer, turnRestriction);
     }
 
 
@@ -516,12 +508,12 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
-            if (!Main.getLayerManager().getActiveLayer().equals(layer)) {  // ?
-                updateLayerWithTheSelectedItem(layer, null);
-                updateDialog(null, null);
+            if (Main.getLayerManager().getActiveLayer().equals(layer)) {  // ?
+                updateSelectedData(layer, null);
             }
             ThreadPool.getInstance().execute(updateThread);
         } else {
+            // new comment added
             if (items.equals(layer.getSelectedItems())) {  // ?
                 final T item = items.get(items.size() - 1);
                 if (layer.getSelectedItems().size() == 1) {
@@ -549,6 +541,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                             ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
         }
         return coordinate;
+    }
+
+    private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item) {
+        SwingUtilities.invokeLater(() -> {
+            updateLayerWithTheSelectedItem(layer, item);
+            updateDialog(item, getItemLocation(item));
+        });
     }
 
     private <T> void updateLayerWithTheSelectedItem(final ImproveOsmLayer<T> layer, final T item) {
