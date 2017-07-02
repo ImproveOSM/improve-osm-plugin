@@ -140,6 +140,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 pnlTileInfo.updateData(null);
                 pnlRoadSegmentInfo.updateData(null);
                 pnlTurnRestrictionInfo.updateData(null);
+                noOfTilesInfo.updateData(null);
             } else {
                 final Component cmpInfoView = cmpInfo.getViewport().getView();
                 if (numberOfSelectedItems > 1) {
