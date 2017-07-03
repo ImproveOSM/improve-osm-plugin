@@ -199,7 +199,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
             Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
-            Main.map.mapView.addMouseMotionListener(new PluginMouseMotionListener());
+            Main.map.mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
             Main.map.mapView.registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
@@ -658,7 +658,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     /**
      * Defines the functionality produced by the mouse dragging.
      */
-    private final class PluginMouseMotionListener extends MouseMotionAdapter {
+    private final class MissingGeometryLayerSelectionListener extends MouseMotionAdapter {
 
         @Override
         public void mouseDragged(final MouseEvent event) {
