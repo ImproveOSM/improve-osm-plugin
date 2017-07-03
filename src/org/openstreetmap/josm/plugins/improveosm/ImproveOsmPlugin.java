@@ -508,13 +508,13 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
-            if (Main.getLayerManager().getActiveLayer().equals(layer)) {  // ?
+            if (Main.getLayerManager().getActiveLayer().equals(layer)) {
                 updateSelectedData(layer, null);
             }
             ThreadPool.getInstance().execute(updateThread);
         } else {
             // new comment added
-            if (items.equals(layer.getSelectedItems())) {  // ?
+            if (items.equals(layer.getSelectedItems())) {
                 final T item = items.get(items.size() - 1);
                 if (layer.getSelectedItems().size() == 1) {
                     updateDialog(item, getItemLocation(item));
@@ -576,7 +576,6 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             final TurnRestriction turn = (TurnRestriction) item;
             noOfSelectedItems = turnRestrictionLayer.getSelectedItems().size();
             comments = noOfSelectedItems == 1 && turn.getTurnRestrictions() == null
-                    // && !turn.equals(turnRestrictionLayer.lastSelectedItem())
                             ? ServiceHandler.getTurnRestrictionHandler().retrieveComments(turn) : null;
             status = turn.getStatus();
         }

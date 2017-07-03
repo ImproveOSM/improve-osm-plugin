@@ -81,7 +81,7 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
                     newList.add(newItem);
                 }
             }
-            setSelectedItems(newList);  // why each time?
+            setSelectedItems(newList);
         }
     }
 
