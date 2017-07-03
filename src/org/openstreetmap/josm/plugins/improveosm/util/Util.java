@@ -16,7 +16,6 @@
 package org.openstreetmap.josm.plugins.improveosm.util;
 
 import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -133,17 +132,7 @@ public final class Util {
         return nearestPoint.distance(point);
     }
 
-    public static boolean roadSegementIsInsideBoundingBox(final RoadSegment roadSegment,
-            final Rectangle2D boundingBox) {
-        for (int i = 0; i < roadSegment.getPoints().size() - 1; i = i + 2) {
-            if (boundingBox.intersectsLine(
-                    new Line2D.Double(roadSegment.getPoints().get(i).getX(), roadSegment.getPoints().get(i).getY(),
-                            roadSegment.getPoints().get(i + 1).getX(), roadSegment.getPoints().get(i + 1).getY()))) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     /**
      * Returns the tile corresponding to the given point.
@@ -196,6 +185,10 @@ public final class Util {
         return tileY;
     }
 
+    /**
+     * Verify if a tile intersects a bounding box. Return true or false depending on the intersection relation between
+     * the tile and the bounding box
+     */
     public static boolean tileIntersectsBoundingBox(final Tile tile, final Rectangle2D boundingBox) {
         return boundingBox.intersects(buildRectangleFromCoordinates(tile2lon(tile.getX()), tile2lat(tile.getY()),
                 tile2lon(tile.getX() + 1), tile2lat(tile.getY() + 1)));
@@ -228,12 +221,6 @@ public final class Util {
             }
         }
         return result;
-    }
-
-    public static boolean turnRestrictionIsInsideBoundingBox(final TurnRestriction turnRestriction,
-            final Rectangle2D boundingBox) {
-        return boundingBox
-                .contains(new Point2D.Double(turnRestriction.getPoint().getX(), turnRestriction.getPoint().getY()));
     }
 
     private static double distance(final Point2D fromPoint, final LatLon toLatLon) {

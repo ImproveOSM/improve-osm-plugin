@@ -62,21 +62,37 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
     }
 
     @Override
-    List<Tile> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox) {
-        return getDataSet().getItems().stream()
-                .filter(tile -> Util.tileIntersectsBoundingBox(tile, boundingBox))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     BasicFilterDialog getFilterDialog() {
         return new MissingGeometryFilterDialog();
     }
 
-
     @Override
     AbstractAction getDeleteAction() {
         return new DeleteMissingGeometryLayerAction();
+    }
+
+    /**
+     * Updates the layer selected items with the items found in the given bounding box.
+     *
+     * @param boundingBox the area in which the items need to be located in order to be selected
+     * @param multiSelected specify if the new selected items need to replace the old selected items or not
+     */
+    public void updateSelectedItems(final Rectangle2D boundingBox, final boolean multiSelected) {
+        final List<Tile> selectedItems = getSelectedItems();
+        if (!multiSelected) {
+            setSelectedItems(getItemsInsideTheBoundingBox(boundingBox));
+        } else {
+            selectedItems.addAll(getItemsInsideTheBoundingBox(boundingBox).stream()
+                    .filter(item -> !getSelectedItems().contains(item))
+                    .collect(Collectors.toList()));
+            setSelectedItems(selectedItems);
+        }
+    }
+
+    private List<Tile> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox) {
+        return getDataSet().getItems().stream()
+                .filter(tile -> Util.tileIntersectsBoundingBox(tile, boundingBox))
+                .collect(Collectors.toList());
     }
 
 

@@ -655,6 +655,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     }
 
 
+    /**
+     * Defines the functionality produced by the mouse dragging.
+     */
     private final class PluginMouseMotionListener extends MouseMotionAdapter {
 
         @Override

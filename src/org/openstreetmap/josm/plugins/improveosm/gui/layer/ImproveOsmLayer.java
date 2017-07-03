@@ -18,11 +18,9 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.RENDERING_MAP;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
@@ -94,16 +92,6 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
         this.selectedItems = newList;
     }
 
-    public void updateSelectedItems(final Rectangle2D boundingBox, final boolean multiSelected) {
-        if (!multiSelected) {
-            selectedItems = getItemsInsideTheBoundingBox(boundingBox);
-        } else {
-            selectedItems.addAll(getItemsInsideTheBoundingBox(boundingBox).stream()
-                    .filter(item -> !selectedItems.contains(item))
-                    .collect(Collectors.toList()));
-        }
-    }
-
     /**
      * Updates the selected item.
      *
@@ -145,8 +133,6 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
      * @return a {@code T}
      */
     abstract T nearbyItem(final Point point);
-
-    abstract List<T> getItemsInsideTheBoundingBox(Rectangle2D boundingBox);
 
     /**
      * Returns the last selected item. If no item is selected the method return null.
