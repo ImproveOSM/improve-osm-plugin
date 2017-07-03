@@ -35,7 +35,7 @@ public class MissingGeometryFilterDialog extends BasicFilterDialog {
     private static final long serialVersionUID = -2173011678464747445L;
 
     /* dialog minimal size */
-    private static final Dimension DIM = new Dimension(400, 200);
+    private static final Dimension DIM = new Dimension(400, 230);
 
 
     public MissingGeometryFilterDialog() {

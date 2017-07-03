@@ -26,6 +26,7 @@ import javax.swing.JTabbedPane;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
+import org.openstreetmap.josm.gui.util.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -94,7 +95,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         pnlBtn = new ButtonPanel();
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
-        setPreferredSize(DIM);
+        setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         add(createLayout(pnlMain, false, null));
     }
 

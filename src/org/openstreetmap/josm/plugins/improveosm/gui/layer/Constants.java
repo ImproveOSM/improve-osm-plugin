@@ -72,7 +72,7 @@ final class Constants {
     static final Color TURN_SEGMENT_FROM_COLOR = new Color(0, 255, 0);
     static final Color TURN_SEGMENT_TO_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-    static final double TURN_ARROW_LENGTH = 1;
+    static final double TURN_ARROW_LENGTH = 1.5;
     static final Color COMPLEX_TURN_COLOR = new Color(255, 0, 0);
     static final int COMPLEX_TURN_RADIUS = 20;
     static final int COMPLEX_TURN_SEL_RADIUS = 30;
