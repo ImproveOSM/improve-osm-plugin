@@ -23,11 +23,13 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.util.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
+import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.CommentsPanel;
@@ -47,7 +49,7 @@ import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
 /**
- * Defines the common functionality of the ImeproveOsm details dialog windows.
+ * Defines the common functionality of the ImproveOsm details dialog windows.
  *
  * @author Beata
  * @version $Revision$
@@ -69,6 +71,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final TileInfoPanel pnlTileInfo;
     private final RoadSegmentInfoPanel pnlRoadSegmentInfo;
     private final TurnRestrictionInfoPanel pnlTurnRestrictionInfo;
+    private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
 
@@ -84,6 +87,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlTileInfo = new TileInfoPanel();
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
+        noOfTilesInfo = new SelectedItemsInfoPanel();
 
         cmpInfo = ContainerBuilder.buildScrollPane(ContainerBuilder.buildEmptyPanel(Color.WHITE),
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
@@ -120,39 +124,45 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
      * @param <T> the selected object
      * @param comments a list of {@code Comment}s
      */
-    public <T> void updateUI(final T item, final List<Comment> comments) {
+    public <T> void updateUI(final T lastSelectedItem, final List<Comment> comments, final LatLon location,
+            final Status status, final Integer numberOfSelectedItems) {
         synchronized (this) {
-            pnlBtn.enablePanelActions(item);
             pnlComments.updateData(comments);
-            updateUI(item);
+            pnlBtn.enablePanelActions(status, location);
+            updateUI(lastSelectedItem, numberOfSelectedItems);
         }
     }
 
-    private <T> void updateUI(final T item) {
+    private <T> void updateUI(final T lastSelectedItem, final Integer numberOfSelectedItems) {
         synchronized (this) {
-            pnlBtn.enablePanelActions(item);
             final Layer activeLayer = Util.getImproveOsmLayer();
             if (activeLayer == null) {
                 // special case, all layers were removed and details panel's needs to be cleared
                 pnlTileInfo.updateData(null);
                 pnlRoadSegmentInfo.updateData(null);
                 pnlTurnRestrictionInfo.updateData(null);
+                noOfTilesInfo.updateData(null);
             } else {
                 final Component cmpInfoView = cmpInfo.getViewport().getView();
-                if (activeLayer instanceof MissingGeometryLayer) {
-                    pnlTileInfo.updateData((Tile) item);
-                    if (!(cmpInfoView instanceof TileInfoPanel)) {
-                        cmpInfo.setViewportView(pnlTileInfo);
-                    }
-                } else if (activeLayer instanceof DirectionOfFlowLayer) {
-                    pnlRoadSegmentInfo.updateData((RoadSegment) item);
-                    if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
-                        cmpInfo.setViewportView(pnlRoadSegmentInfo);
-                    }
-                } else if (activeLayer instanceof TurnRestrictionLayer) {
-                    pnlTurnRestrictionInfo.updateData((TurnRestriction) item);
-                    if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
-                        cmpInfo.setViewportView(pnlTurnRestrictionInfo);
+                if (numberOfSelectedItems > 1) {
+                    noOfTilesInfo.updateData(numberOfSelectedItems);
+                    cmpInfo.setViewportView(noOfTilesInfo);
+                } else {
+                    if (activeLayer instanceof MissingGeometryLayer) {
+                        pnlTileInfo.updateData((Tile) lastSelectedItem);
+                        if (!(cmpInfoView instanceof TileInfoPanel)) {
+                            cmpInfo.setViewportView(pnlTileInfo);
+                        }
+                    } else if (activeLayer instanceof DirectionOfFlowLayer) {
+                        pnlRoadSegmentInfo.updateData((RoadSegment) lastSelectedItem);
+                        if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
+                            cmpInfo.setViewportView(pnlRoadSegmentInfo);
+                        }
+                    } else if (activeLayer instanceof TurnRestrictionLayer) {
+                        pnlTurnRestrictionInfo.updateData((TurnRestriction) lastSelectedItem);
+                        if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
+                            cmpInfo.setViewportView(pnlTurnRestrictionInfo);
+                        }
                     }
                 }
             }

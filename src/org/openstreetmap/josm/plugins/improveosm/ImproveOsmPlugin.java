@@ -15,6 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm;
 
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -23,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Set;
 import javax.swing.AbstractAction;
@@ -33,13 +36,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
+import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangeEvent;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangedListener;
+import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.gui.MapFrame;
+import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.gui.NavigatableComponent;
 import org.openstreetmap.josm.gui.NavigatableComponent.ZoomChangeListener;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
+import org.openstreetmap.josm.gui.layer.AbstractMapViewPaintable;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
@@ -50,6 +57,9 @@ import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
+import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
+import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.InfoDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
@@ -84,12 +94,13 @@ import com.telenav.josm.common.thread.ThreadPool;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+        PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
     private DirectionOfFlowLayer directionOfFlowLayer;
     private TurnRestrictionLayer turnRestrictionLayer;
+    private TemporarySelectionLayer itemSelectionLayer;
 
     /* toggle dialog associated with this plugin */
     private ImproveOsmDetailsDialog detailsDialog;
@@ -102,6 +113,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     private JMenuItem missingGeometryLayerMenuItem;
     private JMenuItem directionOfFlowLayerMenuItem;
     private JMenuItem turnRestrictionLayerLayerMenuItem;
+
+    /* bounding box coordinates for multiple selection */
+    private Point startDrag;
+    private Point endDrag;
 
 
     /**
@@ -174,6 +189,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
             registerListeners();
         }
+
+        itemSelectionLayer = new TemporarySelectionLayer();
     }
 
     private void registerListeners() {
@@ -182,6 +199,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
             Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
+            Main.map.mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
             Main.map.mapView.registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
@@ -246,16 +264,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
         final Layer oldLayer =
                 Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
-                final Layer newLayer = Main.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer instanceof AbstractLayer) {
-                    if (oldLayer instanceof MissingGeometryLayer) {
-                        updateSelectedData(missingGeometryLayer, null, null);
-                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                        updateSelectedData(directionOfFlowLayer, null, null);
-                    } else if (oldLayer instanceof TurnRestrictionLayer) {
-                        updateSelectedData(turnRestrictionLayer, null, null);
-                    }
-                }
+        final Layer newLayer = Main.getLayerManager().getActiveLayer();
+        if (oldLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null);
+            }
+        }
     }
 
     @Override
@@ -264,7 +282,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             final ImproveOsmLayer<?> removedLayer = (ImproveOsmLayer<?>) event.getRemovedLayer();
             if (removedLayer.hasSelectedItems()) {
                 removedLayer.updateSelectedItem(null);
-                detailsDialog.updateUI(null, null);
+                updateDialog(null, null);
             }
         }
 
@@ -283,7 +301,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             Main.pref.removePreferenceChangeListener(this);
             if (Main.map != null) {
                 Main.map.mapView.removeMouseListener(this);
-                detailsDialog.updateUI(null, null);
                 listenersRegistered = false;
             }
         }
@@ -373,11 +390,11 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         final T item = layer.nearbyItem(point, multiSelect);
         if (item != null) {
             if (!item.equals(layer.lastSelectedItem())) {
-                retrieveComments(handler, layer, item);
+                updateSelectedData(layer, item);
             }
         } else {
             // clear selection
-            updateSelectedData(layer, null, null);
+            updateSelectedData(layer, null);
         }
     }
 
@@ -399,26 +416,49 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             }
         }
         if (shouldSelect) {
-            List<Comment> comments = null;
-            if (turnRestriction.getTurnRestrictions() == null
-                    && !turnRestriction.equals(turnRestrictionLayer.lastSelectedItem())) {
-                comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
-            }
-            updateSelectedData(turnRestrictionLayer, turnRestriction, comments);
+            updateSelectedData(turnRestrictionLayer, turnRestriction);
         } else if (!multiSelect) {
             // clear selection
-            updateSelectedData(turnRestrictionLayer, null, null);
+            updateSelectedData(turnRestrictionLayer, null);
         }
     }
 
     @Override
     public void mousePressed(final MouseEvent event) {
-        // no logic for this action
+        if (SwingUtilities.isLeftMouseButton(event)
+                && Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+            startDrag = new Point(event.getX(), event.getY());
+            endDrag = startDrag;
+            Main.map.mapView.addTemporaryLayer(itemSelectionLayer);
+        }
     }
 
     @Override
     public void mouseReleased(final MouseEvent event) {
-        // no logic for this action
+        final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+        if (SwingUtilities.isLeftMouseButton(event)
+                && Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                && activeLayer instanceof MissingGeometryLayer) {
+            Main.map.mapView.removeTemporaryLayer(itemSelectionLayer);
+            if (!startDrag.equals(endDrag)) {
+                final LatLon startDragCoord = Util.pointToLatLon(startDrag);
+                final LatLon endDragCoord = Util.pointToLatLon(endDrag);
+                final MissingGeometryLayer layer = ((MissingGeometryLayer) activeLayer);
+                SwingUtilities.invokeLater(() -> {
+                    final Rectangle2D boundingBox = Util.buildRectangleFromCoordinates(startDragCoord.getX(),
+                            startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
+                    layer.updateSelectedItems(boundingBox, event.isShiftDown());
+                    layer.invalidate();
+                    Main.map.mapView.repaint();
+
+                    final Tile tile = layer.lastSelectedItem();
+                    final LatLon location = layer.getSelectedItems().size() >= 1
+                            ? new LatLon(boundingBox.getCenterX(), boundingBox.getCenterY()) : null;
+                    updateDialog(tile, location);
+                });
+            }
+        }
     }
 
     @Override
@@ -436,9 +476,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public void selectSimpleTurnRestriction(final TurnRestriction turnRestriction) {
-        final List<Comment> comments = ServiceHandler.getTurnRestrictionHandler().retrieveComments(turnRestriction);
         turnRestrictionLayer.updateSelectedItem(null);
-        updateSelectedData(turnRestrictionLayer, turnRestriction, comments);
+        updateSelectedData(turnRestrictionLayer, turnRestriction);
     }
 
 
@@ -469,15 +508,17 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
-
-            if (!Main.getLayerManager().getActiveLayer().equals(layer)) {
-                updateSelectedData(layer, null, null);
+            if (Main.getLayerManager().getActiveLayer().equals(layer)) {
+                updateSelectedData(layer, null);
             }
             ThreadPool.getInstance().execute(updateThread);
         } else {
+            // new comment added
             if (items.equals(layer.getSelectedItems())) {
                 final T item = items.get(items.size() - 1);
-                retrieveComments(handler, layer, item);
+                if (layer.getSelectedItems().size() == 1) {
+                    updateDialog(item, getItemLocation(item));
+                }
             }
         }
     }
@@ -485,19 +526,61 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     /* commonly used private methods and classes */
 
-
-    private <T> void retrieveComments(final ServiceHandler<T> handler, final ImproveOsmLayer<T> layer, final T item) {
-        final List<Comment> comments = handler.retrieveComments(item);
-        updateSelectedData(layer, item, comments);
+    private <T> LatLon getItemLocation(final T item) {
+        LatLon coordinate = null;
+        if (item instanceof Tile) {
+            final Tile tile = (Tile) item;
+            coordinate = tile.getPoints().get(0);
+        } else if (item instanceof RoadSegment) {
+            final RoadSegment roadSegment = (RoadSegment) item;
+            coordinate = roadSegment.getPoints().get(0);
+        } else if (item instanceof TurnRestriction) {
+            final TurnRestriction turnRestriction = (TurnRestriction) item;
+            coordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
+                    : (turnRestriction.getTurnRestrictions() != null
+                            ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
+        }
+        return coordinate;
     }
 
-    private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item, final List<Comment> comments) {
+    private <T> void updateSelectedData(final ImproveOsmLayer<T> layer, final T item) {
         SwingUtilities.invokeLater(() -> {
-            detailsDialog.updateUI(item, comments);
-            layer.updateSelectedItem(item);
-            layer.invalidate();
-            Main.map.mapView.repaint();
+            updateLayerWithTheSelectedItem(layer, item);
+            updateDialog(item, getItemLocation(item));
         });
+    }
+
+    private <T> void updateLayerWithTheSelectedItem(final ImproveOsmLayer<T> layer, final T item) {
+        layer.updateSelectedItem(item);
+        layer.invalidate();
+        Main.map.mapView.repaint();
+    }
+
+    private <T> void updateDialog(final T item, final LatLon itemsLocation) {
+        List<Comment> comments = null;
+        Status status = null;
+        Integer noOfSelectedItems = 0;
+        if (item instanceof Tile) {
+            final Tile tile = (Tile) item;
+            noOfSelectedItems = missingGeometryLayer.getSelectedItems().size();
+            comments =
+                    noOfSelectedItems == 1 ? ServiceHandler.getMissingGeometryHandler().retrieveComments(tile) : null;
+            status = tile.getStatus();
+        } else if (item instanceof RoadSegment) {
+            final RoadSegment roadSegment = (RoadSegment) item;
+            noOfSelectedItems = directionOfFlowLayer.getSelectedItems().size();
+            comments = noOfSelectedItems == 1 ? ServiceHandler.getDirectionOfFlowHandler().retrieveComments(roadSegment)
+                    : null;
+            status = roadSegment.getStatus();
+        } else if (item instanceof TurnRestriction) {
+            final TurnRestriction turn = (TurnRestriction) item;
+            noOfSelectedItems = turnRestrictionLayer.getSelectedItems().size();
+            comments = noOfSelectedItems == 1 && turn.getTurnRestrictions() == null
+                            ? ServiceHandler.getTurnRestrictionHandler().retrieveComments(turn) : null;
+            status = turn.getStatus();
+        }
+
+        detailsDialog.updateUI(item, comments, itemsLocation, status, noOfSelectedItems);
     }
 
 
@@ -568,6 +651,36 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     }
                     break;
             }
+        }
+    }
+
+
+    /**
+     * Defines the functionality produced by the mouse dragging.
+     */
+    private final class MissingGeometryLayerSelectionListener extends MouseMotionAdapter {
+
+        @Override
+        public void mouseDragged(final MouseEvent event) {
+            if (SwingUtilities.isLeftMouseButton(event)
+                    && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+                endDrag = new Point(event.getX(), event.getY());
+                ImproveOsmPlugin.this.itemSelectionLayer.invalidate();
+            }
+        }
+    }
+
+
+    /**
+     * Defines a temporary layer used for selecting multiple items from the map view. The layer life cycle is determined
+     * by the mouse pressed/released actions.
+     */
+    private final class TemporarySelectionLayer extends AbstractMapViewPaintable {
+
+        @Override
+        public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
+            graphics.draw(Util.buildRectangleFromCoordinates(startDrag.getX(), startDrag.getY(), endDrag.getX(),
+                    endDrag.getY()));
         }
     }
 }

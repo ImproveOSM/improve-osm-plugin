@@ -30,10 +30,7 @@ import org.openstreetmap.josm.data.coor.CoordinateFormat;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
-import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
-import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
-import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.DisplayEditDialogAction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.EditPopupMenu;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
@@ -116,40 +113,21 @@ class ButtonPanel extends JPanel {
     }
 
     /**
-     * Enables the panel actions based on the given item. By default only the filter action is enabled; the other
-     * actions are enabled/disabled based on the selected item status.
+     * Enables the panel actions based on the given status and location. By default only the filter action is enabled;
+     * the other actions are enabled/disabled based on the selected item status.
      *
-     * @param item the currently selected object
+     * @param status the currently selected object/objects status
+     * @param location the currently selected object/objects location
      */
-    <T> void enablePanelActions(final T item) {
-        if (item == null) {
+    <T> void enablePanelActions(final Status status, final LatLon location) {
+        selectedItemCoordinate = location;
+        if (status == null) {
             enablePanelActions(false, false, false, false);
-            selectedItemCoordinate = null;
         } else {
-            Status status = null;
-            if (item instanceof Tile) {
-                final Tile tile = (Tile) item;
-                status = tile.getStatus();
-                selectedItemCoordinate = tile.getPoints().get(0);
-            } else if (item instanceof RoadSegment) {
-                final RoadSegment roadSegment = (RoadSegment) item;
-                status = roadSegment.getStatus();
-                selectedItemCoordinate = roadSegment.getPoints().get(0);
-            } else if (item instanceof TurnRestriction) {
-                final TurnRestriction turnRestriction = (TurnRestriction) item;
-                status = turnRestriction.getStatus();
-                selectedItemCoordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
-                        : (turnRestriction.getTurnRestrictions() != null
-                        ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
-            }
-            if (status != null) {
-                if (status == Status.OPEN) {
-                    enablePanelActions(true, true, false, true);
-                } else {
-                    enablePanelActions(true, false, true, false);
-                }
+            if (status == Status.OPEN) {
+                enablePanelActions(true, true, false, true);
             } else {
-                enablePanelActions(false, false, false, false);
+                enablePanelActions(true, false, true, false);
             }
         }
     }

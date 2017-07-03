@@ -66,10 +66,10 @@ public abstract class UpdateThread<T> implements Runnable {
             if (result != null && Main.getLayerManager().getActiveLayer().equals(layer)) {
                 final T item = layer.lastSelectedItem();
                 if (item == null) {
-                    dialog.updateUI(null, null);
+                    dialog.updateUI(null, null, null, null, 0);
                 } else if (shouldClearSelection(item)) {
                     layer.updateSelectedItem(null);
-                    dialog.updateUI(null, null);
+                    dialog.updateUI(null, null, null, null, 0);
                 }
             }
             layer.invalidate();

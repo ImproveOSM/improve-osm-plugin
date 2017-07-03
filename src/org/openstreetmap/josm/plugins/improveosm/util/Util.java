@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.util;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.Bounds;
@@ -131,6 +132,8 @@ public final class Util {
         return nearestPoint.distance(point);
     }
 
+
+
     /**
      * Returns the tile corresponding to the given point.
      *
@@ -154,7 +157,7 @@ public final class Util {
         return result;
     }
 
-    private static LatLon pointToLatLon(final Point point) {
+    public static LatLon pointToLatLon(final Point point) {
         final int width = Main.map.mapView.getWidth();
         final int height = Main.map.mapView.getHeight();
         final EastNorth center = Main.map.mapView.getCenter();
@@ -180,6 +183,21 @@ public final class Util {
             tileY = (1 << MAX_TILE_ZOOM) - 1;
         }
         return tileY;
+    }
+
+    /**
+     * Verify if a tile intersects a bounding box. Return true or false depending on the intersection relation between
+     * the tile and the bounding box
+     */
+    public static boolean tileIntersectsBoundingBox(final Tile tile, final Rectangle2D boundingBox) {
+        return boundingBox.intersects(buildRectangleFromCoordinates(tile2lon(tile.getX()), tile2lat(tile.getY()),
+                tile2lon(tile.getX() + 1), tile2lat(tile.getY() + 1)));
+    }
+
+    public static Rectangle2D buildRectangleFromCoordinates(final double coord1X, final double coord1Y,
+            final double coord2X, final double coord2Y) {
+        return new Rectangle2D.Double(Math.min(coord1X, coord2X), Math.min(coord1Y, coord2Y),
+                Math.abs(coord1X - coord2X), Math.abs(coord1Y - coord2Y));
     }
 
     /**

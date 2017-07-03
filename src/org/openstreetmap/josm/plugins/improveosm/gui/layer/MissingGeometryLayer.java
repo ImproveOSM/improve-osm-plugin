@@ -16,6 +16,9 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
@@ -39,7 +42,7 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
      * Builds a new MissingGeometry layer.
      */
     public MissingGeometryLayer() {
-        super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryHanlder());
+        super(MissingGeometryGuiConfig.getInstance().getLayerName(), new MissingGeometryPaintHandler());
     }
 
 
@@ -63,10 +66,33 @@ public class MissingGeometryLayer extends ImproveOsmLayer<Tile> {
         return new MissingGeometryFilterDialog();
     }
 
-
     @Override
     AbstractAction getDeleteAction() {
         return new DeleteMissingGeometryLayerAction();
+    }
+
+    /**
+     * Updates the layer selected items with the items found in the given bounding box.
+     *
+     * @param boundingBox the area in which the items need to be located in order to be selected
+     * @param multiSelected specify if the new selected items need to replace the old selected items or not
+     */
+    public void updateSelectedItems(final Rectangle2D boundingBox, final boolean multiSelected) {
+        final List<Tile> selectedItems = getSelectedItems();
+        if (!multiSelected) {
+            setSelectedItems(getItemsInsideTheBoundingBox(boundingBox));
+        } else {
+            selectedItems.addAll(getItemsInsideTheBoundingBox(boundingBox).stream()
+                    .filter(item -> !getSelectedItems().contains(item))
+                    .collect(Collectors.toList()));
+            setSelectedItems(selectedItems);
+        }
+    }
+
+    private List<Tile> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox) {
+        return getDataSet().getItems().stream()
+                .filter(tile -> Util.tileIntersectsBoundingBox(tile, boundingBox))
+                .collect(Collectors.toList());
     }
 
 

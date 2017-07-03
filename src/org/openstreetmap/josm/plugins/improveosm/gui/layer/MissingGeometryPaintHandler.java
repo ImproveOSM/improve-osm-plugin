@@ -42,7 +42,7 @@ import com.telenav.josm.common.gui.PaintManager;
  * @author beataj
  * @version $Revision$
  */
-final class MissingGeometryHanlder extends PaintHandler<Tile> {
+final class MissingGeometryPaintHandler extends PaintHandler<Tile> {
 
     @Override
     void drawItem(final Graphics2D graphics, final MapView mapView, final Tile tile, final boolean selected) {
