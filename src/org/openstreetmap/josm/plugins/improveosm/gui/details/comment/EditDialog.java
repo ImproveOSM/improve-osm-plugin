@@ -104,6 +104,10 @@ class EditDialog extends ModalDialog {
         ((AddCommentAction) btnOk.getAction()).registerObserver(observer);
     }
 
+    public void setCurrentStatus(final Status currentStatus) {
+        ((AddCommentAction) btnOk.getAction()).setCurrentStatus(currentStatus);
+    }
+
     private final class EditDocument extends PlainDocument {
 
         private static final long serialVersionUID = -6861902595242696120L;

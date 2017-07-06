@@ -70,7 +70,6 @@ class ButtonPanel extends JPanel {
     private final JButton btnReopen;
     private final JButton btnInvalid;
 
-    private CommentObserver commentObserver;
     private LatLon selectedItemCoordinate;
 
 
@@ -81,21 +80,29 @@ class ButtonPanel extends JPanel {
         final IconConfig iconConfig = IconConfig.getInstance();
         final JButton btnFilter = ButtonBuilder.build(new DisplayFilterDialog(), iconConfig.getFilterIcon(),
                 guiConfig.getBtnFilterTlt(), true);
-        btnComment = ButtonBuilder.build(
-                new DisplayEditDialogAction(null, guiConfig.getDlgCommentTitle(), iconConfig.getCommentIcon()),
-                iconConfig.getCommentIcon(), guiConfig.getBtnCommentTlt(), false);
-        btnSolve = ButtonBuilder.build(
-                new DisplayEditPopupMenu(Status.SOLVED, guiConfig.getDlgSolveTitle(),
-                        guiConfig.getMenuSolveCommentTitle(), iconConfig.getSolveIcon()),
-                iconConfig.getSolveIcon(), guiConfig.getBtnSolveTlt(), false);
-        btnReopen = ButtonBuilder.build(
-                new DisplayEditPopupMenu(Status.OPEN, guiConfig.getDlgReopenTitle(),
-                        guiConfig.getMenuReopenCommentTitle(), iconConfig.getReopenIcon()),
-                iconConfig.getReopenIcon(), guiConfig.getBtnReopenTlt(), false);
-        btnInvalid = ButtonBuilder.build(
-                new DisplayEditPopupMenu(Status.INVALID, guiConfig.getDlgInvalidTitle(),
-                        guiConfig.getMenuInvalidCommentTitle(), iconConfig.getInvalidIcon()),
-                iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
+        btnComment =
+                ButtonBuilder.build(
+                        new DisplayEditDialogAction(guiConfig.getDlgCommentTitle(), guiConfig.getCommentShortcutTxt(),
+                                null, iconConfig.getCommentIcon()),
+                        iconConfig.getCommentIcon(), guiConfig.getBtnCommentTlt(), false);
+        btnSolve =
+                ButtonBuilder.build(
+                        new DisplayEditPopupMenu(guiConfig.getDlgSolveTitle(), guiConfig.getMenuSolveCommentTitle(),
+                                guiConfig.getSolveShortcutTxt(), guiConfig.getSolveCommentShortcutTxt(), Status.SOLVED,
+                                iconConfig.getSolveIcon()),
+                        iconConfig.getSolveIcon(), guiConfig.getBtnSolveTlt(), false);
+        btnReopen =
+                ButtonBuilder.build(
+                        new DisplayEditPopupMenu(guiConfig.getDlgReopenTitle(), guiConfig.getMenuReopenCommentTitle(),
+                                guiConfig.getReopenShortcutTxt(), guiConfig.getReopenCommentShortcutTxt(), Status.OPEN,
+                                iconConfig.getReopenIcon()),
+                        iconConfig.getReopenIcon(), guiConfig.getBtnReopenTlt(), false);
+        btnInvalid =
+                ButtonBuilder.build(
+                        new DisplayEditPopupMenu(guiConfig.getDlgInvalidTitle(), guiConfig.getMenuInvalidCommentTitle(),
+                                guiConfig.getInvalidShortcutTxt(), guiConfig.getInvalidCommentShortcutTxt(),
+                                Status.INVALID, iconConfig.getInvalidIcon()),
+                        iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
         final JButton btnLocation = ButtonBuilder.build(new HandleLocationAction(), iconConfig.getLocationIcon(),
                 guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
@@ -108,8 +115,10 @@ class ButtonPanel extends JPanel {
     }
 
     void registerCommentObserver(final CommentObserver commentObserver) {
-        this.commentObserver = commentObserver;
         ((DisplayEditDialogAction) btnComment.getAction()).registerCommentObserver(commentObserver);
+        ((DisplayEditPopupMenu) btnSolve.getAction()).registerCommentObserver(commentObserver);
+        ((DisplayEditPopupMenu) btnReopen.getAction()).registerCommentObserver(commentObserver);
+        ((DisplayEditPopupMenu) btnInvalid.getAction()).registerCommentObserver(commentObserver);
     }
 
     /**
@@ -119,8 +128,11 @@ class ButtonPanel extends JPanel {
      * @param status the currently selected object/objects status
      * @param location the currently selected object/objects location
      */
-    <T> void enablePanelActions(final Status status, final LatLon location) {
+    void enablePanelActions(final Status status, final LatLon location) {
         selectedItemCoordinate = location;
+        ((DisplayEditPopupMenu) btnSolve.getAction()).setCurrentStatus(status);
+        ((DisplayEditPopupMenu) btnReopen.getAction()).setCurrentStatus(status);
+        ((DisplayEditPopupMenu) btnInvalid.getAction()).setCurrentStatus(status);
         if (status == null) {
             enablePanelActions(false, false, false, false);
         } else {
@@ -170,24 +182,21 @@ class ButtonPanel extends JPanel {
 
         private static final long serialVersionUID = 8129418961741501231L;
         private static final int POZ_Y = 4;
-        private final Status status;
-        private final String titleEdit;
-        private final String titleEditComment;
-        private final ImageIcon icon;
+        private final EditPopupMenu menu;
 
-
-        private DisplayEditPopupMenu(final Status status, final String titleEdit, final String titleEditComment,
+        private DisplayEditPopupMenu(final String titleEdit, final String titleEditComment,
+                final String editShortcutKey, final String editCommentShortcutKey, final Status status,
                 final ImageIcon icon) {
-            this.status = status;
-            this.titleEdit = titleEdit;
-            this.titleEditComment = titleEditComment;
-            this.icon = icon;
+            menu = new EditPopupMenu(titleEdit, titleEditComment, editShortcutKey, editCommentShortcutKey, status,
+                    icon);
+        }
+
+        private void registerCommentObserver(final CommentObserver commentObserver) {
+            menu.registerCommentObserver(commentObserver);
         }
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            final EditPopupMenu menu = new EditPopupMenu(status, titleEdit, titleEditComment, icon);
-            menu.registerCommentObserver(commentObserver);
             final JButton cmpParent = (JButton) event.getSource();
             final Point point = cmpParent.getMousePosition();
             int x = 0;
@@ -197,6 +206,10 @@ class ButtonPanel extends JPanel {
                 y = point.y - cmpParent.getWidth() / POZ_Y;
             }
             menu.show(cmpParent, x, y);
+        }
+
+        public void setCurrentStatus(final Status currentStatus) {
+            menu.setCurrentStatus(currentStatus);
         }
     }
 

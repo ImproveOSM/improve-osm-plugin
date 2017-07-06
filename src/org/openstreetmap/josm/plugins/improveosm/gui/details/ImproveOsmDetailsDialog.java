@@ -18,7 +18,6 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,6 +31,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
+import org.openstreetmap.josm.plugins.improveosm.gui.ShortcutFactory;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.CommentsPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.directionofflow.RoadSegmentInfoPanel;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.missinggeo.TileInfoPanel;
@@ -44,7 +44,6 @@ import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
-import org.openstreetmap.josm.tools.Shortcut;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
 
 
@@ -58,8 +57,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
 
     private static final long serialVersionUID = 614130882392599446L;
 
-    private static final Shortcut SHORTCUT = Shortcut.registerShortcut(GuiConfig.getInstance().getPluginName(),
-            GuiConfig.getInstance().getPluginName(), KeyEvent.VK_F3, Shortcut.NONE);
 
     /** the preferred dimension of the panel components */
     private static final Dimension DIM = new Dimension(150, 100);
@@ -81,7 +78,9 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
      */
     public ImproveOsmDetailsDialog() {
         super(GuiConfig.getInstance().getDialogTitle(), IconConfig.getInstance().getDialogShortcutName(),
-                GuiConfig.getInstance().getPluginName(), SHORTCUT, DLG_HEIGHT, true, PreferenceEditor.class);
+                GuiConfig.getInstance().getPluginName(),
+                ShortcutFactory.getInstance().getShortcut(GuiConfig.getInstance().getDialogShortcutTxt()), DLG_HEIGHT,
+                true, PreferenceEditor.class);
 
         /* build components */
         pnlTileInfo = new TileInfoPanel();
@@ -120,9 +119,12 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     /**
      * Updates the UI with the given object's properties and comment list.
      *
-     * @param item the selected item
      * @param <T> the selected object
+     * @param lastSelectedItem the selected item
      * @param comments a list of {@code Comment}s
+     * @param location the location of the selected item
+     * @param status the status of the selected item
+     * @param numberOfSelectedItems
      */
     public <T> void updateUI(final T lastSelectedItem, final List<Comment> comments, final LatLon location,
             final Status status, final Integer numberOfSelectedItems) {
