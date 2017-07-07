@@ -16,11 +16,12 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.gui.ShortcutFactory;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObservable;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -33,15 +34,27 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
  * @author Beata
  * @version $Revision$
  */
-abstract class BasicCommentAction extends AbstractAction implements CommentObservable {
+abstract class BasicCommentAction extends JosmAction implements CommentObservable {
 
     private static final long serialVersionUID = 859855224700983694L;
-    private final Status status;
+
+    private final Status newStatus;
+    private Status currentStatus;
     private CommentObserver observer;
 
 
-    BasicCommentAction(final Status status) {
-        this.status = status;
+    BasicCommentAction(final String shortcutKey, final Status newStatus) {
+        super(shortcutKey, null, shortcutKey, ShortcutFactory.getInstance().getShortcut(shortcutKey), true);
+        this.newStatus = newStatus;
+    }
+
+    BasicCommentAction(final Status newStatus) {
+        this.newStatus = newStatus;
+    }
+
+
+    public void setCurrentStatus(final Status currentStatus) {
+        this.currentStatus = currentStatus;
     }
 
     @Override
@@ -58,19 +71,22 @@ abstract class BasicCommentAction extends AbstractAction implements CommentObser
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-        final String text = getCommentText();
-        if (isValid()) {
-            final String username = PreferenceManager.getInstance().loadOsmUsername();
-            if (username.isEmpty()) {
-                final String newUsername =
-                        JOptionPane.showInputDialog(Main.parent, GuiConfig.getInstance().getTxtMissingUsername(),
-                                GuiConfig.getInstance().getWarningTitle(), JOptionPane.WARNING_MESSAGE);
-                if (newUsername != null && !newUsername.isEmpty()) {
-                    PreferenceManager.getInstance().saveOsmUsername(newUsername);
-                    notifyObserver(new Comment(newUsername, null, text, status));
+        if (newStatus == null || ((currentStatus == Status.OPEN && newStatus != Status.OPEN)
+                || (currentStatus != Status.OPEN && newStatus == Status.OPEN))) {
+            final String text = getCommentText();
+            if (isValid()) {
+                final String username = PreferenceManager.getInstance().loadOsmUsername();
+                if (username.isEmpty()) {
+                    final String newUsername =
+                            JOptionPane.showInputDialog(Main.parent, GuiConfig.getInstance().getTxtMissingUsername(),
+                                    GuiConfig.getInstance().getWarningTitle(), JOptionPane.WARNING_MESSAGE);
+                    if (newUsername != null && !newUsername.isEmpty()) {
+                        PreferenceManager.getInstance().saveOsmUsername(newUsername);
+                        notifyObserver(new Comment(newUsername, null, text, newStatus));
+                    }
+                } else {
+                    notifyObserver(new Comment(username, null, text, newStatus));
                 }
-            } else {
-                notifyObserver(new Comment(username, null, text, status));
             }
         }
     }

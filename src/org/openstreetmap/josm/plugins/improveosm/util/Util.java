@@ -133,7 +133,6 @@ public final class Util {
     }
 
 
-
     /**
      * Returns the tile corresponding to the given point.
      *
@@ -186,8 +185,11 @@ public final class Util {
     }
 
     /**
-     * Verify if a tile intersects a bounding box. Return true or false depending on the intersection relation between
-     * the tile and the bounding box
+     * Verify if a tile intersects a bounding box.
+     *
+     * @param tile the currently selected {@code Tile}
+     * @param boundingBox the currently drawn bounding box
+     * @return return true or false depending on the intersection relation between the tile and the bounding box
      */
     public static boolean tileIntersectsBoundingBox(final Tile tile, final Rectangle2D boundingBox) {
         return boundingBox.intersects(buildRectangleFromCoordinates(tile2lon(tile.getX()), tile2lat(tile.getY()),

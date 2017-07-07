@@ -30,9 +30,12 @@ public final class GuiConfig extends BaseConfig {
     private static final String CONFIG_FILE = "improveosm_gui.properties";
     private static final GuiConfig INSTANCE = new GuiConfig();
 
+    private final String pluginShortName;
     private final String pluginName;
     private final String pluginTxt;
     private final String dialogTitle;
+    private final String dialogShortcutTxt;
+    private final String dialogLongShortcutTxt;
 
     /* button texts */
     private final String btnOkLbl;
@@ -56,6 +59,16 @@ public final class GuiConfig extends BaseConfig {
     private final String menuSolveCommentTitle;
     private final String menuReopenCommentTitle;
     private final String menuInvalidCommentTitle;
+
+    /* edit operation shortcut texts */
+    private final String commentShortcutTxt;
+    private final String solveShortcutTxt;
+    private final String reopenShortcutTxt;
+    private final String invalidShortcutTxt;
+    private final String solveCommentShortcutTxt;
+    private final String reopenCommentShortcutTxt;
+    private final String invalidCommentShortcutTxt;
+
 
     /* info panel title */
     private final String pnlInfoTitle;
@@ -105,8 +118,11 @@ public final class GuiConfig extends BaseConfig {
         super(CONFIG_FILE);
 
         pluginName = readProperty("plugin.name");
+        pluginShortName = readProperty("plugin.name.short");
         pluginTxt = readProperty("plugin.txt");
         dialogTitle = readProperty("dialog.title");
+        dialogShortcutTxt = readProperty("dialog.shortcut.text");
+        dialogLongShortcutTxt = readProperty("dialog.shortcut.text");
 
         btnOkLbl = readProperty("btn.ok.lbl");
         btnCancelLbl = readProperty("btn.cancel.lbl");
@@ -127,6 +143,15 @@ public final class GuiConfig extends BaseConfig {
         menuSolveCommentTitle = readProperty("edit.menu.solve.comment.title");
         menuReopenCommentTitle = readProperty("edit.menu.reopen.comment.title");
         menuInvalidCommentTitle = readProperty("edit.menu.invalid.comment.title");
+
+        commentShortcutTxt = readProperty("edit.comment.shortcut.text");
+        solveShortcutTxt = readProperty("edit.solve.shortcut.text");
+        reopenShortcutTxt = readProperty("edit.reopen.shortcut.text");
+        invalidShortcutTxt = readProperty("edit.invalid.shortcut.text");
+        solveCommentShortcutTxt = readProperty("edit.solve.comment.shortcut.text");
+        reopenCommentShortcutTxt = readProperty("edit.reopen.comment.shortcut.text");
+        invalidCommentShortcutTxt = readProperty("edit.invalid.comment.shortcut.text");
+
 
         pnlInfoTitle = readProperty("details.info.title");
         txtNumberOfSelectedItems = readProperty("details.info.numberOfSelectedItems");
@@ -179,6 +204,14 @@ public final class GuiConfig extends BaseConfig {
 
     public String getDialogTitle() {
         return dialogTitle;
+    }
+
+    public String getDialogShortcutTxt() {
+        return dialogShortcutTxt;
+    }
+
+    public String getDialogLongShortcutTxt() {
+        return dialogLongShortcutTxt;
     }
 
     public String getBtnOkLbl() {
@@ -375,5 +408,37 @@ public final class GuiConfig extends BaseConfig {
 
     public String getTxtNumberOfSelectedItems() {
         return txtNumberOfSelectedItems;
+    }
+
+    public String getPluginShortName() {
+        return pluginShortName;
+    }
+
+    public String getCommentShortcutTxt() {
+        return commentShortcutTxt;
+    }
+
+    public String getSolveShortcutTxt() {
+        return solveShortcutTxt;
+    }
+
+    public String getReopenShortcutTxt() {
+        return reopenShortcutTxt;
+    }
+
+    public String getInvalidShortcutTxt() {
+        return invalidShortcutTxt;
+    }
+
+    public String getSolveCommentShortcutTxt() {
+        return solveCommentShortcutTxt;
+    }
+
+    public String getReopenCommentShortcutTxt() {
+        return reopenCommentShortcutTxt;
+    }
+
+    public String getInvalidCommentShortcutTxt() {
+        return invalidCommentShortcutTxt;
     }
 }
