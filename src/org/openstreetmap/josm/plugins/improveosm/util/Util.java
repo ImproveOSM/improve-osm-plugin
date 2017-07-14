@@ -46,6 +46,7 @@ public final class Util {
     private static final int MAX_ZOOM = 22;
     private static final int MAX_TILE_ZOOM = 18;
     private static final int TILE_SIZE = 1024;
+    private static final int ZOOM_CONST = 2;
 
 
     private Util() {}
@@ -59,7 +60,7 @@ public final class Util {
      */
     public static int zoom(final Bounds bounds) {
         return Main.map.mapView.getScale() >= ZOOM1_SCALE ? 1 : (int) Math.min(MAX_ZOOM,
-                Math.max(MIN_ZOOM, Math.round(Math.floor(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(2)))));
+                Math.max(MIN_ZOOM, Math.round(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(ZOOM_CONST))));
     }
 
     /**
