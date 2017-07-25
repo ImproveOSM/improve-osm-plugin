@@ -62,7 +62,7 @@ class ButtonPanel extends JPanel {
 
     private static final int ROWS = 1;
     private static final int COLS = 5;
-    private static final Dimension DIM = new Dimension(200, 23);
+    private static final Dimension DIM = new Dimension(200, 24);
 
     /* panel components */
     private final JButton btnComment;
