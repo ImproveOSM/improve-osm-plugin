@@ -42,6 +42,7 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS
 import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
@@ -133,9 +134,8 @@ final class SaveManager {
                 }
             }
             Main.pref.putListOfStructs(MG_TYPE, entries, TileTypeEntry.class);
-            final String countKey =
-                    Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                            ? MG_TRIP_COUNT : MG_POINT_COUNT;
+            final String countKey = Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
+                    .getMaxClusterZoom() ? MG_TRIP_COUNT : MG_POINT_COUNT;
             final String count = filter.getCount() != null ? filter.getCount().toString() : "";
             Main.pref.put(countKey, count);
         }

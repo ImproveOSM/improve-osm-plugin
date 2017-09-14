@@ -38,6 +38,7 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS
 import java.util.EnumSet;
 import java.util.List;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.TurnRestrictionFilter;
@@ -130,8 +131,9 @@ final class LoadManager {
             }
         }
 
-        String valueStr = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                ? Main.pref.get(MG_TRIP_COUNT) : Main.pref.get(MG_POINT_COUNT);
+        String valueStr =
+                Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                        ? Main.pref.get(MG_TRIP_COUNT) : Main.pref.get(MG_POINT_COUNT);
                 valueStr = valueStr.trim();
                 final Integer count = !valueStr.isEmpty() ? Integer.valueOf(valueStr) : null;
                 return status == null && types == null ? MissingGeometryFilter.DEFAULT

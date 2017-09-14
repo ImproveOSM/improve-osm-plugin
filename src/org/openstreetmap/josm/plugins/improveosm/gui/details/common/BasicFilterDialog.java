@@ -22,11 +22,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.tools.GuiSizesHelper;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
+import org.openstreetmap.josm.tools.GuiSizesHelper;
 import com.telenav.josm.common.gui.CancelAction;
 import com.telenav.josm.common.gui.ModalDialog;
 import com.telenav.josm.common.gui.builder.ButtonBuilder;
@@ -55,7 +55,7 @@ public abstract class BasicFilterDialog extends ModalDialog {
     public BasicFilterDialog(final Dimension dimension) {
         super(GuiConfig.getInstance().getDlgFilterTitle(), IconConfig.getInstance().getFilterIcon().getImage(),
                 dimension);
-        setLocationRelativeTo(Main.map.mapView);
+        setLocationRelativeTo(MainApplication.getMap().mapView);
         createComponents();
         setSize(GuiSizesHelper.getDimensionDpiAdjusted(dimension));
     }

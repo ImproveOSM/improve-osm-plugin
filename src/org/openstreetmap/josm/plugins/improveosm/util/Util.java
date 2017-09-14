@@ -19,10 +19,10 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Tile;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
@@ -59,7 +59,7 @@ public final class Util {
      * @return an integer
      */
     public static int zoom(final Bounds bounds) {
-        return Main.map.mapView.getScale() >= ZOOM1_SCALE ? 1 : (int) Math.min(MAX_ZOOM,
+        return MainApplication.getMap().mapView.getScale() >= ZOOM1_SCALE ? 1 : (int) Math.min(MAX_ZOOM,
                 Math.max(MIN_ZOOM, Math.round(Math.log(TILE_SIZE / bounds.asRect().height) / Math.log(ZOOM_CONST))));
     }
 
@@ -113,8 +113,8 @@ public final class Util {
     private static double minDistance(final List<LatLon> points, final Point point) {
         double minDistance = Double.MAX_VALUE;
         for (int i = 0; i < points.size() - 1; i++) {
-            final Point start = Main.map.mapView.getPoint(points.get(i));
-            final Point end = Main.map.mapView.getPoint(points.get(i + 1));
+            final Point start = MainApplication.getMap().mapView.getPoint(points.get(i));
+            final Point end = MainApplication.getMap().mapView.getPoint(points.get(i + 1));
             final double distance = distance(point, start, end);
             if (distance < minDistance) {
                 minDistance = distance;
@@ -158,13 +158,13 @@ public final class Util {
     }
 
     public static LatLon pointToLatLon(final Point point) {
-        final int width = Main.map.mapView.getWidth();
-        final int height = Main.map.mapView.getHeight();
-        final EastNorth center = Main.map.mapView.getCenter();
-        final double scale = Main.map.mapView.getScale();
+        final int width = MainApplication.getMap().mapView.getWidth();
+        final int height = MainApplication.getMap().mapView.getHeight();
+        final EastNorth center = MainApplication.getMap().mapView.getCenter();
+        final double scale = MainApplication.getMap().mapView.getScale();
         final EastNorth eastNorth = new EastNorth(center.east() + (point.getX() - width / 2.0) * scale,
                 center.north() - (point.getY() - height / 2.0) * scale);
-        return Main.map.mapView.getProjection().eastNorth2latlon(eastNorth);
+        return MainApplication.getMap().mapView.getProjection().eastNorth2latlon(eastNorth);
     }
 
     private static int getTileX(final double lon) {
@@ -227,7 +227,7 @@ public final class Util {
     }
 
     private static double distance(final Point2D fromPoint, final LatLon toLatLon) {
-        final Point toPoint = Main.map.mapView.getPoint(toLatLon);
+        final Point toPoint = MainApplication.getMap().mapView.getPoint(toLatLon);
         return new Point2D.Double(fromPoint.getX(), fromPoint.getY()).distance(toPoint);
     }
 }

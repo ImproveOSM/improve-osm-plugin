@@ -16,8 +16,8 @@
 package org.openstreetmap.josm.plugins.improveosm.tread;
 
 import javax.swing.SwingUtilities;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.Bounds;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.ImproveOsmDetailsDialog;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.ImproveOsmLayer;
@@ -46,13 +46,14 @@ public abstract class UpdateThread<T> implements Runnable {
 
     @Override
     public void run() {
-        if (Main.map != null && Main.map.mapView != null) {
-            final Bounds bounds = new Bounds(Main.map.mapView.getLatLon(0, Main.map.mapView.getHeight()),
-                    Main.map.mapView.getLatLon(Main.map.mapView.getWidth(), 0));
+        if (MainApplication.getMap() != null && MainApplication.getMap().mapView != null) {
+            final Bounds bounds = new Bounds(
+                    MainApplication.getMap().mapView.getLatLon(0, MainApplication.getMap().mapView.getHeight()),
+                    MainApplication.getMap().mapView.getLatLon(MainApplication.getMap().mapView.getWidth(), 0));
 
             final BoundingBox bbox = new BoundingBox(bounds.getMax().lat(), bounds.getMin().lat(),
                     bounds.getMax().lon(), bounds.getMin().lon());
-            final int zoom = Util.zoom(Main.map.mapView.getRealBounds());
+            final int zoom = Util.zoom(MainApplication.getMap().mapView.getRealBounds());
             final DataSet<T> result = searchData(bbox, zoom);
 
             // update UI
@@ -63,7 +64,7 @@ public abstract class UpdateThread<T> implements Runnable {
     private void updateUI(final DataSet<T> result) {
         SwingUtilities.invokeLater(() -> {
             layer.setDataSet(result);
-            if (result != null && Main.getLayerManager().getActiveLayer().equals(layer)) {
+            if (result != null && MainApplication.getLayerManager().getActiveLayer().equals(layer)) {
                 final T item = layer.lastSelectedItem();
                 if (item == null) {
                     dialog.updateUI(null, null, null, null, 0);
@@ -73,7 +74,7 @@ public abstract class UpdateThread<T> implements Runnable {
                 }
             }
             layer.invalidate();
-            Main.map.mapView.repaint();
+            MainApplication.getMap().mapView.repaint();
         });
     }
 

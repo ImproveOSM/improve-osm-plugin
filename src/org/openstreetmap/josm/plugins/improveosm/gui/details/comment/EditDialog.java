@@ -32,13 +32,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.tools.GuiSizesHelper;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
+import org.openstreetmap.josm.tools.GuiSizesHelper;
 import com.telenav.josm.common.gui.CancelAction;
 import com.telenav.josm.common.gui.ModalDialog;
 import com.telenav.josm.common.gui.builder.ButtonBuilder;
@@ -73,7 +73,7 @@ class EditDialog extends ModalDialog {
      */
     EditDialog(final Status status, final String title, final Image icon) {
         super(title, icon, GuiSizesHelper.getDimensionDpiAdjusted(DIM));
-        setLocationRelativeTo(Main.map.mapView);
+        setLocationRelativeTo(MainApplication.getMap().mapView);
         this.status = status;
         createComponents();
     }
