@@ -22,7 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 
 
 /**
@@ -47,12 +47,13 @@ class TableHeaderCellRenderer extends JLabel implements TableCellRenderer {
         } else {
             setForeground(Color.black);
         }
-        final Font font = Main.map.getFont().deriveFont(Font.BOLD);
+        final Font font = MainApplication.getMap().getFont().deriveFont(Font.BOLD);
         setFont(font);
         setBorder(BorderFactory.createRaisedBevelBorder());
         setText(value.toString());
 
-        final int width = Main.map.getFontMetrics(font).stringWidth(getText()) + table.getIntercellSpacing().width;
+        final int width = MainApplication.getMap().getFontMetrics(font).stringWidth(getText())
+                + table.getIntercellSpacing().width;
         if (table.getColumnModel().getColumn(column).getMinWidth() < width) {
             table.getColumnModel().getColumn(column).setMinWidth(width);
             table.getColumnModel().getColumn(column).setPreferredWidth(width);

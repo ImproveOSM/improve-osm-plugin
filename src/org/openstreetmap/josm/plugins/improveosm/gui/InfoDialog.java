@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui;
 
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
@@ -48,7 +49,7 @@ public class InfoDialog {
             final int maxZoom = Config.getInstance().getMaxClusterZoom();
             if (!PreferenceManager.getInstance().loadDirectionOfFlowTipSuppressFlag() && (zoom > maxZoom)) {
                 dofTipIsDisplayed = true;
-                final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+                final int val = JOptionPane.showOptionDialog(MainApplication.getMap(),
                         TextComponentBuilder.buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
                                 CONTENT_TYPE, Main.parent.getBackground(), false),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
@@ -68,7 +69,7 @@ public class InfoDialog {
     public synchronized void displayLocationButtonTip() {
         if (!locationTipIsDisplayed && !PreferenceManager.getInstance().loadLocationTipSuppressFlag()) {
             locationTipIsDisplayed = true;
-            final int val = JOptionPane.showOptionDialog(Main.map.mapView,
+            final int val = JOptionPane.showOptionDialog(MainApplication.getMap().mapView,
                     TextComponentBuilder.buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(), CONTENT_TYPE,
                             Main.parent.getBackground(), false),
                     GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,

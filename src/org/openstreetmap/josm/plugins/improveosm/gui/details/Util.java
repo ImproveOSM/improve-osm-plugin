@@ -16,7 +16,7 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import java.util.List;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.AbstractLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
@@ -36,11 +36,11 @@ final class Util {
 
     static Layer getImproveOsmLayer() {
         Layer improveOsmLayer = null;
-        if (Main.getLayerManager().getActiveLayer() instanceof AbstractLayer) {
-            improveOsmLayer = Main.getLayerManager().getActiveLayer();
+        if (MainApplication.getLayerManager().getActiveLayer() instanceof AbstractLayer) {
+            improveOsmLayer = MainApplication.getLayerManager().getActiveLayer();
         } else {
             // other layer is active
-            final List<AbstractLayer> layers = Main.getLayerManager().getLayersOfType(AbstractLayer.class);
+            final List<AbstractLayer> layers = MainApplication.getLayerManager().getLayersOfType(AbstractLayer.class);
             for (final AbstractLayer layer : layers) {
                 if (hasSelectedItems(layer)) {
                     improveOsmLayer = layer;

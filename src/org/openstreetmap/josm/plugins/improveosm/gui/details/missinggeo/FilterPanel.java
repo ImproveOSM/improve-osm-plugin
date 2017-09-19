@@ -23,7 +23,7 @@ import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
@@ -112,9 +112,10 @@ class FilterPanel extends BasicFilterPanel {
     }
 
     private void addCountFilter(final Integer value) {
-        final String lblTxt = Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
-                : MissingGeometryGuiConfig.getInstance().getLblPointCount();
+        final String lblTxt =
+                Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                        ? MissingGeometryGuiConfig.getInstance().getLblTripCount()
+                        : MissingGeometryGuiConfig.getInstance().getLblPointCount();
         add(LabelBuilder.build(lblTxt, Font.BOLD, ComponentOrientation.LEFT_TO_RIGHT, SwingConstants.LEFT,
                 SwingConstants.TOP), Constraints.LBL_COUNT);
         txtCount = TextComponentBuilder.buildIntegerTextField(value, 0, null, Font.PLAIN, Color.WHITE, true);

@@ -40,6 +40,7 @@ import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangeEvent;
 import org.openstreetmap.josm.data.Preferences.PreferenceChangedListener;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.gui.MapFrame;
 import org.openstreetmap.josm.gui.MapView;
@@ -84,6 +85,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.MissingGeometryGuiConf
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.TurnRestrictionGuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.PreferenceManager;
 import org.openstreetmap.josm.tools.ImageProvider;
+import org.openstreetmap.josm.tools.Logging;
 import com.telenav.josm.common.thread.ThreadPool;
 
 
@@ -136,7 +138,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
     @Override
     public void mapFrameInitialized(final MapFrame oldMapFrame, final MapFrame newMapFrame) {
-        if (Main.map != null && !GraphicsEnvironment.isHeadless()) {
+        if (MainApplication.getMap() != null && !GraphicsEnvironment.isHeadless()) {
             // create details dialog
             initializeDetailsDialog(newMapFrame);
             initializeLayerMenuItems();
@@ -149,7 +151,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
             try {
                 ThreadPool.getInstance().shutdown();
             } catch (final InterruptedException e) {
-                Main.error(e, "Could not shutdown thead pool.");
+                Logging.error("Could not shutdown thead pool.", e);
             }
         }
     }
@@ -174,17 +176,17 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         if (PreferenceManager.getInstance().loadMissingGeometryLayerOpenedFlag()
                 && enabledDayaLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             missingGeometryLayer = new MissingGeometryLayer();
-            Main.getLayerManager().addLayer(missingGeometryLayer);
+            MainApplication.getLayerManager().addLayer(missingGeometryLayer);
         }
         if (PreferenceManager.getInstance().loadDirectionOfFlowLayerOpenedFlag()
                 && enabledDayaLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
             directionOfFlowLayer = new DirectionOfFlowLayer();
-            Main.getLayerManager().addLayer(directionOfFlowLayer);
+            MainApplication.getLayerManager().addLayer(directionOfFlowLayer);
         }
         if (PreferenceManager.getInstance().loadTurnRestrictionLayerOpenedFlag()
                 && enabledDayaLayers.contains(DataLayer.TURN_RESTRICTION)) {
             turnRestrictionLayer = new TurnRestrictionLayer();
-            Main.getLayerManager().addLayer(turnRestrictionLayer);
+            MainApplication.getLayerManager().addLayer(turnRestrictionLayer);
         }
         if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
             registerListeners();
@@ -196,11 +198,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     private void registerListeners() {
         if (!listenersRegistered) {
             NavigatableComponent.addZoomChangeListener(ImproveOsmPlugin.this);
-            Main.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
+            MainApplication.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
-            Main.map.mapView.addMouseListener(ImproveOsmPlugin.this);
-            Main.map.mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
-            Main.map.mapView.registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
+            MainApplication.getMap().mapView.addMouseListener(ImproveOsmPlugin.this);
+            MainApplication.getMap().mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
+            MainApplication.getMap().registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
@@ -211,7 +213,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         final Set<DataLayer> enabledDayaLayers = Config.getInstance().getEnabledDataLayers();
         if (enabledDayaLayers.contains(DataLayer.MISSING_GEOMETRY)) {
             if (missingGeometryLayerMenuItem == null) {
-                missingGeometryLayerMenuItem = MainMenu.add(Main.main.menu.imageryMenu,
+                missingGeometryLayerMenuItem = MainMenu.add(MainApplication.getMenu().imageryMenu,
                         new LayerActivator(DataLayer.MISSING_GEOMETRY,
                                 MissingGeometryGuiConfig.getInstance().getLayerName(),
                                 IconConfig.getInstance().getMissingGeometryLayerIconName()),
@@ -222,7 +224,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (enabledDayaLayers.contains(DataLayer.DIRECTION_OF_FLOW)) {
             if (directionOfFlowLayerMenuItem == null) {
-                directionOfFlowLayerMenuItem = MainMenu.add(Main.main.menu.imageryMenu,
+                directionOfFlowLayerMenuItem = MainMenu.add(MainApplication.getMenu().imageryMenu,
                         new LayerActivator(DataLayer.DIRECTION_OF_FLOW,
                                 DirectionOfFlowGuiConfig.getInstance().getLayerName(),
                                 IconConfig.getInstance().getDirectionOfFlowLayerIconName()),
@@ -233,7 +235,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (enabledDayaLayers.contains(DataLayer.TURN_RESTRICTION)) {
             if (turnRestrictionLayerLayerMenuItem == null) {
-                turnRestrictionLayerLayerMenuItem = MainMenu.add(Main.main.menu.imageryMenu,
+                turnRestrictionLayerLayerMenuItem = MainMenu.add(MainApplication.getMenu().imageryMenu,
                         new LayerActivator(DataLayer.TURN_RESTRICTION,
                                 TurnRestrictionGuiConfig.getInstance().getLayerName(),
                                 IconConfig.getInstance().getTurnRestrictonLayerIconName()),
@@ -262,9 +264,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
     @Override
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
-        final Layer oldLayer =
-                Main.getLayerManager().getLayers().size() > 1 ? Main.getLayerManager().getLayers().get(1) : null;
-        final Layer newLayer = Main.getLayerManager().getActiveLayer();
+        final Layer oldLayer = MainApplication.getLayerManager().getLayers().size() > 1
+                ? MainApplication.getLayerManager().getLayers().get(1) : null;
+        final Layer newLayer = MainApplication.getLayerManager().getActiveLayer();
         if (oldLayer != null && newLayer instanceof AbstractLayer) {
             if (oldLayer instanceof MissingGeometryLayer) {
                 updateSelectedData(missingGeometryLayer, null);
@@ -296,11 +298,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         if (missingGeometryLayer == null && directionOfFlowLayer == null && turnRestrictionLayer == null) {
             // remove listeners
             PreferenceManager.getInstance().saveErrorSuppressFlag(false);
-            Main.getLayerManager().removeLayerChangeListener(this);
+            MainApplication.getLayerManager().removeLayerChangeListener(this);
             NavigatableComponent.removeZoomChangeListener(this);
             Main.pref.removePreferenceChangeListener(this);
-            if (Main.map != null) {
-                Main.map.mapView.removeMouseListener(this);
+            if (MainApplication.getMap() != null) {
+                MainApplication.getMap().mapView.removeMouseListener(this);
                 listenersRegistered = false;
             }
         }
@@ -328,8 +330,9 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                 ThreadPool.getInstance().execute(new MissingGeometryUpdateThread(detailsDialog, missingGeometryLayer));
             }
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
-                if (Main.getLayerManager().getActiveLayer() == directionOfFlowLayer) {
-                    new InfoDialog().displayDirectionOfFlowEditTip(Util.zoom(Main.map.mapView.getRealBounds()));
+                if (MainApplication.getLayerManager().getActiveLayer() == directionOfFlowLayer) {
+                    new InfoDialog()
+                            .displayDirectionOfFlowEditTip(Util.zoom(MainApplication.getMap().mapView.getRealBounds()));
                 }
                 ThreadPool.getInstance().execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
             }
@@ -368,10 +371,11 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     @Override
     public void mouseClicked(final MouseEvent event) {
         if (SwingUtilities.isLeftMouseButton(event)) {
-            final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+            final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
             final Point point = event.getPoint();
             final boolean multiSelect = event.isShiftDown();
-            if (Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
+            if (Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
+                    .getMaxClusterZoom()) {
                 if (activeLayer instanceof MissingGeometryLayer) {
                     // select tiles
                     selectItem(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer, point, multiSelect);
@@ -426,21 +430,23 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     @Override
     public void mousePressed(final MouseEvent event) {
         if (SwingUtilities.isLeftMouseButton(event)
-                && Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+                && Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
+                        .getMaxClusterZoom()
+                && MainApplication.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
             startDrag = new Point(event.getX(), event.getY());
             endDrag = startDrag;
-            Main.map.mapView.addTemporaryLayer(itemSelectionLayer);
+            MainApplication.getMap().mapView.addTemporaryLayer(itemSelectionLayer);
         }
     }
 
     @Override
     public void mouseReleased(final MouseEvent event) {
-        final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
         if (SwingUtilities.isLeftMouseButton(event)
-                && Util.zoom(Main.map.mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
+                && Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
+                        .getMaxClusterZoom()
                 && activeLayer instanceof MissingGeometryLayer) {
-            Main.map.mapView.removeTemporaryLayer(itemSelectionLayer);
+            MainApplication.getMap().mapView.removeTemporaryLayer(itemSelectionLayer);
             if (!startDrag.equals(endDrag)) {
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
@@ -450,7 +456,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                             startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
                     layer.updateSelectedItems(boundingBox, event.isShiftDown());
                     layer.invalidate();
-                    Main.map.mapView.repaint();
+                    MainApplication.getMap().mapView.repaint();
 
                     final Tile tile = layer.lastSelectedItem();
                     final LatLon location = layer.getSelectedItems().size() >= 1
@@ -485,7 +491,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
     @Override
     public synchronized void createComment(final Comment comment) {
-        final List<Layer> layers = Main.getLayerManager().getLayers();
+        final List<Layer> layers = MainApplication.getLayerManager().getLayers();
         ThreadPool.getInstance().execute(() -> {
             if (layers.contains(missingGeometryLayer) && missingGeometryLayer.hasSelectedItems()) {
                 createComment(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer,
@@ -508,7 +514,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
 
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
-            if (Main.getLayerManager().getActiveLayer().equals(layer)) {
+            if (MainApplication.getLayerManager().getActiveLayer().equals(layer)) {
                 updateSelectedData(layer, null);
             }
             ThreadPool.getInstance().execute(updateThread);
@@ -553,7 +559,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
     private <T> void updateLayerWithTheSelectedItem(final ImproveOsmLayer<T> layer, final T item) {
         layer.updateSelectedItem(item);
         layer.invalidate();
-        Main.map.mapView.repaint();
+        MainApplication.getMap().mapView.repaint();
     }
 
     private <T> void updateDialog(final T item, final LatLon itemsLocation) {
@@ -591,7 +597,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         @Override
         public void actionPerformed(final ActionEvent event) {
             if (event.getActionCommand().equals(GuiConfig.getInstance().getLblCopy())) {
-                final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+                final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
                 String selection = "";
                 if (activeLayer instanceof MissingGeometryLayer) {
                     if (missingGeometryLayer.hasSelectedItems()) {
@@ -631,14 +637,14 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                     if (missingGeometryLayer == null) {
                         // add layer
                         missingGeometryLayer = new MissingGeometryLayer();
-                        Main.getLayerManager().addLayer(missingGeometryLayer);
+                        MainApplication.getLayerManager().addLayer(missingGeometryLayer);
                         PreferenceManager.getInstance().saveMissingGeometryLayerOpenedFlag(true);
                     }
                     break;
                 case DIRECTION_OF_FLOW:
                     if (directionOfFlowLayer == null) {
                         directionOfFlowLayer = new DirectionOfFlowLayer();
-                        Main.getLayerManager().addLayer(directionOfFlowLayer);
+                        MainApplication.getLayerManager().addLayer(directionOfFlowLayer);
                         PreferenceManager.getInstance().saveDirectionOfFlowLayerOpenedFlag(true);
                     }
                     break;
@@ -646,7 +652,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
                     // turn restriction
                     if (turnRestrictionLayer == null) {
                         turnRestrictionLayer = new TurnRestrictionLayer();
-                        Main.getLayerManager().addLayer(turnRestrictionLayer);
+                        MainApplication.getLayerManager().addLayer(turnRestrictionLayer);
                         PreferenceManager.getInstance().saveTurnRestrictionLayerOpenedFlag(true);
                     }
                     break;
@@ -663,7 +669,7 @@ public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, Zoo
         @Override
         public void mouseDragged(final MouseEvent event) {
             if (SwingUtilities.isLeftMouseButton(event)
-                    && Main.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+                    && MainApplication.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
                 endDrag = new Point(event.getX(), event.getY());
                 ImproveOsmPlugin.this.itemSelectionLayer.invalidate();
             }

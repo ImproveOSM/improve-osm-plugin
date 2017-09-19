@@ -22,7 +22,7 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.MG_LAYER_
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.PANEL_ICON_VISIBILITY;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_FILTERS_CHANGED;
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_OPENED;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
@@ -165,7 +165,7 @@ public final class PreferenceManager {
      */
     public String loadLastComment() {
         String lastComment = null;
-        final Layer activeLayer = Main.getLayerManager().getActiveLayer();
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
         if (activeLayer instanceof DirectionOfFlowLayer) {
             lastComment = loadManager.loadDirectionOfFlowLastComment();
         } else if (activeLayer instanceof MissingGeometryLayer) {

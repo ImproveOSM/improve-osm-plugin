@@ -25,9 +25,9 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.coor.CoordinateFormat;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
@@ -162,7 +162,7 @@ class ButtonPanel extends JPanel {
 
         @Override
         public void actionPerformed(final ActionEvent event) {
-            if (Main.map != null) {
+            if (MainApplication.getMap() != null) {
                 final Layer activeLayer = Util.getImproveOsmLayer();
                 if (activeLayer instanceof MissingGeometryLayer) {
                     new MissingGeometryFilterDialog().setVisible(true);
@@ -223,8 +223,9 @@ class ButtonPanel extends JPanel {
         @Override
         public void actionPerformed(final ActionEvent event) {
             final LatLon location = selectedItemCoordinate != null ? selectedItemCoordinate
-                    : Main.map.mapView.getRealBounds().getCenter();
-            final int zoom = org.openstreetmap.josm.plugins.improveosm.util.Util.zoom(Main.map.mapView.getRealBounds());
+                    : MainApplication.getMap().mapView.getRealBounds().getCenter();
+            final int zoom = org.openstreetmap.josm.plugins.improveosm.util.Util
+                    .zoom(MainApplication.getMap().mapView.getRealBounds());
 
             switch (PreferenceManager.getInstance().loadLocationPrefOption()) {
                 case OPEN_STREET_VIEW:
