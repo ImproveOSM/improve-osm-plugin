@@ -25,8 +25,8 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import org.openstreetmap.josm.data.coor.CoordinateFormat;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.data.coor.conversion.CoordinateFormatManager;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
@@ -230,13 +230,13 @@ class ButtonPanel extends JPanel {
             switch (PreferenceManager.getInstance().loadLocationPrefOption()) {
                 case OPEN_STREET_VIEW:
                     openUrl(Config.getInstance().getLocationPrefOpenStreetView(),
-                            location.latToString(CoordinateFormat.getDefaultFormat()),
-                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+                            CoordinateFormatManager.getDefaultFormat().latToString(location),
+                            CoordinateFormatManager.getDefaultFormat().lonToString(location), String.valueOf(zoom));
                     break;
                 case CUSTOM_SITE:
                     openUrl(generateCustomURL(PreferenceManager.getInstance().loadLocationPrefValue()),
-                            location.latToString(CoordinateFormat.getDefaultFormat()),
-                            location.lonToString(CoordinateFormat.getDefaultFormat()), String.valueOf(zoom));
+                            CoordinateFormatManager.getDefaultFormat().latToString(location),
+                            CoordinateFormatManager.getDefaultFormat().lonToString(location), String.valueOf(zoom));
                     break;
                 case COPY_LOCATION:
                     ClipboardUtils.copyString(Formatter.formatLatLon(location));
