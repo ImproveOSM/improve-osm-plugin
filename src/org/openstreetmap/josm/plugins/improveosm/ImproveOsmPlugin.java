@@ -34,7 +34,6 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.coor.LatLon;
@@ -199,7 +198,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (!listenersRegistered) {
             NavigatableComponent.addZoomChangeListener(ImproveOsmPlugin.this);
             MainApplication.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
-            Main.pref.addPreferenceChangeListener(ImproveOsmPlugin.this);
+            org.openstreetmap.josm.spi.preferences.Config.getPref().addPreferenceChangeListener(ImproveOsmPlugin.this);
             MainApplication.getMap().mapView.addMouseListener(ImproveOsmPlugin.this);
             MainApplication.getMap().mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
             MainApplication.getMap().registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
@@ -300,7 +299,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             PreferenceManager.getInstance().saveErrorSuppressFlag(false);
             MainApplication.getLayerManager().removeLayerChangeListener(this);
             NavigatableComponent.removeZoomChangeListener(this);
-            Main.pref.removePreferenceChangeListener(this);
+            org.openstreetmap.josm.spi.preferences.Config.getPref().removePreferenceChangeListener(this);
             if (MainApplication.getMap() != null) {
                 MainApplication.getMap().mapView.removeMouseListener(this);
                 listenersRegistered = false;
