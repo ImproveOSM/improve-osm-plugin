@@ -38,6 +38,7 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS
 import java.util.EnumSet;
 import java.util.List;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.StructUtils;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
@@ -101,7 +102,7 @@ final class LoadManager {
         final Status status = loadStatusFilter(DOF_STATUS);
 
         final List<OnewayConfidenceLevelEntry> entries =
-                Main.pref.getListOfStructs(DOF_CONFIDENCE_LEVEL, OnewayConfidenceLevelEntry.class);
+                StructUtils.getListOfStructs(Main.pref, DOF_CONFIDENCE_LEVEL, OnewayConfidenceLevelEntry.class);
         EnumSet<OnewayConfidenceLevel> confidenceLevels = null;
         if (entries != null && !entries.isEmpty()) {
             confidenceLevels = EnumSet.noneOf(OnewayConfidenceLevel.class);
@@ -122,23 +123,26 @@ final class LoadManager {
 
     MissingGeometryFilter loadMissingGeometryFilter() {
         final Status status = loadStatusFilter(MG_STATUS);
-        final List<TileTypeEntry> entries = Main.pref.getListOfStructs(Keys.MG_TYPE, TileTypeEntry.class);
+        final List<TileTypeEntry> entriesVal =
+                StructUtils.getListOfStructs(Main.pref, Keys.MG_TYPE, TileTypeEntry.class);
+
         EnumSet<TileType> types = null;
-        if (entries != null && !entries.isEmpty()) {
+        if (entriesVal != null && !entriesVal.isEmpty()) {
             types = EnumSet.noneOf(TileType.class);
-            for (final TileTypeEntry entry : entries) {
+            for (final TileTypeEntry entry : entriesVal) {
                 types.add(TileType.valueOf(entry.getName()));
             }
         }
 
         String valueStr =
                 Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                        ? Main.pref.get(MG_TRIP_COUNT) : Main.pref.get(MG_POINT_COUNT);
+                ? Main.pref.get(MG_TRIP_COUNT) : Main.pref.get(MG_POINT_COUNT);
                 valueStr = valueStr.trim();
                 final Integer count = !valueStr.isEmpty() ? Integer.valueOf(valueStr) : null;
                 return status == null && types == null ? MissingGeometryFilter.DEFAULT
                         : new MissingGeometryFilter(status, types, count);
     }
+
 
     /* TurnRestrictionLayer related methods */
 
@@ -150,7 +154,7 @@ final class LoadManager {
     TurnRestrictionFilter loadTurnRestrictionFilter() {
         final Status status = loadStatusFilter(TR_STATUS);
         final List<TurnConfidenceLevelEntry> entries =
-                Main.pref.getListOfStructs(TR_CONFIDENCE_LEVEL, TurnConfidenceLevelEntry.class);
+                StructUtils.getListOfStructs(Main.pref, TR_CONFIDENCE_LEVEL, TurnConfidenceLevelEntry.class);
         EnumSet<TurnConfidenceLevel> confidenceLevels = null;
         if (entries != null && !entries.isEmpty()) {
             confidenceLevels = EnumSet.noneOf(TurnConfidenceLevel.class);

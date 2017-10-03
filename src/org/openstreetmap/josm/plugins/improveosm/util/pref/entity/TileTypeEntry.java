@@ -15,7 +15,7 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.util.pref.entity;
 
-import org.openstreetmap.josm.data.Preferences.pref;
+import org.openstreetmap.josm.data.StructUtils.StructEntry;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 
 
@@ -28,8 +28,7 @@ import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 public class TileTypeEntry {
 
     // preference entities must be declared public, otherwise JOSM preference loading does not work!
-
-    @pref
+    @StructEntry
     private String name;
 
     public TileTypeEntry() {}

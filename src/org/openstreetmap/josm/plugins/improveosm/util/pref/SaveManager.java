@@ -42,6 +42,7 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS
 import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.StructUtils;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
 import org.openstreetmap.josm.plugins.improveosm.argument.OnewayFilter;
@@ -71,7 +72,7 @@ final class SaveManager {
     }
 
     void saveErrorSuppressFlag(final boolean flag) {
-        Main.pref.put(SUPPRESS_ERROR, flag);
+        Main.pref.putBoolean(SUPPRESS_ERROR, flag);
     }
 
     void saveLocationPrefOption(final LocationPref locationPref) {
@@ -85,12 +86,13 @@ final class SaveManager {
     /* DirrectionOfFlow layer related methods */
 
     void saveDirectionOfFlowTipSuppressFlag(final boolean flag) {
-        Main.pref.put(DOF_TIP_SUPPRESS, flag);
+        Main.pref.putBoolean(DOF_TIP_SUPPRESS, flag);
     }
 
     void saveDirectionOfFlowLastComment(final String comment) {
         Main.pref.put(DOF_LAST_COMMENT, comment);
     }
+
 
     void saveOnewayFilter(final OnewayFilter filter) {
         if (filter != null) {
@@ -104,7 +106,7 @@ final class SaveManager {
                     entries.add(new OnewayConfidenceLevelEntry(confidence));
                 }
             }
-            Main.pref.putListOfStructs(DOF_CONFIDENCE_LEVEL, entries, OnewayConfidenceLevelEntry.class);
+            StructUtils.putListOfStructs(Main.pref, DOF_CONFIDENCE_LEVEL, entries, OnewayConfidenceLevelEntry.class);
         }
     }
 
@@ -120,6 +122,7 @@ final class SaveManager {
         Main.pref.put(MG_LAST_COMMENT, comment);
     }
 
+
     void saveMissingGeoFilter(final MissingGeometryFilter filter) {
         if (filter != null) {
             // status
@@ -133,7 +136,7 @@ final class SaveManager {
                     entries.add(new TileTypeEntry(type));
                 }
             }
-            Main.pref.putListOfStructs(MG_TYPE, entries, TileTypeEntry.class);
+            StructUtils.putListOfStructs(Main.pref, MG_TYPE, entries, TileTypeEntry.class);
             final String countKey = Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
                     .getMaxClusterZoom() ? MG_TRIP_COUNT : MG_POINT_COUNT;
             final String count = filter.getCount() != null ? filter.getCount().toString() : "";
@@ -166,7 +169,7 @@ final class SaveManager {
                     entries.add(new TurnConfidenceLevelEntry(confidence));
                 }
             }
-            Main.pref.putListOfStructs(TR_CONFIDENCE_LEVEL, entries, TurnConfidenceLevelEntry.class);
+            StructUtils.putListOfStructs(Main.pref, TR_CONFIDENCE_LEVEL, entries, TurnConfidenceLevelEntry.class);
         }
     }
 
@@ -176,23 +179,23 @@ final class SaveManager {
     }
 
     void saveLocationTipSuppressFlag(final boolean tag) {
-        Main.pref.put(LOCATION_TIP_SUPPRESS, tag);
+        Main.pref.putBoolean(LOCATION_TIP_SUPPRESS, tag);
     }
 
     void saveMissingGeometryLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.put(MG_LAYER_OPENED, layerOpened);
+        Main.pref.putBoolean(MG_LAYER_OPENED, layerOpened);
     }
 
     void saveDirectionOfFlowLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.put(DOF_LAYER_OPENED, layerOpened);
+        Main.pref.putBoolean(DOF_LAYER_OPENED, layerOpened);
     }
 
     void saveTurnRestrictionLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.put(TR_LAYER_OPENED, layerOpened);
+        Main.pref.putBoolean(TR_LAYER_OPENED, layerOpened);
     }
 
     void savePanelOpenedFlag(final boolean panelOpened) {
-        Main.pref.put(PANEL_OPENED, panelOpened);
+        Main.pref.putBoolean(PANEL_OPENED, panelOpened);
     }
 
 }
