@@ -86,8 +86,7 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
             for (int i = 0; i < turnSegments.size(); i++) {
                 final Color color = i == 0 ? TURN_SEGMENT_FROM_COLOR : TURN_SEGMENT_TO_COLOR;
                 final double arrowLength = PaintUtil.arrowLength(mapView, TURN_ARROW_LENGTH);
-                final List<Point> geometry =
-                        PaintUtil.toPoints(mapView, turnSegments.get(i).getPoints());
+                final List<Point> geometry = PaintUtil.toPoints(mapView, turnSegments.get(i).getPoints());
                 if (i == 0 || i == turnSegments.size() - 1) {
                     final boolean isFromSegment = i == 0;
 
@@ -101,16 +100,24 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
 
             // draw labels
             final TurnSegment firstSegment = turnRestriction.getSegments().get(0);
-            Point labelPoint = labelPoint(mapView, firstSegment.getPoints(), true);
+            final Point firstLabelPoint = labelPoint(mapView, firstSegment.getPoints(), true);
             final Font font = mapView.getFont().deriveFont(Font.BOLD, TURN_SEGMENT_FONT_SIZE);
-            PaintManager.drawText(graphics, Integer.toString(firstSegment.getNumberOfTrips()), labelPoint, font,
+            PaintManager.drawText(graphics, Integer.toString(firstSegment.getNumberOfTrips()), firstLabelPoint, font,
                     LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE);
 
             final TurnSegment lastSegment = turnRestriction.getSegments().get(turnRestriction.getSegments().size() - 1);
-            labelPoint = labelPoint(mapView, lastSegment.getPoints(), true);
-            PaintManager.drawText(graphics, Integer.toString(turnRestriction.getNumberOfPasses()), labelPoint, font,
-                    LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE);
+            Point secondLabelPoint = labelPoint(mapView, lastSegment.getPoints(), false);
+            secondLabelPoint = removeOverlap(secondLabelPoint, firstLabelPoint);
+            PaintManager.drawText(graphics, Integer.toString(turnRestriction.getNumberOfPasses()), secondLabelPoint,
+                    font, LABEL_BACKGROUND_COLOR, Color.black, LABEL_COMPOSITE);
         }
+    }
+
+    private static Point removeOverlap(final Point secondLabelPoint, final Point firstLabelPoint) {
+        if (secondLabelPoint.equals(firstLabelPoint)) {
+            secondLabelPoint.x -= LABEL_DIST;
+        }
+        return secondLabelPoint;
     }
 
     private static List<TurnSegment> orderTurnSegments(final TurnRestriction turnRestriction) {
@@ -145,19 +152,13 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
     }
 
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
-        final Point labelPoint =
-                isFromSegment ? mapView.getPoint(points.get(0)) : mapView.getPoint(points.get(points.size() - 1));
-                final int cmp = Double.compare(mapView.getPoint(points.get(0)).getX(),
-                        mapView.getPoint(points.get(points.size() - 1)).getX());
-                if (cmp == 0) {
-                    labelPoint.x += LABEL_DIST;
-                } else if (cmp < 0) {
-                    labelPoint.x -= LABEL_DIST;
-                    labelPoint.y -= LABEL_DIST;
-                } else {
-                    labelPoint.x += LABEL_DIST;
-                    labelPoint.y += LABEL_DIST;
-                }
-                return labelPoint;
+        int labelIndex;
+        if (isFromSegment && points.size() % 2 == 0) {
+            labelIndex = points.size() / 2 - 1;
+        } else {
+            labelIndex = points.size() / 2;
+        }
+        final Point labelPoint = mapView.getPoint(points.get(labelIndex));
+        return labelPoint;
     }
 }
