@@ -152,13 +152,12 @@ final class TurnRestrictionPaintHandler extends PaintHandler<TurnRestriction> {
     }
 
     private static Point labelPoint(final MapView mapView, final List<LatLon> points, final boolean isFromSegment) {
-        int labelIndex;
-        if (isFromSegment && points.size() % 2 == 0) {
-            labelIndex = points.size() / 2 - 1;
+        Point labelPoint;
+        if (points.size() == 2) {
+            labelPoint = mapView.getPoint(points.get(0).getCenter(points.get(1)));
         } else {
-            labelIndex = points.size() / 2;
+            labelPoint = mapView.getPoint(points.get(points.size() / 2));
         }
-        final Point labelPoint = mapView.getPoint(points.get(labelIndex));
         return labelPoint;
     }
 }
