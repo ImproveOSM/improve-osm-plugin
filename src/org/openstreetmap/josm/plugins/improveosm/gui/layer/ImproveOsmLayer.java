@@ -59,7 +59,7 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
         mapView.setDoubleBuffered(true);
         graphics.setRenderingHints(RENDERING_MAP);
         if (dataSet != null) {
-            paintHandler.drawDataSet(graphics, mapView, bounds, dataSet, selectedItems);
+            paintHandler.drawDataSet(graphics, mapView, bounds, dataSet, selectedItems, (float) getOpacity());
         }
     }
 

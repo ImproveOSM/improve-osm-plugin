@@ -10,20 +10,18 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.BOTH_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.MISSINGGEO_CLUSTER_COLOR;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORMAL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PARKING_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.PATH_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.POINT_POS_RADIUS;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.ROAD_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.SEL_POINT_POS_RADIUS;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_INVALID_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_LINE_STROKE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_OPEN_COLOR;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SEL_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.TILE_SOLVED_COLOR;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.WATER_COLOR;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
@@ -44,25 +42,43 @@ import com.telenav.josm.common.gui.PaintManager;
  */
 final class MissingGeometryPaintHandler extends PaintHandler<Tile> {
 
+    private static final float _SEL_DIFFERENCE = 0.15F;
+
+
     @Override
     void drawItem(final Graphics2D graphics, final MapView mapView, final Tile tile, final boolean selected) {
+        final Composite originalComposite = graphics.getComposite();
         final Color borderColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
                 : (tile.getStatus() == Status.SOLVED ? TILE_SOLVED_COLOR : TILE_INVALID_COLOR);
         final Color tileColor = tileColor(tile);
-        final Composite composite = selected ? TILE_SEL_COMPOSITE : TILE_COMPOSITE;
-        final BoundingBox bbox = Util.tileToBoundingBox(tile.getX(), tile.getY());
-        final Point northEast = mapView.getPoint(new LatLon(bbox.getNorth(), bbox.getEast()));
-        final Point northWest = mapView.getPoint(new LatLon(bbox.getSouth(), bbox.getWest()));
-        PaintManager.drawRectangle(graphics, northEast, northWest, NORMAL_COMPOSITE, composite, TILE_LINE_STROKE,
-                borderColor, tileColor);
+        final Composite composite =
+                selected ? graphics.getComposite()
+                        : AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                                calculateOpacity(((AlphaComposite) graphics.getComposite()).getAlpha()));
+                final BoundingBox bbox = Util.tileToBoundingBox(tile.getX(), tile.getY());
+                final Point northEast = mapView.getPoint(new LatLon(bbox.getNorth(), bbox.getEast()));
+                final Point northWest = mapView.getPoint(new LatLon(bbox.getSouth(), bbox.getWest()));
+                PaintManager.drawRectangle(graphics, northEast, northWest, graphics.getComposite(), composite,
+                        TILE_LINE_STROKE,
+                        borderColor, tileColor);
 
-        final int radius = selected ? SEL_POINT_POS_RADIUS : POINT_POS_RADIUS;
-        // draw points belonging to the tile
-        if (tile.getPoints() != null && tile.getPoints().size() > 1) {
-            for (final LatLon latLon : tile.getPoints()) {
-                PaintManager.drawCircle(graphics, mapView.getPoint(latLon), POINT_COLOR, radius);
-            }
+                final int radius = selected ? SEL_POINT_POS_RADIUS : POINT_POS_RADIUS;
+                // draw points belonging to the tile
+                if (tile.getPoints() != null && tile.getPoints().size() > 1) {
+                    for (final LatLon latLon : tile.getPoints()) {
+                        PaintManager.drawCircle(graphics, mapView.getPoint(latLon), POINT_COLOR, radius);
+                    }
+                }
+                graphics.setComposite(originalComposite);
+    }
+
+    private float calculateOpacity(float opacity) {
+        if (opacity - _SEL_DIFFERENCE >= 0) {
+            opacity -= _SEL_DIFFERENCE;
+        } else {
+            opacity = 0;
         }
+        return opacity;
     }
 
     private Color tileColor(final Tile tile) {
