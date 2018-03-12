@@ -33,12 +33,6 @@ import java.util.Map;
  */
 final class Constants {
 
-    /* composite constants */
-    static final Composite NORMAL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
-    static final Composite CLUSTER_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.80F);
-    static final Composite TILE_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50F);
-    static final Composite TILE_SEL_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65F);
-
     /* constant used for drawing clusters */
     static final double CLUSTER_DEF_RADIUS = 50;
     static final Color DIRECTIONOFFLOW_CLUSTER_COLOR = new Color(238, 118, 0);

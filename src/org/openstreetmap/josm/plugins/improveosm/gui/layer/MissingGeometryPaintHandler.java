@@ -51,10 +51,11 @@ final class MissingGeometryPaintHandler extends PaintHandler<Tile> {
         final Color borderColor = tile.getStatus() == Status.OPEN ? TILE_OPEN_COLOR
                 : (tile.getStatus() == Status.SOLVED ? TILE_SOLVED_COLOR : TILE_INVALID_COLOR);
         final Color tileColor = tileColor(tile);
+        final float currentLayerOpacity = ((AlphaComposite) graphics.getComposite()).getAlpha();
         final Composite composite =
                 selected ? graphics.getComposite()
                         : AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                                calculateOpacity(((AlphaComposite) graphics.getComposite()).getAlpha()));
+                                calculateUnselectedOpacity(currentLayerOpacity));
                 final BoundingBox bbox = Util.tileToBoundingBox(tile.getX(), tile.getY());
                 final Point northEast = mapView.getPoint(new LatLon(bbox.getNorth(), bbox.getEast()));
                 final Point northWest = mapView.getPoint(new LatLon(bbox.getSouth(), bbox.getWest()));
@@ -72,7 +73,14 @@ final class MissingGeometryPaintHandler extends PaintHandler<Tile> {
                 graphics.setComposite(originalComposite);
     }
 
-    private float calculateOpacity(float opacity) {
+    /**
+     * This method calculates the opacity for the unselected missing road tiles. The unselected ones have a decreased
+     * opacity (-0.15F) compared to the selected one.
+     * 
+     * @param opacity
+     * @return
+     */
+    private float calculateUnselectedOpacity(float opacity) {
         if (opacity - _SEL_DIFFERENCE >= 0) {
             opacity -= _SEL_DIFFERENCE;
         } else {
