@@ -15,9 +15,8 @@
  */
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.CLUSTER_COMPOSITE;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.CLUSTER_DEF_RADIUS;
-import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.NORMAL_COMPOSITE;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
@@ -54,10 +53,11 @@ abstract class PaintHandler<T> {
      * @param items a list of selected items
      */
     void drawDataSet(final Graphics2D graphics, final MapView mapView, final Bounds bounds, final DataSet<T> dataSet,
-            final List<T> selectedItems) {
+            final List<T> selectedItems, final float opacity) {
         final int zoom = Util.zoom(bounds);
         final Composite originalComposite = graphics.getComposite();
         final Stroke originalStroke = graphics.getStroke();
+        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
         if (zoom <= Config.getInstance().getMaxClusterZoom()) {
             if (dataSet.getClusters() != null && !dataSet.getClusters().isEmpty()) {
                 drawClusters(graphics, mapView, dataSet.getClusters(), zoom, getClusterColor());
@@ -81,13 +81,11 @@ abstract class PaintHandler<T> {
     private void drawClusters(final Graphics2D graphics, final MapView mapView, final List<Cluster> clusters,
             final int zoom, final Color color) {
         final SortedMap<Integer, Double> clusterRadiusMap = generateClusterRadiusMap(zoom, clusters);
-        graphics.setComposite(CLUSTER_COMPOSITE);
         for (final Cluster cluster : clusters) {
             final Integer radius = clusterRadius(clusterRadiusMap, cluster.getSize()).intValue();
             PaintManager.drawCircle(graphics, mapView.getPoint(cluster.getPoint()), color,
                     radius);
         }
-        graphics.setComposite(NORMAL_COMPOSITE);
     }
 
     private SortedMap<Integer, Double> generateClusterRadiusMap(final int zoom, final List<Cluster> clusters) {
