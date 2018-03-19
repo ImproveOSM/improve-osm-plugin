@@ -446,7 +446,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 .getMaxClusterZoom()
                 && activeLayer instanceof MissingGeometryLayer) {
             MainApplication.getMap().mapView.removeTemporaryLayer(itemSelectionLayer);
-            if (!startDrag.equals(endDrag)) {
+            if (startDrag != null && endDrag != null && !startDrag.equals(endDrag)) {
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
                 final MissingGeometryLayer layer = ((MissingGeometryLayer) activeLayer);
