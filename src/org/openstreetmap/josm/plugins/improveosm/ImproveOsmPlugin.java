@@ -201,7 +201,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             org.openstreetmap.josm.spi.preferences.Config.getPref().addPreferenceChangeListener(ImproveOsmPlugin.this);
             MainApplication.getMap().mapView.addMouseListener(ImproveOsmPlugin.this);
             MainApplication.getMap().mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
-            MainApplication.getMap().registerKeyboardAction(new CopyAction(), GuiConfig.getInstance().getLblCopy(),
+            MainApplication.getMap().mapView.registerKeyboardAction(new CopyAction(),
+                    GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
             listenersRegistered = true;
@@ -446,7 +447,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                 .getMaxClusterZoom()
                 && activeLayer instanceof MissingGeometryLayer) {
             MainApplication.getMap().mapView.removeTemporaryLayer(itemSelectionLayer);
-            if (!startDrag.equals(endDrag)) {
+            if (startDrag != null && endDrag != null && !startDrag.equals(endDrag)) {
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
                 final MissingGeometryLayer layer = ((MissingGeometryLayer) activeLayer);
