@@ -18,7 +18,7 @@ package org.openstreetmap.josm.plugins.improveosm;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.SearchFilter;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataLayer;
@@ -116,11 +116,12 @@ public final class ServiceHandler<T> {
         if (suppress) {
             if (!PreferenceManager.getInstance().loadErrorSuppressFlag()) {
                 PreferenceManager.getInstance().saveErrorSuppressFlag(suppress);
-                JOptionPane.showMessageDialog(Main.parent, e.getMessage(), "Operation failed",
+                JOptionPane.showMessageDialog(MainApplication.getMainFrame(), e.getMessage(), "Operation failed",
                         JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(Main.parent, e.getMessage(), "Operation failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainApplication.getMainFrame(), e.getMessage(), "Operation failed",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

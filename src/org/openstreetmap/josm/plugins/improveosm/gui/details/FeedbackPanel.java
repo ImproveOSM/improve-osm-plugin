@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.tools.OpenBrowser;
@@ -67,7 +67,8 @@ class FeedbackPanel extends JPanel implements HyperlinkListener {
             try {
                 OpenBrowser.displayUrl(new URI(Config.getInstance().getFeedbackUrl()));
             } catch (final Exception e) {
-                JOptionPane.showMessageDialog(Main.parent, tr(GuiConfig.getInstance().getTxtFeedbackUrlError()),
+                JOptionPane.showMessageDialog(MainApplication.getMainFrame(),
+                        tr(GuiConfig.getInstance().getTxtFeedbackUrlError()),
                         tr(GuiConfig.getInstance().getErrorTitle()), JOptionPane.ERROR_MESSAGE);
             }
         }
