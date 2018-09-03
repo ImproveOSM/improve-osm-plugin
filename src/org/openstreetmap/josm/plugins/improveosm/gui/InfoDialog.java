@@ -16,7 +16,6 @@
 package org.openstreetmap.josm.plugins.improveosm.gui;
 
 import javax.swing.JOptionPane;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.DirectionOfFlowGuiConfig;
@@ -51,7 +50,7 @@ public class InfoDialog {
                 dofTipIsDisplayed = true;
                 final int val = JOptionPane.showOptionDialog(MainApplication.getMap(),
                         TextComponentBuilder.buildTextPane(DirectionOfFlowGuiConfig.getInstance().getDlgTipTxt(),
-                                CONTENT_TYPE, Main.parent.getBackground(), false),
+                                CONTENT_TYPE, MainApplication.getMainFrame().getBackground(), false),
                         DirectionOfFlowGuiConfig.getInstance().getDlgTipTitle(), JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, null, null);
                 final boolean flag = val == JOptionPane.NO_OPTION;
@@ -71,7 +70,7 @@ public class InfoDialog {
             locationTipIsDisplayed = true;
             final int val = JOptionPane.showOptionDialog(MainApplication.getMap().mapView,
                     TextComponentBuilder.buildTextPane(GuiConfig.getInstance().getLocationBtnTipTxt(), CONTENT_TYPE,
-                            Main.parent.getBackground(), false),
+                            MainApplication.getMainFrame().getBackground(), false),
                     GuiConfig.getInstance().getLocationBtnTipLbl(), JOptionPane.YES_NO_OPTION,
                     JOptionPane.PLAIN_MESSAGE, null, null, null);
             final boolean flag = val == JOptionPane.YES_OPTION;

@@ -41,7 +41,6 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS;
 import java.util.ArrayList;
 import java.util.List;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.StructUtils;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
@@ -52,10 +51,10 @@ import org.openstreetmap.josm.plugins.improveosm.entity.OnewayConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidenceLevelEntry;
+import org.openstreetmap.josm.spi.preferences.Config;
 
 
 /**
@@ -68,36 +67,36 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidence
 final class SaveManager {
 
     void saveOsmUsername(final String username) {
-        Main.pref.put(OSM_USERNAME, username);
+        Config.getPref().put(OSM_USERNAME, username);
     }
 
     void saveErrorSuppressFlag(final boolean flag) {
-        Main.pref.putBoolean(SUPPRESS_ERROR, flag);
+        Config.getPref().putBoolean(SUPPRESS_ERROR, flag);
     }
 
     void saveLocationPrefOption(final LocationPref locationPref) {
-        Main.pref.put(LOCATION_PREF_OPTION, locationPref.name());
+        Config.getPref().put(LOCATION_PREF_OPTION, locationPref.name());
     }
 
     void saveLocationPrefValue(final String value) {
-        Main.pref.put(LOCATION_PREF_VALUE, value);
+        Config.getPref().put(LOCATION_PREF_VALUE, value);
     }
 
     /* DirrectionOfFlow layer related methods */
 
     void saveDirectionOfFlowTipSuppressFlag(final boolean flag) {
-        Main.pref.putBoolean(DOF_TIP_SUPPRESS, flag);
+        Config.getPref().putBoolean(DOF_TIP_SUPPRESS, flag);
     }
 
     void saveDirectionOfFlowLastComment(final String comment) {
-        Main.pref.put(DOF_LAST_COMMENT, comment);
+        Config.getPref().put(DOF_LAST_COMMENT, comment);
     }
 
 
     void saveOnewayFilter(final OnewayFilter filter) {
         if (filter != null) {
             final String status = filter.getStatus() != null ? filter.getStatus().name() : "";
-            Main.pref.put(DOF_STATUS, status);
+            Config.getPref().put(DOF_STATUS, status);
 
             // confidence levels
             final List<OnewayConfidenceLevelEntry> entries = new ArrayList<>();
@@ -106,20 +105,21 @@ final class SaveManager {
                     entries.add(new OnewayConfidenceLevelEntry(confidence));
                 }
             }
-            StructUtils.putListOfStructs(Main.pref, DOF_CONFIDENCE_LEVEL, entries, OnewayConfidenceLevelEntry.class);
+            StructUtils.putListOfStructs(Config.getPref(), DOF_CONFIDENCE_LEVEL, entries,
+                    OnewayConfidenceLevelEntry.class);
         }
     }
 
     void saveDirectionOfFlowFiltersChangedFlag(final boolean changed) {
-        Main.pref.put(DOF_FILTERS_CHANGED, "");
-        Main.pref.put(DOF_FILTERS_CHANGED, Boolean.toString(changed));
+        Config.getPref().put(DOF_FILTERS_CHANGED, "");
+        Config.getPref().put(DOF_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
 
     /* MissingGeometry layer related methods */
 
     void saveMissingGeoLastComment(final String comment) {
-        Main.pref.put(MG_LAST_COMMENT, comment);
+        Config.getPref().put(MG_LAST_COMMENT, comment);
     }
 
 
@@ -127,7 +127,7 @@ final class SaveManager {
         if (filter != null) {
             // status
             final String status = filter.getStatus() != null ? filter.getStatus().name() : "";
-            Main.pref.put(MG_STATUS, status);
+            Config.getPref().put(MG_STATUS, status);
 
             // type
             final List<TileTypeEntry> entries = new ArrayList<>();
@@ -136,31 +136,32 @@ final class SaveManager {
                     entries.add(new TileTypeEntry(type));
                 }
             }
-            StructUtils.putListOfStructs(Main.pref, MG_TYPE, entries, TileTypeEntry.class);
-            final String countKey = Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
+            StructUtils.putListOfStructs(Config.getPref(), MG_TYPE, entries, TileTypeEntry.class);
+            final String countKey = Util.zoom(MainApplication.getMap().mapView
+                    .getRealBounds()) > org.openstreetmap.josm.plugins.improveosm.util.cnf.Config.getInstance()
                     .getMaxClusterZoom() ? MG_TRIP_COUNT : MG_POINT_COUNT;
             final String count = filter.getCount() != null ? filter.getCount().toString() : "";
-            Main.pref.put(countKey, count);
+            Config.getPref().put(countKey, count);
         }
     }
 
     void saveMissingGeometryFiltersChangedFlag(final boolean changed) {
-        Main.pref.put(MG_FILTERS_CHANGED, "");
-        Main.pref.put(MG_FILTERS_CHANGED, Boolean.toString(changed));
+        Config.getPref().put(MG_FILTERS_CHANGED, "");
+        Config.getPref().put(MG_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
 
     /* TurnRestriction layer related methods */
 
     void saveTurnRestrictionLastComment(final String comment) {
-        Main.pref.put(TR_LAST_COMMENT, comment);
+        Config.getPref().put(TR_LAST_COMMENT, comment);
     }
 
     void saveTurnRestrictionFilter(final TurnRestrictionFilter filter) {
         if (filter != null) {
             // status
             final String status = filter.getStatus() != null ? filter.getStatus().name() : "";
-            Main.pref.put(TR_STATUS, status);
+            Config.getPref().put(TR_STATUS, status);
 
             // confidence levels
             final List<TurnConfidenceLevelEntry> entries = new ArrayList<>();
@@ -169,33 +170,34 @@ final class SaveManager {
                     entries.add(new TurnConfidenceLevelEntry(confidence));
                 }
             }
-            StructUtils.putListOfStructs(Main.pref, TR_CONFIDENCE_LEVEL, entries, TurnConfidenceLevelEntry.class);
+            StructUtils.putListOfStructs(Config.getPref(), TR_CONFIDENCE_LEVEL, entries,
+                    TurnConfidenceLevelEntry.class);
         }
     }
 
     void saveTurnRestrictionFiltersChangedFlag(final boolean changed) {
-        Main.pref.put(TR_FILTERS_CHANGED, "");
-        Main.pref.put(TR_FILTERS_CHANGED, Boolean.toString(changed));
+        Config.getPref().put(TR_FILTERS_CHANGED, "");
+        Config.getPref().put(TR_FILTERS_CHANGED, Boolean.toString(changed));
     }
 
     void saveLocationTipSuppressFlag(final boolean tag) {
-        Main.pref.putBoolean(LOCATION_TIP_SUPPRESS, tag);
+        Config.getPref().putBoolean(LOCATION_TIP_SUPPRESS, tag);
     }
 
     void saveMissingGeometryLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.putBoolean(MG_LAYER_OPENED, layerOpened);
+        Config.getPref().putBoolean(MG_LAYER_OPENED, layerOpened);
     }
 
     void saveDirectionOfFlowLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.putBoolean(DOF_LAYER_OPENED, layerOpened);
+        Config.getPref().putBoolean(DOF_LAYER_OPENED, layerOpened);
     }
 
     void saveTurnRestrictionLayerOpenedFlag(final boolean layerOpened) {
-        Main.pref.putBoolean(TR_LAYER_OPENED, layerOpened);
+        Config.getPref().putBoolean(TR_LAYER_OPENED, layerOpened);
     }
 
     void savePanelOpenedFlag(final boolean panelOpened) {
-        Main.pref.putBoolean(PANEL_OPENED, panelOpened);
+        Config.getPref().putBoolean(PANEL_OPENED, panelOpened);
     }
 
 }

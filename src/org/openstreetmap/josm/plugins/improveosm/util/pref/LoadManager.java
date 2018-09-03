@@ -37,7 +37,6 @@ import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_LAYER_
 import static org.openstreetmap.josm.plugins.improveosm.util.pref.Keys.TR_STATUS;
 import java.util.EnumSet;
 import java.util.List;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.StructUtils;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.argument.MissingGeometryFilter;
@@ -49,10 +48,10 @@ import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.entity.TileType;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnConfidenceLevel;
 import org.openstreetmap.josm.plugins.improveosm.util.Util;
-import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.OnewayConfidenceLevelEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TileTypeEntry;
 import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidenceLevelEntry;
+import org.openstreetmap.josm.spi.preferences.Config;
 
 
 /**
@@ -65,36 +64,36 @@ import org.openstreetmap.josm.plugins.improveosm.util.pref.entity.TurnConfidence
 final class LoadManager {
 
     String loadOsmUsername() {
-        final String username = Main.pref.get(OSM_USERNAME);
+        final String username = Config.getPref().get(OSM_USERNAME);
         return username == null ? "" : username;
     }
 
     boolean loadErrorSuppressFlag() {
-        return Main.pref.getBoolean(SUPPRESS_ERROR);
+        return Config.getPref().getBoolean(SUPPRESS_ERROR);
     }
 
 
     LocationPref loadLocationPrefOption() {
-        final String location = Main.pref.get(LOCATION_PREF_OPTION);
+        final String location = Config.getPref().get(LOCATION_PREF_OPTION);
         return location != null && !location.isEmpty() ? LocationPref.valueOf(location) : LocationPref.COPY_LOCATION;
     }
 
     String loadLocationPrefValue() {
-        return Main.pref.get(LOCATION_PREF_VALUE);
+        return Config.getPref().get(LOCATION_PREF_VALUE);
     }
 
     boolean loadLocationTipSuppressFlag() {
-        return Main.pref.getBoolean(LOCATION_TIP_SUPPRESS);
+        return Config.getPref().getBoolean(LOCATION_TIP_SUPPRESS);
     }
 
     /* DirectionOfFlowLayer related methods */
 
     boolean loadDirectionOfFlowTipSuppressFlag() {
-        return Main.pref.getBoolean(DOF_TIP_SUPPRESS);
+        return Config.getPref().getBoolean(DOF_TIP_SUPPRESS);
     }
 
     String loadDirectionOfFlowLastComment() {
-        final String comment = Main.pref.get(DOF_LAST_COMMENT);
+        final String comment = Config.getPref().get(DOF_LAST_COMMENT);
         return comment == null ? "" : comment;
     }
 
@@ -102,7 +101,7 @@ final class LoadManager {
         final Status status = loadStatusFilter(DOF_STATUS);
 
         final List<OnewayConfidenceLevelEntry> entries =
-                StructUtils.getListOfStructs(Main.pref, DOF_CONFIDENCE_LEVEL, OnewayConfidenceLevelEntry.class);
+                StructUtils.getListOfStructs(Config.getPref(), DOF_CONFIDENCE_LEVEL, OnewayConfidenceLevelEntry.class);
         EnumSet<OnewayConfidenceLevel> confidenceLevels = null;
         if (entries != null && !entries.isEmpty()) {
             confidenceLevels = EnumSet.noneOf(OnewayConfidenceLevel.class);
@@ -117,14 +116,14 @@ final class LoadManager {
     /* MissingGeometyLayer related methods */
 
     String loadMissingGeometryLastComment() {
-        final String comment = Main.pref.get(MG_LAST_COMMENT);
+        final String comment = Config.getPref().get(MG_LAST_COMMENT);
         return comment == null ? "" : comment;
     }
 
     MissingGeometryFilter loadMissingGeometryFilter() {
         final Status status = loadStatusFilter(MG_STATUS);
         final List<TileTypeEntry> entriesVal =
-                StructUtils.getListOfStructs(Main.pref, Keys.MG_TYPE, TileTypeEntry.class);
+                StructUtils.getListOfStructs(Config.getPref(), Keys.MG_TYPE, TileTypeEntry.class);
 
         EnumSet<TileType> types = null;
         if (entriesVal != null && !entriesVal.isEmpty()) {
@@ -135,8 +134,10 @@ final class LoadManager {
         }
 
         String valueStr =
-                Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()
-                ? Main.pref.get(MG_TRIP_COUNT) : Main.pref.get(MG_POINT_COUNT);
+                Util.zoom(MainApplication.getMap().mapView
+                        .getRealBounds()) > org.openstreetmap.josm.plugins.improveosm.util.cnf.Config.getInstance()
+                                .getMaxClusterZoom() ? Config.getPref().get(MG_TRIP_COUNT)
+                                        : Config.getPref().get(MG_POINT_COUNT);
                 valueStr = valueStr.trim();
                 final Integer count = !valueStr.isEmpty() ? Integer.valueOf(valueStr) : null;
                 return status == null && types == null ? MissingGeometryFilter.DEFAULT
@@ -147,14 +148,14 @@ final class LoadManager {
     /* TurnRestrictionLayer related methods */
 
     String loadTurnRestrictionLastComment() {
-        final String comment = Main.pref.get(TR_LAST_COMMENT);
+        final String comment = Config.getPref().get(TR_LAST_COMMENT);
         return comment == null ? "" : comment;
     }
 
     TurnRestrictionFilter loadTurnRestrictionFilter() {
         final Status status = loadStatusFilter(TR_STATUS);
         final List<TurnConfidenceLevelEntry> entries =
-                StructUtils.getListOfStructs(Main.pref, TR_CONFIDENCE_LEVEL, TurnConfidenceLevelEntry.class);
+                StructUtils.getListOfStructs(Config.getPref(), TR_CONFIDENCE_LEVEL, TurnConfidenceLevelEntry.class);
         EnumSet<TurnConfidenceLevel> confidenceLevels = null;
         if (entries != null && !entries.isEmpty()) {
             confidenceLevels = EnumSet.noneOf(TurnConfidenceLevel.class);
@@ -167,29 +168,29 @@ final class LoadManager {
     }
 
     boolean loadMissingGeometryLayerOpenedFlag() {
-        final String layerOpened = Main.pref.get(MG_LAYER_OPENED);
+        final String layerOpened = Config.getPref().get(MG_LAYER_OPENED);
         return layerOpened.isEmpty() ? false : Boolean.valueOf(layerOpened);
     }
 
     boolean loadDirectionOfFlowLayerOpenedFlag() {
-        final String layerOpened = Main.pref.get(DOF_LAYER_OPENED);
+        final String layerOpened = Config.getPref().get(DOF_LAYER_OPENED);
         return layerOpened.isEmpty() ? false : Boolean.valueOf(layerOpened);
     }
 
     boolean loadTurnRestrictionLayerOpenedFlag() {
-        final String layerOpened = Main.pref.get(TR_LAYER_OPENED);
+        final String layerOpened = Config.getPref().get(TR_LAYER_OPENED);
         return layerOpened.isEmpty() ? false : Boolean.valueOf(layerOpened);
     }
 
     boolean loadPanelOpenedFlag() {
-        final String panelOpened = Main.pref.get(PANEL_OPENED);
+        final String panelOpened = Config.getPref().get(PANEL_OPENED);
         return panelOpened.isEmpty() ? false : Boolean.valueOf(panelOpened);
     }
 
     /* commonly used method */
 
     private Status loadStatusFilter(final String key) {
-        final String statusStr = Main.pref.get(key);
+        final String statusStr = Config.getPref().get(key);
         return statusStr != null && !statusStr.isEmpty() ? Status.valueOf(statusStr) : null;
     }
 }

@@ -17,8 +17,8 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details.comment;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
 import org.openstreetmap.josm.plugins.improveosm.gui.ShortcutFactory;
@@ -78,7 +78,8 @@ abstract class BasicCommentAction extends JosmAction implements CommentObservabl
                 final String username = PreferenceManager.getInstance().loadOsmUsername();
                 if (username.isEmpty()) {
                     final String newUsername =
-                            JOptionPane.showInputDialog(Main.parent, GuiConfig.getInstance().getTxtMissingUsername(),
+                            JOptionPane.showInputDialog(MainApplication.getMainFrame(),
+                                    GuiConfig.getInstance().getTxtMissingUsername(),
                                     GuiConfig.getInstance().getWarningTitle(), JOptionPane.WARNING_MESSAGE);
                     if (newUsername != null && !newUsername.isEmpty()) {
                         PreferenceManager.getInstance().saveOsmUsername(newUsername);
