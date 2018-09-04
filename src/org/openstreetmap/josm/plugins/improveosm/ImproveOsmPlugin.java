@@ -200,7 +200,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             MainApplication.getLayerManager().addLayerChangeListener(ImproveOsmPlugin.this);
             org.openstreetmap.josm.spi.preferences.Config.getPref().addPreferenceChangeListener(ImproveOsmPlugin.this);
             MainApplication.getMap().mapView.addMouseListener(ImproveOsmPlugin.this);
-            MainApplication.getMap().mapView.addMouseMotionListener(new MissingGeometryLayerSelectionListener());
+            MainApplication.getMap().mapView.addMouseMotionListener(new LayerSelectionListener());
             MainApplication.getMap().mapView.registerKeyboardAction(new CopyAction(),
                     GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
@@ -378,10 +378,10 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     .getMaxClusterZoom()) {
                 if (activeLayer instanceof MissingGeometryLayer) {
                     // select tiles
-                    selectItem(ServiceHandler.getMissingGeometryHandler(), missingGeometryLayer, point, multiSelect);
+                    selectItem(missingGeometryLayer, point, multiSelect);
                 } else if (activeLayer instanceof DirectionOfFlowLayer) {
                     // select road segments
-                    selectItem(ServiceHandler.getDirectionOfFlowHandler(), directionOfFlowLayer, point, multiSelect);
+                    selectItem(directionOfFlowLayer, point, multiSelect);
                 } else if (activeLayer instanceof TurnRestrictionLayer) {
                     selectTurnRestriction(point, multiSelect);
                 }
@@ -389,8 +389,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         }
     }
 
-    private <T> void selectItem(final ServiceHandler<T> handler, final ImproveOsmLayer<T> layer, final Point point,
-            final boolean multiSelect) {
+    private <T> void selectItem(final ImproveOsmLayer<T> layer, final Point point, final boolean multiSelect) {
         final T item = layer.nearbyItem(point, multiSelect);
         if (item != null) {
             if (!item.equals(layer.lastSelectedItem())) {
@@ -429,10 +428,8 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
     @Override
     public void mousePressed(final MouseEvent event) {
-        if (SwingUtilities.isLeftMouseButton(event)
-                && Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
-                .getMaxClusterZoom()
-                && MainApplication.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+        if (SwingUtilities.isLeftMouseButton(event) && Util
+                .zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
             startDrag = new Point(event.getX(), event.getY());
             endDrag = startDrag;
             MainApplication.getMap().mapView.addTemporaryLayer(itemSelectionLayer);
@@ -442,15 +439,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void mouseReleased(final MouseEvent event) {
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-        if (SwingUtilities.isLeftMouseButton(event)
-                && Util.zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance()
-                .getMaxClusterZoom()
-                && activeLayer instanceof MissingGeometryLayer) {
+        if (SwingUtilities.isLeftMouseButton(event) && Util
+                .zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
             MainApplication.getMap().mapView.removeTemporaryLayer(itemSelectionLayer);
             if (startDrag != null && endDrag != null && !startDrag.equals(endDrag)) {
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
-                final MissingGeometryLayer layer = ((MissingGeometryLayer) activeLayer);
+                final ImproveOsmLayer layer = ((ImproveOsmLayer) activeLayer);
                 SwingUtilities.invokeLater(() -> {
                     final Rectangle2D boundingBox = Util.buildRectangleFromCoordinates(startDragCoord.getX(),
                             startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
@@ -458,10 +453,9 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     layer.invalidate();
                     MainApplication.getMap().mapView.repaint();
 
-                    final Tile tile = layer.lastSelectedItem();
                     final LatLon location = layer.getSelectedItems().size() >= 1
                             ? new LatLon(boundingBox.getCenterX(), boundingBox.getCenterY()) : null;
-                            updateDialog(tile, location);
+                            updateDialog(layer.lastSelectedItem(), location);
                 });
             }
         }
@@ -664,12 +658,11 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     /**
      * Defines the functionality produced by the mouse dragging.
      */
-    private final class MissingGeometryLayerSelectionListener extends MouseMotionAdapter {
+    private final class LayerSelectionListener extends MouseMotionAdapter {
 
         @Override
         public void mouseDragged(final MouseEvent event) {
-            if (SwingUtilities.isLeftMouseButton(event)
-                    && MainApplication.getLayerManager().getActiveLayer() instanceof MissingGeometryLayer) {
+            if (SwingUtilities.isLeftMouseButton(event)) {
                 endDrag = new Point(event.getX(), event.getY());
                 ImproveOsmPlugin.this.itemSelectionLayer.invalidate();
             }

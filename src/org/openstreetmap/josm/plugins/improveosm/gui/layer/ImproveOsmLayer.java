@@ -18,9 +18,11 @@ package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 import static org.openstreetmap.josm.plugins.improveosm.gui.layer.Constants.RENDERING_MAP;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.gui.MapView;
 import org.openstreetmap.josm.plugins.improveosm.entity.DataSet;
@@ -91,6 +93,25 @@ public abstract class ImproveOsmLayer<T> extends AbstractLayer {
         }
         this.selectedItems = newList;
     }
+
+    /**
+     * Updates the layer selected items with the items found in the given bounding box.
+     *
+     * @param boundingBox the area in which the items need to be located in order to be selected
+     * @param multiSelected specify if the new selected items need to replace the old selected items or not
+     */
+    public void updateSelectedItems(final Rectangle2D boundingBox, final boolean multiSelected) {
+        final List<T> selectedItems = getSelectedItems();
+        if (!multiSelected) {
+            setSelectedItems(getItemsInsideTheBoundingBox(boundingBox, multiSelected));
+        } else {
+            selectedItems.addAll(getItemsInsideTheBoundingBox(boundingBox, multiSelected).stream()
+                    .filter(item -> !getSelectedItems().contains(item)).collect(Collectors.toList()));
+            setSelectedItems(selectedItems);
+        }
+    }
+
+    protected abstract List<T> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox, final boolean multiSelected);
 
     /**
      * Updates the selected item.
