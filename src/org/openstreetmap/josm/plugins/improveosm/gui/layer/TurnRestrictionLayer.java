@@ -16,8 +16,10 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.plugins.improveosm.entity.TurnRestriction;
@@ -84,6 +86,22 @@ public class TurnRestrictionLayer extends ImproveOsmLayer<TurnRestriction> {
     @Override
     AbstractAction getDeleteAction() {
         return new TurnRestrictionLayerAction();
+    }
+
+    @Override
+    public List<TurnRestriction> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox,
+            final boolean multiSelected) {
+        List<TurnRestriction> result;
+        if (multiSelected && getSelectedItems().stream()
+                .anyMatch(turnRestriction -> turnRestriction.getTurnRestrictions() != null)) {
+            result = new ArrayList<>();
+        } else {
+            result = getDataSet().getItems().stream()
+                    .filter(turnRestriction -> boundingBox.contains(turnRestriction.getPoint().getX(),
+                            turnRestriction.getPoint().getY()) && turnRestriction.getTurnRestrictions() == null)
+                    .collect(Collectors.toList());
+        }
+        return result;
     }
 
 

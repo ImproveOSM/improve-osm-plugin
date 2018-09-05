@@ -16,6 +16,9 @@
 package org.openstreetmap.josm.plugins.improveosm.gui.layer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -67,6 +70,11 @@ public class DirectionOfFlowLayer extends ImproveOsmLayer<RoadSegment> {
         return new DeleteDirectionOfFlowLayerAction();
     }
 
+    @Override
+    public List<RoadSegment> getItemsInsideTheBoundingBox(final Rectangle2D boundingBox, boolean multiSelected) {
+        return getDataSet().getItems().stream().filter(segment -> segment.getPoints().stream()
+                .anyMatch(point -> boundingBox.contains(point.getX(), point.getY()))).collect(Collectors.toList());
+    }
 
     private static class DeleteDirectionOfFlowLayerAction extends ImproveOsmDeleteLayerAction {
 
