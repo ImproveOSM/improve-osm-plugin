@@ -445,7 +445,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             if (startDrag != null && endDrag != null && !startDrag.equals(endDrag)) {
                 final LatLon startDragCoord = Util.pointToLatLon(startDrag);
                 final LatLon endDragCoord = Util.pointToLatLon(endDrag);
-                final ImproveOsmLayer layer = ((ImproveOsmLayer) activeLayer);
+                final ImproveOsmLayer<?> layer = ((ImproveOsmLayer<?>) activeLayer);
                 SwingUtilities.invokeLater(() -> {
                     final Rectangle2D boundingBox = Util.buildRectangleFromCoordinates(startDragCoord.getX(),
                             startDragCoord.getY(), endDragCoord.getX(), endDragCoord.getY());
