@@ -439,7 +439,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     @Override
     public void mouseReleased(final MouseEvent event) {
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-        if (SwingUtilities.isLeftMouseButton(event) && Util
+        if ((activeLayer instanceof ImproveOsmLayer) && SwingUtilities.isLeftMouseButton(event) && Util
                 .zoom(MainApplication.getMap().mapView.getRealBounds()) > Config.getInstance().getMaxClusterZoom()) {
             MainApplication.getMap().mapView.removeTemporaryLayer(itemSelectionLayer);
             if (startDrag != null && endDrag != null && !startDrag.equals(endDrag)) {
