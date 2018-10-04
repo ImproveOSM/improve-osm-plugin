@@ -66,7 +66,8 @@ class CommentsList extends JList<Comment> {
         public void valueChanged(final ListSelectionEvent event) {
             if (!event.getValueIsAdjusting()) {
                 final Comment selectedObj = getSelectedValue();
-                if (selectedObj.getText().length() > Config.getInstance().getCommentDisplayLength()) {
+                if (selectedObj.getText() != null && selectedObj.getText().length() > Config.getInstance()
+                        .getCommentDisplayLength()) {
                     setToolTipText(selectedObj.getText().substring(0, Config.getInstance().getCommentMaxLength()));
                 } else {
                     setToolTipText(null);
