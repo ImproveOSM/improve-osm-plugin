@@ -100,7 +100,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
-        searchBox = TextComponentBuilder.buildTextField(createSearchBoxAction(), "", Font.PLAIN, Color.WHITE);
+        searchBox = TextComponentBuilder.buildTextField(createSearchBoxAction(), "latitude,longitude", Font.PLAIN, Color.WHITE);
         pnlBtn = new ButtonPanel();
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
@@ -188,14 +188,14 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
      * 
      * @return action the action for the search box
      */
-    public AbstractAction createSearchBoxAction() {
-        AbstractAction action = new AbstractAction() {
+    private AbstractAction createSearchBoxAction() {
+        final AbstractAction action = new AbstractAction() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String latLonValue = searchBox.getText();
+            public void actionPerformed(final ActionEvent e) {
+                final String latLonValue = searchBox.getText();
                 if (latLonValue.split(",").length == 2) {
                     try {
                         final double lat = Double.parseDouble(latLonValue.split(",")[0]);
@@ -209,8 +209,10 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                         searchBox.setText("");
 
                     } catch (final NumberFormatException e1) {
-
+                        searchBox.setText("Incorrect format for latitude or longitude.");
                     }
+                } else {
+                    searchBox.setText("Incorrect format.(expected: lat,lon)");
                 }
             }
         };
