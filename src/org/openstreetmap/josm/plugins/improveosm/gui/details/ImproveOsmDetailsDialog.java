@@ -18,11 +18,17 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
@@ -45,6 +51,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
+import com.telenav.josm.common.gui.builder.TextComponentBuilder;
 
 
 /**
@@ -71,6 +78,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
+    private final JTextField searchBox;
 
 
     /**
@@ -92,8 +100,10 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        searchBox = TextComponentBuilder.buildTextField(createSearchBoxAction(), "", Font.PLAIN, Color.WHITE);
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
+        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         add(createLayout(pnlMain, false, null));
     }
@@ -171,5 +181,39 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             cmpInfo.revalidate();
             repaint();
         }
+    }
+
+    /**
+     * Creates the action specific to the search by coordinates.
+     * 
+     * @return action the action for the search box
+     */
+    public AbstractAction createSearchBoxAction() {
+        AbstractAction action = new AbstractAction() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String latLonValue = searchBox.getText();
+                if (latLonValue.split(",").length == 2) {
+                    try {
+                        final double lat = Double.parseDouble(latLonValue.split(",")[0]);
+                        final double lon = Double.parseDouble(latLonValue.split(",")[1]);
+                        final double latDemo = 0;
+                        final double lonDemo = 0;
+                        final EastNorth demoZoomLocation = new EastNorth(latDemo, lonDemo);
+                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                        final LatLon searchedLocation = new LatLon(lat, lon);
+                        MainApplication.getMap().mapView.zoomTo(searchedLocation);
+                        searchBox.setText("");
+
+                    } catch (final NumberFormatException e1) {
+
+                    }
+                }
+            }
+        };
+        return action;
     }
 }
