@@ -20,8 +20,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -102,7 +100,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
         searchBox = new DisableShortcutsOnFocusGainedTextField("latitude,longitude");
         searchBox.addActionListener(new SearchBoxListeners());
-        searchBox.addMouseListener(new SearchBoxListeners());
         pnlBtn = new ButtonPanel();
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
@@ -186,7 +183,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     }
 
 
-    class SearchBoxListeners implements MouseListener, ActionListener {
+    class SearchBoxListeners implements ActionListener {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -200,46 +197,13 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                             searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
                     MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
                     searchBox.setText("");
-                    searchBox.setFocusable(false);
-
                 } catch (final NumberFormatException e1) {
                     searchBox.setText("Incorrect format for latitude or longitude.");
                 }
             } else {
                 searchBox.setText("Incorrect format.(expected: lat,lon)");
             }
-            searchBox.setFocusable(false);
-        }
-
-        @Override
-        public void mouseClicked(final MouseEvent e) {
-            searchBox.setFocusable(true);
-            searchBox.setText("");
-
-        }
-
-        @Override
-        public void mousePressed(final MouseEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void mouseReleased(final MouseEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            // TODO Auto-generated method stub
-
+            MainApplication.getMap().mapView.requestFocus();
         }
     }
 }
