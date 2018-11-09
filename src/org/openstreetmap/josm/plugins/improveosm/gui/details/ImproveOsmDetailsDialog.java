@@ -18,13 +18,19 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
+import org.openstreetmap.josm.gui.widgets.DisableShortcutsOnFocusGainedTextField;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -71,6 +77,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
+    private final JTextField searchBox;
 
 
     /**
@@ -87,13 +94,15 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
         noOfTilesInfo = new SelectedItemsInfoPanel();
-
         cmpInfo = ContainerBuilder.buildScrollPane(ContainerBuilder.buildEmptyPanel(Color.WHITE),
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        searchBox = new DisableShortcutsOnFocusGainedTextField("latitude,longitude");
+        searchBox.addActionListener(new SearchBoxListeners());
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
+        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         add(createLayout(pnlMain, false, null));
     }
@@ -170,6 +179,31 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             }
             cmpInfo.revalidate();
             repaint();
+        }
+    }
+
+
+    class SearchBoxListeners implements ActionListener {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            final String latLonValue = searchBox.getText();
+            if (latLonValue.split(",").length == 2) {
+                try {
+                    final double lat = Double.parseDouble(latLonValue.split(",")[0]);
+                    final double lon = Double.parseDouble(latLonValue.split(",")[1]);
+                    final LatLon searchedLocation = new LatLon(lat, lon);
+                    final EastNorth demoZoomLocation =
+                            searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                    MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    searchBox.setText("");
+                } catch (final NumberFormatException e1) {
+                    searchBox.setText("Incorrect format for latitude or longitude.");
+                }
+            } else {
+                searchBox.setText("Incorrect format.(expected: lat,lon)");
+            }
+            MainApplication.getMap().mapView.requestFocus();
         }
     }
 }
