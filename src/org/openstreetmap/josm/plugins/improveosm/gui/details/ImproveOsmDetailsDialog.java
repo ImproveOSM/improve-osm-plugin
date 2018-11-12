@@ -185,11 +185,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
 
     class SearchBoxListeners implements ActionListener {
 
-        private static final double MAX_LATITUDE = 90;
-        private static final double MIN_LATITUDE = -90;
-        private static final double MAX_LONGITUDE = 180;
-        private static final double MIN_LONGITUDE = -180;
-
         @Override
         public void actionPerformed(final ActionEvent e) {
             final String latLonValue = searchBox.getText();
@@ -197,8 +192,8 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 try {
                     final double lat = Double.parseDouble(latLonValue.split(",")[0]);
                     final double lon = Double.parseDouble(latLonValue.split(",")[1]);
-                    if (lat <= MAX_LATITUDE && lat >= MIN_LATITUDE && lon <= MAX_LONGITUDE && lon >= MIN_LONGITUDE) {
-                        final LatLon searchedLocation = new LatLon(lat, lon);
+                    final LatLon searchedLocation = new LatLon(lat, lon);
+                    if (searchedLocation.isValid()) {
                         final EastNorth demoZoomLocation =
                                 searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
                         MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
