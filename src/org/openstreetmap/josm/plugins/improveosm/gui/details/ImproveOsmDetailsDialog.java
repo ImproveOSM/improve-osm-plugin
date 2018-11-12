@@ -193,10 +193,14 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                     final double lat = Double.parseDouble(latLonValue.split(",")[0]);
                     final double lon = Double.parseDouble(latLonValue.split(",")[1]);
                     final LatLon searchedLocation = new LatLon(lat, lon);
-                    final EastNorth demoZoomLocation =
-                            searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                    MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                    searchBox.setText("");
+                    if (searchedLocation.isValid()) {
+                        final EastNorth demoZoomLocation =
+                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    } else {
+                        searchBox.setText("Incorrect values for latitude or longitude.");
+                    }
+
                 } catch (final NumberFormatException e1) {
                     searchBox.setText("Incorrect format for latitude or longitude.");
                 }
