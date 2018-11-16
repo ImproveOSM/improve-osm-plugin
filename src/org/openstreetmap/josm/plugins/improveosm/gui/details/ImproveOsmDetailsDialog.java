@@ -53,7 +53,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
-
+import org.openstreetmap.josm.gui.layer.MainLayerManager;
 
 /**
  * Defines the common functionality of the ImproveOsm details dialog windows.
@@ -216,8 +216,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     }
 
     
-    class ActiveLayerListener
-            implements org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener {
+    class ActiveLayerListener implements MainLayerManager.ActiveLayerChangeListener {
 
         @Override
         public void activeOrEditLayerChanged(ActiveLayerChangeEvent arg0) {

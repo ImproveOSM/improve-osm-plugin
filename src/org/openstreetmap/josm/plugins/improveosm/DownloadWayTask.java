@@ -1,6 +1,5 @@
 package org.openstreetmap.josm.plugins.improveosm;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.openstreetmap.josm.actions.downloadtasks.DownloadReferrersTask;
@@ -13,9 +12,7 @@ import org.openstreetmap.josm.gui.io.DownloadPrimitivesTask;
 import org.openstreetmap.josm.gui.layer.OsmDataLayer;
 import org.openstreetmap.josm.gui.progress.ProgressMonitor;
 import org.openstreetmap.josm.gui.util.GuiHelper;
-import org.openstreetmap.josm.io.OsmTransferException;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
-import org.xml.sax.SAXException;
 
 
 public class DownloadWayTask extends PleaseWaitRunnable {
@@ -28,7 +25,6 @@ public class DownloadWayTask extends PleaseWaitRunnable {
 
     public DownloadWayTask(final PrimitiveId wayId) {
         super(GuiConfig.getInstance().getInfoMatchedWayTitle(), null, false);
-        GuiConfig.getInstance();
         this.wayId = wayId;
         tempLayer = new OsmDataLayer(new DataSet(), OsmDataLayer.createNewName(), null);
     }
@@ -63,7 +59,7 @@ public class DownloadWayTask extends PleaseWaitRunnable {
 
 
     @Override
-    protected void realRun() throws SAXException, IOException, OsmTransferException {
+    protected void realRun() {
         downloadWay();
         downloadWayReferrers();
         currentTask = null;
