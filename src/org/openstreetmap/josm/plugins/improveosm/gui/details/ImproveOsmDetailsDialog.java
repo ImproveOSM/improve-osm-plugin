@@ -30,6 +30,7 @@ import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
+import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeEvent;
 import org.openstreetmap.josm.gui.widgets.DisableShortcutsOnFocusGainedTextField;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
@@ -47,11 +48,12 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
-
+import org.openstreetmap.josm.gui.layer.MainLayerManager;
 
 /**
  * Defines the common functionality of the ImproveOsm details dialog windows.
@@ -104,9 +106,14 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
+        MainApplication.getLayerManager().addActiveLayerChangeListener(new ActiveLayerListener());
         add(createLayout(pnlMain, false, null));
     }
-
+    
+    public void addDownloadWayButtonObserver(final DownloadWayObserver observer) {
+        pnlBtn.addObserver(observer);
+    }
+    
     /**
      * Registers the comment observer to the corresponding UI component.
      *
@@ -141,6 +148,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             pnlComments.updateData(comments);
             pnlBtn.enablePanelActions(status, location);
             updateUI(lastSelectedItem, numberOfSelectedItems);
+            pnlBtn.revalidate();
         }
     }
 
@@ -208,6 +216,16 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 searchBox.setText("Incorrect format.(expected: lat,lon)");
             }
             MainApplication.getMap().mapView.requestFocus();
+        }
+    }
+
+    
+    class ActiveLayerListener implements MainLayerManager.ActiveLayerChangeListener {
+
+        @Override
+        public void activeOrEditLayerChanged(ActiveLayerChangeEvent arg0) {
+            pnlBtn.setDownloadButtonAccess();
+            revalidate();
         }
     }
 }
