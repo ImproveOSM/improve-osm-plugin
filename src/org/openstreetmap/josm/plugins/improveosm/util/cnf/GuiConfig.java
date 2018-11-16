@@ -48,6 +48,7 @@ public final class GuiConfig extends BaseConfig {
     private final String btnSolveTlt;
     private final String btnReopenTlt;
     private final String btnInvalidTlt;
+    private final String btnDownloadTlt;
     private final String btnLocationTlt;
 
     /* edit dialog texts */
@@ -68,6 +69,7 @@ public final class GuiConfig extends BaseConfig {
     private final String solveCommentShortcutTxt;
     private final String reopenCommentShortcutTxt;
     private final String invalidCommentShortcutTxt;
+    private final String downloadWayShortcutTxt;
 
 
     /* info panel title */
@@ -113,6 +115,10 @@ public final class GuiConfig extends BaseConfig {
 
     private final String deleteMenuItemLbl;
     private final String deleteMenuItemTlt;
+    
+    private final String infoMatchedWayTitle;
+    private final String infoFileExistsTitle;
+    private final String infoFileExistsText;
 
     private GuiConfig() {
         super(CONFIG_FILE);
@@ -133,6 +139,7 @@ public final class GuiConfig extends BaseConfig {
         btnSolveTlt = readProperty("btn.solve.tlt");
         btnReopenTlt = readProperty("btn.reopen.tlt");
         btnInvalidTlt = readProperty("btn.invalid.tlt");
+        btnDownloadTlt = readProperty("btn.download.tlt");
         btnLocationTlt = readProperty("btn.location.tlt");
 
         dlgFilterTitle = readProperty("dialog.filter.title");
@@ -151,7 +158,7 @@ public final class GuiConfig extends BaseConfig {
         solveCommentShortcutTxt = readProperty("edit.solve.comment.shortcut.text");
         reopenCommentShortcutTxt = readProperty("edit.reopen.comment.shortcut.text");
         invalidCommentShortcutTxt = readProperty("edit.invalid.comment.shortcut.text");
-
+        downloadWayShortcutTxt = readProperty("download.way.shortcut.text");
 
         pnlInfoTitle = readProperty("details.info.title");
         txtNumberOfSelectedItems = readProperty("details.info.numberOfSelectedItems");
@@ -186,6 +193,10 @@ public final class GuiConfig extends BaseConfig {
 
         deleteMenuItemLbl = readProperty("layer.menu.delete.lbl");
         deleteMenuItemTlt = readProperty("layer.menu.delete.tlt");
+        
+        infoMatchedWayTitle = readProperty("itd.info.matchedWay.title");
+        infoFileExistsTitle = readProperty("itd.info.file.exists.title");
+        infoFileExistsText = readProperty("itd.info.file.exists.text");
     }
 
 
@@ -440,5 +451,25 @@ public final class GuiConfig extends BaseConfig {
 
     public String getInvalidCommentShortcutTxt() {
         return invalidCommentShortcutTxt;
+    }
+
+    public String getBtnDownloadTlt() {
+        return btnDownloadTlt;
+    }
+    
+    public String getDownloadWayShortcutTxt() {
+        return downloadWayShortcutTxt;
+    }
+
+    public String getInfoMatchedWayTitle() {
+        return infoMatchedWayTitle;
+    }
+
+    public String getInfoFileExistsTitle() {
+        return infoFileExistsTitle;
+    }
+
+    public String getInfoFileExistsText() {
+        return infoFileExistsText;
     }
 }

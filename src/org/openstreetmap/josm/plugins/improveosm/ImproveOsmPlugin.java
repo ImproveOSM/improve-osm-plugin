@@ -37,6 +37,8 @@ import javax.swing.Timer;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.data.osm.OsmPrimitiveType;
+import org.openstreetmap.josm.data.osm.SimplePrimitiveId;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.gui.MapFrame;
@@ -69,6 +71,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObserver;
 import org.openstreetmap.josm.plugins.improveosm.tread.DirectionOfFlowUpdateThread;
 import org.openstreetmap.josm.plugins.improveosm.tread.MissingGeometryUpdateThread;
 import org.openstreetmap.josm.plugins.improveosm.tread.TurnRestrictionUpdateThread;
@@ -95,7 +98,7 @@ import com.telenav.josm.common.thread.ThreadPool;
  * @version $Revision$
  */
 public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver, DownloadWayObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -160,6 +163,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         detailsDialog = new ImproveOsmDetailsDialog();
         detailsDialog.registerCommentObserver(this);
         detailsDialog.registerTurnRestrictionSelectionObserver(this);
+        detailsDialog.addDownloadWayButtonObserver(this);
         newMapFrame.addToggleDialog(detailsDialog);
 
         // enable dialog
@@ -190,7 +194,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
             registerListeners();
         }
-
         itemSelectionLayer = new TemporarySelectionLayer();
     }
 
@@ -205,6 +208,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
+            MainApplication.getLayerManager();
             listenersRegistered = true;
         }
     }
@@ -682,5 +686,17 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             graphics.draw(Util.buildRectangleFromCoordinates(startDrag.getX(), startDrag.getY(), endDrag.getX(),
                     endDrag.getY()));
         }
+    }
+    
+    @Override
+    public void downloadWay() {
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
+        SimplePrimitiveId primitiveId = null; 
+        if( activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
+            primitiveId = new SimplePrimitiveId(directionOfFlowLayer.lastSelectedItem().getWayId(), OsmPrimitiveType.WAY);
+        }
+        final DownloadWayTask downloadWayTask = new DownloadWayTask(primitiveId);
+        MainApplication.worker.submit(downloadWayTask);
+        
     }
 }

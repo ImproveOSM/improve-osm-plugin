@@ -25,12 +25,14 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.data.coor.conversion.CoordinateFormatManager;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.datatransfer.ClipboardUtils;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.plugins.improveosm.entity.Status;
+import org.openstreetmap.josm.plugins.improveosm.gui.ShortcutFactory;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.DisplayEditDialogAction;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.comment.EditPopupMenu;
 import org.openstreetmap.josm.plugins.improveosm.gui.details.common.Formatter;
@@ -41,6 +43,8 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.DirectionOfFlowLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObservable;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.Config;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -56,7 +60,7 @@ import com.telenav.josm.common.gui.builder.ButtonBuilder;
  * @author Beata
  * @version $Revision$
  */
-class ButtonPanel extends JPanel {
+class ButtonPanel extends JPanel implements DownloadWayObservable {
 
     private static final long serialVersionUID = -1004058684285756450L;
 
@@ -69,9 +73,11 @@ class ButtonPanel extends JPanel {
     private final JButton btnSolve;
     private final JButton btnReopen;
     private final JButton btnInvalid;
+    private final JButton btnDownload;
 
     private LatLon selectedItemCoordinate;
 
+    private DownloadWayObserver downloadObserver;
 
     ButtonPanel() {
         super(new GridLayout(ROWS, COLS));
@@ -103,6 +109,11 @@ class ButtonPanel extends JPanel {
                                 guiConfig.getInvalidShortcutTxt(), guiConfig.getInvalidCommentShortcutTxt(),
                                 Status.INVALID, iconConfig.getInvalidIcon()),
                         iconConfig.getInvalidIcon(), guiConfig.getBtnInvalidTlt(), false);
+        final JosmAction downloadAction = new DownloadWayId();
+        final String tooltip = GuiConfig.getInstance().getBtnDownloadTlt().replace("sc",
+                downloadAction.getShortcut().getKeyText());
+        btnDownload = ButtonBuilder.build(new DownloadWayId(), IconConfig.getInstance().getDownloadIcon(), tooltip, false);
+        
         final JButton btnLocation = ButtonBuilder.build(new HandleLocationAction(), iconConfig.getLocationIcon(),
                 guiConfig.getBtnLocationTlt(), true);
         add(btnFilter);
@@ -135,15 +146,29 @@ class ButtonPanel extends JPanel {
         ((DisplayEditPopupMenu) btnInvalid.getAction()).setCurrentStatus(status);
         if (status == null) {
             enablePanelActions(false, false, false, false);
+            remove(btnDownload);
         } else {
             if (status == Status.OPEN) {
                 enablePanelActions(true, true, false, true);
             } else {
                 enablePanelActions(true, false, true, false);
             }
+            setDownloadButtonAccess();
+       
         }
+        
     }
-
+    
+    public void setDownloadButtonAccess() {
+      Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
+      if(activeLayer instanceof DirectionOfFlowLayer && ((DirectionOfFlowLayer) activeLayer).hasSelectedItems()) {
+          add(btnDownload);
+          btnDownload.setEnabled(true);
+      } else {
+          remove(btnDownload);
+      }
+    }
+    
     private void enablePanelActions(final boolean commmentFlag, final boolean solveFlag, final boolean reopenFlag,
             final boolean invalidFlag) {
         btnComment.setEnabled(commmentFlag);
@@ -152,6 +177,17 @@ class ButtonPanel extends JPanel {
         btnInvalid.setEnabled(invalidFlag);
     }
 
+    @Override
+    public void addObserver(DownloadWayObserver observer) {
+        downloadObserver = observer;
+        
+    }
+
+    @Override
+    public void notifyObserver() {
+        downloadObserver.downloadWay();
+        
+    }
 
     /*
      * Displays the filters corresponding to the active data layer.
@@ -268,5 +304,21 @@ class ButtonPanel extends JPanel {
                 }
             }
         }
+    }
+    
+    private final class DownloadWayId extends JosmAction{
+        
+        private static final long serialVersionUID = 1L;
+
+        DownloadWayId() {
+            super(GuiConfig.getInstance().getBtnDownloadTlt(), null, GuiConfig.getInstance().getBtnDownloadTlt(),
+                    ShortcutFactory.getInstance().getShortcut(GuiConfig.getInstance().getBtnDownloadTlt()), true);
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            notifyObserver();
+        }
+        
     }
 }
