@@ -162,7 +162,6 @@ public final class IconConfig extends BaseConfig {
         return downloadIcon;
     }
 
-
     public ImageIcon getTurnRestrictionIcon() {
         return turnRestrictionIcon;
     }
@@ -174,5 +173,4 @@ public final class IconConfig extends BaseConfig {
     public String getTurnRestrictionIconsPath() {
         return turnRestrictionIconsPath;
     }
-
 }

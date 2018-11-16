@@ -17,13 +17,15 @@ import org.openstreetmap.josm.io.OsmTransferException;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.xml.sax.SAXException;
 
+
 public class DownloadWayTask extends PleaseWaitRunnable {
+
     private final PrimitiveId wayId;
     private final OsmDataLayer tempLayer;
     private boolean canceled;
     private PleaseWaitRunnable currentTask;
-    
-    
+
+
     public DownloadWayTask(final PrimitiveId wayId) {
         super(GuiConfig.getInstance().getInfoMatchedWayTitle(), null, false);
         GuiConfig.getInstance();
@@ -34,9 +36,9 @@ public class DownloadWayTask extends PleaseWaitRunnable {
 
     @Override
     protected void cancel() {
-        synchronized(this) {
+        synchronized (this) {
             canceled = true;
-            if( currentTask != null) {
+            if (currentTask != null) {
                 currentTask.operationCanceled();
             }
         }
@@ -45,18 +47,18 @@ public class DownloadWayTask extends PleaseWaitRunnable {
 
     @Override
     protected void finish() {
-       synchronized(this) {
-           if(canceled) {
-               return;
-           }
-       }
-       if(MainApplication.getLayerManager().getEditLayer() == null) {
-           MainApplication.getLayerManager().addLayer(tempLayer);
-       } else {
-           MainApplication.getLayerManager().getEditLayer().mergeFrom(tempLayer);
-       }
-       GuiHelper.runInEDT(() -> MainApplication.getLayerManager().getEditDataSet().setSelected(wayId));
-        
+        synchronized (this) {
+            if (canceled) {
+                return;
+            }
+        }
+        if (MainApplication.getLayerManager().getEditLayer() == null) {
+            MainApplication.getLayerManager().addLayer(tempLayer);
+        } else {
+            MainApplication.getLayerManager().getEditLayer().mergeFrom(tempLayer);
+        }
+        GuiHelper.runInEDT(() -> MainApplication.getLayerManager().getEditDataSet().setSelected(wayId));
+
     }
 
 
@@ -66,22 +68,23 @@ public class DownloadWayTask extends PleaseWaitRunnable {
         downloadWayReferrers();
         currentTask = null;
     }
-    
+
     private void downloadWay() {
         final List<PrimitiveId> ids = Collections.singletonList(wayId);
-        final DownloadTask mainTask = new DownloadTask(tempLayer, ids, getProgressMonitor().createSubTaskMonitor(1, false));
-        
-        synchronized(this) {
+        final DownloadTask mainTask =
+                new DownloadTask(tempLayer, ids, getProgressMonitor().createSubTaskMonitor(1, false));
+
+        synchronized (this) {
             currentTask = mainTask;
-            if( canceled ) {
+            if (canceled) {
                 currentTask = null;
                 return;
             }
         }
-        
+
         currentTask.run();
     }
-    
+
     private void downloadWayReferrers() {
         synchronized (this) {
             if (canceled) {
@@ -93,13 +96,14 @@ public class DownloadWayTask extends PleaseWaitRunnable {
         }
         currentTask.run();
     }
-    
-    private final class DownloadTask extends DownloadPrimitivesTask{
 
-        public DownloadTask(final OsmDataLayer layer, final List<PrimitiveId> ids, final ProgressMonitor progressMonitor) {
+    private final class DownloadTask extends DownloadPrimitivesTask {
+
+        public DownloadTask(final OsmDataLayer layer, final List<PrimitiveId> ids,
+                final ProgressMonitor progressMonitor) {
             super(layer, ids, true, progressMonitor);
         }
-        
+
         @Override
         protected void finish() {
             if (canceled) {
@@ -115,5 +119,4 @@ public class DownloadWayTask extends PleaseWaitRunnable {
             });
         }
     }
-
 }

@@ -106,7 +106,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
-        MainApplication.getLayerManager().addActiveLayerChangeListener(new ActiveLayerChangeListener3());
+        MainApplication.getLayerManager().addActiveLayerChangeListener(new ActiveLayerListener());
         add(createLayout(pnlMain, false, null));
     }
     
@@ -214,8 +214,10 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             MainApplication.getMap().mapView.requestFocus();
         }
     }
+
     
-    class ActiveLayerChangeListener3 implements org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener{
+    class ActiveLayerListener
+            implements org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener {
 
         @Override
         public void activeOrEditLayerChanged(ActiveLayerChangeEvent arg0) {

@@ -97,8 +97,9 @@ import com.telenav.josm.common.thread.ThreadPool;
  * @author Beata
  * @version $Revision$
  */
-public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver, DownloadWayObserver {
+public class ImproveOsmPlugin extends Plugin
+        implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, MouseListener, CommentObserver,
+        TurnRestrictionSelectionObserver, DownloadWayObserver {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -270,16 +271,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
         final Layer oldLayer = MainApplication.getLayerManager().getLayers().size() > 1
                 ? MainApplication.getLayerManager().getLayers().get(1) : null;
-                final Layer newLayer = MainApplication.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer instanceof AbstractLayer) {
-                    if (oldLayer instanceof MissingGeometryLayer) {
-                        updateSelectedData(missingGeometryLayer, null);
-                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                        updateSelectedData(directionOfFlowLayer, null);
-                    } else if (oldLayer instanceof TurnRestrictionLayer) {
-                        updateSelectedData(turnRestrictionLayer, null);
-                    }
-                }
+        final Layer newLayer = MainApplication.getLayerManager().getActiveLayer();
+        if (oldLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null);
+            }
+        }
     }
 
     @Override
@@ -336,7 +337,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
                 if (MainApplication.getLayerManager().getActiveLayer() == directionOfFlowLayer) {
                     new InfoDialog()
-                    .displayDirectionOfFlowEditTip(Util.zoom(MainApplication.getMap().mapView.getRealBounds()));
+                            .displayDirectionOfFlowEditTip(Util.zoom(MainApplication.getMap().mapView.getRealBounds()));
                 }
                 ThreadPool.getInstance().execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
             }
@@ -460,7 +461,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
                     final LatLon location = layer.getSelectedItems().size() >= 1
                             ? new LatLon(boundingBox.getCenterX(), boundingBox.getCenterY()) : null;
-                            updateDialog(layer.lastSelectedItem(), location);
+                    updateDialog(layer.lastSelectedItem(), location);
                 });
             }
         }
@@ -543,7 +544,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             final TurnRestriction turnRestriction = (TurnRestriction) item;
             coordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
                     : (turnRestriction.getTurnRestrictions() != null
-                    ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
+                            ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
         }
         return coordinate;
     }
@@ -570,7 +571,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             noOfSelectedItems = missingGeometryLayer.getSelectedItems().size();
             comments =
                     noOfSelectedItems == 1 ? ServiceHandler.getMissingGeometryHandler().retrieveComments(tile) : null;
-                    status = tile.getStatus();
+            status = tile.getStatus();
         } else if (item instanceof RoadSegment) {
             final RoadSegment roadSegment = (RoadSegment) item;
             noOfSelectedItems = directionOfFlowLayer.getSelectedItems().size();
@@ -582,7 +583,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             noOfSelectedItems = turnRestrictionLayer.getSelectedItems().size();
             comments = noOfSelectedItems == 1 && turn.getTurnRestrictions() == null
                     ? ServiceHandler.getTurnRestrictionHandler().retrieveComments(turn) : null;
-                    status = turn.getStatus();
+            status = turn.getStatus();
         }
 
         detailsDialog.updateUI(item, comments, itemsLocation, status, noOfSelectedItems);
@@ -687,16 +688,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     endDrag.getY()));
         }
     }
-    
+
     @Override
     public void downloadWay() {
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-        SimplePrimitiveId primitiveId = null; 
-        if( activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
-            primitiveId = new SimplePrimitiveId(directionOfFlowLayer.lastSelectedItem().getWayId(), OsmPrimitiveType.WAY);
+        SimplePrimitiveId primitiveId = null;
+        if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
+            primitiveId =
+                    new SimplePrimitiveId(directionOfFlowLayer.lastSelectedItem().getWayId(), OsmPrimitiveType.WAY);
         }
         final DownloadWayTask downloadWayTask = new DownloadWayTask(primitiveId);
         MainApplication.worker.submit(downloadWayTask);
-        
     }
 }
