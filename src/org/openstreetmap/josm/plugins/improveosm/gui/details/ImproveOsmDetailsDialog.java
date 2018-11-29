@@ -30,7 +30,6 @@ import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
-import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeEvent;
 import org.openstreetmap.josm.gui.widgets.DisableShortcutsOnFocusGainedTextField;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
@@ -53,7 +52,6 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
-import org.openstreetmap.josm.gui.layer.MainLayerManager;
 
 /**
  * Defines the common functionality of the ImproveOsm details dialog windows.
@@ -80,8 +78,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
     private final JTextField searchBox;
-
-
+ 
     /**
      * Builds a new direction of flow details dialog window.
      */
@@ -106,7 +103,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
-        MainApplication.getLayerManager().addActiveLayerChangeListener(new ActiveLayerListener());
         add(createLayout(pnlMain, false, null));
     }
     
@@ -161,6 +157,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 pnlRoadSegmentInfo.updateData(null);
                 pnlTurnRestrictionInfo.updateData(null);
                 noOfTilesInfo.updateData(null);
+                pnlBtn.enableDownloadButton(false, true);
             } else {
                 final Component cmpInfoView = cmpInfo.getViewport().getView();
                 if (numberOfSelectedItems > 1) {
@@ -172,16 +169,20 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                         if (!(cmpInfoView instanceof TileInfoPanel)) {
                             cmpInfo.setViewportView(pnlTileInfo);
                         }
+                        pnlBtn.enableDownloadButton(false, true);
                     } else if (activeLayer instanceof DirectionOfFlowLayer) {
                         pnlRoadSegmentInfo.updateData((RoadSegment) lastSelectedItem);
                         if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
                             cmpInfo.setViewportView(pnlRoadSegmentInfo);
                         }
+                        final boolean enabled = lastSelectedItem != null;
+                        pnlBtn.enableDownloadButton(enabled, false);
                     } else if (activeLayer instanceof TurnRestrictionLayer) {
                         pnlTurnRestrictionInfo.updateData((TurnRestriction) lastSelectedItem);
                         if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
                             cmpInfo.setViewportView(pnlTurnRestrictionInfo);
                         }
+                        pnlBtn.enableDownloadButton(false, true);
                     }
                 }
             }
@@ -189,7 +190,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             repaint();
         }
     }
-
 
     class SearchBoxListeners implements ActionListener {
 
@@ -216,16 +216,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 searchBox.setText("Incorrect format.(expected: lat,lon)");
             }
             MainApplication.getMap().mapView.requestFocus();
-        }
-    }
-
-    
-    class ActiveLayerListener implements MainLayerManager.ActiveLayerChangeListener {
-
-        @Override
-        public void activeOrEditLayerChanged(ActiveLayerChangeEvent arg0) {
-            pnlBtn.setDownloadButtonAccess();
-            revalidate();
         }
     }
 }

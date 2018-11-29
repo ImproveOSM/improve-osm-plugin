@@ -53,6 +53,8 @@ import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerOrderChangeEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerRemoveEvent;
+import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeEvent;
+import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener;
 import org.openstreetmap.josm.gui.preferences.PreferenceSetting;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
@@ -100,7 +102,7 @@ import com.telenav.josm.common.thread.ThreadPool;
  */
 public class ImproveOsmPlugin extends Plugin
         implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, MouseListener, CommentObserver,
-        TurnRestrictionSelectionObserver, DownloadWayObserver {
+        TurnRestrictionSelectionObserver, DownloadWayObserver, ActiveLayerChangeListener {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -161,6 +163,8 @@ public class ImproveOsmPlugin extends Plugin
     }
 
     private void initializeDetailsDialog(final MapFrame newMapFrame) {
+        
+        MainApplication.getLayerManager().addActiveLayerChangeListener(this);
         // create details dialog
         detailsDialog = new ImproveOsmDetailsDialog();
         detailsDialog.registerCommentObserver(this);
@@ -707,5 +711,20 @@ public class ImproveOsmPlugin extends Plugin
                 }
             }
         } 
+    }
+    
+    @Override
+    public void activeOrEditLayerChanged(final ActiveLayerChangeEvent event) {
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
+        if (activeLayer instanceof MissingGeometryLayer) {
+            final Tile item = missingGeometryLayer.lastSelectedItem();
+            updateSelectedData(missingGeometryLayer, item);
+        } else if (activeLayer instanceof DirectionOfFlowLayer) {
+            final RoadSegment item = directionOfFlowLayer.lastSelectedItem();
+            updateSelectedData(directionOfFlowLayer, item);
+        } else if (activeLayer instanceof TurnRestrictionLayer) {
+            final TurnRestriction item = turnRestrictionLayer.lastSelectedItem();
+            updateSelectedData(turnRestrictionLayer, item);
+        }
     }
 }
