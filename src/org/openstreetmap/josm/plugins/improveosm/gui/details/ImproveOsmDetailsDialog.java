@@ -193,7 +193,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         }
     }
 
-    private class SearchBox extends DisableShortcutsOnFocusGainedTextField {
+    private class SearchBox extends DisableShortcutsOnFocusGainedTextField implements ActionListener {
         
         private static final long serialVersionUID = 1L;
         
@@ -204,36 +204,33 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         private JTextField build() {
             final JTextField searchBox =
                     new DisableShortcutsOnFocusGainedTextField(GuiConfig.getInstance().getInitialTxt());
-            searchBox.addActionListener(new SearchBoxListeners());
+            searchBox.addActionListener(this);
             return searchBox;
         }
 
-        class SearchBoxListeners implements ActionListener {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                final String latLonValue = searchBox.getText();
-                if (latLonValue.split(",").length == ELEMENTS_NR) {
-                    try {
-                        final double lat = Double.parseDouble(latLonValue.split(",")[LAT_INDEX]);
-                        final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
-                        final LatLon searchedLocation = new LatLon(lat, lon);
-                        if (searchedLocation.isValid()) {
-                            final EastNorth demoZoomLocation =
-                                    searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                            MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                        } else {
-                            searchBox.setText("Incorrect values for latitude or longitude.");
-                        }
-
-                    } catch (final NumberFormatException e1) {
-                        searchBox.setText("Incorrect format for latitude or longitude.");
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            final String latLonValue = searchBox.getText();
+            if (latLonValue.split(",").length == ELEMENTS_NR) {
+                try {
+                    final double lat = Double.parseDouble(latLonValue.split(",")[LAT_INDEX]);
+                    final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
+                    final LatLon searchedLocation = new LatLon(lat, lon);
+                    if (searchedLocation.isValid()) {
+                        final EastNorth demoZoomLocation =
+                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    } else {
+                        searchBox.setText(GuiConfig.getInstance().getIncorrectValuesTxt());
                     }
-                } else {
-                    searchBox.setText("Incorrect format.(expected: lat,lon)");
+
+                } catch (final NumberFormatException e1) {
+                    searchBox.setText(GuiConfig.getInstance().getIncorrectFormatTxt());
                 }
-                MainApplication.getMap().mapView.requestFocus();
+            } else {
+                searchBox.setText(GuiConfig.getInstance().getIncorrectElementsNr());
             }
+            MainApplication.getMap().mapView.requestFocus();
         }
     }
 
