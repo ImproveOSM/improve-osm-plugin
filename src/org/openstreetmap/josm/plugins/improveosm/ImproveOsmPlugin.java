@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.swing.AbstractAction;
@@ -694,10 +695,17 @@ public class ImproveOsmPlugin extends Plugin
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
         SimplePrimitiveId primitiveId = null;
         if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
-            primitiveId =
-                    new SimplePrimitiveId(directionOfFlowLayer.lastSelectedItem().getWayId(), OsmPrimitiveType.WAY);
-        }
-        final DownloadWayTask downloadWayTask = new DownloadWayTask(primitiveId);
-        MainApplication.worker.submit(downloadWayTask);
+            final List<RoadSegment> selectedRoadSegements = directionOfFlowLayer.getSelectedItems();
+            final List<Long> downloadedRoadsId = new ArrayList<>();
+            for(RoadSegment segment : selectedRoadSegements ){
+                final long wayId = segment.getWayId();
+                if (!downloadedRoadsId.contains(wayId)) {
+                    primitiveId = new SimplePrimitiveId(wayId, OsmPrimitiveType.WAY);
+                    downloadedRoadsId.add(wayId);
+                    DownloadWayTask downloadWayTask = new DownloadWayTask(primitiveId);
+                    MainApplication.worker.submit(downloadWayTask);
+                }
+            }
+        } 
     }
 }
