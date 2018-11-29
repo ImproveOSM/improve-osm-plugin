@@ -55,6 +55,7 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
 import org.openstreetmap.josm.gui.layer.MainLayerManager;
 
+
 /**
  * Defines the common functionality of the ImproveOsm details dialog windows.
  *
@@ -81,6 +82,9 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final ButtonPanel pnlBtn;
     private final JTextField searchBox;
 
+    /** grid layout */
+    private static final int COLUMNS_NR = 1;
+    private static final int ROWS_NR = 2;
 
     /**
      * Builds a new direction of flow details dialog window.
@@ -100,20 +104,19 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
-        searchBox = new DisableShortcutsOnFocusGainedTextField("latitude,longitude");
-        searchBox.addActionListener(new SearchBoxListeners());
+        searchBox = new SearchBox().build();
         pnlBtn = new ButtonPanel();
-        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
+        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(ROWS_NR, COLUMNS_NR, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         MainApplication.getLayerManager().addActiveLayerChangeListener(new ActiveLayerListener());
         add(createLayout(pnlMain, false, null));
     }
-    
+
     public void addDownloadWayButtonObserver(final DownloadWayObserver observer) {
         pnlBtn.addObserver(observer);
     }
-    
+
     /**
      * Registers the comment observer to the corresponding UI component.
      *
@@ -190,36 +193,50 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         }
     }
 
+    private class SearchBox extends DisableShortcutsOnFocusGainedTextField {
+        
+        private static final long serialVersionUID = 1L;
+        
+        private static final int ELEMENTS_NR = 2;
+        private static final int LAT_INDEX = 0;
+        private static final int LON_INDEX = 1;
 
-    class SearchBoxListeners implements ActionListener {
+        private JTextField build() {
+            final JTextField searchBox =
+                    new DisableShortcutsOnFocusGainedTextField(GuiConfig.getInstance().getInitialTxt());
+            searchBox.addActionListener(new SearchBoxListeners());
+            return searchBox;
+        }
 
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            final String latLonValue = searchBox.getText();
-            if (latLonValue.split(",").length == 2) {
-                try {
-                    final double lat = Double.parseDouble(latLonValue.split(",")[0]);
-                    final double lon = Double.parseDouble(latLonValue.split(",")[1]);
-                    final LatLon searchedLocation = new LatLon(lat, lon);
-                    if (searchedLocation.isValid()) {
-                        final EastNorth demoZoomLocation =
-                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                    } else {
-                        searchBox.setText("Incorrect values for latitude or longitude.");
+        class SearchBoxListeners implements ActionListener {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final String latLonValue = searchBox.getText();
+                if (latLonValue.split(",").length == ELEMENTS_NR) {
+                    try {
+                        final double lat = Double.parseDouble(latLonValue.split(",")[LAT_INDEX]);
+                        final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
+                        final LatLon searchedLocation = new LatLon(lat, lon);
+                        if (searchedLocation.isValid()) {
+                            final EastNorth demoZoomLocation =
+                                    searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                            MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                        } else {
+                            searchBox.setText("Incorrect values for latitude or longitude.");
+                        }
+
+                    } catch (final NumberFormatException e1) {
+                        searchBox.setText("Incorrect format for latitude or longitude.");
                     }
-
-                } catch (final NumberFormatException e1) {
-                    searchBox.setText("Incorrect format for latitude or longitude.");
+                } else {
+                    searchBox.setText("Incorrect format.(expected: lat,lon)");
                 }
-            } else {
-                searchBox.setText("Incorrect format.(expected: lat,lon)");
+                MainApplication.getMap().mapView.requestFocus();
             }
-            MainApplication.getMap().mapView.requestFocus();
         }
     }
 
-    
     class ActiveLayerListener implements MainLayerManager.ActiveLayerChangeListener {
 
         @Override
