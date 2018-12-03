@@ -18,20 +18,15 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeEvent;
-import org.openstreetmap.josm.gui.widgets.DisableShortcutsOnFocusGainedTextField;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -80,7 +75,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
-    private final JTextField searchBox;
+    private final SearchBox searchBox;
 
     /** grid layout */
     private static final int COLUMNS_NR = 1;
@@ -104,7 +99,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
-        searchBox = new SearchBox().build();
+        searchBox = new SearchBox();
         pnlBtn = new ButtonPanel();
         final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(ROWS_NR, COLUMNS_NR, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
@@ -190,47 +185,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             }
             cmpInfo.revalidate();
             repaint();
-        }
-    }
-
-    private class SearchBox extends DisableShortcutsOnFocusGainedTextField implements ActionListener {
-        
-        private static final long serialVersionUID = 1L;
-        
-        private static final int ELEMENTS_NR = 2;
-        private static final int LAT_INDEX = 0;
-        private static final int LON_INDEX = 1;
-
-        private JTextField build() {
-            final JTextField searchBox =
-                    new DisableShortcutsOnFocusGainedTextField(GuiConfig.getInstance().getInitialTxt());
-            searchBox.addActionListener(this);
-            return searchBox;
-        }
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            final String latLonValue = searchBox.getText();
-            if (latLonValue.split(",").length == ELEMENTS_NR) {
-                try {
-                    final double lat = Double.parseDouble(latLonValue.split(",")[LAT_INDEX]);
-                    final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
-                    final LatLon searchedLocation = new LatLon(lat, lon);
-                    if (searchedLocation.isValid()) {
-                        final EastNorth demoZoomLocation =
-                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                    } else {
-                        searchBox.setText(GuiConfig.getInstance().getIncorrectValuesTxt());
-                    }
-
-                } catch (final NumberFormatException e1) {
-                    searchBox.setText(GuiConfig.getInstance().getIncorrectFormatTxt());
-                }
-            } else {
-                searchBox.setText(GuiConfig.getInstance().getIncorrectElementsNr());
-            }
-            MainApplication.getMap().mapView.requestFocus();
         }
     }
 
