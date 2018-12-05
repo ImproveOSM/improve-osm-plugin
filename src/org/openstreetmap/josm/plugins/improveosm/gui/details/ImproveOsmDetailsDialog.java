@@ -18,19 +18,13 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
-import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
-import org.openstreetmap.josm.gui.widgets.DisableShortcutsOnFocusGainedTextField;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
 import org.openstreetmap.josm.plugins.improveosm.entity.Comment;
 import org.openstreetmap.josm.plugins.improveosm.entity.RoadSegment;
@@ -52,6 +46,7 @@ import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelecti
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
 import com.telenav.josm.common.gui.builder.ContainerBuilder;
+
 
 /**
  * Defines the common functionality of the ImproveOsm details dialog windows.
@@ -77,8 +72,12 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
-    private final JTextField searchBox;
- 
+    private final SearchBox searchBox;
+
+    /** grid layout */
+    private static final int COLUMNS_NR = 1;
+    private static final int ROWS_NR = 2;
+
     /**
      * Builds a new direction of flow details dialog window.
      */
@@ -97,19 +96,18 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
-        searchBox = new DisableShortcutsOnFocusGainedTextField("latitude,longitude");
-        searchBox.addActionListener(new SearchBoxListeners());
+        searchBox = new SearchBox();
         pnlBtn = new ButtonPanel();
-        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(2, 1, searchBox, pnlBtn);
+        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(ROWS_NR, COLUMNS_NR, searchBox, pnlBtn);
         final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         add(createLayout(pnlMain, false, null));
     }
-    
+
     public void addDownloadWayButtonObserver(final DownloadWayObserver observer) {
         pnlBtn.addObserver(observer);
     }
-    
+
     /**
      * Registers the comment observer to the corresponding UI component.
      *
@@ -188,34 +186,6 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             }
             cmpInfo.revalidate();
             repaint();
-        }
-    }
-
-    class SearchBoxListeners implements ActionListener {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            final String latLonValue = searchBox.getText();
-            if (latLonValue.split(",").length == 2) {
-                try {
-                    final double lat = Double.parseDouble(latLonValue.split(",")[0]);
-                    final double lon = Double.parseDouble(latLonValue.split(",")[1]);
-                    final LatLon searchedLocation = new LatLon(lat, lon);
-                    if (searchedLocation.isValid()) {
-                        final EastNorth demoZoomLocation =
-                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                    } else {
-                        searchBox.setText("Incorrect values for latitude or longitude.");
-                    }
-
-                } catch (final NumberFormatException e1) {
-                    searchBox.setText("Incorrect format for latitude or longitude.");
-                }
-            } else {
-                searchBox.setText("Incorrect format.(expected: lat,lon)");
-            }
-            MainApplication.getMap().mapView.requestFocus();
         }
     }
 }
