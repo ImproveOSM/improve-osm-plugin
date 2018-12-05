@@ -161,6 +161,9 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 if (numberOfSelectedItems > 1) {
                     noOfTilesInfo.updateData(numberOfSelectedItems);
                     cmpInfo.setViewportView(noOfTilesInfo);
+                    if(activeLayer instanceof DirectionOfFlowLayer) {
+                        pnlBtn.enableDownloadButton(true, false);
+                    }
                 } else {
                     if (activeLayer instanceof MissingGeometryLayer) {
                         pnlTileInfo.updateData((Tile) lastSelectedItem);
@@ -181,7 +184,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                             cmpInfo.setViewportView(pnlTurnRestrictionInfo);
                         }
                         pnlBtn.enableDownloadButton(false, true);
-                    }
+                    } 
                 }
             }
             cmpInfo.revalidate();
