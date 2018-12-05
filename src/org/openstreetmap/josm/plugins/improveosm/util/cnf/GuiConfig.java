@@ -119,6 +119,13 @@ public final class GuiConfig extends BaseConfig {
     private final String infoMatchedWayTitle;
     private final String infoFileExistsTitle;
     private final String infoFileExistsText;
+    
+    /* search box texts */
+    private final String initialTxt;
+    private final String incorrectElementsNr;
+    private final String incorrectValuesTxt;
+    private final String incorrectFormatTxt;
+
 
     private GuiConfig() {
         super(CONFIG_FILE);
@@ -197,6 +204,11 @@ public final class GuiConfig extends BaseConfig {
         infoMatchedWayTitle = readProperty("itd.info.matchedWay.title");
         infoFileExistsTitle = readProperty("itd.info.file.exists.title");
         infoFileExistsText = readProperty("itd.info.file.exists.text");
+        
+        initialTxt = readProperty("search.box.initial.text");
+        incorrectElementsNr = readProperty("search.box.incorrect.nr.elements");
+        incorrectValuesTxt = readProperty("search.box.incorrect.values.text");
+        incorrectFormatTxt = readProperty("search.box.incorrect.format.text");
     }
 
 
@@ -471,5 +483,21 @@ public final class GuiConfig extends BaseConfig {
 
     public String getInfoFileExistsText() {
         return infoFileExistsText;
+    }
+  
+    public String getInitialTxt() {
+        return initialTxt;
+    }
+   
+    public String getIncorrectElementsNr() {
+        return incorrectElementsNr;
+    }
+   
+    public String getIncorrectValuesTxt() {
+        return incorrectValuesTxt;
+    }
+    
+    public String getIncorrectFormatTxt() {
+        return incorrectFormatTxt;
     }
 }
