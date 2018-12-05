@@ -146,27 +146,23 @@ class ButtonPanel extends JPanel implements DownloadWayObservable {
         ((DisplayEditPopupMenu) btnInvalid.getAction()).setCurrentStatus(status);
         if (status == null) {
             enablePanelActions(false, false, false, false);
-            remove(btnDownload);
         } else {
             if (status == Status.OPEN) {
                 enablePanelActions(true, true, false, true);
             } else {
                 enablePanelActions(true, false, true, false);
             }
-            setDownloadButtonAccess();
-       
-        }
-        
+            
+       }
     }
     
-    public void setDownloadButtonAccess() {
-      Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-      if(activeLayer instanceof DirectionOfFlowLayer && ((DirectionOfFlowLayer) activeLayer).hasSelectedItems()) {
-          add(btnDownload);
-          btnDownload.setEnabled(true);
-      } else {
-          remove(btnDownload);
-      }
+    void enableDownloadButton(final boolean enable, final boolean remove) {
+        if (remove) {
+            remove(btnDownload);
+        } else {
+            add(btnDownload);
+            btnDownload.setEnabled(enable);
+        }
     }
     
     private void enablePanelActions(final boolean commmentFlag, final boolean solveFlag, final boolean reopenFlag,
@@ -319,6 +315,5 @@ class ButtonPanel extends JPanel implements DownloadWayObservable {
         public void actionPerformed(ActionEvent e) {
             notifyObserver();
         }
-        
     }
 }
