@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.swing.AbstractAction;
@@ -37,6 +38,8 @@ import javax.swing.Timer;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.Bounds;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.data.osm.OsmPrimitiveType;
+import org.openstreetmap.josm.data.osm.SimplePrimitiveId;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.gui.MapFrame;
@@ -50,6 +53,8 @@ import org.openstreetmap.josm.gui.layer.LayerManager.LayerAddEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerChangeListener;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerOrderChangeEvent;
 import org.openstreetmap.josm.gui.layer.LayerManager.LayerRemoveEvent;
+import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeEvent;
+import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener;
 import org.openstreetmap.josm.gui.preferences.PreferenceSetting;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
@@ -69,6 +74,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObserver;
 import org.openstreetmap.josm.plugins.improveosm.tread.DirectionOfFlowUpdateThread;
 import org.openstreetmap.josm.plugins.improveosm.tread.MissingGeometryUpdateThread;
 import org.openstreetmap.josm.plugins.improveosm.tread.TurnRestrictionUpdateThread;
@@ -94,8 +100,9 @@ import com.telenav.josm.common.thread.ThreadPool;
  * @author Beata
  * @version $Revision$
  */
-public class ImproveOsmPlugin extends Plugin implements LayerChangeListener, ZoomChangeListener,
-PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelectionObserver {
+public class ImproveOsmPlugin extends Plugin
+        implements LayerChangeListener, ZoomChangeListener, PreferenceChangedListener, MouseListener, CommentObserver,
+        TurnRestrictionSelectionObserver, DownloadWayObserver, ActiveLayerChangeListener {
 
     /* layers associated with this plugin */
     private MissingGeometryLayer missingGeometryLayer;
@@ -156,10 +163,13 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     }
 
     private void initializeDetailsDialog(final MapFrame newMapFrame) {
+        
+        MainApplication.getLayerManager().addActiveLayerChangeListener(this);
         // create details dialog
         detailsDialog = new ImproveOsmDetailsDialog();
         detailsDialog.registerCommentObserver(this);
         detailsDialog.registerTurnRestrictionSelectionObserver(this);
+        detailsDialog.addDownloadWayButtonObserver(this);
         newMapFrame.addToggleDialog(detailsDialog);
 
         // enable dialog
@@ -190,7 +200,6 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         if (missingGeometryLayer != null || directionOfFlowLayer != null || turnRestrictionLayer != null) {
             registerListeners();
         }
-
         itemSelectionLayer = new TemporarySelectionLayer();
     }
 
@@ -205,6 +214,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
                     GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
+            MainApplication.getLayerManager();
             listenersRegistered = true;
         }
     }
@@ -266,16 +276,16 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
     public void layerOrderChanged(final LayerOrderChangeEvent event) {
         final Layer oldLayer = MainApplication.getLayerManager().getLayers().size() > 1
                 ? MainApplication.getLayerManager().getLayers().get(1) : null;
-                final Layer newLayer = MainApplication.getLayerManager().getActiveLayer();
-                if (oldLayer != null && newLayer instanceof AbstractLayer) {
-                    if (oldLayer instanceof MissingGeometryLayer) {
-                        updateSelectedData(missingGeometryLayer, null);
-                    } else if (oldLayer instanceof DirectionOfFlowLayer) {
-                        updateSelectedData(directionOfFlowLayer, null);
-                    } else if (oldLayer instanceof TurnRestrictionLayer) {
-                        updateSelectedData(turnRestrictionLayer, null);
-                    }
-                }
+        final Layer newLayer = MainApplication.getLayerManager().getActiveLayer();
+        if (oldLayer != null && newLayer instanceof AbstractLayer) {
+            if (oldLayer instanceof MissingGeometryLayer) {
+                updateSelectedData(missingGeometryLayer, null);
+            } else if (oldLayer instanceof DirectionOfFlowLayer) {
+                updateSelectedData(directionOfFlowLayer, null);
+            } else if (oldLayer instanceof TurnRestrictionLayer) {
+                updateSelectedData(turnRestrictionLayer, null);
+            }
+        }
     }
 
     @Override
@@ -332,7 +342,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             if (directionOfFlowLayer != null && directionOfFlowLayer.isVisible()) {
                 if (MainApplication.getLayerManager().getActiveLayer() == directionOfFlowLayer) {
                     new InfoDialog()
-                    .displayDirectionOfFlowEditTip(Util.zoom(MainApplication.getMap().mapView.getRealBounds()));
+                            .displayDirectionOfFlowEditTip(Util.zoom(MainApplication.getMap().mapView.getRealBounds()));
                 }
                 ThreadPool.getInstance().execute(new DirectionOfFlowUpdateThread(detailsDialog, directionOfFlowLayer));
             }
@@ -456,7 +466,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
 
                     final LatLon location = layer.getSelectedItems().size() >= 1
                             ? new LatLon(boundingBox.getCenterX(), boundingBox.getCenterY()) : null;
-                            updateDialog(layer.lastSelectedItem(), location);
+                    updateDialog(layer.lastSelectedItem(), location);
                 });
             }
         }
@@ -539,7 +549,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             final TurnRestriction turnRestriction = (TurnRestriction) item;
             coordinate = turnRestriction.getPoint() != null ? turnRestriction.getPoint()
                     : (turnRestriction.getTurnRestrictions() != null
-                    ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
+                            ? turnRestriction.getTurnRestrictions().get(0).getPoint() : null);
         }
         return coordinate;
     }
@@ -566,7 +576,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             noOfSelectedItems = missingGeometryLayer.getSelectedItems().size();
             comments =
                     noOfSelectedItems == 1 ? ServiceHandler.getMissingGeometryHandler().retrieveComments(tile) : null;
-                    status = tile.getStatus();
+            status = tile.getStatus();
         } else if (item instanceof RoadSegment) {
             final RoadSegment roadSegment = (RoadSegment) item;
             noOfSelectedItems = directionOfFlowLayer.getSelectedItems().size();
@@ -578,7 +588,7 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
             noOfSelectedItems = turnRestrictionLayer.getSelectedItems().size();
             comments = noOfSelectedItems == 1 && turn.getTurnRestrictions() == null
                     ? ServiceHandler.getTurnRestrictionHandler().retrieveComments(turn) : null;
-                    status = turn.getStatus();
+            status = turn.getStatus();
         }
 
         detailsDialog.updateUI(item, comments, itemsLocation, status, noOfSelectedItems);
@@ -681,6 +691,40 @@ PreferenceChangedListener, MouseListener, CommentObserver, TurnRestrictionSelect
         public void paint(final Graphics2D graphics, final MapView mapView, final Bounds bounds) {
             graphics.draw(Util.buildRectangleFromCoordinates(startDrag.getX(), startDrag.getY(), endDrag.getX(),
                     endDrag.getY()));
+        }
+    }
+
+    @Override
+    public void downloadWay() {
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
+        SimplePrimitiveId primitiveId = null;
+        if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
+            final List<RoadSegment> selectedRoadSegements = directionOfFlowLayer.getSelectedItems();
+            final List<Long> downloadedRoadsId = new ArrayList<>();
+            for(RoadSegment segment : selectedRoadSegements ){
+                final long wayId = segment.getWayId();
+                if (!downloadedRoadsId.contains(wayId)) {
+                    primitiveId = new SimplePrimitiveId(wayId, OsmPrimitiveType.WAY);
+                    downloadedRoadsId.add(wayId);
+                    DownloadWayTask downloadWayTask = new DownloadWayTask(primitiveId);
+                    MainApplication.worker.submit(downloadWayTask);
+                }
+            }
+        } 
+    }
+    
+    @Override
+    public void activeOrEditLayerChanged(final ActiveLayerChangeEvent event) {
+        final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
+        if (activeLayer instanceof MissingGeometryLayer) {
+            final Tile item = missingGeometryLayer.lastSelectedItem();
+            updateSelectedData(missingGeometryLayer, item);
+        } else if (activeLayer instanceof DirectionOfFlowLayer) {
+            final RoadSegment item = directionOfFlowLayer.lastSelectedItem();
+            updateSelectedData(directionOfFlowLayer, item);
+        } else if (activeLayer instanceof TurnRestrictionLayer) {
+            final TurnRestriction item = turnRestrictionLayer.lastSelectedItem();
+            updateSelectedData(turnRestrictionLayer, item);
         }
     }
 }

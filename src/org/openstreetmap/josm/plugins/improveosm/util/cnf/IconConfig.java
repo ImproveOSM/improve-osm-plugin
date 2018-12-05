@@ -57,6 +57,7 @@ public final class IconConfig extends BaseConfig {
     private final ImageIcon reopenIcon;
     private final ImageIcon invalidIcon;
     private final ImageIcon locationIcon;
+    private final ImageIcon downloadIcon;
 
     /* turn restriction icons */
     private final ImageIcon turnRestrictionIcon;
@@ -84,6 +85,7 @@ public final class IconConfig extends BaseConfig {
         reopenIcon = ImageProvider.get(readProperty("open.icon"));
         invalidIcon = ImageProvider.get(readProperty("invalid.icon"));
         locationIcon = ImageProvider.get(readProperty("location.icon"));
+        downloadIcon = ImageProvider.get(readProperty("download.icon"));
 
         turnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.icon"));
         selectedTurnRestrictionIcon = ImageProvider.get(readProperty("turnRestriction.sel.icon"));
@@ -155,6 +157,10 @@ public final class IconConfig extends BaseConfig {
     public ImageIcon getLocationIcon() {
         return locationIcon;
     }
+    
+    public ImageIcon getDownloadIcon() {
+        return downloadIcon;
+    }
 
     public ImageIcon getTurnRestrictionIcon() {
         return turnRestrictionIcon;
@@ -167,5 +173,4 @@ public final class IconConfig extends BaseConfig {
     public String getTurnRestrictionIconsPath() {
         return turnRestrictionIconsPath;
     }
-
 }

@@ -41,6 +41,7 @@ import org.openstreetmap.josm.plugins.improveosm.gui.layer.MissingGeometryLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.layer.TurnRestrictionLayer;
 import org.openstreetmap.josm.plugins.improveosm.gui.preferences.PreferenceEditor;
 import org.openstreetmap.josm.plugins.improveosm.observer.CommentObserver;
+import org.openstreetmap.josm.plugins.improveosm.observer.DownloadWayObserver;
 import org.openstreetmap.josm.plugins.improveosm.observer.TurnRestrictionSelectionObserver;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.IconConfig;
@@ -71,7 +72,11 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final SelectedItemsInfoPanel noOfTilesInfo;
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
+    private final SearchBox searchBox;
 
+    /** grid layout */
+    private static final int COLUMNS_NR = 1;
+    private static final int ROWS_NR = 2;
 
     /**
      * Builds a new direction of flow details dialog window.
@@ -87,15 +92,20 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         pnlRoadSegmentInfo = new RoadSegmentInfoPanel();
         pnlTurnRestrictionInfo = new TurnRestrictionInfoPanel();
         noOfTilesInfo = new SelectedItemsInfoPanel();
-
         cmpInfo = ContainerBuilder.buildScrollPane(ContainerBuilder.buildEmptyPanel(Color.WHITE),
                 GuiConfig.getInstance().getPnlInfoTitle(), Color.white, null, SCROLL_BAR_UNIT, false, DIM);
         pnlComments = new CommentsPanel();
         final JTabbedPane pnlDetails = ContainerBuilder.buildTabbedPane(cmpInfo, pnlComments, new FeedbackPanel());
+        searchBox = new SearchBox();
         pnlBtn = new ButtonPanel();
-        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlBtn, null);
+        final JPanel pnlOptions = ContainerBuilder.buildGridLayoutPanel(ROWS_NR, COLUMNS_NR, searchBox, pnlBtn);
+        final JPanel pnlMain = ContainerBuilder.buildBorderLayoutPanel(null, pnlDetails, pnlOptions, null);
         setPreferredSize(GuiSizesHelper.getDimensionDpiAdjusted(DIM));
         add(createLayout(pnlMain, false, null));
+    }
+
+    public void addDownloadWayButtonObserver(final DownloadWayObserver observer) {
+        pnlBtn.addObserver(observer);
     }
 
     /**
@@ -132,6 +142,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             pnlComments.updateData(comments);
             pnlBtn.enablePanelActions(status, location);
             updateUI(lastSelectedItem, numberOfSelectedItems);
+            pnlBtn.revalidate();
         }
     }
 
@@ -144,6 +155,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 pnlRoadSegmentInfo.updateData(null);
                 pnlTurnRestrictionInfo.updateData(null);
                 noOfTilesInfo.updateData(null);
+                pnlBtn.enableDownloadButton(false, true);
             } else {
                 final Component cmpInfoView = cmpInfo.getViewport().getView();
                 if (numberOfSelectedItems > 1) {
@@ -155,16 +167,20 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                         if (!(cmpInfoView instanceof TileInfoPanel)) {
                             cmpInfo.setViewportView(pnlTileInfo);
                         }
+                        pnlBtn.enableDownloadButton(false, true);
                     } else if (activeLayer instanceof DirectionOfFlowLayer) {
                         pnlRoadSegmentInfo.updateData((RoadSegment) lastSelectedItem);
                         if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
                             cmpInfo.setViewportView(pnlRoadSegmentInfo);
                         }
+                        final boolean enabled = lastSelectedItem != null;
+                        pnlBtn.enableDownloadButton(enabled, false);
                     } else if (activeLayer instanceof TurnRestrictionLayer) {
                         pnlTurnRestrictionInfo.updateData((TurnRestriction) lastSelectedItem);
                         if (!(cmpInfoView instanceof TurnRestrictionInfoPanel)) {
                             cmpInfo.setViewportView(pnlTurnRestrictionInfo);
                         }
+                        pnlBtn.enableDownloadButton(false, true);
                     }
                 }
             }
