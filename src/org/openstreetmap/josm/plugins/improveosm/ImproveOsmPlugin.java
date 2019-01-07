@@ -159,6 +159,7 @@ public class ImproveOsmPlugin extends Plugin
             } catch (final InterruptedException e) {
                 Logging.error("Could not shutdown thead pool.", e);
             }
+            MainApplication.getLayerManager().removeActiveLayerChangeListener(this);
         }
     }
 
@@ -214,7 +215,6 @@ public class ImproveOsmPlugin extends Plugin
                     GuiConfig.getInstance().getLblCopy(),
                     KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     JComponent.WHEN_FOCUSED);
-            MainApplication.getLayerManager();
             listenersRegistered = true;
         }
     }
@@ -697,7 +697,7 @@ public class ImproveOsmPlugin extends Plugin
     @Override
     public void downloadWay() {
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-        SimplePrimitiveId primitiveId = null;
+        SimplePrimitiveId primitiveId;
         if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
             final List<RoadSegment> selectedRoadSegements = directionOfFlowLayer.getSelectedItems();
             final List<Long> downloadedRoadsId = new ArrayList<>();
