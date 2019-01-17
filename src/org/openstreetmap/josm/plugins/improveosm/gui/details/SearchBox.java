@@ -30,14 +30,16 @@ import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
  * @author nicoletav
  */
 class SearchBox extends DisableShortcutsOnFocusGainedTextField implements ActionListener {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final int ELEMENTS_NR = 2;
     private static final int LAT_INDEX = 0;
     private static final int LON_INDEX = 1;
+    private static final double MAX_LAT_VALUE = 85.05;
+    private static final double MIN_LAT_VALUE = -85.05;
 
-    SearchBox(){
+    SearchBox() {
         super(GuiConfig.getInstance().getInitialTxt());
         this.addActionListener(this);
     }
@@ -51,9 +53,16 @@ class SearchBox extends DisableShortcutsOnFocusGainedTextField implements Action
                 final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
                 final LatLon searchedLocation = new LatLon(lat, lon);
                 if (searchedLocation.isValid()) {
-                    final EastNorth demoZoomLocation =
-                            searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                    MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    if (isLocationSearchable(searchedLocation.getY())) {
+                        final EastNorth demoZoomLocation =
+                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    } else {
+                        final LatLon newSearchedLocation = getExtremityPoint(searchedLocation);
+                        final EastNorth demoZoomLocation =
+                                newSearchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    }
                 } else {
                     this.setText(GuiConfig.getInstance().getIncorrectValuesTxt());
                 }
@@ -65,5 +74,30 @@ class SearchBox extends DisableShortcutsOnFocusGainedTextField implements Action
             this.setText(GuiConfig.getInstance().getIncorrectElementsNr());
         }
         MainApplication.getMap().mapView.requestFocus();
+    }
+
+    /*
+        Checks if the latitude value can be displayed.
+
+        Display of the geographical point is possible for a latitude value within [-85.05, 85,05] due to the map space.
+     */
+    private boolean isLocationSearchable(final double latitude) {
+        boolean isSearchable = false;
+        if (MIN_LAT_VALUE <= latitude && latitude <= MAX_LAT_VALUE) {
+            isSearchable = true;
+        }
+        return isSearchable;
+    }
+
+    private LatLon getExtremityPoint(final LatLon point) {
+        LatLon extremityPoint = null;
+        if (point.getY() > MAX_LAT_VALUE) {
+            extremityPoint = new LatLon(MAX_LAT_VALUE, point.getX());
+        }
+
+        if (point.getY() < MIN_LAT_VALUE) {
+            extremityPoint = new LatLon(MIN_LAT_VALUE, point.getX());
+        }
+        return extremityPoint;
     }
 }
