@@ -17,6 +17,7 @@ package org.openstreetmap.josm.plugins.improveosm.gui.details;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainApplication;
@@ -51,18 +52,14 @@ class SearchBox extends DisableShortcutsOnFocusGainedTextField implements Action
             try {
                 final double lat = Double.parseDouble(latLonValue.split(",")[LAT_INDEX]);
                 final double lon = Double.parseDouble(latLonValue.split(",")[LON_INDEX]);
-                final LatLon searchedLocation = new LatLon(lat, lon);
+                LatLon searchedLocation = new LatLon(lat, lon);
                 if (searchedLocation.isValid()) {
-                    if (isLocationSearchable(searchedLocation.getY())) {
-                        final EastNorth demoZoomLocation =
-                                searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
-                    } else {
-                        final LatLon newSearchedLocation = getExtremityPoint(searchedLocation);
-                        final EastNorth demoZoomLocation =
-                                newSearchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
-                        MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
+                    if (!isLocationSearchable(searchedLocation.getY())) {
+                        searchedLocation = getExtremityPoint(searchedLocation);
                     }
+                    final EastNorth demoZoomLocation =
+                            searchedLocation.getEastNorth(MainApplication.getMap().mapView.getProjection());
+                    MainApplication.getMap().mapView.zoomTo(demoZoomLocation, 1);
                 } else {
                     this.setText(GuiConfig.getInstance().getIncorrectValuesTxt());
                 }
