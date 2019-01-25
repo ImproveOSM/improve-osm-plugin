@@ -35,9 +35,9 @@ final class Constants {
 
     /* constant used for drawing clusters */
     static final double CLUSTER_DEF_RADIUS = 50;
-    static final Color DIRECTIONOFFLOW_CLUSTER_COLOR = new Color(238, 118, 0);
-    static final Color MISSINGGEO_CLUSTER_COLOR = new Color(176, 23, 31);
-    static final Color TURNRESTRICTION_CLUSTER_COLOR = new Color(30, 144, 255);
+    static final Color DIRECTIONOFFLOW_CLUSTER_COLOR = new Color(244, 127, 34);
+    static final Color MISSINGGEO_CLUSTER_COLOR = new Color(75, 184, 92);
+    static final Color TURNRESTRICTION_CLUSTER_COLOR = new Color(60, 111, 183);
 
     /* constants used for drawing DirectionOfFlow segments */
     static final Color ROAD_SEGMENT_COLOR = new Color(238, 118, 0);
@@ -67,7 +67,7 @@ final class Constants {
     static final Color TURN_SEGMENT_TO_COLOR = new Color(255, 0, 0);
     static final Stroke TURN_SEGMENT_STROKE = new BasicStroke(5F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     static final double TURN_ARROW_LENGTH = 1.5;
-    static final Color COMPLEX_TURN_COLOR = new Color(255, 0, 0);
+    static final Color COMPLEX_TURN_COLOR = new Color(60, 111, 183);
     static final int COMPLEX_TURN_RADIUS = 20;
     static final int COMPLEX_TURN_SEL_RADIUS = 30;
     static final float COMPLEX_TURN_FONT_SIZE = 11F;
