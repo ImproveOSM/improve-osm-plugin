@@ -149,7 +149,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
         }
     }
 
-    private  <T> void updateUI(final T lastSelectedItem, final Integer numberOfSelectedItems) {
+    private <T> void updateUI(final T lastSelectedItem, final Integer numberOfSelectedItems) {
         synchronized (this) {
             final Layer activeLayer = Util.getImproveOsmLayer();
             if (activeLayer == null) {
