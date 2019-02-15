@@ -697,7 +697,7 @@ public class ImproveOsmPlugin extends Plugin
     @Override
     public void downloadWay() {
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
-        SimplePrimitiveId primitiveId = null;
+        SimplePrimitiveId primitiveId;
         if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
             final List<RoadSegment> selectedRoadSegements = directionOfFlowLayer.getSelectedItems();
             final List<Long> downloadedRoadsId = new ArrayList<>();
@@ -710,7 +710,8 @@ public class ImproveOsmPlugin extends Plugin
                     MainApplication.worker.submit(downloadWayTask);
                 }
             }
-        } 
+            detailsDialog.disableDownloadButton();
+        }
     }
     
     @Override
