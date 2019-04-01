@@ -710,7 +710,8 @@ public class ImproveOsmPlugin extends Plugin
                     MainApplication.worker.submit(downloadWayTask);
                 }
             }
-        } 
+            detailsDialog.disableDownloadButton();
+        }
     }
     
     @Override

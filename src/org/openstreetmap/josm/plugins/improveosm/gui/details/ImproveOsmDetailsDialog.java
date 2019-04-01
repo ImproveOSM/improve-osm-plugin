@@ -23,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import org.openstreetmap.josm.data.coor.LatLon;
+import org.openstreetmap.josm.data.osm.OsmPrimitiveType;
+import org.openstreetmap.josm.data.osm.SimplePrimitiveId;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.dialogs.ToggleDialog;
 import org.openstreetmap.josm.gui.layer.Layer;
 import org.openstreetmap.josm.tools.GuiSizesHelper;
@@ -161,8 +164,8 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                 if (numberOfSelectedItems > 1) {
                     noOfTilesInfo.updateData(numberOfSelectedItems);
                     cmpInfo.setViewportView(noOfTilesInfo);
-                    if(activeLayer instanceof DirectionOfFlowLayer) {
-                        pnlBtn.enableDownloadButton(true, false);
+                    if(activeLayer instanceof DirectionOfFlowLayer){
+                        pnlBtn.enableDownloadButton(checkWaysToDownloadInSelection(((DirectionOfFlowLayer) activeLayer).getSelectedItems()), false);
                     }
                 } else {
                     if (activeLayer instanceof MissingGeometryLayer) {
@@ -176,7 +179,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                         if (!(cmpInfoView instanceof RoadSegmentInfoPanel)) {
                             cmpInfo.setViewportView(pnlRoadSegmentInfo);
                         }
-                        final boolean enabled = lastSelectedItem != null;
+                        final boolean enabled = checkWaysToDownloadInSelection(((DirectionOfFlowLayer) activeLayer).getSelectedItems());
                         pnlBtn.enableDownloadButton(enabled, false);
                     } else if (activeLayer instanceof TurnRestrictionLayer) {
                         pnlTurnRestrictionInfo.updateData((TurnRestriction) lastSelectedItem);
@@ -184,11 +187,33 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
                             cmpInfo.setViewportView(pnlTurnRestrictionInfo);
                         }
                         pnlBtn.enableDownloadButton(false, true);
-                    } 
+                    }
                 }
             }
             cmpInfo.revalidate();
             repaint();
         }
+    }
+
+    public void disableDownloadButton(){
+        pnlBtn.enableDownloadButton(false, false);
+    }
+
+    private boolean checkWaysToDownloadInSelection(final List<RoadSegment> selectedRoadSegments){
+        boolean hasWaysToDownload = false;
+        if(selectedRoadSegments != null){
+            for(RoadSegment segment : selectedRoadSegments ) {
+                if(MainApplication.getLayerManager().getEditLayer() != null){
+                    SimplePrimitiveId primitiveId = new SimplePrimitiveId(segment.getWayId(), OsmPrimitiveType.WAY);
+                    if(MainApplication.getLayerManager().getEditLayer().getDataSet().getPrimitiveById(primitiveId) == null) {
+                        hasWaysToDownload = true;
+                    }
+                }
+                else{
+                    hasWaysToDownload = true;
+                }
+            }
+        }
+        return hasWaysToDownload;
     }
 }
