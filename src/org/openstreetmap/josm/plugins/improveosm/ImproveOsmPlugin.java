@@ -699,9 +699,9 @@ public class ImproveOsmPlugin extends Plugin
         final Layer activeLayer = MainApplication.getLayerManager().getActiveLayer();
         SimplePrimitiveId primitiveId;
         if (activeLayer instanceof DirectionOfFlowLayer && directionOfFlowLayer.hasSelectedItems()) {
-            final List<RoadSegment> selectedRoadSegements = directionOfFlowLayer.getSelectedItems();
+            final List<RoadSegment> selectedRoadSegments = directionOfFlowLayer.getSelectedItems();
             final List<Long> downloadedRoadsId = new ArrayList<>();
-            for(RoadSegment segment : selectedRoadSegements ){
+            for(RoadSegment segment : selectedRoadSegments ){
                 final long wayId = segment.getWayId();
                 if (!downloadedRoadsId.contains(wayId)) {
                     primitiveId = new SimplePrimitiveId(wayId, OsmPrimitiveType.WAY);
@@ -710,7 +710,8 @@ public class ImproveOsmPlugin extends Plugin
                     MainApplication.worker.submit(downloadWayTask);
                 }
             }
-        } 
+            detailsDialog.disableDownloadButton();
+        }
     }
     
     @Override
