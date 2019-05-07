@@ -76,6 +76,7 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
     private final CommentsPanel pnlComments;
     private final ButtonPanel pnlBtn;
     private final SearchBox searchBox;
+    private boolean isDetached = false;
 
     /** grid layout */
     private static final int COLUMNS_NR = 1;
@@ -215,5 +216,34 @@ public class ImproveOsmDetailsDialog extends ToggleDialog {
             }
         }
         return hasWaysToDownload;
+    }
+
+    /**
+     * It is called when the detached dialog is closed.
+     */
+    @Override
+    protected void dock() {
+        if (isDetached) {
+            super.dock();
+            isDetached = false;
+        }
+    }
+
+    /**
+     * It is called when the detached dialog is opened.
+     */
+    @Override
+    protected void detach() {
+        if (!isDetached) {
+            super.detach();
+            isDetached = true;
+        }
+
+    }
+
+    @Override
+    public void hideDialog() {
+        super.hideDialog();
+        isDetached = false;
     }
 }
