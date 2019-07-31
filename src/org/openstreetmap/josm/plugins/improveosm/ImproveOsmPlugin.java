@@ -520,10 +520,10 @@ public class ImproveOsmPlugin extends Plugin
         if (comment.getStatus() != null) {
             // status changed - refresh data (possible to select only 1 status from filters)
             if (MainApplication.getLayerManager().getActiveLayer().equals(layer)) {
-               SwingUtilities.invokeLater(() ->{
-                   layer.updateSelectedItem(null);
-                   updateDialog(null, getItemLocation(null));
-               });
+                SwingUtilities.invokeLater(() -> {
+                    layer.updateSelectedItem(null);
+                    updateDialog(null, getItemLocation(null));
+                });
             }
             ThreadPool.getInstance().execute(updateThread);
         } else {
