@@ -63,18 +63,20 @@ public abstract class UpdateThread<T> implements Runnable {
 
     private void updateUI(final DataSet<T> result) {
         SwingUtilities.invokeLater(() -> {
-            layer.setDataSet(result);
-            if (result != null && MainApplication.getLayerManager().getActiveLayer().equals(layer)) {
-                final T item = layer.lastSelectedItem();
-                if (item == null) {
-                    dialog.updateUI(null, null, null, null, 0);
-                } else if (shouldClearSelection(item)) {
-                    layer.updateSelectedItem(null);
-                    dialog.updateUI(null, null, null, null, 0);
+            if (layer != null) {
+                layer.setDataSet(result);
+                if (result != null && layer.equals(MainApplication.getLayerManager().getActiveLayer())) {
+                    final T item = layer.lastSelectedItem();
+                    if (item == null) {
+                        dialog.updateUI(null, null, null, null, 0);
+                    } else if (shouldClearSelection(item)) {
+                        layer.updateSelectedItem(null);
+                        dialog.updateUI(null, null, null, null, 0);
+                    }
                 }
+                layer.invalidate();
+                MainApplication.getMap().mapView.repaint();
             }
-            layer.invalidate();
-            MainApplication.getMap().mapView.repaint();
         });
     }
 
