@@ -1,3 +1,9 @@
+/*
+ * Copyright 2019 Grabtaxi Holdings PTE LTE (GRAB), All rights reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be found in the LICENSE file.
+ *
+ */
 package org.openstreetmap.josm.plugins.improveosm;
 
 import java.util.Collections;
@@ -15,7 +21,12 @@ import org.openstreetmap.josm.gui.util.GuiHelper;
 import org.openstreetmap.josm.plugins.improveosm.util.cnf.GuiConfig;
 
 
-public class DownloadWayTask extends PleaseWaitRunnable {
+/**
+ * Downloads an OSM way.
+ *
+ * @author nicoletav
+ */
+class DownloadWayTask extends PleaseWaitRunnable {
 
     private final PrimitiveId wayId;
     private final OsmDataLayer tempLayer;
@@ -23,7 +34,7 @@ public class DownloadWayTask extends PleaseWaitRunnable {
     private PleaseWaitRunnable currentTask;
 
 
-    public DownloadWayTask(final PrimitiveId wayId) {
+    DownloadWayTask(final PrimitiveId wayId) {
         super(GuiConfig.getInstance().getInfoMatchedWayTitle(), null, false);
         this.wayId = wayId;
         tempLayer = new OsmDataLayer(new DataSet(), OsmDataLayer.createNewName(), null);
